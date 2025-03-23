@@ -510,14 +510,15 @@
         .volume-control {
             display: none;
             position: fixed;
-            bottom: 70px;
-            right: 70px;
+            top: 70px;
+            right: 20px;
             width: 120px;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             z-index: 100;
+            animation: fadeIn 0.3s ease;
         }
         
         body.dark-mode .volume-control {
@@ -633,9 +634,6 @@
         <button class="control-btn" id="timerToggle" title="Meditation Timer">
             ⏱️
         </button>
-        <button class="control-btn" id="volumeToggle" title="Adjust OM Volume">
-            🔈
-        </button>
     </div>
     
     <audio id="streamSound" loop>
@@ -686,18 +684,26 @@
             const breatheToggle = document.getElementById('breatheToggle');
             const breathingCircle = document.querySelector('.breathing-circle');
             const omSound = document.getElementById('omSound');
+            const omVolumeControl = document.getElementById('om-volume-control');
+            const omVolumeSlider = document.getElementById('om-volume-slider');
             let breathingActive = false;
             
             breatheToggle.addEventListener('click', function() {
                 if (breathingActive) {
                     breathingCircle.style.display = 'none';
+                    omVolumeControl.style.display = 'none';
                     omSound.pause();
                     omSound.currentTime = 0;
                 } else {
                     breathingCircle.style.display = 'block';
+                    omVolumeControl.style.display = 'block';
                     omSound.play().catch(e => console.error("OM sound playback failed:", e));
                 }
                 breathingActive = !breathingActive;
+            });
+            
+            omVolumeSlider.addEventListener('input', function() {
+                omSound.volume = this.value;
             });
             
             // Secret message
@@ -1239,25 +1245,6 @@
                     }, 8000);
                 }
             }, 60000); // Show after 1 minute
-            
-            // Add volume control for OM sound
-            const volumeToggle = document.getElementById('volumeToggle');
-            const omVolumeControl = document.getElementById('om-volume-control');
-            const omVolumeSlider = document.getElementById('om-volume-slider');
-            let volumeControlActive = false;
-            
-            volumeToggle.addEventListener('click', function() {
-                if (volumeControlActive) {
-                    omVolumeControl.style.display = 'none';
-                } else {
-                    omVolumeControl.style.display = 'block';
-                }
-                volumeControlActive = !volumeControlActive;
-            });
-            
-            omVolumeSlider.addEventListener('input', function() {
-                omSound.volume = this.value;
-            });
         });
     </script>
 </body>
