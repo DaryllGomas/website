@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter Zen From There</title>
-    <!-- No preload needed for embedded images -->
+    <!-- Preload critical images -->
+    <link rel="preload" href="mountain-path.jpg" as="image">
+    <link rel="preload" href="cosmic.jpg" as="image">
     <style>
         html, body {
             margin: 0;
@@ -605,10 +607,39 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            overflow: hidden;
+            background-image: url('cosmic.jpg');
+            background-size: cover;
+            background-position: center;
             opacity: 0;
-            transition: opacity 3s ease;
+            transition: opacity 3s ease, transform 15s ease-in-out;
             pointer-events: none;
+            transform: scale(1);
+        }
+        
+        /* Add animation for cosmic mode */
+        .cosmic-mode .space-scene {
+            opacity: 1;
+            transform: scale(1.05);
+            animation: cosmic-drift 30s infinite alternate ease-in-out;
+            filter: brightness(1.2) saturate(1.2) hue-rotate(0deg);
+        }
+        
+        @keyframes cosmic-drift {
+            0% {
+                background-position: center center;
+                transform: scale(1.05);
+                filter: brightness(1.2) saturate(1.2) hue-rotate(0deg);
+            }
+            50% {
+                background-position: 51% 49%;
+                transform: scale(1.1);
+                filter: brightness(1.3) saturate(1.3) hue-rotate(5deg);
+            }
+            100% {
+                background-position: 49% 51%;
+                transform: scale(1.08);
+                filter: brightness(1.25) saturate(1.25) hue-rotate(-5deg);
+            }
         }
         
         .cosmic-canvas {
@@ -1578,8 +1609,8 @@
                     // Add cosmic pulse to container
                     document.querySelector('.container').classList.add('cosmic-pulse');
                     
-                    // Initialize space scene
-                    initSpaceScene();
+                    // Initialize space scene - removed canvas initialization
+                    // initSpaceScene();
                     
                     // Show cosmic volume control if sound controls are visible
                     if (soundPlaying) {
@@ -1594,333 +1625,15 @@
                 spaceScene.style.opacity = '0';
                 document.querySelector('.container').classList.remove('cosmic-pulse');
                 
-                // Cancel any ongoing animation
-                if (spaceScene.animationFrame) {
-                    cancelAnimationFrame(spaceScene.animationFrame);
-                    spaceScene.animationFrame = null;
-                }
+                // No need to cancel animation frames or clear the space scene since we're using an image
                 
-                // Clear space scene
+                // Set cosmicActive to false after transition completes
                 setTimeout(() => {
-                    while (spaceScene.firstChild) {
-                        spaceScene.removeChild(spaceScene.firstChild);
-                    }
                     cosmicActive = false;
                 }, 3000); // Match transition time
             }
             
-            function initSpaceScene() {
-                console.log("Initializing enhanced space scene with canvas...");
-                
-                // Clear any existing contents
-                while (spaceScene.firstChild) {
-                    spaceScene.removeChild(spaceScene.firstChild);
-                }
-                
-                // Create canvas element
-                const canvas = document.createElement('canvas');
-                canvas.className = 'cosmic-canvas';
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-                spaceScene.appendChild(canvas);
-                
-                const ctx = canvas.getContext('2d');
-                
-                // Create a deep space background gradient
-                const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-                bgGradient.addColorStop(0, '#020924');
-                bgGradient.addColorStop(0.5, '#0d0d2f');
-                bgGradient.addColorStop(1, '#000000');
-                
-                // Stars properties
-                const stars = [];
-                for (let i = 0; i < 800; i++) {
-                    const size = Math.random() * 2 + 0.5;
-                    stars.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        size: size,
-                        color: size > 1.5 ? 
-                               `rgb(${200 + Math.random() * 55}, ${200 + Math.random() * 55}, 255)` : 
-                               'rgb(255, 255, 255)',
-                        brightness: Math.random() * 0.8 + 0.2,
-                        pulseSpeed: Math.random() * 0.02 + 0.005
-                    });
-                }
-                
-                // Nebula properties - using multiple overlapping gradients
-                const nebulae = [];
-                
-                // Create 5 differently colored nebulae
-                nebulae.push({
-                    x: canvas.width * 0.3,
-                    y: canvas.height * 0.7,
-                    radius: canvas.width * 0.4,
-                    color1: 'rgba(30, 50, 180, 0.2)',
-                    color2: 'rgba(10, 20, 120, 0.05)',
-                    speedX: 0.0003,
-                    speedY: 0.0005,
-                    pulseSpeed: 0.001
-                });
-                
-                nebulae.push({
-                    x: canvas.width * 0.6,
-                    y: canvas.height * 0.3,
-                    radius: canvas.width * 0.5,
-                    color1: 'rgba(180, 30, 180, 0.15)',
-                    color2: 'rgba(120, 10, 120, 0.03)',
-                    speedX: -0.0004,
-                    speedY: 0.0003,
-                    pulseSpeed: 0.0015
-                });
-                
-                nebulae.push({
-                    x: canvas.width * 0.5,
-                    y: canvas.height * 0.5,
-                    radius: canvas.width * 0.6,
-                    color1: 'rgba(50, 100, 200, 0.1)',
-                    color2: 'rgba(20, 40, 100, 0.02)',
-                    speedX: 0.0002,
-                    speedY: -0.0004,
-                    pulseSpeed: 0.0012
-                });
-                
-                nebulae.push({
-                    x: canvas.width * 0.2,
-                    y: canvas.height * 0.4,
-                    radius: canvas.width * 0.3,
-                    color1: 'rgba(100, 30, 150, 0.15)',
-                    color2: 'rgba(50, 10, 80, 0.03)',
-                    speedX: 0.0005,
-                    speedY: 0.0002,
-                    pulseSpeed: 0.001
-                });
-                
-                nebulae.push({
-                    x: canvas.width * 0.8,
-                    y: canvas.height * 0.6,
-                    radius: canvas.width * 0.3,
-                    color1: 'rgba(30, 100, 150, 0.12)',
-                    color2: 'rgba(10, 50, 90, 0.03)',
-                    speedX: -0.0003,
-                    speedY: -0.0004,
-                    pulseSpeed: 0.0008
-                });
-                
-                // Warp field effect - multiple concentric rings that pulse
-                const warpRings = [];
-                for (let i = 0; i < 5; i++) {
-                    warpRings.push({
-                        x: canvas.width / 2,
-                        y: canvas.height / 2,
-                        radius: canvas.width * (0.1 + i * 0.15),
-                        pulseAmount: 0,
-                        pulseSpeed: 0.002 + i * 0.0005,
-                        color: `rgba(100, 150, 255, ${0.15 - i * 0.02})`
-                    });
-                }
-                
-                // Shooting stars
-                const shootingStars = [];
-                
-                // Function to create a new shooting star
-                function createShootingStar() {
-                    if (Math.random() > 0.995) { // Lower chance makes them rare
-                        const side = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
-                        let x, y, angle;
-                        
-                        // Start position based on side
-                        switch(side) {
-                            case 0: // top
-                                x = Math.random() * canvas.width;
-                                y = 0;
-                                angle = Math.PI / 4 + Math.random() * Math.PI / 2; // Down-right to down-left
-                                break;
-                            case 1: // right
-                                x = canvas.width;
-                                y = Math.random() * canvas.height;
-                                angle = Math.PI * 3/4 + Math.random() * Math.PI / 2; // Down-left to up-left
-                                break;
-                            case 2: // bottom
-                                x = Math.random() * canvas.width;
-                                y = canvas.height;
-                                angle = Math.PI * 5/4 + Math.random() * Math.PI / 2; // Up-left to up-right
-                                break;
-                            case 3: // left
-                                x = 0;
-                                y = Math.random() * canvas.height;
-                                angle = Math.PI * 7/4 + Math.random() * Math.PI / 2; // Up-right to down-right
-                                break;
-                        }
-                        
-                        shootingStars.push({
-                            x: x,
-                            y: y,
-                            trailLength: 100 + Math.random() * 150,
-                            speed: 5 + Math.random() * 10,
-                            angle: angle,
-                            life: 1.0,
-                            decay: 0.01 + Math.random() * 0.02
-                        });
-                    }
-                }
-                
-                // Time variables for animation
-                let time = 0;
-                let lastFrameTime = Date.now();
-                
-                // Animation function
-                function animate() {
-                    const now = Date.now();
-                    const deltaTime = (now - lastFrameTime) / 1000; // Convert to seconds
-                    lastFrameTime = now;
-                    
-                    time += deltaTime;
-                    
-                    // Clear the canvas and draw background
-                    ctx.fillStyle = bgGradient;
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    
-                    // Draw and update nebulae
-                    ctx.globalCompositeOperation = 'screen';
-                    nebulae.forEach(nebula => {
-                        // Move nebula slightly
-                        nebula.x += Math.sin(time * 0.2) * nebula.speedX * canvas.width;
-                        nebula.y += Math.cos(time * 0.3) * nebula.speedY * canvas.height;
-                        
-                        // Pulse effect
-                        const pulseScale = 1 + Math.sin(time * nebula.pulseSpeed * 10) * 0.1;
-                        
-                        // Create gradient
-                        const gradient = ctx.createRadialGradient(
-                            nebula.x, nebula.y, 0,
-                            nebula.x, nebula.y, nebula.radius * pulseScale
-                        );
-                        
-                        gradient.addColorStop(0, nebula.color1);
-                        gradient.addColorStop(1, nebula.color2);
-                        
-                        ctx.fillStyle = gradient;
-                        ctx.beginPath();
-                        ctx.arc(nebula.x, nebula.y, nebula.radius * pulseScale, 0, Math.PI * 2);
-                        ctx.fill();
-                    });
-                    
-                    // Draw stars with twinkling effect
-                    stars.forEach(star => {
-                        // Calculate brightness with a unique sine wave for each star
-                        const brightness = star.brightness * (0.5 + 0.5 * Math.sin(time * star.pulseSpeed * 5));
-                        
-                        // Set star color with calculated brightness
-                        ctx.fillStyle = star.color.replace('rgb', 'rgba').replace(')', `, ${brightness})`);
-                        
-                        // Draw star
-                        ctx.beginPath();
-                        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                        ctx.fill();
-                        
-                        // Add glow to larger stars
-                        if (star.size > 1.5) {
-                            ctx.fillStyle = star.color.replace('rgb', 'rgba').replace(')', ', 0.1)');
-                            ctx.beginPath();
-                            ctx.arc(star.x, star.y, star.size * 4, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    });
-                    
-                    // Draw warp rings
-                    warpRings.forEach(ring => {
-                        // Update pulse amount
-                        ring.pulseAmount += ring.pulseSpeed;
-                        if (ring.pulseAmount > 1 || ring.pulseAmount < 0) {
-                            ring.pulseSpeed *= -1;
-                        }
-                        
-                        // Draw ring with current pulse amount
-                        const currentRadius = ring.radius * (1 + ring.pulseAmount * 0.2);
-                        
-                        ctx.strokeStyle = ring.color;
-                        ctx.lineWidth = 10 + Math.sin(time * 2) * 5;
-                        ctx.beginPath();
-                        ctx.arc(ring.x, ring.y, currentRadius, 0, Math.PI * 2);
-                        ctx.stroke();
-                    });
-                    
-                    // Check for new shooting stars
-                    createShootingStar();
-                    
-                    // Draw and update shooting stars
-                    ctx.lineCap = 'round';
-                    
-                    shootingStars.forEach((star, index) => {
-                        if (star.life > 0) {
-                            // Calculate the end of the trail
-                            const endX = star.x - Math.cos(star.angle) * star.trailLength * star.life;
-                            const endY = star.y - Math.sin(star.angle) * star.trailLength * star.life;
-                            
-                            // Create a gradient for the trail
-                            const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
-                            gradient.addColorStop(0, `rgba(255, 255, 255, ${star.life})`);
-                            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-                            
-                            // Draw the trail
-                            ctx.strokeStyle = gradient;
-                            ctx.lineWidth = 2 * star.life;
-                            ctx.beginPath();
-                            ctx.moveTo(star.x, star.y);
-                            ctx.lineTo(endX, endY);
-                            ctx.stroke();
-                            
-                            // Move the star
-                            star.x += Math.cos(star.angle) * star.speed;
-                            star.y += Math.sin(star.angle) * star.speed;
-                            
-                            // Decrease life
-                            star.life -= star.decay;
-                        } else {
-                            // Remove dead stars
-                            shootingStars.splice(index, 1);
-                        }
-                    });
-                    
-                    // Add a central glow effect
-                    const centerX = canvas.width / 2;
-                    const centerY = canvas.height / 2;
-                    const centerRadius = canvas.width * 0.1 + Math.sin(time) * canvas.width * 0.01;
-                    
-                    const centerGlow = ctx.createRadialGradient(
-                        centerX, centerY, 0,
-                        centerX, centerY, centerRadius
-                    );
-                    
-                    centerGlow.addColorStop(0, 'rgba(150, 200, 255, 0.3)');
-                    centerGlow.addColorStop(1, 'rgba(100, 150, 255, 0)');
-                    
-                    ctx.fillStyle = centerGlow;
-                    ctx.beginPath();
-                    ctx.arc(centerX, centerY, centerRadius, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    // Continue animation if cosmic mode is still active
-                    if (cosmicActive) {
-                        animationFrame = requestAnimationFrame(animate);
-                    }
-                }
-                
-                // Start animation
-                const animationFrame = requestAnimationFrame(animate);
-                
-                // Store the animation frame reference on the scene for cleanup
-                spaceScene.animationFrame = animationFrame;
-                
-                // Resize handler
-                function handleResize() {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                }
-                
-                window.addEventListener('resize', handleResize);
-            }
+            // Remove the entire initSpaceScene function since we're not using canvas anymore
             
             // Get references to the cosmic volume controls
             const cosmicVolumeControl = document.getElementById('cosmic-volume-control');
