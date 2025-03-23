@@ -16,7 +16,14 @@
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
+            transition: all 0.5s ease;
         }
+        
+        body.dark-mode {
+            color: #f0f0f0;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('mountain-path.jpg');
+        }
+        
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -26,70 +33,251 @@
             border-radius: 5px;
             margin-top: 30px;
             margin-bottom: 30px;
+            transition: all 0.5s ease;
         }
+        
+        body.dark-mode .container {
+            background-color: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
         header {
             text-align: center;
             padding: 20px 0;
             border-bottom: 1px solid #ddd;
+            transition: all 0.5s ease;
         }
+        
+        body.dark-mode header {
+            border-bottom: 1px solid #444;
+        }
+        
         h1 {
             font-size: 2.2em;
             margin-bottom: 5px;
             color: #333;
+            transition: all 0.5s ease;
         }
+        
+        body.dark-mode h1 {
+            color: #f0f0f0;
+        }
+        
         h2 {
             font-size: 1.2em;
             font-weight: normal;
             font-style: italic;
             color: #666;
             margin-top: 0;
+            transition: all 0.5s ease;
         }
+        
+        body.dark-mode h2 {
+            color: #aaa;
+        }
+        
         .content {
             padding: 20px 0;
+            transition: all 0.5s ease;
         }
+        
         p {
             margin-bottom: 1em;
+            transition: all 0.5s ease;
+            line-height: 1.8;
         }
+        
+        body.dark-mode p {
+            color: #ddd;
+        }
+        
         footer {
             text-align: center;
             padding: 20px 0;
             color: #666;
             font-size: 0.9em;
             border-top: 1px solid #ddd;
+            transition: all 0.5s ease;
         }
+        
+        body.dark-mode footer {
+            color: #aaa;
+            border-top: 1px solid #444;
+        }
+        
         .logo {
             max-width: 80px;
             margin-bottom: 10px;
+            border-radius: 50%;
+            transition: all 0.5s ease;
         }
+        
         @media (max-width: 600px) {
             .container {
                 margin: 10px;
                 padding: 15px;
             }
         }
+        
+        /* Toggle buttons */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        body.dark-mode .control-btn {
+            background-color: rgba(60, 60, 60, 0.8);
+            color: #fff;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Breathing circle animation */
+        .breathing-circle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(100, 149, 237, 0.5);
+            animation: breathing 5s infinite ease-in-out;
+            display: none;
+        }
+        
+        @keyframes breathing {
+            0% { transform: scale(0.9); background-color: rgba(100, 149, 237, 0.5); }
+            25% { transform: scale(1.0); background-color: rgba(100, 149, 237, 0.7); }
+            50% { transform: scale(1.2); background-color: rgba(100, 149, 237, 0.9); }
+            75% { transform: scale(1.0); background-color: rgba(100, 149, 237, 0.7); }
+            100% { transform: scale(0.9); background-color: rgba(100, 149, 237, 0.5); }
+        }
+        
+        /* Fade-in animation for content */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        .delay-5 { animation-delay: 1.0s; }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
+        <header class="fade-in">
             <img src="mountain-path.jpg" alt="mountain-path Logo" class="logo">
             <h1>Enter Zen From There</h1>
-            <h2>Gerry Shishin Wick</h2>
         </header>
         
         <div class="content">
-            <p>Once a young monk called Kyosho came to Zen Master Gensha to study under him. Kyosho said, "I have come over here seeking the truth, where can I start to get into Zen?" At this Gensha the Master said, "Kyosho, can you hear the murmuring of the mountain stream?" "Yes, Master. I can hear it." "Enter Zen from there," was the Master's answer. Sometime later a lay Zen student Kyo told the story to Master Ayn of Singon and asked, "Because Kyosho answered he could hear the murmuring of the mountain stream when Gensha asked him if he could hear it, Gensha could instruct him to 'Enter Zen from there'. If however Kyosho had said he could not hear it, how would Master Gensha have instructed him?" Ayn suddenly called out, "Mister Kyo!" Kyo answered, "Yes, Master." At this the Master said, "Enter Zen from there!"</p>
+            <p class="fade-in delay-1">A Zen Master was walking in silence with one of his disciples along a mountain trail. When they came to an ancient cedar tree, they sat down under it for a simple meal of some rice and vegetables. After the meal, the disciple, a young monk who had not yet found the key to the mystery of Zen, broke the silence by asking the Master, "Master, how do I enter Zen?"</p>
             
-            <p>That's the secret of our Zen practice, wherever you are enter Zen from there. Doesn't matter whether you are encouraged or discouraged or feel as though your meditation is excellent or whether you feel it is horrible. Whether you are happy or you are sad or you are angry or you are blissful it doesn't matter. Just enter Zen from there, that's the reality. That's what's so. That's how to be satisfied.</p>
+            <p class="fade-in delay-2">He was, of course, inquiring how to enter the state of consciousness which is Zen.</p>
             
-            <p>If you are tired, enter Zen from there. If you are confused, enter Zen from there. If your mind is wandering, enter Zen from there. What remains to be sought? Nirvana is clear before you. This very place is the Lotus Paradise. This very body, the Buddha. If you really believe that, there is no problem.</p>
+            <p class="fade-in delay-2">The master remained silent. Almost five minutes passed while the disciple anxiously waited for an answer. He was about to ask another question when the Master suddenly spoke. "Do you hear the sound of that mountain stream?"</p>
             
-            <p>So, wherever you are, enter Zen from there. Are you confused? Enter Zen from there. Are you angry? Enter Zen from there. Are you smug, you think you are a wonderful Zen student, enter Zen from there. Wherever you are this very place is nirvana. Enter it from there.</p>
+            <p class="fade-in delay-3">The disciple had been busy thinking about the meaning of Zen. Now, as he began to listen to the sound, his noisy mind subsided. At first he heard nothing. Then, his thinking gave way to heightened alertness, and suddenly he did hear the hardly perceptible murmur of a small stream in the far distance.</p>
+            
+            <p class="fade-in delay-3">"Yes, I can hear it now," he said.</p>
+            
+            <p class="fade-in delay-4">The Master raised his finger and, with a look in his eyes that in some way was both fierce and gentle, said, "Enter Zen from there."</p>
+            
+            <p class="fade-in delay-4">The disciple was stunned. It was his first satori — a flash of enlightenment. He knew what Zen was without knowing what it was that he knew!</p>
+            
+            <p class="fade-in delay-4">They continued on their journey in silence. The disciple was amazed at the aliveness of the world around him. He experienced everything as if for the first time. Gradually, however, he started thinking again. The alert stillness became covered up again by mental noise, and before long he had another question. "Master," he said, "I have been thinking. What would you have said if I hadn't been able to hear the mountain stream?" The Master stopped, looked at him, raised his finger and said, "Enter Zen from there."</p>
         </div>
         
-        <footer>
-            <p>Source: RIONA</p>
+        <footer class="fade-in delay-5">
+            <p>Found this hidden gem? Enter Zen from here.</p>
         </footer>
     </div>
+    
+    <div class="breathing-circle"></div>
+    
+    <div class="controls">
+        <button class="control-btn" id="darkModeToggle" title="Toggle Light/Dark Mode">
+            ☀️
+        </button>
+        <button class="control-btn" id="soundToggle" title="Toggle Stream Sound">
+            🔇
+        </button>
+        <button class="control-btn" id="breatheToggle" title="Toggle Breathing Guide">
+            🫁
+        </button>
+    </div>
+    
+    <audio id="streamSound" loop>
+        <source src="https://soundbible.com/mp3/creek-daniel_simon.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                darkModeToggle.textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
+            });
+            
+            // Sound toggle
+            const soundToggle = document.getElementById('soundToggle');
+            const streamSound = document.getElementById('streamSound');
+            let soundPlaying = false;
+            
+            soundToggle.addEventListener('click', function() {
+                if (soundPlaying) {
+                    streamSound.pause();
+                    soundToggle.textContent = '🔇';
+                } else {
+                    streamSound.play().catch(e => console.error("Audio playback failed:", e));
+                    soundToggle.textContent = '🔊';
+                }
+                soundPlaying = !soundPlaying;
+            });
+            
+            // Breathing guide toggle
+            const breatheToggle = document.getElementById('breatheToggle');
+            const breathingCircle = document.querySelector('.breathing-circle');
+            let breathingActive = false;
+            
+            breatheToggle.addEventListener('click', function() {
+                if (breathingActive) {
+                    breathingCircle.style.display = 'none';
+                } else {
+                    breathingCircle.style.display = 'block';
+                }
+                breathingActive = !breathingActive;
+            });
+        });
+    </script>
 </body>
 </html> 
