@@ -652,20 +652,35 @@
         </button>
     </div>
     
-    <audio id="streamSound" loop>
+    <audio id="streamSound" loop preload="auto">
         <source src="https://soundbible.com/mp3/creek-daniel_simon.mp3" type="audio/mpeg">
     </audio>
     
-    <audio id="bellSound">
+    <audio id="bellSound" preload="auto">
         <source src="https://soundbible.com/mp3/meditative-bell-sound-1-12752.mp3" type="audio/mpeg">
     </audio>
     
-    <audio id="omSound" loop>
+    <audio id="omSound" loop preload="auto">
         <source src="OM.mp3" type="audio/mpeg">
     </audio>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Debug audio loading
+            console.log("DOM fully loaded");
+            
+            const streamSound = document.getElementById('streamSound');
+            const bellSound = document.getElementById('bellSound');
+            const omSound = document.getElementById('omSound');
+            
+            console.log("Stream sound ready state:", streamSound.readyState);
+            console.log("Bell sound ready state:", bellSound.readyState);
+            console.log("OM sound ready state:", omSound.readyState);
+            
+            // Check if OM.mp3 exists
+            const omAudioElement = document.querySelector("#omSound source");
+            console.log("OM audio source:", omAudioElement.src);
+            
             // Initialize fireflies since dark mode is default
             initFireflies();
             
@@ -685,16 +700,21 @@
             
             // Sound toggle
             const soundToggle = document.getElementById('soundToggle');
-            const streamSound = document.getElementById('streamSound');
             let soundPlaying = false;
             
             soundToggle.addEventListener('click', function() {
+                console.log("Sound toggle clicked. Current state:", soundPlaying);
+                
                 if (soundPlaying) {
+                    console.log("Pausing stream sound");
                     streamSound.pause();
                     soundToggle.textContent = '🔇';
                     omVolumeControl.style.display = 'none';
                 } else {
-                    streamSound.play().catch(e => console.error("Audio playback failed:", e));
+                    console.log("Playing stream sound");
+                    streamSound.play()
+                        .then(() => console.log("Stream sound playing successfully"))
+                        .catch(e => console.error("Audio playback failed:", e));
                     soundToggle.textContent = '🔊';
                     omVolumeControl.style.display = 'block';
                 }
@@ -704,26 +724,67 @@
             // Breathing guide toggle
             const breatheToggle = document.getElementById('breatheToggle');
             const breathingCircle = document.querySelector('.breathing-circle');
-            const omSound = document.getElementById('omSound');
             const omVolumeControl = document.getElementById('om-volume-control');
             const omVolumeSlider = document.getElementById('om-volume-slider');
             let breathingActive = false;
             
             breatheToggle.addEventListener('click', function() {
+                console.log("Breathing toggle clicked. Current state:", breathingActive);
+                
                 if (breathingActive) {
+                    console.log("Stopping breathing animation and OM sound");
                     breathingCircle.style.display = 'none';
                     omSound.pause();
                     omSound.currentTime = 0;
                 } else {
+                    console.log("Starting breathing animation and OM sound");
                     breathingCircle.style.display = 'block';
-                    omSound.play().catch(e => {
-                        console.error("OM sound playback failed:", e);
-                        // Try to handle autoplay restrictions with a user interaction
-                        document.body.addEventListener('click', function tryPlayOM() {
-                            omSound.play().catch(e2 => console.error("Second attempt failed:", e2));
-                            document.body.removeEventListener('click', tryPlayOM);
-                        }, { once: true });
-                    });
+                    
+                    // Try to play with user gesture
+                    const playPromise = omSound.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise
+                            .then(() => console.log("OM sound playing successfully"))
+                            .catch(e => {
+                                console.error("OM sound playback failed:", e);
+                                
+                                // Add a visible notification for the user
+                                const notification = document.createElement('div');
+                                notification.style.position = 'fixed';
+                                notification.style.top = '20px';
+                                notification.style.left = '50%';
+                                notification.style.transform = 'translateX(-50%)';
+                                notification.style.padding = '10px 15px';
+                                notification.style.backgroundColor = 'rgba(255, 0, 0, 0.7)';
+                                notification.style.color = 'white';
+                                notification.style.borderRadius = '5px';
+                                notification.style.zIndex = '1000';
+                                notification.textContent = "Click anywhere to enable sound";
+                                document.body.appendChild(notification);
+                                
+                                // Try to play on next user interaction
+                                const clickHandler = function() {
+                                    console.log("Document clicked, trying to play OM sound again");
+                                    omSound.play()
+                                        .then(() => {
+                                            console.log("OM sound playing after click");
+                                            notification.remove();
+                                        })
+                                        .catch(e2 => console.error("Second attempt failed:", e2));
+                                    document.removeEventListener('click', clickHandler);
+                                };
+                                
+                                document.addEventListener('click', clickHandler);
+                                
+                                // Remove notification after 5 seconds
+                                setTimeout(() => {
+                                    if (notification.parentNode) {
+                                        notification.parentNode.removeChild(notification);
+                                    }
+                                }, 5000);
+                            });
+                    }
                 }
                 breathingActive = !breathingActive;
             });
@@ -1058,7 +1119,6 @@
             const startTimerBtn = document.getElementById('start-timer');
             const closeTimerBtn = document.getElementById('close-timer');
             const timerOptions = document.querySelectorAll('.timer-option');
-            const bellSound = document.getElementById('bellSound');
             
             let timerMinutes = 5;
             let timerInterval;
