@@ -635,7 +635,7 @@
         <button class="control-btn" id="darkModeToggle" title="Toggle Light/Dark Mode">
             🌙
         </button>
-        <button class="control-btn" id="soundToggle" title="Toggle OM Sound">
+        <button class="control-btn" id="soundToggle" title="Toggle Stream Sound">
             🔇
         </button>
         <button class="control-btn" id="breatheToggle" title="Toggle Breathing Guide">
@@ -716,7 +716,14 @@
                     omSound.currentTime = 0;
                 } else {
                     breathingCircle.style.display = 'block';
-                    omSound.play().catch(e => console.error("OM sound playback failed:", e));
+                    omSound.play().catch(e => {
+                        console.error("OM sound playback failed:", e);
+                        // Try to handle autoplay restrictions with a user interaction
+                        document.body.addEventListener('click', function tryPlayOM() {
+                            omSound.play().catch(e2 => console.error("Second attempt failed:", e2));
+                            document.body.removeEventListener('click', tryPlayOM);
+                        }, { once: true });
+                    });
                 }
                 breathingActive = !breathingActive;
             });
