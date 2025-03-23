@@ -5,13 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter Zen From There</title>
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevents scrollbars from appearing */
+            width: 100%;
+            height: 100%;
+            position: fixed; /* Ensures the page doesn't scroll at all */
+        }
+        
         body {
             font-family: 'Georgia', serif;
             line-height: 1.6;
             color: #333;
             background-color: #f5f5f0;
-            margin: 0;
-            padding: 0;
             background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('mountain-path.jpg');
             background-size: cover;
             background-attachment: fixed;
@@ -34,6 +41,10 @@
             margin-top: 30px;
             margin-bottom: 30px;
             transition: all 0.5s ease;
+            max-height: 85vh; /* Limit height to prevent overflow */
+            overflow-y: auto; /* Allow scrolling within container if needed */
+            position: relative; /* Create a new stacking context */
+            z-index: 1; /* Ensure container is above background */
         }
         
         body.dark-mode .container {
@@ -500,6 +511,7 @@
             background-size: cover;
             z-index: -2;
             transform: translate(-10%, -10%);
+            will-change: transform; /* Optimizes for animation */
         }
         
         body.dark-mode .parallax-bg {
@@ -551,6 +563,10 @@
             transition: opacity 3s ease;
             z-index: 5;
             pointer-events: none;
+            overflow: hidden; /* Prevent text from overflowing */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         
         body.dark-mode .floating-quote {
@@ -649,6 +665,9 @@
         </button>
         <button class="control-btn" id="timerToggle" title="Meditation Timer">
             ⏱️
+        </button>
+        <button class="control-btn" id="parallaxToggle" title="Toggle Parallax Effect">
+            🖱️
         </button>
     </div>
     
@@ -1189,12 +1208,28 @@
             }
             
             // Parallax effect for the background
-            document.addEventListener('mousemove', function(e) {
-                const parallaxBg = document.querySelector('.parallax-bg');
-                const moveX = (e.clientX / window.innerWidth) * 10 - 5;
-                const moveY = (e.clientY / window.innerHeight) * 10 - 5;
+            let parallaxEnabled = false; // Disabled by default
+            
+            const parallaxToggle = document.getElementById('parallaxToggle');
+            parallaxToggle.addEventListener('click', function() {
+                parallaxEnabled = !parallaxEnabled;
+                parallaxToggle.textContent = parallaxEnabled ? '🔄' : '🖱️';
                 
-                parallaxBg.style.transform = `translate(${-10 - moveX}%, ${-10 - moveY}%)`;
+                // If disabled, reset background position
+                if (!parallaxEnabled) {
+                    const parallaxBg = document.querySelector('.parallax-bg');
+                    parallaxBg.style.transform = 'translate(-10%, -10%)';
+                }
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (parallaxEnabled) {
+                    const parallaxBg = document.querySelector('.parallax-bg');
+                    const moveX = (e.clientX / window.innerWidth) * 10 - 5;
+                    const moveY = (e.clientY / window.innerHeight) * 10 - 5;
+                    
+                    parallaxBg.style.transform = `translate(${-10 - moveX}%, ${-10 - moveY}%)`;
+                }
             });
             
             // Easter egg: Konami code
