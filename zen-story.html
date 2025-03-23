@@ -598,18 +598,6 @@
         </div>
     </div>
     
-    <div class="mindful-reading-overlay">
-        <div class="mindful-reading-container">
-            <h3>Mindful Reading</h3>
-            <div class="mindful-text"></div>
-            <div class="mindful-controls">
-                <button class="mindful-btn" id="prev-mindful">Previous</button>
-                <button class="mindful-btn" id="next-mindful">Next</button>
-                <button class="mindful-btn" id="close-mindful">Close</button>
-            </div>
-        </div>
-    </div>
-    
     <div class="volume-control" id="om-volume-control">
         <div class="volume-title">OM Volume</div>
         <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="om-volume-slider">
@@ -947,7 +935,7 @@
             
             // Water ripple effect
             document.addEventListener('click', function(e) {
-                if (e.target.closest('.controls, .zen-garden, .meditation-timer, .hidden-message, .mindful-reading-overlay')) {
+                if (e.target.closest('.controls, .zen-garden, .meditation-timer, .hidden-message')) {
                     return; // Don't create ripples when clicking controls or other interactive elements
                 }
                 
@@ -1099,72 +1087,6 @@
             
             function updateTimerDisplay(minutes, seconds) {
                 timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-            
-            // Mindful Reading Mode
-            const mindfulToggle = document.getElementById('mindfulToggle');
-            const mindfulOverlay = document.querySelector('.mindful-reading-overlay');
-            const mindfulText = document.querySelector('.mindful-text');
-            const prevMindfulBtn = document.getElementById('prev-mindful');
-            const nextMindfulBtn = document.getElementById('next-mindful');
-            const closeMindfulBtn = document.getElementById('close-mindful');
-            
-            // Break story into mindful reading segments
-            const storyParagraphs = [
-                "A Zen Master was walking in silence with one of his disciples along a mountain trail.",
-                "When they came to an ancient cedar tree, they sat down under it for a simple meal of some rice and vegetables.",
-                "After the meal, the disciple, a young monk who had not yet found the key to the mystery of Zen, broke the silence by asking the Master, \"Master, how do I enter Zen?\"",
-                "He was, of course, inquiring how to enter the state of consciousness which is Zen.",
-                "The master remained silent.",
-                "Almost five minutes passed while the disciple anxiously waited for an answer.",
-                "He was about to ask another question when the Master suddenly spoke. \"Do you hear the sound of that mountain stream?\"",
-                "The disciple had been busy thinking about the meaning of Zen.",
-                "Now, as he began to listen to the sound, his noisy mind subsided.",
-                "At first he heard nothing.",
-                "Then, his thinking gave way to heightened alertness, and suddenly he did hear the hardly perceptible murmur of a small stream in the far distance.",
-                "\"Yes, I can hear it now,\" he said.",
-                "The Master raised his finger and, with a look in his eyes that in some way was both fierce and gentle, said, \"Enter Zen from there.\"",
-                "The disciple was stunned. It was his first satori — a flash of enlightenment.",
-                "He knew what Zen was without knowing what it was that he knew!",
-                "They continued on their journey in silence.",
-                "The disciple was amazed at the aliveness of the world around him. He experienced everything as if for the first time.",
-                "Gradually, however, he started thinking again. The alert stillness became covered up again by mental noise.",
-                "Before long he had another question. \"Master,\" he said, \"I have been thinking. What would you have said if I hadn't been able to hear the mountain stream?\"",
-                "The Master stopped, looked at him, raised his finger and said, \"Enter Zen from there.\""
-            ];
-            
-            let currentMindfulIndex = 0;
-            
-            mindfulToggle.addEventListener('click', function() {
-                mindfulOverlay.style.display = 'flex';
-                currentMindfulIndex = 0;
-                updateMindfulText();
-            });
-            
-            closeMindfulBtn.addEventListener('click', function() {
-                mindfulOverlay.style.display = 'none';
-            });
-            
-            prevMindfulBtn.addEventListener('click', function() {
-                if (currentMindfulIndex > 0) {
-                    currentMindfulIndex--;
-                    updateMindfulText();
-                }
-            });
-            
-            nextMindfulBtn.addEventListener('click', function() {
-                if (currentMindfulIndex < storyParagraphs.length - 1) {
-                    currentMindfulIndex++;
-                    updateMindfulText();
-                }
-            });
-            
-            function updateMindfulText() {
-                mindfulText.textContent = storyParagraphs[currentMindfulIndex];
-                
-                // Update button states
-                prevMindfulBtn.disabled = currentMindfulIndex === 0;
-                nextMindfulBtn.disabled = currentMindfulIndex === storyParagraphs.length - 1;
             }
             
             // Parallax effect for the background
