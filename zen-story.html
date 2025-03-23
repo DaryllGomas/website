@@ -553,6 +553,15 @@
             font-size: 0.8em;
             margin-bottom: 5px;
             text-align: center;
+            color: #333;
+        }
+        
+        body.dark-mode .volume-title {
+            color: #ddd;
+        }
+        
+        .volume-control + .volume-control {
+            top: 140px; /* Position second volume control below the first one */
         }
         
         /* Add CSS for floating quotes after the volume control styles */
@@ -740,6 +749,11 @@
         <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="om-volume-slider">
     </div>
     
+    <div class="volume-control" id="cosmic-volume-control">
+        <div class="volume-title">Cosmic Meditation Volume</div>
+        <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="cosmic-volume-slider">
+    </div>
+    
     <div class="controls">
         <button class="control-btn" id="darkModeToggle" title="Toggle Light/Dark Mode">
             🌙
@@ -833,6 +847,7 @@
                     streamSound.pause();
                     soundToggle.textContent = '🔇';
                     omVolumeControl.style.display = 'none';
+                    cosmicVolumeControl.style.display = 'none';
                 } else {
                     console.log("Playing stream sound");
                     streamSound.play()
@@ -840,6 +855,10 @@
                         .catch(e => console.error("Audio playback failed:", e));
                     soundToggle.textContent = '🔊';
                     omVolumeControl.style.display = 'block';
+                    // Only show cosmic volume control if cosmic mode is active
+                    if (cosmicActive) {
+                        cosmicVolumeControl.style.display = 'block';
+                    }
                 }
                 soundPlaying = !soundPlaying;
             });
@@ -1558,6 +1577,8 @@
                     cosmicSound.pause();
                     cosmicSound.currentTime = 0;
                     exitCosmicMode();
+                    // Hide cosmic volume control
+                    cosmicVolumeControl.style.display = 'none';
                 } else {
                     // If not active, turn it on
                     cosmicActive = true;
@@ -1574,6 +1595,11 @@
                     
                     // Initialize space scene
                     initSpaceScene();
+                    
+                    // Show cosmic volume control if sound controls are visible
+                    if (soundPlaying) {
+                        cosmicVolumeControl.style.display = 'block';
+                    }
                     
                     // When audio ends, return to normal
                     cosmicSound.addEventListener('ended', function() {
@@ -1664,6 +1690,15 @@
                     nebula.style.opacity = Math.random() * 0.3 + 0.1;
                 }, Math.random() * 3000);
             }
+            
+            // Get references to the cosmic volume controls
+            const cosmicVolumeControl = document.getElementById('cosmic-volume-control');
+            const cosmicVolumeSlider = document.getElementById('cosmic-volume-slider');
+            
+            // Add volume slider event listener
+            cosmicVolumeSlider.addEventListener('input', function() {
+                cosmicSound.volume = this.value;
+            });
         });
     </script>
 </body>
