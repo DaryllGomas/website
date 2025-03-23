@@ -535,6 +535,34 @@
             margin-bottom: 5px;
             text-align: center;
         }
+        
+        /* Add CSS for floating quotes after the volume control styles */
+        .floating-quote {
+            position: fixed;
+            padding: 15px 25px;
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-style: italic;
+            max-width: 300px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 3s ease;
+            z-index: 5;
+            pointer-events: none;
+        }
+        
+        body.dark-mode .floating-quote {
+            background-color: rgba(0, 0, 0, 0.15);
+            color: #f0f0f0;
+        }
+        
+        .quote-author {
+            font-size: 0.9em;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body class="dark-mode">
@@ -1170,6 +1198,90 @@
                     }, 8000);
                 }
             }, 60000); // Show after 1 minute
+            
+            // Add the floating quotes function near the end of the script, before the setTimeout for the existing quote
+            // Add an expanded collection of Zen quotes
+            function showFloatingQuote() {
+                // Collection of Zen quotes
+                const zenQuotes = [
+                    { text: "When you realize nothing is lacking, the whole world belongs to you.", author: "Lao Tzu" },
+                    { text: "Before enlightenment, chop wood, carry water. After enlightenment, chop wood, carry water.", author: "Zen Proverb" },
+                    { text: "The obstacle is the path.", author: "Zen Proverb" },
+                    { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
+                    { text: "In the beginner's mind there are many possibilities, in the expert's mind there are few.", author: "Shunryu Suzuki" },
+                    { text: "When thoughts arise, then do all things arise. When thoughts vanish, then do all things vanish.", author: "Huang Po" },
+                    { text: "If you are depressed, you are living in the past. If you are anxious, you are living in the future. If you are at peace, you are living in the present.", author: "Lao Tzu" },
+                    { text: "Zen is not some kind of excitement, but concentration on our usual everyday routine.", author: "Shunryu Suzuki" },
+                    { text: "The only Zen you find on the tops of mountains is the Zen you bring up there.", author: "Robert M. Pirsig" },
+                    { text: "When you do something, you should burn yourself completely, like a good bonfire, leaving no trace of yourself.", author: "Shunryu Suzuki" },
+                    { text: "To seek is to suffer. To seek nothing is bliss.", author: "Bodhidharma" },
+                    { text: "If your mind isn't clouded by unnecessary things, this is the best season of your life.", author: "Wu-Men" },
+                    { text: "Wherever you are, it's the place you need to be.", author: "Maxime Lagacé" },
+                    { text: "The true purpose of Zen is to see things as they are.", author: "Shunryu Suzuki" },
+                    { text: "When walking, walk. When eating, eat.", author: "Zen Proverb" },
+                    { text: "Smile, breathe, and go slowly.", author: "Thich Nhat Hanh" },
+                    { text: "Let go, or be dragged.", author: "Zen Proverb" },
+                    { text: "The journey of a thousand miles begins with a single step.", author: "Lao Tzu" },
+                    { text: "No snowflake ever falls in the wrong place.", author: "Zen Proverb" },
+                    { text: "Only when you can be extremely pliable and soft can you be extremely hard and strong.", author: "Zen Proverb" }
+                ];
+                
+                // Get a random quote
+                const randomQuote = zenQuotes[Math.floor(Math.random() * zenQuotes.length)];
+                
+                // Create quote element
+                const quoteEl = document.createElement('div');
+                quoteEl.className = 'floating-quote';
+                
+                // Add quote text and author
+                const quoteText = document.createElement('div');
+                quoteText.textContent = `"${randomQuote.text}"`;
+                quoteEl.appendChild(quoteText);
+                
+                const quoteAuthor = document.createElement('div');
+                quoteAuthor.className = 'quote-author';
+                quoteAuthor.textContent = `— ${randomQuote.author}`;
+                quoteEl.appendChild(quoteAuthor);
+                
+                // Position randomly on screen (with some padding from edges)
+                const padding = 100; // px from the edge
+                const x = padding + Math.random() * (window.innerWidth - padding * 2);
+                const y = padding + Math.random() * (window.innerHeight - padding * 2);
+                
+                quoteEl.style.left = `${x}px`;
+                quoteEl.style.top = `${y}px`;
+                
+                // Add to document
+                document.body.appendChild(quoteEl);
+                
+                // Fade in
+                setTimeout(() => {
+                    quoteEl.style.opacity = 1;
+                }, 100);
+                
+                // Fade out and remove after 8-12 seconds
+                const displayTime = 8000 + Math.random() * 4000;
+                setTimeout(() => {
+                    quoteEl.style.opacity = 0;
+                    setTimeout(() => {
+                        if (quoteEl.parentNode) {
+                            quoteEl.parentNode.removeChild(quoteEl);
+                        }
+                    }, 3000); // Match the CSS transition time
+                }, displayTime);
+                
+                // Schedule next quote
+                scheduleNextQuote();
+            }
+            
+            function scheduleNextQuote() {
+                // Random interval between 20-40 seconds for a calming pace
+                const nextInterval = 20000 + Math.random() * 20000;
+                setTimeout(showFloatingQuote, nextInterval);
+            }
+            
+            // Start the floating quotes after a short initial delay
+            setTimeout(showFloatingQuote, 10000);
         });
     </script>
 </body>
