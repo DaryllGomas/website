@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter Zen From There</title>
+    <link rel="preload" href="cosmic.jpg" as="image">
     <style>
         html, body {
             margin: 0;
@@ -604,19 +605,19 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            background: url('cosmic.jpg') center center;
-            background-size: cover;
+            background-color: #000;
             overflow: hidden;
             opacity: 0;
             transition: opacity 3s ease;
+            pointer-events: none;
         }
         
         .cosmic-warp {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
             background: url('cosmic.jpg') center center;
             background-size: cover;
             filter: blur(8px) brightness(1.2);
@@ -1603,8 +1604,11 @@
             let cosmicActive = false;
             
             cosmicToggle.addEventListener('click', function() {
+                console.log("Cosmic toggle clicked. Current state:", cosmicActive);
+                
                 if (cosmicActive) {
                     // If already active, turn it off
+                    console.log("Turning off cosmic mode");
                     cosmicSound.pause();
                     cosmicSound.currentTime = 0;
                     exitCosmicMode();
@@ -1612,25 +1616,40 @@
                     cosmicVolumeControl.style.display = 'none';
                 } else {
                     // If not active, turn it on
+                    console.log("Turning on cosmic mode");
                     cosmicActive = true;
                     
-                    // Start the audio
-                    cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
+                    // Pre-load the cosmic image and wait for it to load
+                    const preloadImg = new Image();
+                    preloadImg.onload = function() {
+                        console.log("Cosmic image loaded successfully");
+                        
+                        // Start the audio
+                        cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
+                        
+                        // Transform the page
+                        document.body.classList.add('cosmic-mode');
+                        spaceScene.style.opacity = '1';
+                        
+                        // Add cosmic pulse to container
+                        document.querySelector('.container').classList.add('cosmic-pulse');
+                        
+                        // Initialize space scene
+                        initSpaceScene();
+                        
+                        // Show cosmic volume control if sound controls are visible
+                        if (soundPlaying) {
+                            cosmicVolumeControl.style.display = 'block';
+                        }
+                    };
                     
-                    // Transform the page
-                    document.body.classList.add('cosmic-mode');
-                    spaceScene.style.opacity = '1';
+                    preloadImg.onerror = function() {
+                        console.error("Failed to load cosmic image");
+                        alert("Could not load cosmic background image. Please check that cosmic.jpg exists in the website folder.");
+                        cosmicActive = false;
+                    };
                     
-                    // Add cosmic pulse to container
-                    document.querySelector('.container').classList.add('cosmic-pulse');
-                    
-                    // Initialize space scene
-                    initSpaceScene();
-                    
-                    // Show cosmic volume control if sound controls are visible
-                    if (soundPlaying) {
-                        cosmicVolumeControl.style.display = 'block';
-                    }
+                    preloadImg.src = 'cosmic.jpg';
                     
                     // When audio ends, return to normal
                     cosmicSound.addEventListener('ended', function() {
@@ -1655,37 +1674,80 @@
             }
             
             function initSpaceScene() {
-                // Create warp effect layers using the cosmic.jpg image
-                for (let i = 0; i < 3; i++) {
-                    createWarpLayer(i);
+                console.log("Initializing space scene with failsafe method...");
+                
+                // Clear any existing contents
+                while (spaceScene.firstChild) {
+                    spaceScene.removeChild(spaceScene.firstChild);
                 }
                 
-                // Still add some stars over the image for extra effect
-                for (let i = 0; i < 100; i++) {
-                    createStar();
-                }
-            }
-            
-            function createWarpLayer(index) {
-                const warp = document.createElement('div');
-                warp.className = 'cosmic-warp';
+                // Embed the cosmic image directly
+                const cosmicImage = document.createElement('img');
+                cosmicImage.src = 'cosmic.jpg';
+                cosmicImage.style.position = 'absolute';
+                cosmicImage.style.top = '0';
+                cosmicImage.style.left = '0';
+                cosmicImage.style.width = '100%';
+                cosmicImage.style.height = '100%';
+                cosmicImage.style.objectFit = 'cover';
+                cosmicImage.style.opacity = '0';
+                cosmicImage.style.transition = 'opacity 3s ease';
+                spaceScene.appendChild(cosmicImage);
                 
-                // Each layer has slightly different animation timing
-                warp.style.animationDelay = `${index * -7}s`;
-                warp.style.animationDuration = `${20 + index * 5}s`;
+                // Fade in the image
+                setTimeout(() => {
+                    cosmicImage.style.opacity = '1';
+                }, 100);
                 
-                // Each layer has slightly different opacity and blend mode
-                warp.style.opacity = 0.3 - (index * 0.05);
-                
-                // Different starting transforms for each layer
-                warp.style.transform = `scale(${1 + index * 0.05}) rotate(${index - 1}deg)`;
-                
-                spaceScene.appendChild(warp);
+                // Create a separate warp layer using the same image technique
+                const warpLayer = document.createElement('div');
+                warpLayer.style.position = 'absolute';
+                warpLayer.style.top = '-5%';
+                warpLayer.style.left = '-5%';
+                warpLayer.style.width = '110%';
+                warpLayer.style.height = '110%';
+                warpLayer.style.backgroundImage = 'url("cosmic.jpg")';
+                warpLayer.style.backgroundSize = 'cover';
+                warpLayer.style.backgroundPosition = 'center';
+                warpLayer.style.opacity = '0';
+                warpLayer.style.filter = 'blur(8px) brightness(1.2)';
+                warpLayer.style.mixBlendMode = 'screen';
+                warpLayer.style.animation = 'warpEffect 20s infinite alternate ease-in-out';
+                spaceScene.appendChild(warpLayer);
                 
                 // Fade in the warp layer
                 setTimeout(() => {
-                    warp.style.opacity = 0.3 - (index * 0.05);
-                }, 500 + index * 300);
+                    warpLayer.style.transition = 'opacity 3s ease';
+                    warpLayer.style.opacity = '0.3';
+                }, 500);
+                
+                // Create a second, offset warp layer
+                const warpLayer2 = document.createElement('div');
+                warpLayer2.style.position = 'absolute';
+                warpLayer2.style.top = '-8%';
+                warpLayer2.style.left = '-8%';
+                warpLayer2.style.width = '116%';
+                warpLayer2.style.height = '116%';
+                warpLayer2.style.backgroundImage = 'url("cosmic.jpg")';
+                warpLayer2.style.backgroundSize = 'cover';
+                warpLayer2.style.backgroundPosition = 'center';
+                warpLayer2.style.opacity = '0';
+                warpLayer2.style.filter = 'blur(12px) brightness(1.1) hue-rotate(15deg)';
+                warpLayer2.style.mixBlendMode = 'screen';
+                warpLayer2.style.animation = 'warpEffect 25s infinite alternate-reverse ease-in-out';
+                warpLayer2.style.animationDelay = '-10s';
+                spaceScene.appendChild(warpLayer2);
+                
+                // Fade in the second warp layer
+                setTimeout(() => {
+                    warpLayer2.style.transition = 'opacity 3s ease';
+                    warpLayer2.style.opacity = '0.2';
+                }, 1000);
+                
+                // Add some stars
+                for (let i = 0; i < 50; i++) {
+                    createStar();
+                }
             }
             
             function createStar() {
@@ -1716,34 +1778,6 @@
                 }, Math.random() * 2000);
             }
             
-            function createNebula() {
-                const nebula = document.createElement('div');
-                nebula.className = 'nebula';
-                
-                // Random size
-                const size = 100 + Math.random() * 300;
-                nebula.style.width = `${size}px`;
-                nebula.style.height = `${size}px`;
-                
-                // Random position
-                nebula.style.left = `${Math.random() * 100}%`;
-                nebula.style.top = `${Math.random() * 100}%`;
-                
-                // Random color (blue/purple hues)
-                const hue = 180 + Math.random() * 90;
-                nebula.style.backgroundColor = `hsla(${hue}, 70%, 50%, 0.3)`;
-                
-                // Random animation delay
-                nebula.style.animationDelay = `${Math.random() * 5}s`;
-                
-                spaceScene.appendChild(nebula);
-                
-                // Fade in the nebula
-                setTimeout(() => {
-                    nebula.style.opacity = Math.random() * 0.3 + 0.1;
-                }, Math.random() * 3000);
-            }
-            
             // Get references to the cosmic volume controls
             const cosmicVolumeControl = document.getElementById('cosmic-volume-control');
             const cosmicVolumeSlider = document.getElementById('cosmic-volume-slider');
@@ -1752,6 +1786,19 @@
             cosmicVolumeSlider.addEventListener('input', function() {
                 cosmicSound.volume = this.value;
             });
+            
+            // Add this at the bottom of the script to ensure image has loaded
+            setTimeout(function() {
+                console.log("Testing cosmic image load...");
+                const testImg = new Image();
+                testImg.onload = function() {
+                    console.log("COSMIC IMAGE FOUND AND LOADED SUCCESSFULLY!");
+                };
+                testImg.onerror = function() {
+                    console.error("COSMIC IMAGE FAILED TO LOAD! Please check the path: " + testImg.src);
+                };
+                testImg.src = 'cosmic.jpg';
+            }, 2000);
         });
     </script>
 </body>
