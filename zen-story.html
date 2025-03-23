@@ -661,9 +661,11 @@
                 if (soundPlaying) {
                     streamSound.pause();
                     soundToggle.textContent = '🔇';
+                    omVolumeControl.style.display = 'none';
                 } else {
                     streamSound.play().catch(e => console.error("Audio playback failed:", e));
                     soundToggle.textContent = '🔊';
+                    omVolumeControl.style.display = 'block';
                 }
                 soundPlaying = !soundPlaying;
             });
@@ -679,12 +681,10 @@
             breatheToggle.addEventListener('click', function() {
                 if (breathingActive) {
                     breathingCircle.style.display = 'none';
-                    omVolumeControl.style.display = 'none';
                     omSound.pause();
                     omSound.currentTime = 0;
                 } else {
                     breathingCircle.style.display = 'block';
-                    omVolumeControl.style.display = 'block';
                     omSound.play().catch(e => console.error("OM sound playback failed:", e));
                 }
                 breathingActive = !breathingActive;
