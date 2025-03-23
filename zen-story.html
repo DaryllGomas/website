@@ -522,6 +522,12 @@
             z-index: -2;
             transform: translate(-10%, -10%);
             will-change: transform; /* Optimizes for animation */
+            transition: opacity 1.5s ease; /* Add transition for smooth fade */
+        }
+        
+        /* Add this rule to hide the mountain background when cosmic mode is active */
+        body.cosmic-mode .parallax-bg {
+            opacity: 0;
         }
         
         body.dark-mode .parallax-bg {
@@ -606,18 +612,19 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -3;
+            z-index: -3; /* Behind parallax by default */
             background-image: url('cosmic.jpg');
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 3s ease, transform 15s ease-in-out;
+            transition: opacity 3s ease, transform 15s ease-in-out, z-index 0s linear;
             pointer-events: none;
             transform: scale(1);
         }
         
         /* Add animation for cosmic mode */
         .cosmic-mode .space-scene {
+            z-index: -1; /* Bring it to front when active */
             opacity: 1;
             transform: scale(1.05);
             animation: cosmic-drift 30s infinite alternate ease-in-out;
@@ -813,6 +820,16 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Debug audio loading
             console.log("DOM fully loaded");
+            
+            // Check if cosmic.jpg exists and is loadable
+            const cosmicTest = new Image();
+            cosmicTest.onload = function() {
+                console.log("cosmic.jpg loaded successfully");
+            };
+            cosmicTest.onerror = function() {
+                console.error("Error loading cosmic.jpg - please check the file exists in the correct location");
+            };
+            cosmicTest.src = 'cosmic.jpg';
             
             const streamSound = document.getElementById('streamSound');
             const bellSound = document.getElementById('bellSound');
@@ -1604,13 +1621,20 @@
                     
                     // Transform the page
                     document.body.classList.add('cosmic-mode');
+                    
+                    // Debug log for cosmic background
+                    console.log("Setting space scene to visible");
+                    console.log("Space scene element:", spaceScene);
+                    
+                    // Make sure space scene is visible
                     spaceScene.style.opacity = '1';
+                    spaceScene.style.zIndex = '-1';
+                    
+                    console.log("Space scene opacity set to:", spaceScene.style.opacity);
+                    console.log("Space scene z-index set to:", spaceScene.style.zIndex);
                     
                     // Add cosmic pulse to container
                     document.querySelector('.container').classList.add('cosmic-pulse');
-                    
-                    // Initialize space scene - removed canvas initialization
-                    // initSpaceScene();
                     
                     // Show cosmic volume control if sound controls are visible
                     if (soundPlaying) {
@@ -1621,15 +1645,24 @@
             
             function exitCosmicMode() {
                 // Return to normal state
+                console.log("Exiting cosmic mode...");
                 document.body.classList.remove('cosmic-mode');
-                spaceScene.style.opacity = '0';
-                document.querySelector('.container').classList.remove('cosmic-pulse');
                 
-                // No need to cancel animation frames or clear the space scene since we're using an image
+                // Reset space scene
+                spaceScene.style.opacity = '0';
+                // Reset the z-index after the opacity transition to prevent flicker
+                setTimeout(() => {
+                    spaceScene.style.zIndex = '-3';
+                    console.log("Reset space scene z-index to:", spaceScene.style.zIndex);
+                }, 1500);
+                
+                // Remove the pulse effect from the container
+                document.querySelector('.container').classList.remove('cosmic-pulse');
                 
                 // Set cosmicActive to false after transition completes
                 setTimeout(() => {
                     cosmicActive = false;
+                    console.log("Cosmic mode deactivated");
                 }, 3000); // Match transition time
             }
             
