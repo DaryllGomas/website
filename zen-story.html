@@ -673,6 +673,10 @@
             const bellSound = document.getElementById('bellSound');
             const omSound = document.getElementById('omSound');
             
+            // Move firefliesActive declaration to the top
+            let firefliesActive = false;
+            let fireflies = [];
+            
             console.log("Stream sound ready state:", streamSound.readyState);
             console.log("Bell sound ready state:", bellSound.readyState);
             console.log("OM sound ready state:", omSound.readyState);
@@ -1058,9 +1062,6 @@
             }
             
             // Fireflies in dark mode
-            let firefliesActive = false;
-            let fireflies = [];
-            
             function initFireflies() {
                 firefliesActive = true;
                 for (let i = 0; i < 25; i++) {
