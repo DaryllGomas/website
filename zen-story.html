@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enter Zen From There</title>
-    <link rel="preload" href="cosmic.jpg" as="image">
+    <!-- No preload needed for embedded images -->
     <style>
         html, body {
             margin: 0;
@@ -1619,37 +1619,23 @@
                     console.log("Turning on cosmic mode");
                     cosmicActive = true;
                     
-                    // Pre-load the cosmic image and wait for it to load
-                    const preloadImg = new Image();
-                    preloadImg.onload = function() {
-                        console.log("Cosmic image loaded successfully");
-                        
-                        // Start the audio
-                        cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
-                        
-                        // Transform the page
-                        document.body.classList.add('cosmic-mode');
-                        spaceScene.style.opacity = '1';
-                        
-                        // Add cosmic pulse to container
-                        document.querySelector('.container').classList.add('cosmic-pulse');
-                        
-                        // Initialize space scene
-                        initSpaceScene();
-                        
-                        // Show cosmic volume control if sound controls are visible
-                        if (soundPlaying) {
-                            cosmicVolumeControl.style.display = 'block';
-                        }
-                    };
+                    // Start the audio
+                    cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
                     
-                    preloadImg.onerror = function() {
-                        console.error("Failed to load cosmic image");
-                        alert("Could not load cosmic background image. Please check that cosmic.jpg exists in the website folder.");
-                        cosmicActive = false;
-                    };
+                    // Transform the page
+                    document.body.classList.add('cosmic-mode');
+                    spaceScene.style.opacity = '1';
                     
-                    preloadImg.src = 'cosmic.jpg';
+                    // Add cosmic pulse to container
+                    document.querySelector('.container').classList.add('cosmic-pulse');
+                    
+                    // Initialize space scene
+                    initSpaceScene();
+                    
+                    // Show cosmic volume control if sound controls are visible
+                    if (soundPlaying) {
+                        cosmicVolumeControl.style.display = 'block';
+                    }
                     
                     // When audio ends, return to normal
                     cosmicSound.addEventListener('ended', function() {
@@ -1674,79 +1660,115 @@
             }
             
             function initSpaceScene() {
-                console.log("Initializing space scene with failsafe method...");
+                console.log("Initializing space scene with pure CSS...");
                 
                 // Clear any existing contents
                 while (spaceScene.firstChild) {
                     spaceScene.removeChild(spaceScene.firstChild);
                 }
                 
-                // Embed the cosmic image directly
-                const cosmicImage = document.createElement('img');
-                cosmicImage.src = 'cosmic.jpg';
-                cosmicImage.style.position = 'absolute';
-                cosmicImage.style.top = '0';
-                cosmicImage.style.left = '0';
-                cosmicImage.style.width = '100%';
-                cosmicImage.style.height = '100%';
-                cosmicImage.style.objectFit = 'cover';
-                cosmicImage.style.opacity = '0';
-                cosmicImage.style.transition = 'opacity 3s ease';
-                spaceScene.appendChild(cosmicImage);
+                // Create a deep space background
+                const spaceBackground = document.createElement('div');
+                spaceBackground.style.position = 'absolute';
+                spaceBackground.style.top = '0';
+                spaceBackground.style.left = '0';
+                spaceBackground.style.width = '100%';
+                spaceBackground.style.height = '100%';
+                spaceBackground.style.background = 'radial-gradient(ellipse at center, #1B2735 0%, #090A0F 100%)';
+                spaceBackground.style.opacity = '0';
+                spaceBackground.style.transition = 'opacity 3s ease';
+                spaceScene.appendChild(spaceBackground);
                 
-                // Fade in the image
+                // Fade in the background
                 setTimeout(() => {
-                    cosmicImage.style.opacity = '1';
+                    spaceBackground.style.opacity = '1';
                 }, 100);
                 
-                // Create a separate warp layer using the same image technique
-                const warpLayer = document.createElement('div');
-                warpLayer.style.position = 'absolute';
-                warpLayer.style.top = '-5%';
-                warpLayer.style.left = '-5%';
-                warpLayer.style.width = '110%';
-                warpLayer.style.height = '110%';
-                warpLayer.style.backgroundImage = 'url("cosmic.jpg")';
-                warpLayer.style.backgroundSize = 'cover';
-                warpLayer.style.backgroundPosition = 'center';
-                warpLayer.style.opacity = '0';
-                warpLayer.style.filter = 'blur(8px) brightness(1.2)';
-                warpLayer.style.mixBlendMode = 'screen';
-                warpLayer.style.animation = 'warpEffect 20s infinite alternate ease-in-out';
-                spaceScene.appendChild(warpLayer);
+                // Create a nebula effect with CSS
+                const nebula1 = document.createElement('div');
+                nebula1.style.position = 'absolute';
+                nebula1.style.top = '20%';
+                nebula1.style.left = '30%';
+                nebula1.style.width = '60%';
+                nebula1.style.height = '60%';
+                nebula1.style.borderRadius = '50%';
+                nebula1.style.background = 'radial-gradient(ellipse at center, rgba(100, 100, 255, 0.3) 0%, rgba(50, 50, 150, 0) 70%)';
+                nebula1.style.filter = 'blur(30px)';
+                nebula1.style.opacity = '0';
+                nebula1.style.transform = 'scale(0.8)';
+                nebula1.style.animation = 'nebulaEffect1 20s infinite alternate ease-in-out';
+                spaceScene.appendChild(nebula1);
                 
-                // Fade in the warp layer
-                setTimeout(() => {
-                    warpLayer.style.transition = 'opacity 3s ease';
-                    warpLayer.style.opacity = '0.3';
-                }, 500);
+                // Create another nebula effect with different colors
+                const nebula2 = document.createElement('div');
+                nebula2.style.position = 'absolute';
+                nebula2.style.top = '40%';
+                nebula2.style.left = '50%';
+                nebula2.style.width = '70%';
+                nebula2.style.height = '70%';
+                nebula2.style.borderRadius = '50%';
+                nebula2.style.background = 'radial-gradient(ellipse at center, rgba(255, 100, 255, 0.2) 0%, rgba(150, 50, 150, 0) 70%)';
+                nebula2.style.filter = 'blur(40px)';
+                nebula2.style.opacity = '0';
+                nebula2.style.transform = 'scale(0.9)';
+                nebula2.style.animation = 'nebulaEffect2 25s infinite alternate-reverse ease-in-out';
+                spaceScene.appendChild(nebula2);
                 
-                // Create a second, offset warp layer
-                const warpLayer2 = document.createElement('div');
-                warpLayer2.style.position = 'absolute';
-                warpLayer2.style.top = '-8%';
-                warpLayer2.style.left = '-8%';
-                warpLayer2.style.width = '116%';
-                warpLayer2.style.height = '116%';
-                warpLayer2.style.backgroundImage = 'url("cosmic.jpg")';
-                warpLayer2.style.backgroundSize = 'cover';
-                warpLayer2.style.backgroundPosition = 'center';
-                warpLayer2.style.opacity = '0';
-                warpLayer2.style.filter = 'blur(12px) brightness(1.1) hue-rotate(15deg)';
-                warpLayer2.style.mixBlendMode = 'screen';
-                warpLayer2.style.animation = 'warpEffect 25s infinite alternate-reverse ease-in-out';
-                warpLayer2.style.animationDelay = '-10s';
-                spaceScene.appendChild(warpLayer2);
-                
-                // Fade in the second warp layer
-                setTimeout(() => {
-                    warpLayer2.style.transition = 'opacity 3s ease';
-                    warpLayer2.style.opacity = '0.2';
-                }, 1000);
+                // Create a bright central region
+                const core = document.createElement('div');
+                core.style.position = 'absolute';
+                core.style.top = '45%';
+                core.style.left = '48%';
+                core.style.width = '10%';
+                core.style.height = '10%';
+                core.style.borderRadius = '50%';
+                core.style.background = 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.8) 0%, rgba(150, 200, 255, 0.3) 50%, rgba(100, 100, 200, 0) 100%)';
+                core.style.boxShadow = '0 0 30px 10px rgba(100, 150, 255, 0.6)';
+                core.style.opacity = '0';
+                core.style.animation = 'pulseEffect 8s infinite alternate ease-in-out';
+                spaceScene.appendChild(core);
                 
                 // Add some stars
-                for (let i = 0; i < 50; i++) {
+                for (let i = 0; i < 200; i++) {
                     createStar();
+                }
+                
+                // Fade in the nebulae and core
+                setTimeout(() => {
+                    nebula1.style.transition = 'opacity 5s ease';
+                    nebula1.style.opacity = '0.7';
+                    
+                    nebula2.style.transition = 'opacity 6s ease';
+                    nebula2.style.opacity = '0.6';
+                    
+                    core.style.transition = 'opacity 4s ease';
+                    core.style.opacity = '0.8';
+                }, 500);
+                
+                // Add CSS animations to the document if they don't exist yet
+                if (!document.getElementById('cosmic-animations')) {
+                    const styleSheet = document.createElement('style');
+                    styleSheet.id = 'cosmic-animations';
+                    styleSheet.textContent = `
+                        @keyframes nebulaEffect1 {
+                            0% { transform: scale(0.8) rotate(0deg); filter: blur(30px) brightness(1); }
+                            50% { transform: scale(1.1) rotate(5deg); filter: blur(40px) brightness(1.2); }
+                            100% { transform: scale(0.9) rotate(-2deg); filter: blur(35px) brightness(0.9); }
+                        }
+                        
+                        @keyframes nebulaEffect2 {
+                            0% { transform: scale(0.9) translate(0, 0); filter: blur(40px) hue-rotate(0deg); }
+                            50% { transform: scale(1.2) translate(-5%, 5%); filter: blur(50px) hue-rotate(30deg); }
+                            100% { transform: scale(1.0) translate(3%, -3%); filter: blur(45px) hue-rotate(-20deg); }
+                        }
+                        
+                        @keyframes pulseEffect {
+                            0% { transform: scale(0.8); opacity: 0.6; }
+                            50% { transform: scale(1.2); opacity: 0.9; }
+                            100% { transform: scale(0.9); opacity: 0.7; }
+                        }
+                    `;
+                    document.head.appendChild(styleSheet);
                 }
             }
             
