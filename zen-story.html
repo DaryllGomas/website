@@ -537,7 +537,7 @@
         }
     </style>
 </head>
-<body>
+<body class="dark-mode">
     <div class="parallax-bg"></div>
     
     <div class="container">
@@ -605,9 +605,9 @@
     
     <div class="controls">
         <button class="control-btn" id="darkModeToggle" title="Toggle Light/Dark Mode">
-            ☀️
+            🌙
         </button>
-        <button class="control-btn" id="soundToggle" title="Toggle Stream Sound">
+        <button class="control-btn" id="soundToggle" title="Toggle OM Sound">
             🔇
         </button>
         <button class="control-btn" id="breatheToggle" title="Toggle Breathing Guide">
@@ -638,6 +638,9 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize fireflies since dark mode is default
+            initFireflies();
+            
             // Dark mode toggle
             const darkModeToggle = document.getElementById('darkModeToggle');
             darkModeToggle.addEventListener('click', function() {
