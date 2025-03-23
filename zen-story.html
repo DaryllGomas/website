@@ -605,69 +605,18 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            background-color: #000;
             overflow: hidden;
             opacity: 0;
             transition: opacity 3s ease;
             pointer-events: none;
         }
         
-        .cosmic-warp {
+        .cosmic-canvas {
             position: absolute;
-            top: -10%;
-            left: -10%;
-            width: 120%;
-            height: 120%;
-            background: url('cosmic.jpg') center center;
-            background-size: cover;
-            filter: blur(8px) brightness(1.2);
-            mix-blend-mode: screen;
-            opacity: 0;
-            animation: warpEffect 20s infinite alternate ease-in-out;
-            transform-origin: center;
-        }
-        
-        @keyframes warpEffect {
-            0% {
-                transform: scale(1.0) rotate(0deg);
-                filter: blur(8px) brightness(1.1) hue-rotate(0deg);
-            }
-            50% {
-                transform: scale(1.1) rotate(1deg);
-                filter: blur(12px) brightness(1.3) hue-rotate(15deg);
-            }
-            100% {
-                transform: scale(1.05) rotate(-1deg);
-                filter: blur(10px) brightness(1.2) hue-rotate(-15deg);
-            }
-        }
-        
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            opacity: 0;
-            animation: twinkle 5s infinite ease-in-out;
-        }
-        
-        @keyframes twinkle {
-            0% { opacity: 0; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-            100% { opacity: 0; transform: scale(0.8); }
-        }
-        
-        .nebula {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(30px);
-            opacity: 0;
-            animation: pulsate 15s infinite ease-in-out;
-        }
-        
-        @keyframes pulsate {
-            0% { opacity: 0.1; transform: scale(0.9); }
-            50% { opacity: 0.4; transform: scale(1.1); }
-            100% { opacity: 0.1; transform: scale(0.9); }
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
         
         .cosmic-mode .container {
@@ -1636,11 +1585,6 @@
                     if (soundPlaying) {
                         cosmicVolumeControl.style.display = 'block';
                     }
-                    
-                    // When audio ends, return to normal
-                    cosmicSound.addEventListener('ended', function() {
-                        exitCosmicMode();
-                    });
                 }
             });
             
@@ -1649,6 +1593,12 @@
                 document.body.classList.remove('cosmic-mode');
                 spaceScene.style.opacity = '0';
                 document.querySelector('.container').classList.remove('cosmic-pulse');
+                
+                // Cancel any ongoing animation
+                if (spaceScene.animationFrame) {
+                    cancelAnimationFrame(spaceScene.animationFrame);
+                    spaceScene.animationFrame = null;
+                }
                 
                 // Clear space scene
                 setTimeout(() => {
@@ -1660,144 +1610,316 @@
             }
             
             function initSpaceScene() {
-                console.log("Initializing space scene with pure CSS...");
+                console.log("Initializing enhanced space scene with canvas...");
                 
                 // Clear any existing contents
                 while (spaceScene.firstChild) {
                     spaceScene.removeChild(spaceScene.firstChild);
                 }
                 
-                // Create a deep space background
-                const spaceBackground = document.createElement('div');
-                spaceBackground.style.position = 'absolute';
-                spaceBackground.style.top = '0';
-                spaceBackground.style.left = '0';
-                spaceBackground.style.width = '100%';
-                spaceBackground.style.height = '100%';
-                spaceBackground.style.background = 'radial-gradient(ellipse at center, #1B2735 0%, #090A0F 100%)';
-                spaceBackground.style.opacity = '0';
-                spaceBackground.style.transition = 'opacity 3s ease';
-                spaceScene.appendChild(spaceBackground);
+                // Create canvas element
+                const canvas = document.createElement('canvas');
+                canvas.className = 'cosmic-canvas';
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                spaceScene.appendChild(canvas);
                 
-                // Fade in the background
-                setTimeout(() => {
-                    spaceBackground.style.opacity = '1';
-                }, 100);
+                const ctx = canvas.getContext('2d');
                 
-                // Create a nebula effect with CSS
-                const nebula1 = document.createElement('div');
-                nebula1.style.position = 'absolute';
-                nebula1.style.top = '20%';
-                nebula1.style.left = '30%';
-                nebula1.style.width = '60%';
-                nebula1.style.height = '60%';
-                nebula1.style.borderRadius = '50%';
-                nebula1.style.background = 'radial-gradient(ellipse at center, rgba(100, 100, 255, 0.3) 0%, rgba(50, 50, 150, 0) 70%)';
-                nebula1.style.filter = 'blur(30px)';
-                nebula1.style.opacity = '0';
-                nebula1.style.transform = 'scale(0.8)';
-                nebula1.style.animation = 'nebulaEffect1 20s infinite alternate ease-in-out';
-                spaceScene.appendChild(nebula1);
+                // Create a deep space background gradient
+                const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+                bgGradient.addColorStop(0, '#020924');
+                bgGradient.addColorStop(0.5, '#0d0d2f');
+                bgGradient.addColorStop(1, '#000000');
                 
-                // Create another nebula effect with different colors
-                const nebula2 = document.createElement('div');
-                nebula2.style.position = 'absolute';
-                nebula2.style.top = '40%';
-                nebula2.style.left = '50%';
-                nebula2.style.width = '70%';
-                nebula2.style.height = '70%';
-                nebula2.style.borderRadius = '50%';
-                nebula2.style.background = 'radial-gradient(ellipse at center, rgba(255, 100, 255, 0.2) 0%, rgba(150, 50, 150, 0) 70%)';
-                nebula2.style.filter = 'blur(40px)';
-                nebula2.style.opacity = '0';
-                nebula2.style.transform = 'scale(0.9)';
-                nebula2.style.animation = 'nebulaEffect2 25s infinite alternate-reverse ease-in-out';
-                spaceScene.appendChild(nebula2);
-                
-                // Create a bright central region
-                const core = document.createElement('div');
-                core.style.position = 'absolute';
-                core.style.top = '45%';
-                core.style.left = '48%';
-                core.style.width = '10%';
-                core.style.height = '10%';
-                core.style.borderRadius = '50%';
-                core.style.background = 'radial-gradient(ellipse at center, rgba(255, 255, 255, 0.8) 0%, rgba(150, 200, 255, 0.3) 50%, rgba(100, 100, 200, 0) 100%)';
-                core.style.boxShadow = '0 0 30px 10px rgba(100, 150, 255, 0.6)';
-                core.style.opacity = '0';
-                core.style.animation = 'pulseEffect 8s infinite alternate ease-in-out';
-                spaceScene.appendChild(core);
-                
-                // Add some stars
-                for (let i = 0; i < 200; i++) {
-                    createStar();
+                // Stars properties
+                const stars = [];
+                for (let i = 0; i < 800; i++) {
+                    const size = Math.random() * 2 + 0.5;
+                    stars.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: size,
+                        color: size > 1.5 ? 
+                               `rgb(${200 + Math.random() * 55}, ${200 + Math.random() * 55}, 255)` : 
+                               'rgb(255, 255, 255)',
+                        brightness: Math.random() * 0.8 + 0.2,
+                        pulseSpeed: Math.random() * 0.02 + 0.005
+                    });
                 }
                 
-                // Fade in the nebulae and core
-                setTimeout(() => {
-                    nebula1.style.transition = 'opacity 5s ease';
-                    nebula1.style.opacity = '0.7';
-                    
-                    nebula2.style.transition = 'opacity 6s ease';
-                    nebula2.style.opacity = '0.6';
-                    
-                    core.style.transition = 'opacity 4s ease';
-                    core.style.opacity = '0.8';
-                }, 500);
+                // Nebula properties - using multiple overlapping gradients
+                const nebulae = [];
                 
-                // Add CSS animations to the document if they don't exist yet
-                if (!document.getElementById('cosmic-animations')) {
-                    const styleSheet = document.createElement('style');
-                    styleSheet.id = 'cosmic-animations';
-                    styleSheet.textContent = `
-                        @keyframes nebulaEffect1 {
-                            0% { transform: scale(0.8) rotate(0deg); filter: blur(30px) brightness(1); }
-                            50% { transform: scale(1.1) rotate(5deg); filter: blur(40px) brightness(1.2); }
-                            100% { transform: scale(0.9) rotate(-2deg); filter: blur(35px) brightness(0.9); }
-                        }
-                        
-                        @keyframes nebulaEffect2 {
-                            0% { transform: scale(0.9) translate(0, 0); filter: blur(40px) hue-rotate(0deg); }
-                            50% { transform: scale(1.2) translate(-5%, 5%); filter: blur(50px) hue-rotate(30deg); }
-                            100% { transform: scale(1.0) translate(3%, -3%); filter: blur(45px) hue-rotate(-20deg); }
-                        }
-                        
-                        @keyframes pulseEffect {
-                            0% { transform: scale(0.8); opacity: 0.6; }
-                            50% { transform: scale(1.2); opacity: 0.9; }
-                            100% { transform: scale(0.9); opacity: 0.7; }
-                        }
-                    `;
-                    document.head.appendChild(styleSheet);
+                // Create 5 differently colored nebulae
+                nebulae.push({
+                    x: canvas.width * 0.3,
+                    y: canvas.height * 0.7,
+                    radius: canvas.width * 0.4,
+                    color1: 'rgba(30, 50, 180, 0.2)',
+                    color2: 'rgba(10, 20, 120, 0.05)',
+                    speedX: 0.0003,
+                    speedY: 0.0005,
+                    pulseSpeed: 0.001
+                });
+                
+                nebulae.push({
+                    x: canvas.width * 0.6,
+                    y: canvas.height * 0.3,
+                    radius: canvas.width * 0.5,
+                    color1: 'rgba(180, 30, 180, 0.15)',
+                    color2: 'rgba(120, 10, 120, 0.03)',
+                    speedX: -0.0004,
+                    speedY: 0.0003,
+                    pulseSpeed: 0.0015
+                });
+                
+                nebulae.push({
+                    x: canvas.width * 0.5,
+                    y: canvas.height * 0.5,
+                    radius: canvas.width * 0.6,
+                    color1: 'rgba(50, 100, 200, 0.1)',
+                    color2: 'rgba(20, 40, 100, 0.02)',
+                    speedX: 0.0002,
+                    speedY: -0.0004,
+                    pulseSpeed: 0.0012
+                });
+                
+                nebulae.push({
+                    x: canvas.width * 0.2,
+                    y: canvas.height * 0.4,
+                    radius: canvas.width * 0.3,
+                    color1: 'rgba(100, 30, 150, 0.15)',
+                    color2: 'rgba(50, 10, 80, 0.03)',
+                    speedX: 0.0005,
+                    speedY: 0.0002,
+                    pulseSpeed: 0.001
+                });
+                
+                nebulae.push({
+                    x: canvas.width * 0.8,
+                    y: canvas.height * 0.6,
+                    radius: canvas.width * 0.3,
+                    color1: 'rgba(30, 100, 150, 0.12)',
+                    color2: 'rgba(10, 50, 90, 0.03)',
+                    speedX: -0.0003,
+                    speedY: -0.0004,
+                    pulseSpeed: 0.0008
+                });
+                
+                // Warp field effect - multiple concentric rings that pulse
+                const warpRings = [];
+                for (let i = 0; i < 5; i++) {
+                    warpRings.push({
+                        x: canvas.width / 2,
+                        y: canvas.height / 2,
+                        radius: canvas.width * (0.1 + i * 0.15),
+                        pulseAmount: 0,
+                        pulseSpeed: 0.002 + i * 0.0005,
+                        color: `rgba(100, 150, 255, ${0.15 - i * 0.02})`
+                    });
                 }
-            }
-            
-            function createStar() {
-                const star = document.createElement('div');
-                star.className = 'star';
                 
-                // Random size between 1 and 3 pixels
-                const size = 1 + Math.random() * 2;
-                star.style.width = `${size}px`;
-                star.style.height = `${size}px`;
+                // Shooting stars
+                const shootingStars = [];
                 
-                // Random position
-                star.style.left = `${Math.random() * 100}%`;
-                star.style.top = `${Math.random() * 100}%`;
+                // Function to create a new shooting star
+                function createShootingStar() {
+                    if (Math.random() > 0.995) { // Lower chance makes them rare
+                        const side = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
+                        let x, y, angle;
+                        
+                        // Start position based on side
+                        switch(side) {
+                            case 0: // top
+                                x = Math.random() * canvas.width;
+                                y = 0;
+                                angle = Math.PI / 4 + Math.random() * Math.PI / 2; // Down-right to down-left
+                                break;
+                            case 1: // right
+                                x = canvas.width;
+                                y = Math.random() * canvas.height;
+                                angle = Math.PI * 3/4 + Math.random() * Math.PI / 2; // Down-left to up-left
+                                break;
+                            case 2: // bottom
+                                x = Math.random() * canvas.width;
+                                y = canvas.height;
+                                angle = Math.PI * 5/4 + Math.random() * Math.PI / 2; // Up-left to up-right
+                                break;
+                            case 3: // left
+                                x = 0;
+                                y = Math.random() * canvas.height;
+                                angle = Math.PI * 7/4 + Math.random() * Math.PI / 2; // Up-right to down-right
+                                break;
+                        }
+                        
+                        shootingStars.push({
+                            x: x,
+                            y: y,
+                            trailLength: 100 + Math.random() * 150,
+                            speed: 5 + Math.random() * 10,
+                            angle: angle,
+                            life: 1.0,
+                            decay: 0.01 + Math.random() * 0.02
+                        });
+                    }
+                }
                 
-                // Random animation delay
-                star.style.animationDelay = `${Math.random() * 5}s`;
+                // Time variables for animation
+                let time = 0;
+                let lastFrameTime = Date.now();
                 
-                // Random animation duration
-                const duration = 3 + Math.random() * 7;
-                star.style.animationDuration = `${duration}s`;
+                // Animation function
+                function animate() {
+                    const now = Date.now();
+                    const deltaTime = (now - lastFrameTime) / 1000; // Convert to seconds
+                    lastFrameTime = now;
+                    
+                    time += deltaTime;
+                    
+                    // Clear the canvas and draw background
+                    ctx.fillStyle = bgGradient;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw and update nebulae
+                    ctx.globalCompositeOperation = 'screen';
+                    nebulae.forEach(nebula => {
+                        // Move nebula slightly
+                        nebula.x += Math.sin(time * 0.2) * nebula.speedX * canvas.width;
+                        nebula.y += Math.cos(time * 0.3) * nebula.speedY * canvas.height;
+                        
+                        // Pulse effect
+                        const pulseScale = 1 + Math.sin(time * nebula.pulseSpeed * 10) * 0.1;
+                        
+                        // Create gradient
+                        const gradient = ctx.createRadialGradient(
+                            nebula.x, nebula.y, 0,
+                            nebula.x, nebula.y, nebula.radius * pulseScale
+                        );
+                        
+                        gradient.addColorStop(0, nebula.color1);
+                        gradient.addColorStop(1, nebula.color2);
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(nebula.x, nebula.y, nebula.radius * pulseScale, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                    
+                    // Draw stars with twinkling effect
+                    stars.forEach(star => {
+                        // Calculate brightness with a unique sine wave for each star
+                        const brightness = star.brightness * (0.5 + 0.5 * Math.sin(time * star.pulseSpeed * 5));
+                        
+                        // Set star color with calculated brightness
+                        ctx.fillStyle = star.color.replace('rgb', 'rgba').replace(')', `, ${brightness})`);
+                        
+                        // Draw star
+                        ctx.beginPath();
+                        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        // Add glow to larger stars
+                        if (star.size > 1.5) {
+                            ctx.fillStyle = star.color.replace('rgb', 'rgba').replace(')', ', 0.1)');
+                            ctx.beginPath();
+                            ctx.arc(star.x, star.y, star.size * 4, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    });
+                    
+                    // Draw warp rings
+                    warpRings.forEach(ring => {
+                        // Update pulse amount
+                        ring.pulseAmount += ring.pulseSpeed;
+                        if (ring.pulseAmount > 1 || ring.pulseAmount < 0) {
+                            ring.pulseSpeed *= -1;
+                        }
+                        
+                        // Draw ring with current pulse amount
+                        const currentRadius = ring.radius * (1 + ring.pulseAmount * 0.2);
+                        
+                        ctx.strokeStyle = ring.color;
+                        ctx.lineWidth = 10 + Math.sin(time * 2) * 5;
+                        ctx.beginPath();
+                        ctx.arc(ring.x, ring.y, currentRadius, 0, Math.PI * 2);
+                        ctx.stroke();
+                    });
+                    
+                    // Check for new shooting stars
+                    createShootingStar();
+                    
+                    // Draw and update shooting stars
+                    ctx.lineCap = 'round';
+                    
+                    shootingStars.forEach((star, index) => {
+                        if (star.life > 0) {
+                            // Calculate the end of the trail
+                            const endX = star.x - Math.cos(star.angle) * star.trailLength * star.life;
+                            const endY = star.y - Math.sin(star.angle) * star.trailLength * star.life;
+                            
+                            // Create a gradient for the trail
+                            const gradient = ctx.createLinearGradient(star.x, star.y, endX, endY);
+                            gradient.addColorStop(0, `rgba(255, 255, 255, ${star.life})`);
+                            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                            
+                            // Draw the trail
+                            ctx.strokeStyle = gradient;
+                            ctx.lineWidth = 2 * star.life;
+                            ctx.beginPath();
+                            ctx.moveTo(star.x, star.y);
+                            ctx.lineTo(endX, endY);
+                            ctx.stroke();
+                            
+                            // Move the star
+                            star.x += Math.cos(star.angle) * star.speed;
+                            star.y += Math.sin(star.angle) * star.speed;
+                            
+                            // Decrease life
+                            star.life -= star.decay;
+                        } else {
+                            // Remove dead stars
+                            shootingStars.splice(index, 1);
+                        }
+                    });
+                    
+                    // Add a central glow effect
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    const centerRadius = canvas.width * 0.1 + Math.sin(time) * canvas.width * 0.01;
+                    
+                    const centerGlow = ctx.createRadialGradient(
+                        centerX, centerY, 0,
+                        centerX, centerY, centerRadius
+                    );
+                    
+                    centerGlow.addColorStop(0, 'rgba(150, 200, 255, 0.3)');
+                    centerGlow.addColorStop(1, 'rgba(100, 150, 255, 0)');
+                    
+                    ctx.fillStyle = centerGlow;
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, centerRadius, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Continue animation if cosmic mode is still active
+                    if (cosmicActive) {
+                        animationFrame = requestAnimationFrame(animate);
+                    }
+                }
                 
-                spaceScene.appendChild(star);
+                // Start animation
+                const animationFrame = requestAnimationFrame(animate);
                 
-                // Fade in the star
-                setTimeout(() => {
-                    star.style.opacity = Math.random() * 0.7 + 0.3;
-                }, Math.random() * 2000);
+                // Store the animation frame reference on the scene for cleanup
+                spaceScene.animationFrame = animationFrame;
+                
+                // Resize handler
+                function handleResize() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                
+                window.addEventListener('resize', handleResize);
             }
             
             // Get references to the cosmic volume controls
@@ -1809,18 +1931,10 @@
                 cosmicSound.volume = this.value;
             });
             
-            // Add this at the bottom of the script to ensure image has loaded
-            setTimeout(function() {
-                console.log("Testing cosmic image load...");
-                const testImg = new Image();
-                testImg.onload = function() {
-                    console.log("COSMIC IMAGE FOUND AND LOADED SUCCESSFULLY!");
-                };
-                testImg.onerror = function() {
-                    console.error("COSMIC IMAGE FAILED TO LOAD! Please check the path: " + testImg.src);
-                };
-                testImg.src = 'cosmic.jpg';
-            }, 2000);
+            // Add ended event listener to cosmic sound
+            cosmicSound.addEventListener('ended', function() {
+                exitCosmicMode();
+            });
         });
     </script>
 </body>
