@@ -750,6 +750,9 @@
         <button class="control-btn" id="breatheToggle" title="Toggle Breathing Guide">
             🫁
         </button>
+        <button class="control-btn" id="cosmicToggle" title="Toggle Cosmic Meditation">
+            🌌
+        </button>
         <button class="control-btn" id="zenGardenToggle" title="Toggle Zen Garden">
             🪨
         </button>
@@ -761,9 +764,6 @@
         </button>
         <button class="control-btn" id="parallaxToggle" title="Toggle Parallax Effect">
             🖱️
-        </button>
-        <button class="control-btn" id="cosmicToggle" title="Cosmic Meditation">
-            🌌
         </button>
     </div>
     
@@ -1553,27 +1553,33 @@
             let cosmicActive = false;
             
             cosmicToggle.addEventListener('click', function() {
-                if (cosmicActive) return; // Prevent multiple activations
-                
-                cosmicActive = true;
-                
-                // Start the audio
-                cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
-                
-                // Transform the page
-                document.body.classList.add('cosmic-mode');
-                spaceScene.style.opacity = '1';
-                
-                // Add cosmic pulse to container
-                document.querySelector('.container').classList.add('cosmic-pulse');
-                
-                // Initialize space scene
-                initSpaceScene();
-                
-                // When audio ends, return to normal
-                cosmicSound.addEventListener('ended', function() {
+                if (cosmicActive) {
+                    // If already active, turn it off
+                    cosmicSound.pause();
+                    cosmicSound.currentTime = 0;
                     exitCosmicMode();
-                });
+                } else {
+                    // If not active, turn it on
+                    cosmicActive = true;
+                    
+                    // Start the audio
+                    cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
+                    
+                    // Transform the page
+                    document.body.classList.add('cosmic-mode');
+                    spaceScene.style.opacity = '1';
+                    
+                    // Add cosmic pulse to container
+                    document.querySelector('.container').classList.add('cosmic-pulse');
+                    
+                    // Initialize space scene
+                    initSpaceScene();
+                    
+                    // When audio ends, return to normal
+                    cosmicSound.addEventListener('ended', function() {
+                        exitCosmicMode();
+                    });
+                }
             });
             
             function exitCosmicMode() {
