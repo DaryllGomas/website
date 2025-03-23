@@ -7,6 +7,7 @@
     <!-- Preload critical images -->
     <link rel="preload" href="mountain-path.jpg" as="image">
     <link rel="preload" href="cosmic.jpg" as="image">
+    <link rel="preload" href="Future.JPEG" as="image">
     <style>
         html, body {
             margin: 0;
@@ -128,9 +129,22 @@
         
         .logo {
             max-width: 120px;
+            max-height: 120px;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
             margin-bottom: 10px;
             border-radius: 50%;
-            transition: all 0.5s ease;
+            transition: all 0.8s ease;
+        }
+        
+        /* Logo transition when in cosmic mode */
+        .logo-transitioning {
+            opacity: 0.1; /* Initial fade out before changing */
+        }
+        
+        .cosmic-mode .logo-transitioning {
+            opacity: 1; /* Fade back in after image is changed */
         }
         
         @media (max-width: 600px) {
@@ -674,6 +688,9 @@
         .cosmic-mode .logo {
             box-shadow: 0 0 20px rgba(100, 150, 255, 0.5);
             transition: all 3s ease;
+            content: url('Future.JPEG'); /* Changes the image source in cosmic mode */
+            transform: scale(1.05);
+            filter: brightness(1.2) saturate(1.2);
         }
         
         .cosmic-mode a, .cosmic-mode span {
@@ -1619,6 +1636,12 @@
                     // Start the audio
                     cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
                     
+                    // Get the logo element
+                    const logoImage = document.querySelector('.logo');
+                    
+                    // Add transitioning class for smooth fade
+                    logoImage.classList.add('logo-transitioning');
+                    
                     // Transform the page
                     document.body.classList.add('cosmic-mode');
                     
@@ -1646,10 +1669,30 @@
             function exitCosmicMode() {
                 // Return to normal state
                 console.log("Exiting cosmic mode...");
+                
+                // Get the logo element
+                const logoImage = document.querySelector('.logo');
+                
+                // Start fade out transition
+                logoImage.classList.add('logo-transitioning');
+                
+                // Remove cosmic mode class
                 document.body.classList.remove('cosmic-mode');
                 
                 // Reset space scene
                 spaceScene.style.opacity = '0';
+                
+                // Need a small delay for the logo to transition back after cosmic mode is removed
+                setTimeout(() => {
+                    // Force the image back to mountain path manually since CSS content property won't auto-revert
+                    logoImage.src = 'mountain-path.jpg';
+                    
+                    // Remove transition class after a delay so it fades back in
+                    setTimeout(() => {
+                        logoImage.classList.remove('logo-transitioning');
+                    }, 300);
+                }, 500);
+                
                 // Reset the z-index after the opacity transition to prevent flicker
                 setTimeout(() => {
                     spaceScene.style.zIndex = '-3';
