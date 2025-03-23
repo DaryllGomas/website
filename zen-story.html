@@ -604,10 +604,41 @@
             width: 100%;
             height: 100%;
             z-index: -3;
-            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            background: url('cosmic.jpg') center center;
+            background-size: cover;
             overflow: hidden;
             opacity: 0;
             transition: opacity 3s ease;
+        }
+        
+        .cosmic-warp {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('cosmic.jpg') center center;
+            background-size: cover;
+            filter: blur(8px) brightness(1.2);
+            mix-blend-mode: screen;
+            opacity: 0;
+            animation: warpEffect 20s infinite alternate ease-in-out;
+            transform-origin: center;
+        }
+        
+        @keyframes warpEffect {
+            0% {
+                transform: scale(1.0) rotate(0deg);
+                filter: blur(8px) brightness(1.1) hue-rotate(0deg);
+            }
+            50% {
+                transform: scale(1.1) rotate(1deg);
+                filter: blur(12px) brightness(1.3) hue-rotate(15deg);
+            }
+            100% {
+                transform: scale(1.05) rotate(-1deg);
+                filter: blur(10px) brightness(1.2) hue-rotate(-15deg);
+            }
         }
         
         .star {
@@ -1624,15 +1655,37 @@
             }
             
             function initSpaceScene() {
-                // Create stars
-                for (let i = 0; i < 200; i++) {
-                    createStar();
+                // Create warp effect layers using the cosmic.jpg image
+                for (let i = 0; i < 3; i++) {
+                    createWarpLayer(i);
                 }
                 
-                // Create nebulae
-                for (let i = 0; i < 5; i++) {
-                    createNebula();
+                // Still add some stars over the image for extra effect
+                for (let i = 0; i < 100; i++) {
+                    createStar();
                 }
+            }
+            
+            function createWarpLayer(index) {
+                const warp = document.createElement('div');
+                warp.className = 'cosmic-warp';
+                
+                // Each layer has slightly different animation timing
+                warp.style.animationDelay = `${index * -7}s`;
+                warp.style.animationDuration = `${20 + index * 5}s`;
+                
+                // Each layer has slightly different opacity and blend mode
+                warp.style.opacity = 0.3 - (index * 0.05);
+                
+                // Different starting transforms for each layer
+                warp.style.transform = `scale(${1 + index * 0.05}) rotate(${index - 1}deg)`;
+                
+                spaceScene.appendChild(warp);
+                
+                // Fade in the warp layer
+                setTimeout(() => {
+                    warp.style.opacity = 0.3 - (index * 0.05);
+                }, 500 + index * 300);
             }
             
             function createStar() {
