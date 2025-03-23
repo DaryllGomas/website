@@ -189,6 +189,154 @@
         .delay-3 { animation-delay: 0.6s; }
         .delay-4 { animation-delay: 0.8s; }
         .delay-5 { animation-delay: 1.0s; }
+        
+        /* Falling leaves */
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(139, 195, 74, 0.5);
+            border-radius: 0 50% 50% 50%;
+            transform: rotate(45deg);
+            pointer-events: none;
+            filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.1));
+            z-index: -1;
+        }
+        
+        /* Zen Garden */
+        .zen-garden {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 280px;
+            height: 160px;
+            background-color: rgba(245, 245, 240, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            z-index: 10;
+            transition: all 0.3s ease;
+            transform-origin: bottom right;
+        }
+        
+        body.dark-mode .zen-garden {
+            background-color: rgba(30, 30, 30, 0.9);
+        }
+        
+        .sand {
+            width: 100%;
+            height: 100%;
+            background-color: #f0e6d2;
+            cursor: pointer;
+        }
+        
+        body.dark-mode .sand {
+            background-color: #3a3a3a;
+        }
+        
+        .stone {
+            position: absolute;
+            background-color: #777;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .stone:active {
+            cursor: grabbing;
+        }
+        
+        .stone:hover {
+            filter: brightness(1.1);
+        }
+        
+        /* Sand lines */
+        .line {
+            position: absolute;
+            background-color: #e5dbc5;
+            pointer-events: none;
+        }
+        
+        body.dark-mode .line {
+            background-color: #444;
+        }
+        
+        /* Hidden message */
+        .hidden-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        body.dark-mode .hidden-message {
+            background-color: rgba(30, 30, 30, 0.95);
+        }
+        
+        .hidden-message p {
+            margin-bottom: 15px;
+        }
+        
+        .hidden-message button {
+            background-color: #4b79a1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .hidden-message button:hover {
+            background-color: #3a678f;
+        }
+        
+        /* Clickable zen words */
+        .zen-word {
+            text-decoration: none;
+            color: inherit;
+            border-bottom: 1px dotted #888;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .zen-word:hover {
+            color: #4b79a1;
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            font-size: 0.9em;
+            width: 220px;
+            display: none;
+            z-index: 100;
+            text-align: center;
+        }
+        
+        body.dark-mode .tooltip {
+            background-color: rgba(50, 50, 50, 0.95);
+        }
+        
+        .zen-word:hover .tooltip {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -199,29 +347,38 @@
         </header>
         
         <div class="content">
-            <p class="fade-in delay-1">A Zen Master was walking in silence with one of his disciples along a mountain trail. When they came to an ancient cedar tree, they sat down under it for a simple meal of some rice and vegetables. After the meal, the disciple, a young monk who had not yet found the key to the mystery of Zen, broke the silence by asking the Master, "Master, how do I enter Zen?"</p>
+            <p class="fade-in delay-1">A Zen Master was walking in silence with one of his disciples along a mountain trail. When they came to an ancient cedar tree, they sat down under it for a simple meal of some rice and vegetables. After the meal, the disciple, a young monk who had not yet found the key to the mystery of <span class="zen-word">Zen<span class="tooltip">Zen is not something to understand, but to experience directly. It points to your true nature beyond thinking.</span></span>?, broke the silence by asking the Master, "Master, how do I enter Zen?"</p>
             
-            <p class="fade-in delay-2">He was, of course, inquiring how to enter the state of consciousness which is Zen.</p>
+            <p class="fade-in delay-2">He was, of course, inquiring how to enter the state of <span class="zen-word">consciousness<span class="tooltip">Pure awareness without the interference of thought - your natural state.</span></span> which is Zen.</p>
             
             <p class="fade-in delay-2">The master remained silent. Almost five minutes passed while the disciple anxiously waited for an answer. He was about to ask another question when the Master suddenly spoke. "Do you hear the sound of that mountain stream?"</p>
             
-            <p class="fade-in delay-3">The disciple had been busy thinking about the meaning of Zen. Now, as he began to listen to the sound, his noisy mind subsided. At first he heard nothing. Then, his thinking gave way to heightened alertness, and suddenly he did hear the hardly perceptible murmur of a small stream in the far distance.</p>
+            <p class="fade-in delay-3">The disciple had been busy <span class="zen-word">thinking<span class="tooltip">Thinking is useful, but it can become an obstacle to direct experience. Beyond thinking lies wisdom.</span></span> about the meaning of Zen. Now, as he began to listen to the sound, his noisy mind subsided. At first he heard nothing. Then, his thinking gave way to heightened alertness, and suddenly he did hear the hardly perceptible murmur of a small stream in the far distance.</p>
             
             <p class="fade-in delay-3">"Yes, I can hear it now," he said.</p>
             
             <p class="fade-in delay-4">The Master raised his finger and, with a look in his eyes that in some way was both fierce and gentle, said, "Enter Zen from there."</p>
             
-            <p class="fade-in delay-4">The disciple was stunned. It was his first satori — a flash of enlightenment. He knew what Zen was without knowing what it was that he knew!</p>
+            <p class="fade-in delay-4">The disciple was stunned. It was his first <span class="zen-word">satori<span class="tooltip">Satori is a glimpse of enlightenment - a moment when the veil of thoughts drops and reality is seen directly.</span></span> — a flash of enlightenment. He knew what Zen was without knowing what it was that he knew!</p>
             
-            <p class="fade-in delay-4">They continued on their journey in silence. The disciple was amazed at the aliveness of the world around him. He experienced everything as if for the first time. Gradually, however, he started thinking again. The alert stillness became covered up again by mental noise, and before long he had another question. "Master," he said, "I have been thinking. What would you have said if I hadn't been able to hear the mountain stream?" The Master stopped, looked at him, raised his finger and said, "Enter Zen from there."</p>
+            <p class="fade-in delay-4">They continued on their journey in silence. The disciple was amazed at the <span class="zen-word">aliveness<span class="tooltip">When mental noise subsides, the world appears vibrant, fresh and alive - as it truly is.</span></span> of the world around him. He experienced everything as if for the first time. Gradually, however, he started thinking again. The alert stillness became covered up again by mental noise, and before long he had another question. "Master," he said, "I have been thinking. What would you have said if I hadn't been able to hear the mountain stream?" The Master stopped, looked at him, raised his finger and said, "Enter Zen from there."</p>
         </div>
         
         <footer class="fade-in delay-5">
-            <p>Found this hidden gem? Enter Zen from here.</p>
+            <p>Found this hidden gem? <span id="secret-trigger">Enter Zen from here</span>.</p>
         </footer>
     </div>
     
     <div class="breathing-circle"></div>
+    <div class="zen-garden">
+        <div class="sand" id="sand"></div>
+    </div>
+    
+    <div class="hidden-message">
+        <p>"The true purpose of Zen is to see things as they are, to observe things as they are, and to let everything go as it goes."</p>
+        <p>— Shunryu Suzuki</p>
+        <button id="close-message">Continue the journey</button>
+    </div>
     
     <div class="controls">
         <button class="control-btn" id="darkModeToggle" title="Toggle Light/Dark Mode">
@@ -232,6 +389,12 @@
         </button>
         <button class="control-btn" id="breatheToggle" title="Toggle Breathing Guide">
             🫁
+        </button>
+        <button class="control-btn" id="zenGardenToggle" title="Toggle Zen Garden">
+            🪨
+        </button>
+        <button class="control-btn" id="leavesToggle" title="Toggle Falling Leaves">
+            🍃
         </button>
     </div>
     
@@ -277,6 +440,313 @@
                 }
                 breathingActive = !breathingActive;
             });
+            
+            // Secret message
+            const secretTrigger = document.getElementById('secret-trigger');
+            const hiddenMessage = document.querySelector('.hidden-message');
+            const closeMessage = document.getElementById('close-message');
+            
+            secretTrigger.addEventListener('click', function() {
+                hiddenMessage.style.display = 'block';
+            });
+            
+            closeMessage.addEventListener('click', function() {
+                hiddenMessage.style.display = 'none';
+            });
+            
+            // Zen Garden
+            const zenGardenToggle = document.getElementById('zenGardenToggle');
+            const zenGarden = document.querySelector('.zen-garden');
+            let zenGardenActive = false;
+            
+            zenGardenToggle.addEventListener('click', function() {
+                if (zenGardenActive) {
+                    zenGarden.style.display = 'none';
+                } else {
+                    zenGarden.style.display = 'block';
+                    if (stones.length === 0) {
+                        initZenGarden();
+                    }
+                }
+                zenGardenActive = !zenGardenActive;
+            });
+            
+            const sand = document.getElementById('sand');
+            let stones = [];
+            let activeStone = null;
+            let lines = [];
+            
+            function initZenGarden() {
+                // Create stones
+                for (let i = 0; i < 5; i++) {
+                    const stone = document.createElement('div');
+                    stone.className = 'stone';
+                    stone.style.width = (10 + Math.random() * 15) + 'px';
+                    stone.style.height = (10 + Math.random() * 15) + 'px';
+                    stone.style.left = (20 + Math.random() * 240) + 'px';
+                    stone.style.top = (20 + Math.random() * 120) + 'px';
+                    
+                    stone.addEventListener('mousedown', function(e) {
+                        activeStone = stone;
+                        stone.style.zIndex = 2;
+                    });
+                    
+                    zenGarden.appendChild(stone);
+                    stones.push(stone);
+                }
+                
+                // Draw some initial lines
+                drawZenLines();
+                
+                // Handle stone movement
+                document.addEventListener('mousemove', function(e) {
+                    if (activeStone && zenGardenActive) {
+                        const rect = zenGarden.getBoundingClientRect();
+                        let x = e.clientX - rect.left;
+                        let y = e.clientY - rect.top;
+                        
+                        // Keep stones within garden
+                        x = Math.max(10, Math.min(x, rect.width - 10));
+                        y = Math.max(10, Math.min(y, rect.height - 10));
+                        
+                        activeStone.style.left = x + 'px';
+                        activeStone.style.top = y + 'px';
+                    }
+                });
+                
+                document.addEventListener('mouseup', function() {
+                    if (activeStone) {
+                        activeStone.style.zIndex = 1;
+                        activeStone = null;
+                        
+                        // Redraw lines when stone is released
+                        clearZenLines();
+                        drawZenLines();
+                    }
+                });
+                
+                // Rake sand (draw lines) on click
+                sand.addEventListener('click', function(e) {
+                    if (!activeStone) {
+                        const rect = zenGarden.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        drawCircularLines(x, y);
+                    }
+                });
+            }
+            
+            function clearZenLines() {
+                lines.forEach(line => zenGarden.removeChild(line));
+                lines = [];
+            }
+            
+            function drawZenLines() {
+                // Draw horizontal lines
+                for (let i = 0; i < 10; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'line';
+                    line.style.width = '100%';
+                    line.style.height = '1px';
+                    line.style.top = (i * 16 + 8) + 'px';
+                    line.style.left = '0';
+                    
+                    // Bend lines around stones
+                    stones.forEach(stone => {
+                        const stoneTop = parseInt(stone.style.top);
+                        const stoneHeight = parseInt(stone.style.height);
+                        const lineTop = i * 16 + 8;
+                        
+                        if (Math.abs(stoneTop - lineTop) < stoneHeight / 2) {
+                            const stoneLeft = parseInt(stone.style.left);
+                            const stoneWidth = parseInt(stone.style.width);
+                            
+                            // Create gap for stone
+                            line.style.width = (stoneLeft - 5) + 'px';
+                            
+                            // Create second part of line after stone
+                            const line2 = document.createElement('div');
+                            line2.className = 'line';
+                            line2.style.width = (zenGarden.clientWidth - stoneLeft - stoneWidth - 5) + 'px';
+                            line2.style.height = '1px';
+                            line2.style.top = lineTop + 'px';
+                            line2.style.left = (stoneLeft + stoneWidth + 5) + 'px';
+                            
+                            zenGarden.appendChild(line2);
+                            lines.push(line2);
+                        }
+                    });
+                    
+                    zenGarden.appendChild(line);
+                    lines.push(line);
+                }
+            }
+            
+            function drawCircularLines(x, y) {
+                for (let i = 0; i < 3; i++) {
+                    const radius = 10 + i * 10;
+                    const line = document.createElement('div');
+                    line.className = 'line';
+                    line.style.width = radius * 2 + 'px';
+                    line.style.height = radius * 2 + 'px';
+                    line.style.borderRadius = '50%';
+                    line.style.border = '1px solid ' + (document.body.classList.contains('dark-mode') ? '#444' : '#e5dbc5');
+                    line.style.backgroundColor = 'transparent';
+                    line.style.top = (y - radius) + 'px';
+                    line.style.left = (x - radius) + 'px';
+                    
+                    zenGarden.appendChild(line);
+                    lines.push(line);
+                }
+            }
+            
+            // Falling leaves
+            const leavesToggle = document.getElementById('leavesToggle');
+            let leavesActive = false;
+            let leavesInterval;
+            
+            leavesToggle.addEventListener('click', function() {
+                if (leavesActive) {
+                    clearInterval(leavesInterval);
+                    const leaves = document.querySelectorAll('.leaf');
+                    leaves.forEach(leaf => {
+                        if (leaf.parentNode) {
+                            leaf.parentNode.removeChild(leaf);
+                        }
+                    });
+                } else {
+                    leavesInterval = setInterval(createLeaf, 300);
+                }
+                leavesActive = !leavesActive;
+            });
+            
+            function createLeaf() {
+                const leaf = document.createElement('div');
+                leaf.className = 'leaf';
+                
+                // Randomize leaf properties
+                const size = 10 + Math.random() * 15;
+                const hue = 60 + Math.random() * 60; // colors from yellow to green
+                leaf.style.width = size + 'px';
+                leaf.style.height = size + 'px';
+                leaf.style.backgroundColor = `hsla(${hue}, 70%, 60%, 0.6)`;
+                leaf.style.left = Math.random() * window.innerWidth + 'px';
+                leaf.style.top = -30 + 'px';
+                
+                document.body.appendChild(leaf);
+                
+                // Animate leaf falling
+                const fallDuration = 5000 + Math.random() * 5000;
+                const rotation = Math.random() * 360;
+                const swayAmount = 100 + Math.random() * 100;
+                const swayDuration = 3 + Math.random() * 4;
+                
+                leaf.style.transition = `top ${fallDuration}ms linear, left ${swayDuration}s ease-in-out, transform ${swayDuration/2}s ease-in-out`;
+                
+                setTimeout(() => {
+                    leaf.style.top = (window.innerHeight + 50) + 'px';
+                    animateSway(leaf, swayAmount, swayDuration);
+                }, 10);
+                
+                // Remove leaf after animation completes
+                setTimeout(() => {
+                    if (leaf.parentNode) {
+                        leaf.parentNode.removeChild(leaf);
+                    }
+                }, fallDuration + 1000);
+            }
+            
+            function animateSway(leaf, amount, duration) {
+                const startLeft = parseInt(leaf.style.left);
+                let direction = Math.random() > 0.5 ? 1 : -1;
+                
+                function sway() {
+                    const newLeft = startLeft + (direction * amount);
+                    const newRotation = 45 + (direction * 20);
+                    
+                    leaf.style.left = newLeft + 'px';
+                    leaf.style.transform = `rotate(${newRotation}deg)`;
+                    
+                    direction *= -1;
+                    
+                    if (leaf.parentNode) {
+                        setTimeout(sway, duration * 1000 / 2);
+                    }
+                }
+                
+                sway();
+            }
+            
+            // Easter egg: Konami code
+            let konamiSequence = [];
+            const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // up up down down left right left right B A
+            
+            document.addEventListener('keydown', function(e) {
+                konamiSequence.push(e.keyCode);
+                
+                // Keep only the last N keypresses
+                if (konamiSequence.length > konami.length) {
+                    konamiSequence.shift();
+                }
+                
+                // Check if sequence matches
+                if (konamiSequence.join(',') === konami.join(',')) {
+                    // Activate all features at once
+                    if (!soundPlaying) soundToggle.click();
+                    if (!breathingActive) breatheToggle.click();
+                    if (!zenGardenActive) zenGardenToggle.click();
+                    if (!leavesActive) leavesToggle.click();
+                    
+                    // Show a special message
+                    alert('You have discovered the path to enlightenment! All elements are now in harmony.');
+                    
+                    // Reset sequence
+                    konamiSequence = [];
+                }
+            });
+            
+            // Easter egg: Hidden messages after time spent
+            setTimeout(function() {
+                if (!document.hidden) {
+                    const quotes = [
+                        "The mind is everything. What you think you become. - Buddha",
+                        "When you realize nothing is lacking, the whole world belongs to you. - Lao Tzu",
+                        "Before enlightenment, chop wood, carry water. After enlightenment, chop wood, carry water.",
+                        "The obstacle is the path.",
+                        "When the student is ready, the teacher will appear."
+                    ];
+                    
+                    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                    
+                    const notification = document.createElement('div');
+                    notification.style.position = 'fixed';
+                    notification.style.bottom = '20px';
+                    notification.style.left = '20px';
+                    notification.style.padding = '10px 15px';
+                    notification.style.backgroundColor = document.body.classList.contains('dark-mode') ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+                    notification.style.color = document.body.classList.contains('dark-mode') ? '#ddd' : '#333';
+                    notification.style.borderRadius = '5px';
+                    notification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+                    notification.style.zIndex = '100';
+                    notification.style.maxWidth = '300px';
+                    notification.style.animation = 'fadeIn 0.5s ease';
+                    notification.textContent = randomQuote;
+                    
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.style.opacity = '0';
+                        notification.style.transition = 'opacity 0.5s ease';
+                        
+                        setTimeout(() => {
+                            if (notification.parentNode) {
+                                notification.parentNode.removeChild(notification);
+                            }
+                        }, 500);
+                    }, 8000);
+                }
+            }, 60000); // Show after 1 minute
         });
     </script>
 </body>
