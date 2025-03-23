@@ -666,6 +666,10 @@
         <source src="https://soundbible.com/mp3/meditative-bell-sound-1-12752.mp3" type="audio/mpeg">
     </audio>
     
+    <audio id="omSound" loop>
+        <source src="OM.mp3" type="audio/mpeg">
+    </audio>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Dark mode toggle
@@ -701,13 +705,17 @@
             // Breathing guide toggle
             const breatheToggle = document.getElementById('breatheToggle');
             const breathingCircle = document.querySelector('.breathing-circle');
+            const omSound = document.getElementById('omSound');
             let breathingActive = false;
             
             breatheToggle.addEventListener('click', function() {
                 if (breathingActive) {
                     breathingCircle.style.display = 'none';
+                    omSound.pause();
+                    omSound.currentTime = 0;
                 } else {
                     breathingCircle.style.display = 'block';
+                    omSound.play().catch(e => console.error("OM sound playback failed:", e));
                 }
                 breathingActive = !breathingActive;
             });
