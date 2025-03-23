@@ -586,10 +586,96 @@
             margin-top: 8px;
             opacity: 0.8;
         }
+        
+        /* Space scene styles */
+        .space-scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 3s ease;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 5s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(0.8); }
+        }
+        
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(30px);
+            opacity: 0;
+            animation: pulsate 15s infinite ease-in-out;
+        }
+        
+        @keyframes pulsate {
+            0% { opacity: 0.1; transform: scale(0.9); }
+            50% { opacity: 0.4; transform: scale(1.1); }
+            100% { opacity: 0.1; transform: scale(0.9); }
+        }
+        
+        .cosmic-mode .container {
+            background-color: rgba(10, 10, 30, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            box-shadow: 0 0 30px rgba(50, 100, 255, 0.15);
+            transition: all 3s ease;
+        }
+        
+        .cosmic-mode p, .cosmic-mode h1, .cosmic-mode h2, .cosmic-mode footer {
+            color: #e0e0ff;
+            text-shadow: 0 0 15px rgba(150, 200, 255, 0.3);
+            transition: all 3s ease;
+        }
+        
+        .cosmic-mode .logo {
+            box-shadow: 0 0 20px rgba(100, 150, 255, 0.5);
+            transition: all 3s ease;
+        }
+        
+        .cosmic-mode a, .cosmic-mode span {
+            color: #a0c0ff;
+            transition: all 3s ease;
+        }
+        
+        .cosmic-mode .zen-word {
+            border-bottom-color: rgba(150, 200, 255, 0.4);
+        }
+        
+        .cosmic-mode .tooltip {
+            background-color: rgba(20, 30, 60, 0.9);
+            color: #d0e0ff;
+        }
+        
+        .cosmic-pulse {
+            animation: cosmicPulse 8s infinite ease-in-out;
+        }
+        
+        @keyframes cosmicPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body class="dark-mode">
     <div class="parallax-bg"></div>
+    <div class="space-scene" id="spaceScene"></div>
     
     <div class="container">
         <header class="fade-in">
@@ -676,6 +762,9 @@
         <button class="control-btn" id="parallaxToggle" title="Toggle Parallax Effect">
             🖱️
         </button>
+        <button class="control-btn" id="cosmicToggle" title="Cosmic Meditation">
+            🌌
+        </button>
     </div>
     
     <audio id="streamSound" loop preload="auto">
@@ -688,6 +777,10 @@
     
     <audio id="omSound" loop preload="auto">
         <source src="OM.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="cosmicSound" preload="auto">
+        <source src="KTN.mp3" type="audio/mpeg">
     </audio>
     
     <script>
@@ -1177,7 +1270,7 @@
                 if (timerRunning) {
                     clearInterval(timerInterval);
                     timerRunning = false;
-                    startTimerBtn.textContent = 'Start';
+                    startTimerBtn.textContent = 'Pause';
                 } else {
                     let totalSeconds = timerMinutes * 60;
                     timerRunning = true;
@@ -1353,10 +1446,70 @@
                 quoteAuthor.textContent = `— ${randomQuote.author}`;
                 quoteEl.appendChild(quoteAuthor);
                 
-                // Position randomly on screen (with some padding from edges)
-                const padding = 100; // px from the edge
-                const x = padding + Math.random() * (window.innerWidth - padding * 2);
-                const y = padding + Math.random() * (window.innerHeight - padding * 2);
+                // Get container position and dimensions
+                const container = document.querySelector('.container');
+                const containerRect = container.getBoundingClientRect();
+                
+                // Set approximate dimensions for quote
+                const quoteWidth = 250;
+                const quoteHeight = 100;
+                
+                // Choose a zone for the quote (1-4 for corners, avoiding the center where the container is)
+                const zone = Math.floor(Math.random() * 4) + 1;
+                
+                // Set padding from edges
+                const edgePadding = 20;
+                
+                // Calculate position based on zone
+                let x, y;
+                
+                switch(zone) {
+                    case 1: // Top-left
+                        x = edgePadding + Math.random() * (containerRect.left - edgePadding - quoteWidth);
+                        y = edgePadding + Math.random() * (containerRect.top - edgePadding - quoteHeight);
+                        break;
+                    case 2: // Top-right
+                        x = containerRect.right + edgePadding + Math.random() * (window.innerWidth - containerRect.right - edgePadding - quoteWidth);
+                        y = edgePadding + Math.random() * (containerRect.top - edgePadding - quoteHeight);
+                        break;
+                    case 3: // Bottom-left
+                        x = edgePadding + Math.random() * (containerRect.left - edgePadding - quoteWidth);
+                        y = containerRect.bottom + edgePadding + Math.random() * (window.innerHeight - containerRect.bottom - edgePadding - quoteHeight);
+                        break;
+                    case 4: // Bottom-right
+                        x = containerRect.right + edgePadding + Math.random() * (window.innerWidth - containerRect.right - edgePadding - quoteWidth);
+                        y = containerRect.bottom + edgePadding + Math.random() * (window.innerHeight - containerRect.bottom - edgePadding - quoteHeight);
+                        break;
+                }
+                
+                // Ensure quote stays within viewport bounds
+                x = Math.max(edgePadding, Math.min(x, window.innerWidth - quoteWidth - edgePadding));
+                y = Math.max(edgePadding, Math.min(y, window.innerHeight - quoteHeight - edgePadding));
+                
+                // If container occupies most of the screen, position quotes at the very edges
+                if (x >= containerRect.left - quoteWidth && x <= containerRect.right && 
+                    y >= containerRect.top - quoteHeight && y <= containerRect.bottom) {
+                    // Position at a random edge instead
+                    const edge = Math.floor(Math.random() * 4);
+                    switch(edge) {
+                        case 0: // Top
+                            x = Math.random() * (window.innerWidth - quoteWidth);
+                            y = Math.max(5, containerRect.top - quoteHeight - 20);
+                            break;
+                        case 1: // Right
+                            x = Math.min(window.innerWidth - quoteWidth - 5, containerRect.right + 20);
+                            y = Math.random() * (window.innerHeight - quoteHeight);
+                            break;
+                        case 2: // Bottom
+                            x = Math.random() * (window.innerWidth - quoteWidth);
+                            y = Math.min(window.innerHeight - quoteHeight - 5, containerRect.bottom + 20);
+                            break;
+                        case 3: // Left
+                            x = Math.max(5, containerRect.left - quoteWidth - 20);
+                            y = Math.random() * (window.innerHeight - quoteHeight);
+                            break;
+                    }
+                }
                 
                 quoteEl.style.left = `${x}px`;
                 quoteEl.style.top = `${y}px`;
@@ -1392,6 +1545,119 @@
             
             // Start the floating quotes after a short initial delay
             setTimeout(showFloatingQuote, 10000);
+            
+            // Cosmic meditation mode
+            const cosmicToggle = document.getElementById('cosmicToggle');
+            const spaceScene = document.getElementById('spaceScene');
+            const cosmicSound = document.getElementById('cosmicSound');
+            let cosmicActive = false;
+            
+            cosmicToggle.addEventListener('click', function() {
+                if (cosmicActive) return; // Prevent multiple activations
+                
+                cosmicActive = true;
+                
+                // Start the audio
+                cosmicSound.play().catch(e => console.error("Cosmic sound playback failed:", e));
+                
+                // Transform the page
+                document.body.classList.add('cosmic-mode');
+                spaceScene.style.opacity = '1';
+                
+                // Add cosmic pulse to container
+                document.querySelector('.container').classList.add('cosmic-pulse');
+                
+                // Initialize space scene
+                initSpaceScene();
+                
+                // When audio ends, return to normal
+                cosmicSound.addEventListener('ended', function() {
+                    exitCosmicMode();
+                });
+            });
+            
+            function exitCosmicMode() {
+                // Return to normal state
+                document.body.classList.remove('cosmic-mode');
+                spaceScene.style.opacity = '0';
+                document.querySelector('.container').classList.remove('cosmic-pulse');
+                
+                // Clear space scene
+                setTimeout(() => {
+                    while (spaceScene.firstChild) {
+                        spaceScene.removeChild(spaceScene.firstChild);
+                    }
+                    cosmicActive = false;
+                }, 3000); // Match transition time
+            }
+            
+            function initSpaceScene() {
+                // Create stars
+                for (let i = 0; i < 200; i++) {
+                    createStar();
+                }
+                
+                // Create nebulae
+                for (let i = 0; i < 5; i++) {
+                    createNebula();
+                }
+            }
+            
+            function createStar() {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random size between 1 and 3 pixels
+                const size = 1 + Math.random() * 2;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation delay
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                // Random animation duration
+                const duration = 3 + Math.random() * 7;
+                star.style.animationDuration = `${duration}s`;
+                
+                spaceScene.appendChild(star);
+                
+                // Fade in the star
+                setTimeout(() => {
+                    star.style.opacity = Math.random() * 0.7 + 0.3;
+                }, Math.random() * 2000);
+            }
+            
+            function createNebula() {
+                const nebula = document.createElement('div');
+                nebula.className = 'nebula';
+                
+                // Random size
+                const size = 100 + Math.random() * 300;
+                nebula.style.width = `${size}px`;
+                nebula.style.height = `${size}px`;
+                
+                // Random position
+                nebula.style.left = `${Math.random() * 100}%`;
+                nebula.style.top = `${Math.random() * 100}%`;
+                
+                // Random color (blue/purple hues)
+                const hue = 180 + Math.random() * 90;
+                nebula.style.backgroundColor = `hsla(${hue}, 70%, 50%, 0.3)`;
+                
+                // Random animation delay
+                nebula.style.animationDelay = `${Math.random() * 5}s`;
+                
+                spaceScene.appendChild(nebula);
+                
+                // Fade in the nebula
+                setTimeout(() => {
+                    nebula.style.opacity = Math.random() * 0.3 + 0.1;
+                }, Math.random() * 3000);
+            }
         });
     </script>
 </body>
