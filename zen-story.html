@@ -135,16 +135,18 @@
             object-fit: cover;
             margin-bottom: 10px;
             border-radius: 50%;
-            transition: all 0.8s ease;
+            transition: all 2s ease;
         }
         
         /* Logo transition when in cosmic mode */
         .logo-transitioning {
             opacity: 0.1; /* Initial fade out before changing */
+            transition: opacity 2.5s ease;
         }
         
         .cosmic-mode .logo-transitioning {
             opacity: 1; /* Fade back in after image is changed */
+            transition: opacity 2.5s ease;
         }
         
         @media (max-width: 600px) {
@@ -536,7 +538,7 @@
             z-index: -2;
             transform: translate(-10%, -10%);
             will-change: transform; /* Optimizes for animation */
-            transition: opacity 1.5s ease; /* Add transition for smooth fade */
+            transition: opacity 3s ease; /* Slower transition for smooth fade */
         }
         
         /* Add this rule to hide the mountain background when cosmic mode is active */
@@ -631,7 +633,7 @@
             background-size: cover;
             background-position: center;
             opacity: 0;
-            transition: opacity 3s ease, transform 15s ease-in-out, z-index 0s linear;
+            transition: opacity 5s ease, transform 20s ease-in-out, z-index 0s linear;
             pointer-events: none;
             transform: scale(1);
         }
@@ -687,7 +689,7 @@
         
         .cosmic-mode .logo {
             box-shadow: 0 0 20px rgba(100, 150, 255, 0.5);
-            transition: all 3s ease;
+            transition: all 5s ease;
             content: url('Future.JPEG'); /* Changes the image source in cosmic mode */
             transform: scale(1.05);
             filter: brightness(1.2) saturate(1.2);
@@ -708,7 +710,7 @@
         }
         
         .cosmic-pulse {
-            animation: cosmicPulse 8s infinite ease-in-out;
+            animation: cosmicPulse 12s infinite ease-in-out;
         }
         
         @keyframes cosmicPulse {
@@ -1397,220 +1399,6 @@
                 }
             });
             
-            // Easter egg: Konami code
-            let konamiSequence = [];
-            const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // up up down down left right left right B A
-            
-            document.addEventListener('keydown', function(e) {
-                konamiSequence.push(e.keyCode);
-                
-                // Keep only the last N keypresses
-                if (konamiSequence.length > konami.length) {
-                    konamiSequence.shift();
-                }
-                
-                // Check if sequence matches
-                if (konamiSequence.join(',') === konami.join(',')) {
-                    // Activate all features at once
-                    if (!soundPlaying) soundToggle.click();
-                    if (!breathingActive) breatheToggle.click();
-                    if (!zenGardenActive) zenGardenToggle.click();
-                    if (!leavesActive) leavesToggle.click();
-                    
-                    // Show a special message
-                    alert('You have discovered the path to enlightenment! All elements are now in harmony.');
-                    
-                    // Reset sequence
-                    konamiSequence = [];
-                }
-            });
-            
-            // Easter egg: Hidden messages after time spent
-            setTimeout(function() {
-                if (!document.hidden) {
-                    const quotes = [
-                        "The mind is everything. What you think you become. - Buddha",
-                        "When you realize nothing is lacking, the whole world belongs to you. - Lao Tzu",
-                        "Before enlightenment, chop wood, carry water. After enlightenment, chop wood, carry water.",
-                        "The obstacle is the path.",
-                        "When the student is ready, the teacher will appear."
-                    ];
-                    
-                    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-                    
-                    const notification = document.createElement('div');
-                    notification.style.position = 'fixed';
-                    notification.style.bottom = '20px';
-                    notification.style.left = '20px';
-                    notification.style.padding = '10px 15px';
-                    notification.style.backgroundColor = document.body.classList.contains('dark-mode') ? 'rgba(30, 30, 30, 0.9)' : 'rgba(255, 255, 255, 0.9)';
-                    notification.style.color = document.body.classList.contains('dark-mode') ? '#ddd' : '#333';
-                    notification.style.borderRadius = '5px';
-                    notification.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
-                    notification.style.zIndex = '100';
-                    notification.style.maxWidth = '300px';
-                    notification.style.animation = 'fadeIn 0.5s ease';
-                    notification.textContent = randomQuote;
-                    
-                    document.body.appendChild(notification);
-                    
-                    setTimeout(() => {
-                        notification.style.opacity = '0';
-                        notification.style.transition = 'opacity 0.5s ease';
-                        
-                        setTimeout(() => {
-                            if (notification.parentNode) {
-                                notification.parentNode.removeChild(notification);
-                            }
-                        }, 500);
-                    }, 8000);
-                }
-            }, 60000); // Show after 1 minute
-            
-            // Add the floating quotes function near the end of the script, before the setTimeout for the existing quote
-            // Add an expanded collection of Zen quotes
-            function showFloatingQuote() {
-                // Collection of Zen quotes
-                const zenQuotes = [
-                    { text: "When you realize nothing is lacking, the whole world belongs to you.", author: "Lao Tzu" },
-                    { text: "Before enlightenment, chop wood, carry water. After enlightenment, chop wood, carry water.", author: "Zen Proverb" },
-                    { text: "The obstacle is the path.", author: "Zen Proverb" },
-                    { text: "The quieter you become, the more you can hear.", author: "Ram Dass" },
-                    { text: "In the beginner's mind there are many possibilities, in the expert's mind there are few.", author: "Shunryu Suzuki" },
-                    { text: "When thoughts arise, then do all things arise. When thoughts vanish, then do all things vanish.", author: "Huang Po" },
-                    { text: "If you are depressed, you are living in the past. If you are anxious, you are living in the future. If you are at peace, you are living in the present.", author: "Lao Tzu" },
-                    { text: "Zen is not some kind of excitement, but concentration on our usual everyday routine.", author: "Shunryu Suzuki" },
-                    { text: "The only Zen you find on the tops of mountains is the Zen you bring up there.", author: "Robert M. Pirsig" },
-                    { text: "When you do something, you should burn yourself completely, like a good bonfire, leaving no trace of yourself.", author: "Shunryu Suzuki" },
-                    { text: "To seek is to suffer. To seek nothing is bliss.", author: "Bodhidharma" },
-                    { text: "If your mind isn't clouded by unnecessary things, this is the best season of your life.", author: "Wu-Men" },
-                    { text: "Wherever you are, it's the place you need to be.", author: "Maxime Lagacé" },
-                    { text: "The true purpose of Zen is to see things as they are.", author: "Shunryu Suzuki" },
-                    { text: "When walking, walk. When eating, eat.", author: "Zen Proverb" },
-                    { text: "Smile, breathe, and go slowly.", author: "Thich Nhat Hanh" },
-                    { text: "Let go, or be dragged.", author: "Zen Proverb" },
-                    { text: "The journey of a thousand miles begins with a single step.", author: "Lao Tzu" },
-                    { text: "No snowflake ever falls in the wrong place.", author: "Zen Proverb" },
-                    { text: "Only when you can be extremely pliable and soft can you be extremely hard and strong.", author: "Zen Proverb" }
-                ];
-                
-                // Get a random quote
-                const randomQuote = zenQuotes[Math.floor(Math.random() * zenQuotes.length)];
-                
-                // Create quote element
-                const quoteEl = document.createElement('div');
-                quoteEl.className = 'floating-quote';
-                
-                // Add quote text and author
-                const quoteText = document.createElement('div');
-                quoteText.textContent = `"${randomQuote.text}"`;
-                quoteEl.appendChild(quoteText);
-                
-                const quoteAuthor = document.createElement('div');
-                quoteAuthor.className = 'quote-author';
-                quoteAuthor.textContent = `— ${randomQuote.author}`;
-                quoteEl.appendChild(quoteAuthor);
-                
-                // Get container position and dimensions
-                const container = document.querySelector('.container');
-                const containerRect = container.getBoundingClientRect();
-                
-                // Set approximate dimensions for quote
-                const quoteWidth = 250;
-                const quoteHeight = 100;
-                
-                // Choose a zone for the quote (1-4 for corners, avoiding the center where the container is)
-                const zone = Math.floor(Math.random() * 4) + 1;
-                
-                // Set padding from edges
-                const edgePadding = 20;
-                
-                // Calculate position based on zone
-                let x, y;
-                
-                switch(zone) {
-                    case 1: // Top-left
-                        x = edgePadding + Math.random() * (containerRect.left - edgePadding - quoteWidth);
-                        y = edgePadding + Math.random() * (containerRect.top - edgePadding - quoteHeight);
-                        break;
-                    case 2: // Top-right
-                        x = containerRect.right + edgePadding + Math.random() * (window.innerWidth - containerRect.right - edgePadding - quoteWidth);
-                        y = edgePadding + Math.random() * (containerRect.top - edgePadding - quoteHeight);
-                        break;
-                    case 3: // Bottom-left
-                        x = edgePadding + Math.random() * (containerRect.left - edgePadding - quoteWidth);
-                        y = containerRect.bottom + edgePadding + Math.random() * (window.innerHeight - containerRect.bottom - edgePadding - quoteHeight);
-                        break;
-                    case 4: // Bottom-right
-                        x = containerRect.right + edgePadding + Math.random() * (window.innerWidth - containerRect.right - edgePadding - quoteWidth);
-                        y = containerRect.bottom + edgePadding + Math.random() * (window.innerHeight - containerRect.bottom - edgePadding - quoteHeight);
-                        break;
-                }
-                
-                // Ensure quote stays within viewport bounds
-                x = Math.max(edgePadding, Math.min(x, window.innerWidth - quoteWidth - edgePadding));
-                y = Math.max(edgePadding, Math.min(y, window.innerHeight - quoteHeight - edgePadding));
-                
-                // If container occupies most of the screen, position quotes at the very edges
-                if (x >= containerRect.left - quoteWidth && x <= containerRect.right && 
-                    y >= containerRect.top - quoteHeight && y <= containerRect.bottom) {
-                    // Position at a random edge instead
-                    const edge = Math.floor(Math.random() * 4);
-                    switch(edge) {
-                        case 0: // Top
-                            x = Math.random() * (window.innerWidth - quoteWidth);
-                            y = Math.max(5, containerRect.top - quoteHeight - 20);
-                            break;
-                        case 1: // Right
-                            x = Math.min(window.innerWidth - quoteWidth - 5, containerRect.right + 20);
-                            y = Math.random() * (window.innerHeight - quoteHeight);
-                            break;
-                        case 2: // Bottom
-                            x = Math.random() * (window.innerWidth - quoteWidth);
-                            y = Math.min(window.innerHeight - quoteHeight - 5, containerRect.bottom + 20);
-                            break;
-                        case 3: // Left
-                            x = Math.max(5, containerRect.left - quoteWidth - 20);
-                            y = Math.random() * (window.innerHeight - quoteHeight);
-                            break;
-                    }
-                }
-                
-                quoteEl.style.left = `${x}px`;
-                quoteEl.style.top = `${y}px`;
-                
-                // Add to document
-                document.body.appendChild(quoteEl);
-                
-                // Fade in
-                setTimeout(() => {
-                    quoteEl.style.opacity = 1;
-                }, 100);
-                
-                // Fade out and remove after 8-12 seconds
-                const displayTime = 8000 + Math.random() * 4000;
-                setTimeout(() => {
-                    quoteEl.style.opacity = 0;
-                    setTimeout(() => {
-                        if (quoteEl.parentNode) {
-                            quoteEl.parentNode.removeChild(quoteEl);
-                        }
-                    }, 3000); // Match the CSS transition time
-                }, displayTime);
-                
-                // Schedule next quote
-                scheduleNextQuote();
-            }
-            
-            function scheduleNextQuote() {
-                // Random interval between 20-40 seconds for a calming pace
-                const nextInterval = 20000 + Math.random() * 20000;
-                setTimeout(showFloatingQuote, nextInterval);
-            }
-            
-            // Start the floating quotes after a short initial delay
-            setTimeout(showFloatingQuote, 10000);
-            
             // Cosmic meditation mode
             const cosmicToggle = document.getElementById('cosmicToggle');
             const spaceScene = document.getElementById('spaceScene');
@@ -1682,7 +1470,7 @@
                 // Reset space scene
                 spaceScene.style.opacity = '0';
                 
-                // Need a small delay for the logo to transition back after cosmic mode is removed
+                // Need a longer delay for the logo to transition back after cosmic mode is removed
                 setTimeout(() => {
                     // Force the image back to mountain path manually since CSS content property won't auto-revert
                     logoImage.src = 'mountain-path.jpg';
@@ -1690,14 +1478,14 @@
                     // Remove transition class after a delay so it fades back in
                     setTimeout(() => {
                         logoImage.classList.remove('logo-transitioning');
-                    }, 300);
-                }, 500);
+                    }, 1000);
+                }, 1500);
                 
                 // Reset the z-index after the opacity transition to prevent flicker
                 setTimeout(() => {
                     spaceScene.style.zIndex = '-3';
                     console.log("Reset space scene z-index to:", spaceScene.style.zIndex);
-                }, 1500);
+                }, 3000);
                 
                 // Remove the pulse effect from the container
                 document.querySelector('.container').classList.remove('cosmic-pulse');
@@ -1706,10 +1494,8 @@
                 setTimeout(() => {
                     cosmicActive = false;
                     console.log("Cosmic mode deactivated");
-                }, 3000); // Match transition time
+                }, 5000); // Match longer transition time
             }
-            
-            // Remove the entire initSpaceScene function since we're not using canvas anymore
             
             // Get references to the cosmic volume controls
             const cosmicVolumeControl = document.getElementById('cosmic-volume-control');
@@ -1727,4 +1513,4 @@
         });
     </script>
 </body>
-</html> 
+</html>
