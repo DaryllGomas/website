@@ -220,6 +220,48 @@
             transform-origin: bottom right;
         }
         
+        .zen-garden-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: rgba(200, 200, 200, 0.5);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .zen-garden-title {
+            font-size: 0.9em;
+            margin: 0;
+            font-weight: normal;
+        }
+        
+        .zen-garden-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 0;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+        
+        .zen-garden-close:hover {
+            color: #000;
+        }
+        
+        body.dark-mode .zen-garden-close {
+            color: #aaa;
+        }
+        
+        body.dark-mode .zen-garden-close:hover {
+            color: #fff;
+        }
+        
+        body.dark-mode .zen-garden-header {
+            background-color: rgba(50, 50, 50, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
         body.dark-mode .zen-garden {
             background-color: rgba(30, 30, 30, 0.9);
         }
@@ -553,6 +595,10 @@
     
     <div class="breathing-circle"></div>
     <div class="zen-garden">
+        <div class="zen-garden-header">
+            <h4 class="zen-garden-title">Zen Garden</h4>
+            <button class="zen-garden-close" id="close-zen-garden">×</button>
+        </div>
         <div class="sand" id="sand"></div>
     </div>
     
@@ -682,18 +728,20 @@
             // Zen Garden
             const zenGardenToggle = document.getElementById('zenGardenToggle');
             const zenGarden = document.querySelector('.zen-garden');
+            const closeZenGarden = document.getElementById('close-zen-garden');
             let zenGardenActive = false;
             
             zenGardenToggle.addEventListener('click', function() {
-                if (zenGardenActive) {
-                    zenGarden.style.display = 'none';
-                } else {
-                    zenGarden.style.display = 'block';
-                    if (stones.length === 0) {
-                        initZenGarden();
-                    }
+                zenGarden.style.display = 'block';
+                zenGardenActive = true;
+                if (stones.length === 0) {
+                    initZenGarden();
                 }
-                zenGardenActive = !zenGardenActive;
+            });
+            
+            closeZenGarden.addEventListener('click', function() {
+                zenGarden.style.display = 'none';
+                zenGardenActive = false;
             });
             
             const sand = document.getElementById('sand');
