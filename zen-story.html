@@ -245,16 +245,188 @@
             display: none;
             position: fixed;
             bottom: 80px;
-            right: 20px;
-            width: 280px;
-            height: 160px;
+            right: 60px;
+            width: 480px;
+            height: 320px;
             background-color: rgba(245, 245, 240, 0.9);
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
             overflow: hidden;
             z-index: 10;
             transition: all 0.3s ease;
             transform-origin: bottom right;
+        }
+        
+        .zen-garden.day-mode {
+            background-color: rgba(245, 245, 240, 0.9);
+        }
+        
+        .zen-garden.night-mode {
+            background-color: rgba(25, 25, 35, 0.9);
+        }
+        
+        .zen-garden.night-mode .sand {
+            background-color: #3a3a3a;
+            filter: brightness(0.7) contrast(1.1);
+        }
+        
+        .zen-garden.night-mode .water-pond {
+            background-color: rgba(30, 80, 150, 0.6);
+            border-color: rgba(50, 100, 180, 0.7);
+        }
+        
+        .zen-garden.night-mode .stone {
+            filter: brightness(0.8);
+        }
+        
+        .zen-garden.night-mode .bamboo {
+            filter: brightness(0.8) saturate(0.7);
+        }
+        
+        .zen-garden.night-mode .petal {
+            background-color: rgba(210, 180, 200, 0.7);
+        }
+        
+        /* Day-night transition overlay */
+        .day-night-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, transparent, rgba(0, 0, 50, 0.3));
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 2s ease;
+            z-index: 5;
+        }
+        
+        .zen-garden.night-mode .day-night-overlay {
+            opacity: 1;
+        }
+        
+        /* Stars in night mode */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            animation: twinkle 4s infinite alternate;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        
+        .zen-garden.night-mode .star {
+            opacity: 1;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        /* Stone lantern */
+        .stone-lantern {
+            position: absolute;
+            bottom: 25px;
+            left: 30px;
+            width: 30px;
+            height: 55px;
+            z-index: 3;
+        }
+        
+        .lantern-top {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 8px;
+            background-color: #aaa;
+            border-radius: 3px;
+        }
+        
+        .lantern-roof {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 8px;
+            background-color: #999;
+            border-radius: 2px;
+        }
+        
+        .lantern-chamber {
+            position: absolute;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 18px;
+            height: 14px;
+            background-color: #888;
+            border-radius: 2px;
+        }
+        
+        .lantern-light {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 6px;
+            background-color: rgba(255, 200, 100, 0);
+            border-radius: 2px;
+            transition: background-color 2s ease;
+        }
+        
+        .zen-garden.night-mode .lantern-light {
+            background-color: rgba(255, 200, 100, 0.7);
+            box-shadow: 0 0 10px rgba(255, 200, 100, 0.5);
+            animation: flicker 2s infinite alternate;
+        }
+        
+        .lantern-base {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 25px;
+            background-color: #777;
+            border-radius: 1px;
+        }
+        
+        .lantern-platform {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 6px;
+            background-color: #888;
+            border-radius: 2px;
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 0.7; }
+            25% { opacity: 0.8; }
+            50% { opacity: 1; }
+            75% { opacity: 0.9; }
+            100% { opacity: 0.7; }
+        }
+        
+        .zen-garden.fullscreen {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 0;
+            z-index: 1000;
         }
         
         .zen-garden-header {
@@ -264,6 +436,12 @@
             padding: 5px 10px;
             background-color: rgba(200, 200, 200, 0.5);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .zen-garden.night-mode .zen-garden-header {
+            background-color: rgba(40, 40, 60, 0.5);
+            border-bottom: 1px solid rgba(100, 100, 140, 0.2);
         }
         
         .zen-garden-title {
@@ -272,18 +450,31 @@
             font-weight: normal;
         }
         
-        .zen-garden-reset {
+        .zen-garden-controls {
+            display: flex;
+            align-items: center;
+        }
+        
+        .zen-garden-fullscreen {
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 0.9em; /* Slightly smaller than close */
+            font-size: 0.9em;
             padding: 0 5px;
             color: #555;
             transition: color 0.3s ease;
         }
         
-        .zen-garden-reset:hover {
+        .zen-garden-fullscreen:hover {
             color: #000;
+        }
+        
+        body.dark-mode .zen-garden-fullscreen {
+            color: #aaa;
+        }
+        
+        body.dark-mode .zen-garden-fullscreen:hover {
+            color: #fff;
         }
         
         body.dark-mode .zen-garden-reset {
@@ -308,20 +499,28 @@
             height: 100%;
             background-color: #f0e6d2;
             cursor: pointer;
+            background-image: url('data:image/png;base64,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');
+            position: relative;
         }
         
         body.dark-mode .sand {
             background-color: #3a3a3a;
+            background-image: url('data:image/png;base64,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');
+            filter: invert(1) brightness(0.8);
         }
         
+        /* Improved stone styling */
         .stone {
             position: absolute;
-            background-color: #777;
+            background-color: #999;
             border-radius: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
-            cursor: grab;
-            user-select: none;
+            cursor: move;
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+            z-index: 2;
+        }
+        
+        body.dark-mode .stone {
+            box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.2);
         }
         
         .stone:active {
@@ -751,6 +950,276 @@
         body.dark-mode .zen-garden-close {
             color: #aaa;
         }
+        
+        .zen-garden-pattern-selector {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 5px;
+            padding: 5px;
+            display: flex;
+            z-index: 10;
+        }
+        
+        body.dark-mode .zen-garden-pattern-selector {
+            background-color: rgba(60, 60, 60, 0.7);
+        }
+        
+        .pattern-option {
+            width: 25px;
+            height: 25px;
+            margin: 0 3px;
+            cursor: pointer;
+            border-radius: 3px;
+            background-size: cover;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        
+        .pattern-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .pattern-option.active {
+            box-shadow: 0 0 0 2px #4b79a1;
+        }
+        
+        #pattern-line {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25"><line x1="0" y1="12.5" x2="25" y2="12.5" stroke="%23555" stroke-width="1"/></svg>');
+        }
+        
+        #pattern-wave {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25"><path d="M0,12.5 C2.5,8.5 5,16.5 7.5,12.5 C10,8.5 12.5,16.5 15,12.5 C17.5,8.5 20,16.5 22.5,12.5 C25,8.5 25,12.5 25,12.5" stroke="%23555" fill="none" stroke-width="1"/></svg>');
+        }
+        
+        #pattern-circle {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25"><circle cx="12.5" cy="12.5" r="6" stroke="%23555" fill="none" stroke-width="1"/></svg>');
+        }
+        
+        #pattern-spiral {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25"><path d="M12.5,12.5 C14.5,10.5 14.5,8.5 12.5,6.5 C10.5,4.5 8.5,4.5 6.5,6.5 C4.5,8.5 4.5,10.5 6.5,12.5 C8.5,14.5 10.5,14.5 12.5,12.5 C14.5,10.5 16.5,10.5 18.5,12.5" stroke="%23555" fill="none" stroke-width="1"/></svg>');
+        }
+        
+        body.dark-mode #pattern-line,
+        body.dark-mode #pattern-wave,
+        body.dark-mode #pattern-circle,
+        body.dark-mode #pattern-spiral {
+            filter: invert(1);
+        }
+        
+        /* Sand particles styling */
+        .sand-particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            opacity: 0.8;
+            animation: sandParticleAnim 0.7s ease-out forwards;
+        }
+        
+        @keyframes sandParticleAnim {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-10px) translateX(var(--x-offset, 5px));
+                opacity: 0;
+            }
+        }
+        
+        /* Water pond */
+        .water-pond {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            background-color: rgba(100, 160, 255, 0.6);
+            border-radius: 50%;
+            bottom: 15px;
+            right: 15px;
+            transform: rotate(-10deg);
+            border: 1px solid rgba(100, 160, 255, 0.8);
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        /* Koi fish */
+        .koi {
+            position: absolute;
+            width: 15px;
+            height: 8px;
+            border-radius: 50% 40% 40% 50%;
+            z-index: 2;
+            transition: transform 0.5s ease-in-out;
+            animation: swim 20s infinite linear;
+        }
+        
+        .koi:before {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 7px;
+            right: -2px;
+            top: 0.5px;
+            background-color: inherit;
+            border-radius: 0 50% 50% 0;
+            transform: rotate(15deg);
+        }
+        
+        .koi-orange {
+            background-color: rgba(255, 140, 0, 0.9);
+        }
+        
+        .koi-white {
+            background-color: rgba(255, 255, 250, 0.9);
+        }
+        
+        .koi-white:after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(255, 120, 0, 0.8);
+            border-radius: 50%;
+            left: 3px;
+            top: 1px;
+        }
+        
+        @keyframes swim {
+            0% { transform: translate(30%, 30%) rotate(0deg); }
+            25% { transform: translate(-30%, 10%) rotate(45deg); }
+            50% { transform: translate(10%, -20%) rotate(170deg); }
+            75% { transform: translate(30%, 20%) rotate(250deg); }
+            100% { transform: translate(30%, 30%) rotate(360deg); }
+        }
+        
+        .water-ripple {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            animation: pond-ripple 3s linear infinite;
+            z-index: 2;
+        }
+        
+        @keyframes pond-ripple {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+            }
+            100% {
+                width: 40px;
+                height: 20px; /* Elliptical ripple */
+                opacity: 0;
+            }
+        }
+        
+        /* Cherry blossom petals */
+        .petal {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: rgba(255, 230, 240, 0.8);
+            border-radius: 50% 0 50% 50%;
+            transform: rotate(45deg);
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 3;
+            animation: petal-fall 8s linear forwards;
+        }
+        
+        @keyframes petal-fall {
+            0% {
+                transform: rotate(45deg) translateY(-20px) translateX(var(--x-start, 0));
+                opacity: 0.8;
+            }
+            25% {
+                transform: rotate(90deg) translateY(var(--y-quarter, 40px)) translateX(var(--x-drift, 10px));
+            }
+            50% {
+                transform: rotate(180deg) translateY(var(--y-half, 80px)) translateX(calc(var(--x-drift, 10px) * -1));
+            }
+            75% {
+                transform: rotate(270deg) translateY(var(--y-three-quarters, 120px)) translateX(var(--x-drift, 10px));
+            }
+            100% {
+                transform: rotate(360deg) translateY(var(--y-end, 150px)) translateX(var(--x-end, 20px));
+                opacity: 0;
+            }
+        }
+        
+        /* Bamboo elements */
+        .bamboo {
+            position: absolute;
+            width: 8px;
+            height: 80px;
+            background: linear-gradient(to right, rgba(100, 140, 50, 0.7), rgba(150, 180, 100, 0.7), rgba(100, 140, 50, 0.7));
+            border-radius: 2px;
+            z-index: 2;
+        }
+        
+        .bamboo::before, .bamboo::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: rgba(0, 0, 0, 0.1);
+            left: 0;
+        }
+        
+        .bamboo::before {
+            top: 25%;
+        }
+        
+        .bamboo::after {
+            top: 55%;
+        }
+        
+        .bamboo-leaf {
+            position: absolute;
+            width: 25px;
+            height: 8px;
+            background-color: rgba(100, 150, 50, 0.7);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-10deg);
+            z-index: 1;
+        }
+        
+        .zen-garden-fullscreen:hover {
+            color: #000;
+        }
+        
+        .zen-garden-day-night {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9em;
+            padding: 0 5px;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+        
+        .zen-garden-day-night:hover {
+            color: #000;
+        }
+        
+        body.dark-mode .zen-garden-day-night,
+        body.dark-mode .zen-garden-fullscreen,
+        body.dark-mode .zen-garden-reset {
+            color: #aaa;
+        }
+        
+        body.dark-mode .zen-garden-day-night:hover,
+        body.dark-mode .zen-garden-fullscreen:hover,
+        body.dark-mode .zen-garden-reset:hover {
+            color: #fff;
+        }
     </style>
 </head>
 <body class="dark-mode">
@@ -787,13 +1256,24 @@
     </div>
     
     <div class="breathing-circle"></div>
-    <div class="zen-garden">
+    <div class="zen-garden day-mode">
         <div class="zen-garden-header">
             <h4 class="zen-garden-title">Zen Garden</h4>
-            <button class="zen-garden-reset" id="reset-zen-garden" title="Reset Garden">🔄</button>
-            <button class="zen-garden-close" id="close-zen-garden" title="Close Garden">×</button>
+            <div class="zen-garden-controls">
+                <button class="zen-garden-day-night" id="day-night-toggle" title="Toggle Day/Night">☀️</button>
+                <button class="zen-garden-fullscreen" id="fullscreen-zen-garden" title="Fullscreen">⛶</button>
+                <button class="zen-garden-reset" id="reset-zen-garden" title="Reset Garden">🔄</button>
+                <button class="zen-garden-close" id="close-zen-garden" title="Close Garden">×</button>
+            </div>
         </div>
+        <div class="day-night-overlay"></div>
         <div class="sand" id="sand"></div>
+        <div class="zen-garden-pattern-selector">
+            <div class="pattern-option" id="pattern-line" title="Line Pattern"></div>
+            <div class="pattern-option" id="pattern-wave" title="Wave Pattern"></div>
+            <div class="pattern-option" id="pattern-circle" title="Circle Pattern"></div>
+            <div class="pattern-option" id="pattern-spiral" title="Spiral Pattern"></div>
+        </div>
     </div>
     
     <div class="hidden-message">
@@ -878,6 +1358,11 @@
         <source src="https://soundbible.com/mp3/rock-destroy-2-6304.mp3" type="audio/mpeg">
     </audio>
     
+    <!-- Zen Garden ambient sound -->
+    <audio id="zenGardenAmbient" loop preload="auto">
+        <source src="https://soundbible.com/mp3/japanese-temple-bell-small-588.mp3" type="audio/mpeg">
+    </audio>
+    
     <script src="js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
@@ -909,10 +1394,12 @@
             // Get references to Zen Garden sound effects
             const rakeSound = document.getElementById('rakeSound');
             const stonePlaceSound = document.getElementById('stonePlaceSound');
+            const zenGardenAmbient = document.getElementById('zenGardenAmbient');
             
             // Set initial volume of sound effects (very low)
             rakeSound.volume = 0.2;
             stonePlaceSound.volume = 0.3;
+            zenGardenAmbient.volume = 0.3;
             
             console.log("Stream sound ready state:", streamSound.readyState);
             console.log("Bell sound ready state:", bellSound.readyState);
@@ -956,6 +1443,9 @@
                     soundToggle.textContent = '🔇';
                     omVolumeControl.style.display = 'none';
                     cosmicVolumeControl.style.display = 'none';
+                    
+                    // Also pause zen garden ambient if it's playing
+                    zenGardenAmbient.pause();
                 } else {
                     console.log("Playing stream sound");
                     streamSound.play()
@@ -966,6 +1456,11 @@
                     // Only show cosmic volume control if cosmic mode is active
                     if (cosmicActive) {
                         cosmicVolumeControl.style.display = 'block';
+                    }
+                    
+                    // Resume zen garden ambient if zen garden is active
+                    if (zenGardenActive) {
+                        zenGardenAmbient.play().catch(e => console.log("Could not resume zen garden ambient sound"));
                     }
                 }
                 soundPlaying = !soundPlaying;
@@ -1071,6 +1566,12 @@
             zenGardenToggle.addEventListener('click', function() {
                 zenGarden.style.display = 'block';
                 zenGardenActive = true;
+                
+                // Play zen garden ambient sound if sound is enabled
+                if (soundPlaying) {
+                    zenGardenAmbient.play().catch(e => console.log("Could not play zen garden ambient sound"));
+                }
+                
                 if (stones.length === 0) {
                     initZenGarden();
                 }
@@ -1079,6 +1580,10 @@
             closeZenGarden.addEventListener('click', function() {
                 zenGarden.style.display = 'none';
                 zenGardenActive = false;
+                
+                // Stop zen garden ambient sound
+                zenGardenAmbient.pause();
+                zenGardenAmbient.currentTime = 0;
             });
             
             const sand = document.getElementById('sand');
@@ -1088,33 +1593,126 @@
                 for (let i = 0; i < 5; i++) {
                     const stone = document.createElement('div');
                     stone.className = 'stone';
-                    stone.style.width = (10 + Math.random() * 15) + 'px';
-                    stone.style.height = (10 + Math.random() * 15) + 'px';
-                    stone.style.left = (20 + Math.random() * 240) + 'px';
-                    stone.style.top = (20 + Math.random() * 120) + 'px';
+                    
+                    // More varied sizes
+                    const size = 12 + Math.random() * 20;
+                    stone.style.width = size + 'px';
+                    stone.style.height = size * (0.8 + Math.random() * 0.4) + 'px'; // Slightly oval
+                    
+                    // Better positioning
+                    stone.style.left = (20 + Math.random() * (zenGarden.clientWidth - 60)) + 'px';
+                    stone.style.top = (20 + Math.random() * (zenGarden.clientHeight - 80)) + 'px';
                     
                     // --- Stone Variety Enhancement ---
-                    // Randomize grey color
-                    const greyValue = 100 + Math.random() * 50; // Range from 100 to 150
-                    stone.style.backgroundColor = `rgb(${greyValue}, ${greyValue}, ${greyValue})`;
-                    // Add subtle inner shadow
-                    stone.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.2)';
+                    // More natural color range - earth tones
+                    let colorBase;
+                    if (Math.random() > 0.5) {
+                        // Grey stones
+                        const greyValue = 120 + Math.random() * 70; // Range from 120 to 190
+                        colorBase = `rgb(${greyValue}, ${greyValue * 0.95}, ${greyValue * 0.9})`;
+                    } else {
+                        // Brown/beige stones
+                        const r = 150 + Math.random() * 60;
+                        const g = r * (0.7 + Math.random() * 0.2);
+                        const b = g * (0.7 + Math.random() * 0.2);
+                        colorBase = `rgb(${r}, ${g}, ${b})`;
+                    }
+                    stone.style.backgroundColor = colorBase;
+                    
+                    // Add subtle rotation
+                    stone.style.transform = `rotate(${Math.random() * 360}deg)`;
                     // --- End Enhancement ---
                     
                     stone.addEventListener('mousedown', function(e) {
                         activeStone = stone;
-                        stone.style.zIndex = 2;
+                        stone.style.zIndex = 3; // Higher than other elements
                     });
                     
                     zenGarden.appendChild(stone);
                     stones.push(stone);
                 }
                 
+                // Initialize pattern selector
+                const patternOptions = document.querySelectorAll('.pattern-option');
+                let currentPattern = 'line'; // default pattern
+                
+                // Set initial active pattern
+                document.getElementById('pattern-line').classList.add('active');
+                
+                // Add event listeners to pattern options
+                patternOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        patternOptions.forEach(opt => opt.classList.remove('active'));
+                        option.classList.add('active');
+                        currentPattern = option.id.replace('pattern-', '');
+                    });
+                });
+                
+                // Add water pond
+                const pond = document.createElement('div');
+                pond.className = 'water-pond';
+                zenGarden.appendChild(pond);
+                
+                // Add koi fish to the pond
+                createKoiFish(pond, 'koi-orange', 0);
+                createKoiFish(pond, 'koi-white', 7000);
+                
+                // Create stone lantern
+                createStoneLantern();
+                
+                // Create bamboo elements
+                createBamboo(zenGarden.clientWidth - 30, 40);
+                createBamboo(zenGarden.clientWidth - 50, 30);
+                createBamboo(zenGarden.clientWidth - 20, 50);
+                
+                // Start water ripple and cherry blossom effects
+                setInterval(() => createWaterRipple(), 3000);
+                setInterval(() => createCherryBlossom(), 2000);
+                
                 // Draw some initial lines
                 drawZenLines();
                 
                 // Set up event handlers if they haven't been set up already
                 if (!window.zenGardenEventsInitialized) {
+                    // Day/Night toggle
+                    const dayNightToggle = document.getElementById('day-night-toggle');
+                    let isNightMode = false;
+                    
+                    // Create stars for night mode
+                    createStars();
+                    
+                    dayNightToggle.addEventListener('click', function() {
+                        isNightMode = !isNightMode;
+                        
+                        if (isNightMode) {
+                            zenGarden.classList.remove('day-mode');
+                            zenGarden.classList.add('night-mode');
+                            dayNightToggle.textContent = '🌙';
+                        } else {
+                            zenGarden.classList.remove('night-mode');
+                            zenGarden.classList.add('day-mode');
+                            dayNightToggle.textContent = '☀️';
+                        }
+                    });
+                    
+                    // Fullscreen toggle
+                    const fullscreenBtn = document.getElementById('fullscreen-zen-garden');
+                    fullscreenBtn.addEventListener('click', function() {
+                        zenGarden.classList.toggle('fullscreen');
+                        fullscreenBtn.textContent = zenGarden.classList.contains('fullscreen') ? '⛶' : '⛶';
+                        
+                        // Reposition elements if needed
+                        if (zenGarden.classList.contains('fullscreen')) {
+                            // Move pond to better position in fullscreen
+                            pond.style.right = '50px';
+                            pond.style.bottom = '50px';
+                        } else {
+                            // Reset pond position
+                            pond.style.right = '15px';
+                            pond.style.bottom = '15px';
+                        }
+                    });
+                    
                     // Handle stone movement
                     document.addEventListener('mousemove', function(e) {
                         if (activeStone && zenGardenActive) {
@@ -1157,7 +1755,21 @@
                             const x = e.clientX - rect.left;
                             const y = e.clientY - rect.top;
                             
-                            drawCircularLines(x, y);
+                            // Use the selected pattern
+                            switch(currentPattern) {
+                                case 'line':
+                                    drawHorizontalLines(x, y);
+                                    break;
+                                case 'wave':
+                                    drawWaveLines(x, y);
+                                    break;
+                                case 'circle':
+                                    drawCircularLines(x, y);
+                                    break;
+                                case 'spiral':
+                                    drawSpiralLines(x, y);
+                                    break;
+                            }
                         }
                     });
                     
@@ -1179,8 +1791,29 @@
                             const x = e.clientX - rect.left;
                             const y = e.clientY - rect.top;
                             
-                            // Draw line segment from last position to current position
-                            drawRakeLine(lastX, lastY, x, y);
+                            // Draw pattern based on current selection
+                            switch(currentPattern) {
+                                case 'line':
+                                case 'wave':
+                                    drawRakeLine(lastX, lastY, x, y);
+                                    break;
+                                case 'circle':
+                                    // Draw small circles along the path
+                                    if (Math.sqrt((x - lastX) ** 2 + (y - lastY) ** 2) > 10) {
+                                        drawCircularLines(x, y, 1);
+                                        lastX = x;
+                                        lastY = y;
+                                    }
+                                    break;
+                                case 'spiral':
+                                    // Draw spiral segments
+                                    if (Math.sqrt((x - lastX) ** 2 + (y - lastY) ** 2) > 20) {
+                                        drawSpiralLines(x, y);
+                                        lastX = x;
+                                        lastY = y;
+                                    }
+                                    break;
+                            }
                             
                             // Play rake sound if sound is enabled (only occasionally for better effect)
                             if (soundPlaying && Math.random() < 0.2) {
@@ -1188,8 +1821,10 @@
                                 rakeSound.play().catch(e => console.log("Could not play rake sound"));
                             }
                             
-                            lastX = x;
-                            lastY = y;
+                            if (currentPattern !== 'circle' && currentPattern !== 'spiral') {
+                                lastX = x;
+                                lastY = y;
+                            }
                         }
                     });
                     
@@ -1244,8 +1879,8 @@
                 }
             }
             
-            function drawCircularLines(x, y) {
-                for (let i = 0; i < 3; i++) {
+            function drawCircularLines(x, y, count = 3) {
+                for (let i = 0; i < count; i++) {
                     const radius = 10 + i * 10;
                     const line = document.createElement('div');
                     line.className = 'line';
@@ -1260,6 +1895,90 @@
                     zenGarden.appendChild(line);
                     lines.push(line);
                 }
+            }
+            
+            function drawHorizontalLines(x, y) {
+                // Draw three parallel horizontal lines
+                for (let i = -1; i <= 1; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'line';
+                    line.style.width = '50px';
+                    line.style.height = '1px';
+                    line.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#444' : '#e5dbc5';
+                    line.style.position = 'absolute';
+                    line.style.top = (y + i * 5) + 'px';
+                    line.style.left = (x - 25) + 'px';
+                    
+                    zenGarden.appendChild(line);
+                    lines.push(line);
+                }
+            }
+            
+            function drawWaveLines(x, y) {
+                // Create wave path with SVG for better visual
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, "svg");
+                svg.setAttribute("width", "60");
+                svg.setAttribute("height", "20");
+                svg.style.position = "absolute";
+                svg.style.top = (y - 10) + "px";
+                svg.style.left = (x - 30) + "px";
+                svg.style.pointerEvents = "none";
+                
+                const path = document.createElementNS(svgNS, "path");
+                path.setAttribute("d", "M0,10 C5,5 15,15 20,10 C25,5 35,15 40,10 C45,5 55,15 60,10");
+                path.setAttribute("fill", "none");
+                path.setAttribute("stroke", document.body.classList.contains('dark-mode') ? '#444' : '#e5dbc5');
+                path.setAttribute("stroke-width", "1");
+                
+                svg.appendChild(path);
+                zenGarden.appendChild(svg);
+                
+                // Add SVG to lines array so it can be cleared
+                svg.className = 'line'; // Adding class just for consistency
+                lines.push(svg);
+            }
+            
+            function drawSpiralLines(x, y) {
+                // Create spiral path with SVG
+                const svgNS = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNS, "svg");
+                svg.setAttribute("width", "60");
+                svg.setAttribute("height", "60");
+                svg.style.position = "absolute";
+                svg.style.top = (y - 30) + "px";
+                svg.style.left = (x - 30) + "px";
+                svg.style.pointerEvents = "none";
+                
+                const spiral = document.createElementNS(svgNS, "path");
+                
+                // Create a spiral path
+                let spiralPath = "M30,30 ";
+                let angle = 0;
+                let radius = 2;
+                const turns = 2; // Number of spiral turns
+                
+                for (let i = 0; i < 100; i++) {
+                    angle += 0.1;
+                    radius += 0.15;
+                    if (angle > turns * 2 * Math.PI) break;
+                    
+                    const x = 30 + radius * Math.cos(angle);
+                    const y = 30 + radius * Math.sin(angle);
+                    spiralPath += `L${x},${y} `;
+                }
+                
+                spiral.setAttribute("d", spiralPath);
+                spiral.setAttribute("fill", "none");
+                spiral.setAttribute("stroke", document.body.classList.contains('dark-mode') ? '#444' : '#e5dbc5');
+                spiral.setAttribute("stroke-width", "1");
+                
+                svg.appendChild(spiral);
+                zenGarden.appendChild(svg);
+                
+                // Add SVG to lines array so it can be cleared
+                svg.className = 'line'; // Adding class just for consistency
+                lines.push(svg);
             }
             
             function drawRakeLine(x1, y1, x2, y2) {
@@ -1286,10 +2005,222 @@
                 
                 zenGarden.appendChild(line);
                 lines.push(line);
+                
+                // Create sand particle effect
+                createSandParticles(x2, y2);
             }
             
-            // Falling leaves
-            const leavesToggle = document.getElementById('leavesToggle');
+            function createSandParticles(x, y) {
+                // Create 3-5 sand particles
+                const particleCount = 3 + Math.floor(Math.random() * 3);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'sand-particle';
+                    
+                    // Random size between 2-4px
+                    const size = 2 + Math.random() * 2;
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    
+                    // Position at origin point with slight randomness
+                    particle.style.left = (x - size/2 + (Math.random() * 6 - 3)) + 'px';
+                    particle.style.top = (y - size/2 + (Math.random() * 6 - 3)) + 'px';
+                    
+                    // Set random direction for particles to float
+                    const xOffset = Math.random() * 20 - 10; // Between -10 and 10
+                    particle.style.setProperty('--x-offset', `${xOffset}px`);
+                    
+                    // Set color to match sand
+                    // Set color to match sand
+                    particle.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#555' : '#d8ceb7';
+                    
+                    // Add to the garden
+                    zenGarden.appendChild(particle);
+                    
+                    // Animate and remove after animation completes
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.parentNode.removeChild(particle);
+                        }
+                    }, 700);
+                }
+            }
+            
+            // Water ripple effect for the pond
+            function createWaterRipple() {
+                if (!zenGardenActive) return;
+                
+                const pond = document.querySelector('.water-pond');
+                if (!pond) return;
+                
+                const ripple = document.createElement('div');
+                ripple.className = 'water-ripple';
+                
+                // Random position within the pond
+                const pondRect = pond.getBoundingClientRect();
+                const x = Math.random() * (pondRect.width * 0.8) + (pondRect.width * 0.1);
+                const y = Math.random() * (pondRect.height * 0.8) + (pondRect.height * 0.1);
+                
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                
+                pond.appendChild(ripple);
+                
+                // Remove ripple after animation completes
+                setTimeout(() => {
+                    if (ripple.parentNode) {
+                        ripple.parentNode.removeChild(ripple);
+                    }
+                }, 3000);
+            }
+            
+            // Cherry blossom petals
+            function createCherryBlossom() {
+                if (!zenGardenActive) return;
+                
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                
+                // Random position from top
+                const xStart = Math.random() * zenGarden.clientWidth;
+                petal.style.left = xStart + 'px';
+                petal.style.top = '0px';
+                
+                // Set custom properties for animation
+                petal.style.setProperty('--x-start', `${xStart}px`);
+                petal.style.setProperty('--y-quarter', `${Math.random() * 40 + 30}px`);
+                petal.style.setProperty('--y-half', `${Math.random() * 60 + 70}px`);
+                petal.style.setProperty('--y-three-quarters', `${Math.random() * 80 + 140}px`);
+                petal.style.setProperty('--y-end', `${zenGarden.clientHeight + 20}px`);
+                petal.style.setProperty('--x-drift', `${Math.random() * 30 - 15}px`);
+                petal.style.setProperty('--x-end', `${Math.random() * 40 - 20}px`);
+                
+                zenGarden.appendChild(petal);
+                
+                // Remove petal after animation completes
+                setTimeout(() => {
+                    if (petal.parentNode) {
+                        petal.parentNode.removeChild(petal);
+                    }
+                }, 8000);
+            }
+            
+            // Create bamboo decoration
+            function createBamboo(x, y) {
+                const bamboo = document.createElement('div');
+                bamboo.className = 'bamboo';
+                bamboo.style.left = x + 'px';
+                bamboo.style.top = y + 'px';
+                
+                // Random height
+                bamboo.style.height = (70 + Math.random() * 30) + 'px';
+                
+                // Add some random rotation
+                bamboo.style.transform = `rotate(${Math.random() * 6 - 3}deg)`;
+                
+                // Add leaves
+                addBambooLeaf(bamboo, 15, -10);
+                addBambooLeaf(bamboo, 40, 15);
+                
+                zenGarden.appendChild(bamboo);
+            }
+            
+            // Add leaf to bamboo
+            function addBambooLeaf(bamboo, yPos, angle) {
+                const leaf = document.createElement('div');
+                leaf.className = 'bamboo-leaf';
+                leaf.style.top = yPos + 'px';
+                leaf.style.left = '5px';
+                leaf.style.transform = `rotate(${angle}deg)`;
+                
+                bamboo.appendChild(leaf);
+            }
+            
+            // Create a koi fish that swims in the pond
+            function createKoiFish(pond, type, delay) {
+                const koi = document.createElement('div');
+                koi.className = 'koi ' + type;
+                pond.appendChild(koi);
+                
+                // Add random starting position
+                koi.style.left = (Math.random() * 50 + 25) + '%';
+                koi.style.top = (Math.random() * 50 + 25) + '%';
+                
+                // Add animation delay for more natural movement
+                koi.style.animationDelay = delay + 'ms';
+                
+                // Add random animation duration (faster or slower fish)
+                const duration = 15 + Math.random() * 10;
+                koi.style.animationDuration = duration + 's';
+            }
+            
+            // Create stars for the night sky
+            function createStars() {
+                const zenGarden = document.querySelector('.zen-garden');
+                
+                // Add 30 stars with random positions
+                for (let i = 0; i < 30; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    
+                    // Random position
+                    star.style.left = (Math.random() * 100) + '%';
+                    star.style.top = (Math.random() * 100) + '%';
+                    
+                    // Random animation delay
+                    star.style.animationDelay = (Math.random() * 4) + 's';
+                    
+                    // Slightly random size for some variety
+                    const size = 1 + Math.random();
+                    star.style.width = size + 'px';
+                    star.style.height = size + 'px';
+                    
+                    // Add to the garden
+                    zenGarden.appendChild(star);
+                }
+            }
+            
+            // Create a traditional stone lantern
+            function createStoneLantern() {
+                const zenGarden = document.querySelector('.zen-garden');
+                
+                // Create main lantern container
+                const lantern = document.createElement('div');
+                lantern.className = 'stone-lantern';
+                
+                // Create lantern parts
+                const top = document.createElement('div');
+                top.className = 'lantern-top';
+                
+                const roof = document.createElement('div');
+                roof.className = 'lantern-roof';
+                
+                const chamber = document.createElement('div');
+                chamber.className = 'lantern-chamber';
+                
+                const light = document.createElement('div');
+                light.className = 'lantern-light';
+                
+                const base = document.createElement('div');
+                base.className = 'lantern-base';
+                
+                const platform = document.createElement('div');
+                platform.className = 'lantern-platform';
+                
+                // Assemble lantern
+                lantern.appendChild(top);
+                lantern.appendChild(roof);
+                lantern.appendChild(chamber);
+                chamber.appendChild(light);
+                lantern.appendChild(base);
+                lantern.appendChild(platform);
+                
+                // Add to garden
+                zenGarden.appendChild(lantern);
+            }
+            
+            // Falling leaves functionality
             let leavesActive = false;
             let leavesInterval;
             
