@@ -304,6 +304,19 @@
 		sliderMain();
 		stickyFunction();
 		owlCrouselFeatureSlide();
+
+		// Contact link hover effect
+		var contactLink = $('#contact-link');
+		var originalText = contactLink.text();
+		var emailText = 'daryll.gomas@gmail.com';
+
+		contactLink.on('mouseover', function() {
+			$(this).text(emailText);
+		});
+
+		contactLink.on('mouseout', function() {
+			$(this).text(originalText);
+		});
 	});
 
 

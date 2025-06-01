@@ -1,0 +1,856 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Zen From There</title>
+    <!-- Preload critical images -->
+    <link rel="preload" href="mountain-path.jpg" as="image">
+    <link rel="preload" href="cosmic.jpg" as="image">
+    <link rel="preload" href="Future.JPEG" as="image">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevents scrollbars from appearing */
+            width: 100%;
+            height: 100%;
+            position: fixed; /* Ensures the page doesn't scroll at all */
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('mountain-path.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            transition: all 0.5s ease;
+        }
+        
+        body.dark-mode {
+            color: #f0f0f0;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('mountain-path.jpg');
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 20px 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+            max-height: 95vh; /* Increased max height */
+            overflow: hidden; /* Hide scrollbars completely */
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        body.dark-mode .container {
+            background-color: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        header {
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            transition: all 0.5s ease;
+        }
+        
+        body.dark-mode header {
+            border-bottom: 1px solid #444;
+        }
+        
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 5px;
+            color: #333;
+            transition: all 0.5s ease;
+        }
+        
+        body.dark-mode h1 {
+            color: #f0f0f0;
+        }
+        
+        h2 {
+            font-size: 1.2em;
+            font-weight: normal;
+            font-style: italic;
+            color: #666;
+            margin-top: 0;
+            transition: all 0.5s ease;
+        }
+        
+        body.dark-mode h2 {
+            color: #aaa;
+        }
+        
+        .content {
+            padding: 15px 0;
+            transition: all 0.5s ease;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        p {
+            margin-bottom: 0.8em;
+            transition: all 0.5s ease;
+            line-height: 1.6;
+        }
+        
+        body.dark-mode p {
+            color: #ddd;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #ddd;
+            transition: all 0.5s ease;
+        }
+        
+        body.dark-mode footer {
+            color: #aaa;
+            border-top: 1px solid #444;
+        }
+        
+        .logo {
+            max-width: 120px;
+            max-height: 120px;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border-radius: 50%;
+            transition: all 2s ease;
+        }
+        
+        /* Logo transition when in cosmic mode */
+        .logo-transitioning {
+            opacity: 0.1; /* Initial fade out before changing */
+            transition: opacity 2.5s ease;
+        }
+        
+        .cosmic-mode .logo-transitioning {
+            opacity: 1; /* Fade back in after image is changed */
+            transition: opacity 2.5s ease;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+        
+        /* Toggle buttons */
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        body.dark-mode .control-btn {
+            background-color: rgba(60, 60, 60, 0.8);
+            color: #fff;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Breathing circle animation */
+        .breathing-circle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(100, 149, 237, 0.5);
+            animation: breathing 5s infinite ease-in-out;
+            display: none;
+        }
+        
+        @keyframes breathing {
+            0% { transform: scale(0.9); background-color: rgba(100, 149, 237, 0.5); }
+            25% { transform: scale(1.0); background-color: rgba(100, 149, 237, 0.7); }
+            50% { transform: scale(1.2); background-color: rgba(100, 149, 237, 0.9); }
+            75% { transform: scale(1.0); background-color: rgba(100, 149, 237, 0.7); }
+            100% { transform: scale(0.9); background-color: rgba(100, 149, 237, 0.5); }
+        }
+        
+        /* Fade-in animation for content */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.5s ease forwards;
+            opacity: 0;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        .delay-5 { animation-delay: 1.0s; }
+        
+        /* Falling leaves */
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(139, 195, 74, 0.5);
+            border-radius: 0 50% 50% 50%;
+            transform: rotate(45deg);
+            pointer-events: none;
+            filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.1));
+            z-index: -1;
+        }
+        
+        /* Zen Garden */
+        .zen-garden {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 280px;
+            height: 160px;
+            background-color: rgba(245, 245, 240, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            z-index: 10;
+            transition: all 0.3s ease;
+            transform-origin: bottom right;
+        }
+        
+        .zen-garden-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 10px;
+            background-color: rgba(200, 200, 200, 0.5);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .zen-garden-title {
+            font-size: 0.9em;
+            margin: 0;
+            font-weight: normal;
+        }
+        
+        .zen-garden-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 0;
+            color: #555;
+            transition: color 0.3s ease;
+        }
+        
+        .zen-garden-close:hover {
+            color: #000;
+        }
+        
+        body.dark-mode .zen-garden-close {
+            color: #aaa;
+        }
+        
+        body.dark-mode .zen-garden-close:hover {
+            color: #fff;
+        }
+        
+        body.dark-mode .zen-garden-header {
+            background-color: rgba(50, 50, 50, 0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        body.dark-mode .zen-garden {
+            background-color: rgba(30, 30, 30, 0.9);
+        }
+        
+        .sand {
+            width: 100%;
+            height: 100%;
+            background-color: #f0e6d2;
+            cursor: pointer;
+        }
+        
+        body.dark-mode .sand {
+            background-color: #3a3a3a;
+        }
+        
+        .stone {
+            position: absolute;
+            background-color: #777;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+            cursor: grab;
+            user-select: none;
+        }
+        
+        .stone:active {
+            cursor: grabbing;
+        }
+        
+        .stone:hover {
+            filter: brightness(1.1);
+        }
+        
+        /* Sand lines */
+        .line {
+            position: absolute;
+            background-color: #e5dbc5;
+            pointer-events: none;
+        }
+        
+        body.dark-mode .line {
+            background-color: #444;
+        }
+        
+        /* Hidden message */
+        .hidden-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            display: none;
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        body.dark-mode .hidden-message {
+            background-color: rgba(30, 30, 30, 0.95);
+        }
+        
+        .hidden-message p {
+            margin-bottom: 15px;
+        }
+        
+        .hidden-message button {
+            background-color: #4b79a1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .hidden-message button:hover {
+            background-color: #3a678f;
+        }
+        
+        /* Clickable zen words */
+        .zen-word {
+            text-decoration: none;
+            color: inherit;
+            border-bottom: 1px dotted #888;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .zen-word:hover {
+            color: #4b79a1;
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            font-size: 0.9em;
+            width: 220px;
+            display: none;
+            z-index: 100;
+            text-align: center;
+        }
+        
+        body.dark-mode .tooltip {
+            background-color: rgba(50, 50, 50, 0.95);
+        }
+        
+        .zen-word:hover .tooltip {
+            display: block;
+        }
+        
+        /* Water ripples */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            animation: rippleEffect 2s linear forwards;
+            pointer-events: none;
+        }
+        
+        @keyframes rippleEffect {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.8;
+            }
+            100% {
+                width: 200px;
+                height: 200px;
+                opacity: 0;
+            }
+        }
+        
+        body.dark-mode .ripple {
+            border-color: rgba(150, 180, 255, 0.3);
+        }
+        
+        /* Fireflies */
+        .firefly {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background-color: rgba(255, 255, 190, 0.7);
+            border-radius: 50%;
+            box-shadow: 0 0 5px 1px rgba(255, 255, 100, 0.5);
+            pointer-events: none;
+            opacity: 0;
+        }
+        
+        /* Meditation timer */
+        .meditation-timer {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 100;
+            width: 300px;
+        }
+        
+        body.dark-mode .meditation-timer {
+            background-color: rgba(40, 40, 40, 0.95);
+        }
+        
+        .timer-display {
+            font-size: 3rem;
+            font-weight: 300;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        
+        .timer-controls {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .timer-btn {
+            background-color: #4b79a1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 80px;
+        }
+        
+        .timer-btn:hover {
+            background-color: #3a678f;
+        }
+        
+        .timer-options {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .timer-option {
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+        }
+        
+        body.dark-mode .timer-option {
+            border-color: #555;
+        }
+        
+        .timer-option.active {
+            background-color: #4b79a1;
+            color: white;
+            border-color: #4b79a1;
+        }
+        
+        /* Parallax effect */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 120%;
+            height: 120%;
+            background-image: url('mountain-path.jpg');
+            background-size: cover;
+            z-index: -2;
+            transform: translate(-10%, -10%);
+            will-change: transform; /* Optimizes for animation */
+            transition: opacity 3s ease; /* Slower transition for smooth fade */
+        }
+        
+        /* Add this rule to hide the mountain background when cosmic mode is active */
+        body.cosmic-mode .parallax-bg {
+            opacity: 0;
+        }
+        
+        body.dark-mode .parallax-bg {
+            filter: brightness(0.5) saturate(0.7);
+        }
+        
+        /* Add volume control slider styles */
+        .volume-control {
+            display: none;
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            width: 120px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        body.dark-mode .volume-control {
+            background-color: rgba(40, 40, 40, 0.9);
+        }
+        
+        .volume-slider {
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .volume-title {
+            font-size: 0.8em;
+            margin-bottom: 5px;
+            text-align: center;
+            color: #333;
+        }
+        
+        body.dark-mode .volume-title {
+            color: #ddd;
+        }
+        
+        .volume-control + .volume-control {
+            top: 140px; /* Position second volume control below the first one */
+        }
+        
+        /* Add CSS for floating quotes after the volume control styles */
+        .floating-quote {
+            position: fixed;
+            padding: 15px 25px;
+            background-color: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-style: italic;
+            max-width: 300px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 3s ease;
+            z-index: 5;
+            pointer-events: none;
+            overflow: hidden; /* Prevent text from overflowing */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        body.dark-mode .floating-quote {
+            background-color: rgba(0, 0, 0, 0.15);
+            color: #f0f0f0;
+        }
+        
+        .quote-author {
+            font-size: 0.9em;
+            margin-top: 8px;
+            opacity: 0.8;
+        }
+        
+        /* Space scene styles */
+        .space-scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3; /* Behind parallax by default */
+            background-image: url('cosmic.jpg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 5s ease, transform 20s ease-in-out, z-index 0s linear;
+            pointer-events: none;
+            transform: scale(1);
+        }
+        
+        /* Add animation for cosmic mode */
+        .cosmic-mode .space-scene {
+            z-index: -1; /* Bring it to front when active */
+            opacity: 1;
+            transform: scale(1.05);
+            animation: cosmic-drift 30s infinite alternate ease-in-out;
+            filter: brightness(1.2) saturate(1.2) hue-rotate(0deg);
+        }
+        
+        @keyframes cosmic-drift {
+            0% {
+                background-position: center center;
+                transform: scale(1.05);
+                filter: brightness(1.2) saturate(1.2) hue-rotate(0deg);
+            }
+            50% {
+                background-position: 51% 49%;
+                transform: scale(1.1);
+                filter: brightness(1.3) saturate(1.3) hue-rotate(5deg);
+            }
+            100% {
+                background-position: 49% 51%;
+                transform: scale(1.08);
+                filter: brightness(1.25) saturate(1.25) hue-rotate(-5deg);
+            }
+        }
+        
+        .cosmic-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .cosmic-mode .container {
+            background-color: rgba(10, 10, 30, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            box-shadow: 0 0 30px rgba(50, 100, 255, 0.15);
+            transition: all 3s ease;
+        }
+        
+        .cosmic-mode p, .cosmic-mode h1, .cosmic-mode h2, .cosmic-mode footer {
+            color: #e0e0ff;
+            text-shadow: 0 0 15px rgba(150, 200, 255, 0.3);
+            transition: all 3s ease;
+        }
+        
+        .cosmic-mode .logo {
+            box-shadow: 0 0 20px rgba(100, 150, 255, 0.5);
+            transition: all 5s ease;
+            content: url('Future.JPEG'); /* Changes the image source in cosmic mode */
+            transform: scale(1.05);
+            filter: brightness(1.2) saturate(1.2);
+        }
+        
+        .cosmic-mode a, .cosmic-mode span {
+            color: #a0c0ff;
+            transition: all 3s ease;
+        }
+        
+        .cosmic-mode .zen-word {
+            border-bottom-color: rgba(150, 200, 255, 0.4);
+        }
+        
+        .cosmic-mode .tooltip {
+            background-color: rgba(20, 30, 60, 0.9);
+            color: #d0e0ff;
+        }
+        
+        .cosmic-pulse {
+            animation: cosmicPulse 12s infinite ease-in-out;
+        }
+        
+        @keyframes cosmicPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <div class="parallax-bg"></div>
+    <div class="space-scene" id="spaceScene"></div>
+    
+    <div class="container">
+        <header class="fade-in">
+            <img src="mountain-path.jpg" alt="mountain-path Logo" class="logo">
+            <h1>Enter Zen From There</h1>
+        </header>
+        
+        <div class="content">
+            <p class="fade-in delay-1">A Zen Master was walking in silence with one of his disciples along a mountain trail. When they came to an ancient cedar tree, they sat down under it for a simple meal of some rice and vegetables. After the meal, the disciple, a young monk who had not yet found the key to the mystery of <span class="zen-word">Zen<span class="tooltip">Zen is not something to understand, but to experience directly. It points to your true nature beyond thinking.</span></span>, broke the silence by asking the Master, "Master, how do I enter Zen?"</p>
+            
+            <p class="fade-in delay-2">He was, of course, inquiring how to enter the state of <span class="zen-word">consciousness<span class="tooltip">Pure awareness without the interference of thought - your natural state.</span></span> which is Zen.</p>
+            
+            <p class="fade-in delay-2">The master remained silent. Almost five minutes passed while the disciple anxiously waited for an answer. He was about to ask another question when the Master suddenly spoke. "Do you hear the sound of that mountain stream?"</p>
+            
+            <p class="fade-in delay-3">The disciple had been busy <span class="zen-word">thinking<span class="tooltip">Thinking is useful, but it can become an obstacle to direct experience. Beyond thinking lies wisdom.</span></span> about the meaning of Zen. Now, as he began to listen to the sound, his noisy mind subsided. At first he heard nothing. Then, his thinking gave way to heightened alertness, and suddenly he did hear the hardly perceptible murmur of a small stream in the far distance.</p>
+            
+            <p class="fade-in delay-3">"Yes, I can hear it now," he said.</p>
+            
+            <p class="fade-in delay-4">The Master raised his finger and, with a look in his eyes that in some way was both fierce and gentle, said, "Enter Zen from there."</p>
+            
+            <p class="fade-in delay-4">The disciple was stunned. It was his first <span class="zen-word">satori<span class="tooltip">Satori is a glimpse of enlightenment - a moment when the veil of thoughts drops and reality is seen directly.</span></span> — a flash of enlightenment. He knew what Zen was without knowing what it was that he knew!</p>
+            
+            <p class="fade-in delay-4">They continued on their journey in silence. The disciple was amazed at the <span class="zen-word">aliveness<span class="tooltip">When mental noise subsides, the world appears vibrant, fresh and alive - as it truly is.</span></span> of the world around him. He experienced everything as if for the first time. Gradually, however, he started thinking again. The alert stillness became covered up again by mental noise, and before long he had another question. "Master," he said, "I have been thinking. What would you have said if I hadn't been able to hear the mountain stream?" The Master stopped, looked at him, raised his finger and said, "Enter Zen from there."</p>
+        </div>
+        
+        <footer class="fade-in delay-5">
+            <p>Found this hidden gem? <span id="secret-trigger">Enter Zen from here</span>.</p>
+        </footer>
+    </div>
+    
+    <div class="breathing-circle"></div>
+    <div class="zen-garden">
+        <div class="zen-garden-header">
+            <h4 class="zen-garden-title">Zen Garden</h4>
+            <button class="zen-garden-close" id="close-zen-garden">×</button>
+        </div>
+        <div class="sand" id="sand"></div>
+    </div>
+    
+    <div class="hidden-message">
+        <p>"The true purpose of Zen is to see things as they are, to observe things as they are, and to let everything go as it goes."</p>
+        <p>— Shunryu Suzuki</p>
+        <button id="close-message">Continue the journey</button>
+    </div>
+    
+    <div class="meditation-timer">
+        <h3>Meditation Timer</h3>
+        <div class="timer-options">
+            <div class="timer-option active" data-time="5">5 min</div>
+            <div class="timer-option" data-time="10">10 min</div>
+            <div class="timer-option" data-time="15">15 min</div>
+        </div>
+        <div class="timer-display">05:00</div>
+        <div class="timer-controls">
+            <button class="timer-btn" id="start-timer">Start</button>
+            <button class="timer-btn" id="close-timer">Close</button>
+        </div>
+    </div>
+    
+    <div class="volume-control" id="om-volume-control">
+        <div class="volume-title">OM Volume</div>
+        <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="om-volume-slider">
+    </div>
+    
+    <div class="volume-control" id="cosmic-volume-control">
+        <div class="volume-title">Cosmic Meditation Volume</div>
+        <input type="range" min="0" max="1" step="0.1" value="0.5" class="volume-slider" id="cosmic-volume-slider">
+    </div>
+    
+    <div class="controls">
+        <button class="control-btn" id="darkModeToggle" title="Toggle Light/Dark Mode">
+            🌙
+        </button>
+        <button class="control-btn" id="soundToggle" title="Toggle Stream Sound">
+            🔇
+        </button>
+        <button class="control-btn" id="breatheToggle" title="Toggle Breathing Guide">
+            🧘
+        </button>
+        <button class="control-btn" id="cosmicToggle" title="Toggle Cosmic Meditation">
+            🌌
+        </button>
+        <button class="control-btn" id="zenGardenToggle" title="Toggle Zen Garden">
+            ☯️
+        </button>
+        <button class="control-btn" id="leavesToggle" title="Toggle Falling Leaves">
+            🍃
+        </button>
+        <button class="control-btn" id="timerToggle" title="Meditation Timer">
+            ⏱️
+        </button>
+        <button class="control-btn" id="parallaxToggle" title="Toggle Parallax Effect">
+            🖱️
+        </button>
+    </div>
+    
+    <audio id="streamSound" loop preload="auto">
+        <source src="https://soundbible.com/mp3/creek-daniel_simon.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="bellSound" preload="auto">
+        <source src="https://soundbible.com/mp3/meditative-bell-sound-1-12752.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="omSound" loop preload="auto">
+        <source src="OM.mp3" type="audio/mpeg">
+    </audio>
+    
+    <audio id="cosmicSound" preload="auto">
+        <source src="KTN.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script src="js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Debug audio loading
+            console.log("DOM fully loaded");
+            
+            // Fix zen garden button icon
+            document.getElementById('zenGardenToggle').textContent = '☯️';
+            
+            // Check if cosmic.jpg exists and is loadable
+        });
+    </script>
+</body>
+</html>
