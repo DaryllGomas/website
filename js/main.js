@@ -305,17 +305,26 @@
 		stickyFunction();
 		owlCrouselFeatureSlide();
 
-		// Contact link hover effect
+		// Click to copy email for Contact Me link
 		var contactLink = $('#contact-link');
-		var originalText = contactLink.text();
-		var emailText = 'daryll.gomas@gmail.com';
+		var copiedMessage = $('#copied-message');
+		var emailToCopy = 'daryll.gomas@gmail.com';
 
-		contactLink.on('mouseover', function() {
-			$(this).text(emailText);
-		});
+		contactLink.on('click', function(event) {
+			console.log('Contact link clicked');
 
-		contactLink.on('mouseout', function() {
-			$(this).text(originalText);
+			if (navigator.clipboard && navigator.clipboard.writeText) {
+				console.log('Clipboard API is available');
+				navigator.clipboard.writeText(emailToCopy).then(function() {
+					console.log('Email copied successfully!');
+					copiedMessage.text('Email copied!');
+					copiedMessage.fadeIn(200).delay(1800).fadeOut(200);
+				}, function(err) {
+					console.error('Failed to copy email: ', err);
+				});
+			} else {
+				console.warn('Clipboard API not available.');
+			}
 		});
 	});
 
