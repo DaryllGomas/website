@@ -1,477 +1,590 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Daryll's Website</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="" />
-	<meta name="keywords" content="" />
-	<meta name="author" content="" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daryll Gomas — Technology Enthusiast</title>
+  <meta name="description" content="Daryll Gomas — Cybersecurity professional, technology enthusiast, and lifelong learner. Portfolio showcasing skills, achievements, and projects.">
+  <meta name="author" content="Daryll Gomas">
 
-  <!-- Facebook and Twitter integration -->
-	<meta property="og:title" content=""/>
-	<meta property="og:image" content=""/>
-	<meta property="og:url" content=""/>
-	<meta property="og:site_name" content=""/>
-	<meta property="og:description" content=""/>
-	<meta name="twitter:title" content="" />
-	<meta name="twitter:image" content="" />
-	<meta name="twitter:url" content="" />
-	<meta name="twitter:card" content="" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="Daryll Gomas — Technology Enthusiast">
+  <meta property="og:description" content="Cybersecurity professional, AI and robotics enthusiast.">
+  <meta property="og:url" content="https://daryllgomas.com">
+  <meta property="og:image" content="images/AI_Left.jpg">
+  <meta property="og:site_name" content="Daryll Gomas">
 
-	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-	<link rel="shortcut icon" href="favicon.ico">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Daryll Gomas — Technology Enthusiast">
+  <meta name="twitter:image" content="images/AI_Left.jpg">
 
-	<link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700" rel="stylesheet">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-	<!-- Animate.css -->
-	<link rel="stylesheet" href="css/animate.css">
-	<!-- Icomoon Icon Fonts-->
-	<link rel="stylesheet" href="css/icomoon.css">
-	<!-- Bootstrap  -->
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<!-- Flexslider  -->
-	<link rel="stylesheet" href="css/flexslider.css">
-	<!-- Flaticons  -->
-	<link rel="stylesheet" href="fonts/flaticon/font/flaticon.css">
-	<!-- Owl Carousel -->
-	<link rel="stylesheet" href="css/owl.carousel.min.css">
-	<link rel="stylesheet" href="css/owl.theme.default.min.css">
-	<!-- Theme style  -->
-	<link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="canonical" href="https://daryllgomas.com">
+</head>
+<body>
 
-	<!-- Modernizr JS -->
-	<script src="js/modernizr-2.6.2.min.js"></script>
-	<!-- FOR IE9 below -->
-	<!--[if lt IE 9]>
-	<script src="js/respond.min.js"></script>
-	<![endif]-->
+  <!-- SVG Defs (hidden) — shared gradient for skill rings -->
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <linearGradient id="skillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00d4ff"/>
+        <stop offset="100%" stop-color="#7b2ff2"/>
+      </linearGradient>
+    </defs>
+  </svg>
 
-	</head>
-	<body>
-	<div id="colorlib-page">
-		<div class="container-wrap">
-		<a href="#" class="js-colorlib-nav-toggle colorlib-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-		<aside id="colorlib-aside" role="complementary" class="border js-fullheight">
-			<div class="text-center">
-				<div class="author-img" style="background-image: url(images/about.jpg);"></div>
-				<h1 id="colorlib-logo"><a href="index.html">Daryll Gomas</a></h1>
-				<span class="position"><b>Technology Enthusiast</b></a> in United States</span>
-			</div>
-			<nav id="colorlib-main-menu" role="navigation" class="navbar">
-				<div id="navbar" class="collapse">
-					<ul>
-						<li class="active"><a href="#" data-nav-section="home">Home</a></li>
-						<li><a href="#" data-nav-section="about">About</a></li>
-						<li><a href="#" data-nav-section="skills">Skills</a></li>
-						<li><a href="#" data-nav-section="experience">Labs and Projects</a></li>
-						<li><a href="https://bigpicsolutions.com/" target="_blank" class="external">BigPic</a></li>
-						<li><a href="https://www.justsomedude.org/" target="_blank" class="external">Book</a></li>
-						<li><a id="contact-link" href="mailto:daryll.gomas@gmail.com" class="external">Contact Me</a></li>
-					</ul>
-				</div>
-			</nav>
+  <!-- Atmosphere layers -->
+  <div class="ambient-bg" aria-hidden="true"></div>
+  <div class="noise-overlay" aria-hidden="true"></div>
 
-			<div class="colorlib-footer">                
-				<ul>
-					<li><a href="https://twitter.com/DaryllGomas" target="_blank"><i class="icon-twitter2"></i></a></li>
-					<li><a href="https://www.linkedin.com/in/daryll-gomas" target="_blank"><i class="icon-linkedin2"></i></a></li>
-					<li><a href="https://github.com/DaryllGomas" target="_blank"><i class="icon-github"></i></a></li>
-					<li><a href="mailto:daryll.gomas@gmail.com" target="_blank"><i class="icon-mail5"></i></a></li>
-				</ul>
-			</div>
-			<script src="https://tryhackme.com/badge/1299094"></script>
-		</aside>
+  <!-- ============================================
+       NAVIGATION
+       ============================================ -->
+  <header class="nav-header" id="nav-header">
+    <nav class="nav-inner">
+      <a href="#hero" class="nav-logo">DG</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about" data-nav="about">About</a></li>
+        <li><a href="#skills" data-nav="skills">Skills</a></li>
+        <li><a href="#achievements" data-nav="achievements">Achievements</a></li>
+        <li><a href="#projects" data-nav="projects">Projects</a></li>
+        <li><a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">BigPic</a></li>
+        <li><a href="https://www.justsomedude.org/" target="_blank" rel="noopener">Book</a></li>
+        <li><a href="#contact" data-nav="contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
 
-		<div id="colorlib-main">
-			<section id="colorlib-hero" class="js-fullheight" data-section="home">
-				<div class="flexslider js-fullheight">
-					<ul class="slides">
-				   	<li style="background-image: url(images/AI_Left.jpg);">
-				   		<div class="overlay"></div>
-				   		<div class="container-fluid">
-				   			<div class="row">
-					   			<div class="col-md-6 col-md-offset-6 col-md-pull-3 col-sm-12 col-xs-12 js-fullheight slider-text">
-					   				<div class="slider-text-inner js-fullheight">
-					   					<div class="desc">
-						   					<h1>Hi! <br>I'm Daryll</h1>
-											</div>
-					   				</div>
-					   			</div>
-					   		</div>
-				   		</div>
-				   	</li>
-				   	<li style="background-image: url(images/AI_right.jpg);">
-				   		<div class="overlay"></div>
-				   		<div class="container-fluid">
-				   			<div class="row">
-					   			<div class="col-md-6 col-md-offset-6 col-md-pull-3 col-sm-12 col-xs-12 js-fullheight slider-text">
-					   				<div class="slider-text-inner">
-					   					<div class="desc">
-						   					<h1>Welcome to my website</h1>
+  <main>
 
-											</div>
-                                        </div>
-					   			</div>
-					   		</div>
-				   		</div>
-				   	</li>
-				   	<li style="background-image: url(images/portal.png);">
-				   		<div class="overlay"></div>
-				   		<div class="container-fluid">
-				   			<div class="row">
-					   			<div class="col-md-6 col-md-offset-9 col-md-pull-3 col-sm-12 col-xs-12 js-fullheight slider-text">
-					   				<div class="slider-text-inner">
-					   					<div class="desc">
-						   					<h1> Take a stroll around </h1>
-											</div>
-					   				</div>
-					   			</div>
-					   		</div>
-				   		</div>
-				   	</li>
-				  	</ul>
-			  	</div>
-			</section>
+    <!-- ============================================
+         HERO
+         ============================================ -->
+    <section class="hero" id="hero">
 
-			<section class="colorlib-about" data-section="about">
-				<div class="colorlib-narrow-content">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="row row-bottom-padded-sm animate-box" data-animate-effect="fadeInLeft">
-								<div class="col-md-12">
-									<div class="about-desc">
-										<span class="heading-meta">About Me</span>
-										<h2 class="colorlib-heading">Who Am I?</h2>
-										<p><strong>Hi I'm Daryll</strong>. I created this page to give a more comprehensive display of my skills and what I am learning and doing in the tech industry and in life. If you are here as a result of reading my resume, welcome!</p>
-										<p>I have always been passionate about technology and learning. This was a gift that was passed down to me from my father, who worked as an engineer at IBM. He always brought home the latest cutting-edge technolgies before it went to market and I was able to play with them for fun, which gave me a head start into the world of technology ( Thanks Dad ). That guidence and experience has provided me with a forward-looking perspective that has enabled me to have a long, rewarding career that I remain passionate about.</p>
-									</div>
-								</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-md-12 animate-box" data-animate-effect="fadeInLeft">
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-                <div class="colorlib-narrow-content">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-							<span class="heading-meta">What are my passions?</span>
-							<h2 class="colorlib-heading">Important things</h2>
-						</div>
-					</div>
-					<div class="row row-pt-md">
-						<div class="col-md-4 text-center animate-box">
-							<div class="services color-1">
-								<span class="icon">
-									<i class="icon-bulb"></i>
-								</span>
-								<div class="desc">
-									<h3>Being Creative</h3>
-									<p>Putting things together, even when it doesn't make sense to or your told not to do it, can lead to the most rewarding experiences and outcomes.</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 text-center animate-box">
-							<div class="services color-2">
-								<span class="icon">
-									<i class="icon-data"></i>
-								</span>
-								<div class="desc">
-									<h3>Life learning</h3>
-									<p>The goal in life I feel should be to never stop learning and improving. It keeps you sharp and honestly, whats the point if your not always growing?</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 text-center animate-box">
-							<div class="services color-3">
-								<span class="icon">
-									<i class="icon-phone3"></i>
-								</span>
-								<div class="desc">
-									<h3>Keeping Balance</h3>
-									<p>As the world speeds up, don't forget to slow down. Taking a walk, hiking a mountain, balancing some rocks or just breathing can make all the difference.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
+      <!-- Digital Mandala — layered concentric rings behind hero text -->
+      <div class="mandala" aria-hidden="true">
+        <svg class="mandala-svg" viewBox="0 0 800 800">
 
-		
-			<section class="colorlib-skills" data-section="skills">
-				<div class="colorlib-narrow-content">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-							<span class="heading-meta">Career Specialties</span>
-							<h2 class="colorlib-heading animate-box">Skills</h2>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12 animate-box" data-animate-effect="fadeInLeft">
-							<p>We are all works in <b>progress</b>. Right now, these are the areas in which I have progressed the most in.</p>
-						</div>
-						<div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
-							<div class="progress-wrap">
-								<h3>Networking</h3>
-								<div class="progress">
-								 	<div class="progress-bar color-1" role="progressbar" aria-valuenow="75"
-								  	aria-valuemin="0" aria-valuemax="100" style="width:75%">
-								    <span>75%</span>
-								  	</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 animate-box" data-animate-effect="fadeInRight">
-							<div class="progress-wrap">
-								<h3>CyberSecurity</h3>
-								<div class="progress">
-								 	<div class="progress-bar color-2" role="progressbar" aria-valuenow="60"
-								  	aria-valuemin="0" aria-valuemax="100" style="width:60%">
-								    <span>60%</span>
-								  	</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
-							<div class="progress-wrap">
-								<h3>Virtualization</h3>
-								<div class="progress">
-								 	<div class="progress-bar color-3" role="progressbar" aria-valuenow="85"
-								  	aria-valuemin="0" aria-valuemax="100" style="width:65%">
-								    <span>65%</span>
-								  	</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 animate-box" data-animate-effect="fadeInRight">
-							<div class="progress-wrap">
-								<h3>Cloud</h3>
-								<div class="progress">
-								 	<div class="progress-bar color-4" role="progressbar" aria-valuenow="90"
-								  	aria-valuemin="0" aria-valuemax="100" style="width:60%">
-								    <span>60%</span>
-								  	</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 animate-box" data-animate-effect="fadeInLeft">
-							<div class="progress-wrap">
-								<h3>Administration</h3>
-								<div class="progress">
-								 	<div class="progress-bar color-5" role="progressbar" aria-valuenow="50"
-								  	aria-valuemin="0" aria-valuemax="100" style="width:50%">
-								    <span>50%</span>
-								  	</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-6 animate-box" data-animate-effect="fadeInRight">
-							<div class="progress-wrap">
-								<h3>Blockchain</h3>
-								<div class="progress">
-								 	<div class="progress-bar color-6" role="progressbar" aria-valuenow="80"
-								  	aria-valuemin="0" aria-valuemax="100" style="width:80%">
-								    <span>80%</span>
-								  	</div>
-								</div>
-							</div>
-						</div><style>
-							* {
-							   box-sizing: border-box;
-							}
-							.imageColumn {
-							   float: left;
-							   width: 33%;
-							   padding: 15px;
-							}
-							h1{
-							   text-align: center;
-							}
-							</style>
-							</head>
-							<body>
-							<h1>Certifications & Achievements</h1>
-							
-							<div class="alignRow">
-								<div class="imageColumn">
-									<img src="https://github.com/DaryllGomas/website/blob/master/images/udemynetplus.jpg?raw=true" alt="NetPlus" style="width:110%">
-								</div>
-								<div class="imageColumn">
-									<img src="https://github.com/DaryllGomas/website/blob/master/images/SOC_Core_Skills.png?raw=true" alt="SoC Core" style="width:110%">
-								</div>
-								<div class="imageColumn">
-									<img src="https://raw.githubusercontent.com/DaryllGomas/website/master/images/addigy.png" alt="Addigy" style="width:110%">
-								</div>
-								     <div class="imageColumn">
-										<img src="https://github.com/DaryllGomas/website/blob/master/images/presec.png?raw=true" alt="PreSec" style="width:100%">
-									</div>
-									<div class="imageColumn">
-										<img src="https://github.com/DaryllGomas/website/blob/master/images/linux.png?raw=true" alt="Linux" style="width:110%">
-									</div>
-									<div class="imageColumn">
-										<img src="https://raw.githubusercontent.com/DaryllGomas/website/master/images/THM-07TDRGKZIH.png" alt="PenTest" style="width:110%">
-									</div>
-									<div class="imageColumn">
-										<img src="https://raw.githubusercontent.com/DaryllGomas/website/master/images/cyber_def.png" alt="Cyber_Defense" style="width:110%">
-									</div>
-									<div class="imageColumn">
-										<img src="images/AppleCert.png" alt="Apple Certified Support Professional" style="width:90%">
-									</div>
-							</div>
-					</div>
-				</div>
-			</section>
+          <!-- Layer 1: Outermost ring — slow clockwise -->
+          <g class="mandala-layer mandala-layer-1">
+            <circle cx="400" cy="400" r="380" class="mandala-ring"/>
+            <circle cx="400" cy="400" r="360" class="mandala-ring mandala-ring--dashed"/>
+            <!-- 24 outer dots -->
+            <g class="mandala-dots">
+              <circle cx="400" cy="20" r="2.5"/><circle cx="557" cy="42" r="2"/><circle cx="694" cy="113" r="2.5"/>
+              <circle cx="758" cy="243" r="2"/><circle cx="780" cy="400" r="2.5"/><circle cx="758" cy="557" r="2"/>
+              <circle cx="694" cy="687" r="2.5"/><circle cx="557" cy="758" r="2"/><circle cx="400" cy="780" r="2.5"/>
+              <circle cx="243" cy="758" r="2"/><circle cx="106" cy="687" r="2.5"/><circle cx="42" cy="557" r="2"/>
+              <circle cx="20" cy="400" r="2.5"/><circle cx="42" cy="243" r="2"/><circle cx="106" cy="113" r="2.5"/>
+              <circle cx="243" cy="42" r="2"/>
+            </g>
+          </g>
 
+          <!-- Layer 2: Petal ring — 12 petals, counter-clockwise -->
+          <g class="mandala-layer mandala-layer-2">
+            <circle cx="400" cy="400" r="290" class="mandala-ring"/>
+            <!-- 12 petal arcs (ellipses rotated at 30° intervals) -->
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(30 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(60 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(90 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(120 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(150 400 400)"/>
+          </g>
 
+          <!-- Layer 3: Inner detailed ring — slow clockwise -->
+          <g class="mandala-layer mandala-layer-3">
+            <circle cx="400" cy="400" r="200" class="mandala-ring mandala-ring--dotted"/>
+            <circle cx="400" cy="400" r="180" class="mandala-ring"/>
+            <!-- 8 inner lotus petals (teardrop shapes via paths) -->
+            <g class="mandala-lotus">
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(45 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(90 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(135 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(180 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(225 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(270 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(315 400 400)"/>
+            </g>
+            <!-- 16 dots on inner ring -->
+            <g class="mandala-dots">
+              <circle cx="400" cy="200" r="2"/><circle cx="541" cy="259" r="1.5"/>
+              <circle cx="600" cy="400" r="2"/><circle cx="541" cy="541" r="1.5"/>
+              <circle cx="400" cy="600" r="2"/><circle cx="259" cy="541" r="1.5"/>
+              <circle cx="200" cy="400" r="2"/><circle cx="259" cy="259" r="1.5"/>
+              <circle cx="468" cy="213" r="1.5"/><circle cx="587" cy="332" r="1.5"/>
+              <circle cx="587" cy="468" r="1.5"/><circle cx="468" cy="587" r="1.5"/>
+              <circle cx="332" cy="587" r="1.5"/><circle cx="213" cy="468" r="1.5"/>
+              <circle cx="213" cy="332" r="1.5"/><circle cx="332" cy="213" r="1.5"/>
+            </g>
+          </g>
 
-			<section class="colorlib-experience" data-section="experience">
-				<div class="colorlib-narrow-content">
-					<div class="row">
-						<div class="col-md-6 col-md-offset-3 col-md-pull-3 animate-box" data-animate-effect="fadeInLeft">
-							<span class="heading-meta"> Tinker Town </span>
-							<h2 class="colorlib-heading animate-box">Labs, Projects & Resources</h2>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-				         <div class="timeline-centered">
-					         <article class="timeline-entry animate-box" data-animate-effect="fadeInLeft">
-					            <div class="timeline-entry-inner">
-					               <div class="timeline-icon color-1">
-					                  <i class="icon-pen2"></i>
-					               </div>
+          <!-- Layer 4: Core — small rings + center point, slow pulse -->
+          <g class="mandala-layer mandala-layer-4">
+            <circle cx="400" cy="400" r="100" class="mandala-ring mandala-ring--dashed"/>
+            <circle cx="400" cy="400" r="60" class="mandala-ring"/>
+            <circle cx="400" cy="400" r="30" class="mandala-ring mandala-ring--dotted"/>
+            <!-- 8 core dots -->
+            <circle cx="400" cy="340" r="2" class="mandala-dots"/><circle cx="442" cy="358" r="2" class="mandala-dots"/>
+            <circle cx="460" cy="400" r="2" class="mandala-dots"/><circle cx="442" cy="442" r="2" class="mandala-dots"/>
+            <circle cx="400" cy="460" r="2" class="mandala-dots"/><circle cx="358" cy="442" r="2" class="mandala-dots"/>
+            <circle cx="340" cy="400" r="2" class="mandala-dots"/><circle cx="358" cy="358" r="2" class="mandala-dots"/>
+            <!-- Center glow -->
+            <circle cx="400" cy="400" r="5" class="mandala-center"/>
+          </g>
 
-					               <div class="timeline-label">
-					                  <h2><a href="#">Fundamentals</a></h2>
-                                         <ul>
-											<li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnlCJiCrOYuRYb6cne864a7G" target=”_blank><b>Professor Messer - N10-008 Net+ Training Course</b></a></li>
-											<li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnkL2ulFS3132mOVKuzzBxA8" target=”_blank><b>Professor Messer - Sec+ SY0-601 Training Course</b></a></li>
-											<li><a href="https://youtube.com/playlist?list=PLlVtbbG169nED0_vMEniWBQjSoxTsBYS3" target=”_blank><b>AZ-900 | Azure Fundamentals Certification Course</b></a></li>
-											<ul>
-												<li><a href="https://github.com/DaryllGomas/Documents/blob/main/Cloud/AZ-900_MS-Learn_Notes.pdf" target=”_blank>My Notion Notes ( Documentation Practice )</a></li>
-											</ul>
-											<li><a href="https://youtu.be/u4VWQZ8KLmI" target=”_blank><b>Become an Ethical Hacker for $0  @thecybermentor</b></a></li>
-												<ul>
-													<li><a href="https://github.com/DaryllGomas/Documents/blob/main/CyberSecurity/Becoming_a_Ethical_Hacker_for_0.pdf" target=”_blank>My Notion Notes ( Documentation Practice )</a></li>
-												</ul>
-                                        </ul>
-					               </div>
-					            </div>
-					         </article>
+        </svg>
+      </div>
 
-							 <article class="timeline-entry animate-box" data-animate-effect="fadeInRight">
-					            <div class="timeline-entry-inner">
-					               <div class="timeline-icon color-2">
-					                  <i class="icon-pen2"></i>
-					               </div>
-					               <div class="timeline-label">
-					               	 <h2><a href="#">CyberSecurity</a></h2>
-									 	<ul>
-											<li><a href="https://youtu.be/RoZeVbbZ0o0" target=”_blank><b>SEIM Tutorial with Live attacks ( Azure Sentinel ) @JoshMadakor</b></a></li>
-											<li><a href="https://youtu.be/lT6Px9zJM3s" target=”_blank><b>Vulnerability Management ( Nessus ) - @JoshMadakor </b></a></li>
-											<li><a href="https://youtu.be/P85L2vwmBKA" target=”_blank><b>Build a CyberSecurity Lab - @collinsinfosec</b></a></li>
-											<li><a href="https://youtube.com/playlist?list=PLDqMNdDvMsRkmtiKcZwbhOz7MeLQE0r3G" target=”_blank><b>Cybersecurity Detection & Monitoring Lab - @daycyberwox </b></a></li>
-                                       </ul>
-					               </div>
-					            </div>
-					         </article>
+      <div class="hero-content">
+        <p class="hero-greeting">Hello, I'm</p>
+        <h1 class="hero-name shimmer">Daryll Gomas</h1>
+        <p class="hero-title">Technology Enthusiast</p>
+        <div class="hero-line breathing" aria-hidden="true"></div>
+      </div>
+      <div class="hero-scroll-indicator" aria-hidden="true">
+        <span></span>
+      </div>
+    </section>
 
-					         <article class="timeline-entry animate-box" data-animate-effect="fadeInLeft">
-					            <div class="timeline-entry-inner">
-					               <div class="timeline-icon color-3">
-					                  <i class="icon-pen2"></i>
-					               </div>
-					               <div class="timeline-label">
-					               	<h2><a href="#">Cloud & Virtualization</a></h2>
-                                       <ul>
-										<li><a href="https://youtu.be/apC1bOLbzbY" target=”_blank><b>Docker Fundamentals - @adriancantrill </b></a></li>
-                                        <li><a href="https://youtu.be/VIMaFk-R9xQ" target=”_blank><b>Linux Lab in the Azure Cloud - @NetworkChuck </b></a></li>
-									    <li><a href="https://youtu.be/9J_yjmzCavg" target=”_blank><b>Virtualize Mac OS</b></a></li>
-                                       </ul>
-                                   </div>
-					            </div>
-					         </article>
+    <!-- ============================================
+         ABOUT
+         ============================================ -->
+    <section class="section about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image reveal">
+            <div class="about-image-frame">
+              <img src="images/about.jpg" alt="Daryll Gomas" loading="lazy">
+              <div class="image-glow" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="about-text reveal">
+            <span class="section-label">About Me</span>
+            <h2 class="section-heading">Who I Am</h2>
+            <p>I created this page to give a more comprehensive display of my skills and what I am learning and doing in the tech industry and in life. If you are here as a result of reading my resume, welcome!</p>
+            <p>I have always existed at the cross section of soul and technology. I have always been passionate about new things and learning. This was a gift that was passed down to me from my father, who worked as a Sr Engineer at IBM since the 70's and is now a reverend. I got to experience the personal computer revolution that Steve Jobs and so many others brought us, first hand because of that. He always brought home the latest cutting-edge technologies before they went to market and I was able to play with them for fun, which gave me a head start into the world of technology, it made me a native before this digital land was even built and I have always existed almost primarily in it. That guidance and experience has provided me with a forward-looking perspective that has enabled me to have a long, rewarding career that I remain passionate about to this day. Even now at the age of 51, I could not be more excited and hopeful about the world to come and I try my best to keep my eyes on it and help bring us all there together, in my own ways. Some call me an optimist, some call me a dreamer, but in the words of John Lennon — "I know I'm not the only one."</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-					         <article class="timeline-entry animate-box" data-animate-effect="fadeInTop">
-					            <div class="timeline-entry-inner">
-					               <div class="timeline-icon color-4">
-					                  <i class="icon-pen2"></i>
-					               </div>
-					               <div class="timeline-label">
-					               	<h2><a href="#">Network & Administration</a></h2>
-                                       <ul>
-                                           <li><a href="https://youtu.be/MHsI8hJmggI" target=”_blank><b>Setup AD and add users with PowerShell - @JoshMadakor</b></a></li>
-                                           <li><a href="https://youtu.be/r8UOKHCQEW8" target=”_blank><b>Host a website on Windows Server 2016/2019</b></a></li>
-										   <li><a href="https://tryhackme.com/room/winadbasics" target=”_blank><b>TryHackMe - Active Directory Basics</b></a></li>
-                                       </ul>
-					               </div>
-					            </div>
-					         </article>
+    <!-- ============================================
+         PASSIONS
+         ============================================ -->
+    <section class="section passions">
+      <div class="container">
+        <div class="passions-header reveal">
+          <span class="section-label">What Drives Me</span>
+          <h2 class="section-heading">Important Things</h2>
+        </div>
+        <div class="passions-grid reveal-stagger">
 
-					         <article class="timeline-entry animate-box" data-animate-effect="fadeInLeft">
-					            <div class="timeline-entry-inner">
-					               <div class="timeline-icon color-5">
-					                  <i class="icon-pen2"></i>
-					               </div>
-					               <div class="timeline-label">
-					               	<h2><a href="#">Linux & Coding</a></h2>
-                                        <ul>
-											<li><a href="https://youtu.be/rZsJieGi8os" target=”_blank><b>Linux for Ethical Hackers - @thecybermentor</b></a></li>
-											<li><a href="https://youtu.be/kqtD5dpn9C8" target=”_blank><b>Python for Beginners - Learn Python in 1 Hour</b></a></li>
-                                            <li><a href="https://youtu.be/be4W-pSk8Ac" target=”_blank><b>Linux Home Lab Server - @christian_tdl</b></a></li>
-											<li><a href="https://youtube.com/playlist?list=PLw78nfbi6DWjX8ephtrITEqdnWL1wv8qC" target=”_blank><b>CompTIA Linux+ Breakdowns and Labs - @@JBizzle703</b></a></li>
-                                       </ul>
-					               </div>
-					            </div>
-					         </article>
+          <article class="passion-card reveal">
+            <div class="passion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/>
+              </svg>
+            </div>
+            <h3>Being Creative</h3>
+            <p>Putting things together, even when it doesn't make sense to or you're told not to do it, can lead to the most rewarding experiences and outcomes.</p>
+          </article>
 
-					         <article class="timeline-entry begin animate-box" data-animate-effect="fadeInBottom">
-					            <div class="timeline-entry-inner">
-					               <div class="timeline-icon color-none">
-					               </div>
-					            </div>
-					         </article>
-					      </div>
-					   </div>
-				   </div>
-				</div>
-			</section>
+          <article class="passion-card reveal">
+            <div class="passion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <h3>Life Learning</h3>
+            <p>The goal in life I feel should be to never stop learning and improving. It keeps you sharp and honestly, what's the point if you're not always growing?</p>
+          </article>
 
+          <article class="passion-card reveal">
+            <div class="passion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </div>
+            <h3>Keeping Balance</h3>
+            <p>As the world speeds up, don't forget to slow down. Taking a walk, hiking a mountain, balancing some rocks or just breathing can make all the difference.</p>
+          </article>
 
+        </div>
+      </div>
+    </section>
 
+    <!-- ============================================
+         SKILLS
+         ============================================ -->
+    <section class="section skills" id="skills">
+      <div class="container">
+        <div class="skills-header reveal">
+          <span class="section-label">Career Specialties</span>
+          <h2 class="section-heading">Skills</h2>
+          <p class="skills-intro">We are all works in progress. Right now, these are the areas in which I have experienced the most. Don't have to believe me, take ChatGPT and Claude's word for it.</p>
+        </div>
+        <div class="skills-grid reveal-stagger">
 
+          <div class="skill-item reveal" style="--skill-pct: 85" data-modal="networking">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">85%</span>
+              <span class="skill-name">Networking</span>
+            </div>
+          </div>
 
+          <div class="skill-item reveal" style="--skill-pct: 75" data-modal="cybersecurity">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">75%</span>
+              <span class="skill-name">CyberSecurity</span>
+            </div>
+          </div>
 
+          <div class="skill-item reveal" style="--skill-pct: 80" data-modal="virtualization">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">80%</span>
+              <span class="skill-name">Virtualization</span>
+            </div>
+          </div>
 
-		</div><!-- end:colorlib-main -->
-	</div><!-- end:container-wrap -->
-	</div><!-- end:colorlib-page -->
+          <div class="skill-item reveal" style="--skill-pct: 70" data-modal="cloud">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">70%</span>
+              <span class="skill-name">Cloud</span>
+            </div>
+          </div>
 
-	<!-- jQuery -->
-	<script src="js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
-	<script src="js/jquery.easing.1.3.js"></script>
-	<!-- Bootstrap -->
-	<script src="js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
-	<script src="js/jquery.waypoints.min.js"></script>
-	<!-- Flexslider -->
-	<script src="js/jquery.flexslider-min.js"></script>
-	<!-- Owl carousel -->
-	<script src="js/owl.carousel.min.js"></script>
-	<!-- Counters -->
-	<script src="js/jquery.countTo.js"></script>
+          <div class="skill-item reveal" style="--skill-pct: 88" data-modal="syseng">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">88%</span>
+              <span class="skill-name">Systems Engineering</span>
+            </div>
+          </div>
 
+          <div class="skill-item reveal" style="--skill-pct: 65" data-modal="blockchain">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">65%</span>
+              <span class="skill-name">Blockchain</span>
+            </div>
+          </div>
 
-	<!-- MAIN JS -->
-	<script src="js/main.js"></script>
+          <div class="skill-item reveal" style="--skill-pct: 75" data-modal="ai">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">75%</span>
+              <span class="skill-name">Artificial Intelligence</span>
+            </div>
+          </div>
 
-	</body>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         ACHIEVEMENTS
+         ============================================ -->
+    <section class="section achievements" id="achievements">
+      <div class="container">
+        <div class="certs-header reveal">
+          <span class="section-label">Verified Knowledge</span>
+          <h2 class="section-heading">Achievements</h2>
+        </div>
+        <div class="certs-grid reveal-stagger">
+          <div class="cert-card reveal" data-cert="udemynetplus">
+            <img src="images/udemynetplus.jpg" alt="Network+ Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="soc">
+            <img src="images/SOC_Core_Skills.png" alt="SOC Core Skills" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="addigy">
+            <img src="images/addigy.png" alt="Addigy Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="presec">
+            <img src="images/presec.png" alt="Pre-Security Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="linux">
+            <img src="images/linux.png" alt="Linux Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="pentest">
+            <img src="images/THM-07TDRGKZIH.png" alt="TryHackMe PenTest Certificate" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="cyberdef">
+            <img src="images/cyber_def.png" alt="Cyber Defense Certificate" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="apple">
+            <img src="images/AppleCert.png" alt="Apple Certified Support Professional" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificate Image Modal -->
+    <div class="cert-modal-overlay" id="cert-modal-overlay">
+      <button class="cert-modal-close" aria-label="Close">&times;</button>
+      <img class="cert-modal-img" id="cert-modal-img" src="" alt="">
+    </div>
+
+    <!-- ============================================
+         PROJECTS / LABS
+         ============================================ -->
+    <section class="section projects" id="projects">
+      <div class="container">
+        <div class="projects-header reveal">
+          <span class="section-label">Tinker Town</span>
+          <h2 class="section-heading">Labs, Projects &amp; Resources</h2>
+        </div>
+        <div class="projects-accordion reveal-stagger">
+
+          <details class="project-category reveal" open>
+            <summary><span class="category-marker"></span>Fundamentals</summary>
+            <ul class="project-links">
+              <li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnlCJiCrOYuRYb6cne864a7G" target="_blank" rel="noopener">Professor Messer - N10-008 Net+ Training Course</a></li>
+              <li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnkL2ulFS3132mOVKuzzBxA8" target="_blank" rel="noopener">Professor Messer - Sec+ SY0-601 Training Course</a></li>
+              <li>
+                <a href="https://youtube.com/playlist?list=PLlVtbbG169nED0_vMEniWBQjSoxTsBYS3" target="_blank" rel="noopener">AZ-900 | Azure Fundamentals Certification Course</a>
+                <ul><li><a href="https://github.com/DaryllGomas/Documents/blob/main/Cloud/AZ-900_MS-Learn_Notes.pdf" target="_blank" rel="noopener">My Notion Notes (Documentation Practice)</a></li></ul>
+              </li>
+              <li>
+                <a href="https://youtu.be/u4VWQZ8KLmI" target="_blank" rel="noopener">Become an Ethical Hacker for $0 — @thecybermentor</a>
+                <ul><li><a href="https://github.com/DaryllGomas/Documents/blob/main/CyberSecurity/Becoming_a_Ethical_Hacker_for_0.pdf" target="_blank" rel="noopener">My Notion Notes (Documentation Practice)</a></li></ul>
+              </li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>CyberSecurity</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/RoZeVbbZ0o0" target="_blank" rel="noopener">SIEM Tutorial with Live Attacks (Azure Sentinel) — @JoshMadakor</a></li>
+              <li><a href="https://youtu.be/lT6Px9zJM3s" target="_blank" rel="noopener">Vulnerability Management (Nessus) — @JoshMadakor</a></li>
+              <li><a href="https://youtu.be/P85L2vwmBKA" target="_blank" rel="noopener">Build a CyberSecurity Lab — @collinsinfosec</a></li>
+              <li><a href="https://youtube.com/playlist?list=PLDqMNdDvMsRkmtiKcZwbhOz7MeLQE0r3G" target="_blank" rel="noopener">Cybersecurity Detection &amp; Monitoring Lab — @daycyberwox</a></li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Cloud &amp; Virtualization</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/apC1bOLbzbY" target="_blank" rel="noopener">Docker Fundamentals — @adriancantrill</a></li>
+              <li><a href="https://youtu.be/VIMaFk-R9xQ" target="_blank" rel="noopener">Linux Lab in the Azure Cloud — @NetworkChuck</a></li>
+              <li><a href="https://youtu.be/9J_yjmzCavg" target="_blank" rel="noopener">Virtualize Mac OS</a></li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Network &amp; Administration</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/MHsI8hJmggI" target="_blank" rel="noopener">Setup AD and Add Users with PowerShell — @JoshMadakor</a></li>
+              <li><a href="https://youtu.be/r8UOKHCQEW8" target="_blank" rel="noopener">Host a Website on Windows Server 2016/2019</a></li>
+              <li><a href="https://tryhackme.com/room/winadbasics" target="_blank" rel="noopener">TryHackMe — Active Directory Basics</a></li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Linux &amp; Coding</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/rZsJieGi8os" target="_blank" rel="noopener">Linux for Ethical Hackers — @thecybermentor</a></li>
+              <li><a href="https://youtu.be/kqtD5dpn9C8" target="_blank" rel="noopener">Python for Beginners — Learn Python in 1 Hour</a></li>
+              <li><a href="https://youtu.be/be4W-pSk8Ac" target="_blank" rel="noopener">Linux Home Lab Server — @christian_tdl</a></li>
+              <li><a href="https://youtube.com/playlist?list=PLw78nfbi6DWjX8ephtrITEqdnWL1wv8qC" target="_blank" rel="noopener">CompTIA Linux+ Breakdowns and Labs — @JBizzle703</a></li>
+            </ul>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER / CONTACT
+         ============================================ -->
+    <footer class="section footer" id="contact">
+      <div class="container">
+        <div class="footer-content reveal">
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-heading">Let's Connect</h2>
+          <div class="footer-links">
+            <a href="https://twitter.com/DaryllGomas" target="_blank" rel="noopener" aria-label="Twitter">
+              <svg viewBox="0 0 24 24"><path d="M4 4l11.7 16h4.3L8.3 4H4zm2.1 1h1.9l9.9 14h-1.9L6.1 5z"/><line x1="4" y1="20" x2="10" y2="13"/><line x1="20" y1="4" x2="14" y2="11"/></svg>
+              <span>X / Twitter</span>
+            </a>
+            <a href="https://www.linkedin.com/in/daryll-gomas" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/DaryllGomas" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              <span>GitHub</span>
+            </a>
+            <a href="mailto:daryll.gomas@gmail.com" aria-label="Email">
+              <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              <span>Email</span>
+            </a>
+          </div>
+          <div class="footer-external">
+            <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">BigPic Solutions</a>
+            <span class="footer-divider" aria-hidden="true"></span>
+            <a href="https://www.justsomedude.org/" target="_blank" rel="noopener">justsomedude.org</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Daryll Gomas</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================
+         SKILL MODALS
+         ============================================ -->
+    <div class="skill-modal-overlay" id="skill-modal-overlay">
+
+      <div class="skill-modal" id="modal-networking">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Networking</h3>
+        <span class="skill-modal-pct">85% — Architecture Capable</span>
+        <p>Operating comfortably at architecture level. Not just configuring — thinking structurally.</p>
+        <ul>
+          <li>SonicWall firewall configuration and management</li>
+          <li>VLAN design and network segmentation strategy</li>
+          <li>DNS architecture including Synology as backup DNS</li>
+          <li>MSP multi-site network awareness</li>
+          <li>Packet inspection concepts</li>
+          <li>Security-first network design philosophy</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-cybersecurity">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>CyberSecurity</h3>
+        <span class="skill-modal-pct">75% — Strong Defensive Mindset</span>
+        <p>Consistently thinking in terms of attack surface and defense. Strong blue-team architecture brain.</p>
+        <ul>
+          <li>2FA enforcement across M365 and Authenticator</li>
+          <li>Firewall upgrades for security posture improvement</li>
+          <li>Vulnerability scanning VM architecture</li>
+          <li>SIEM implementation and discussion</li>
+          <li>Zero-cloud AI inference for data control</li>
+          <li>Incident response mindset — dealt with real attacks</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-virtualization">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Virtualization</h3>
+        <span class="skill-modal-pct">80% — Infrastructure Fluent</span>
+        <p>Understanding virtualization as infrastructure, not just lab usage.</p>
+        <ul>
+          <li>Hyper-V including performance troubleshooting</li>
+          <li>Linux VM deployment and management</li>
+          <li>Synology VM environments</li>
+          <li>Multi-GPU LLM servers in Docker</li>
+          <li>Cross-platform Mac/Windows virtualization needs</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-cloud">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Cloud</h3>
+        <span class="skill-modal-pct">70% — Hybrid-Heavy Strength</span>
+        <p>Leaning hybrid/on-prem secure architecture more than pure cloud-native SaaS engineering.</p>
+        <ul>
+          <li>Microsoft 365 tenant management</li>
+          <li>Entra integration concepts</li>
+          <li>Multi-tenant management strategy</li>
+          <li>Authentication models and identity sync</li>
+          <li>Hybrid cloud architecture planning</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-syseng">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Systems Engineering</h3>
+        <span class="skill-modal-pct">88% — Core Competency</span>
+        <p>This is not IT support. This is infrastructure systems engineering. 25+ years of cross-platform systems work.</p>
+        <ul>
+          <li>Windows, macOS, and Linux administration</li>
+          <li>DNS and domain consolidation planning</li>
+          <li>Infrastructure modernization strategy</li>
+          <li>RAID decisions and storage architecture</li>
+          <li>Identity architecture and access management</li>
+          <li>Automation mindset across all platforms</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-blockchain">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Blockchain</h3>
+        <span class="skill-modal-pct">65% — Investor + Systems Awareness</span>
+        <p>Understanding the ecosystem at a structural and capital allocation level.</p>
+        <ul>
+          <li>What a blockchain is (distributed ledger, consensus, immutability)</li>
+          <li>Difference between Bitcoin-style monetary chains and smart contract platforms</li>
+          <li>Market cycles and volatility mechanics</li>
+          <li>Token economics at a macro level</li>
+          <li>Layer 1 vs Layer 2 concepts</li>
+          <li>Custody risks (self-custody vs exchange risk)</li>
+          <li>Why decentralization matters (and where it's overstated)</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-ai">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Artificial Intelligence</h3>
+        <span class="skill-modal-pct">75% — Builder + Deployer</span>
+        <p>Not just using AI — deploying it on infrastructure, building with it, and thinking about where it's going.</p>
+        <ul>
+          <li>LLM deployment on local infrastructure</li>
+          <li>Multi-GPU server builds for AI inference</li>
+          <li>AI-assisted automation and workflow design</li>
+          <li>Secure on-prem AI for data sovereignty</li>
+          <li>Strategic understanding of the AI landscape</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="main.js"></script>
+</body>
 </html>
-
