@@ -1044,6 +1044,105 @@ a:hover {
   color: var(--accent-violet);
 }
 
+/* Project Cards Grid */
+.project-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg) var(--space-lg);
+}
+
+.project-card {
+  display: block;
+  padding: var(--space-md);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: border-color var(--transition-base), transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.project-card:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.08);
+}
+
+.project-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.project-card h4 {
+  font-family: var(--font-display);
+  font-size: var(--size-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-card p {
+  font-size: var(--size-xs);
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.project-card:hover h4 {
+  color: var(--accent-cyan);
+}
+
+/* Language Badges */
+.lang-badge {
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.lang-ts     { background: rgba(49, 120, 198, 0.2); color: #5b9bd5; }
+.lang-js     { background: rgba(241, 224, 90, 0.15); color: #e8d44d; }
+.lang-py     { background: rgba(53, 114, 165, 0.2); color: #6ba1c7; }
+.lang-html   { background: rgba(227, 76, 38, 0.15); color: #e06030; }
+.lang-rust   { background: rgba(222, 165, 132, 0.15); color: #dea584; }
+.lang-bicep  { background: rgba(0, 212, 255, 0.12); color: var(--accent-cyan); }
+
+/* Projects Divider */
+.projects-divider {
+  max-width: var(--content-narrow);
+  margin: var(--space-xl) auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
+}
+
+/* Labs sub-heading */
+.section-subheading {
+  font-family: var(--font-display);
+  font-size: var(--size-xl);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .project-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 /* ------------------------------------------------
    FOOTER / CONTACT
