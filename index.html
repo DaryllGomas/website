@@ -548,7 +548,139 @@
 
           <details class="project-category reveal">
             <summary><span class="category-marker"></span>BigPic Solutions</summary>
+
+            <!-- Organizational Structure Diagram -->
+            <div class="ecosystem-diagram reveal">
+              <svg viewBox="0 0 800 390" class="ecosystem-svg" role="img" aria-label="BigPic Solutions organizational structure — three divisions: Capital, Technology, and CyberCab">
+                <defs>
+                  <linearGradient id="bp-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#7b2ff2"/>
+                    <stop offset="100%" stop-color="#00d4ff"/>
+                  </linearGradient>
+                  <filter id="bp-glow">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Connection Lines: Parent → Divisions -->
+                <g class="eco-lines">
+                  <path d="M 400 75 C 400 102, 135 102, 135 128" class="bp-line bp-line-t1"/>
+                  <path d="M 400 75 C 400 102, 400 102, 400 128" class="bp-line bp-line-t1"/>
+                  <path d="M 400 75 C 400 102, 665 102, 665 128" class="bp-line bp-line-t1"/>
+                </g>
+
+                <!-- Vertical Brackets: Division → Capability columns -->
+                <line x1="18" y1="240" x2="18" y2="378" class="bp-bracket"/>
+                <line x1="283" y1="240" x2="283" y2="378" class="bp-bracket"/>
+                <line x1="548" y1="240" x2="548" y2="378" class="bp-bracket bp-bracket-dev"/>
+
+                <!-- Parent Hub: BigPic Solutions -->
+                <g class="eco-node eco-hub eco-clickable" data-eco-modal="bp-parent">
+                  <rect x="250" y="15" width="300" height="60" rx="12" style="stroke: url(#bp-grad); stroke-width: 2"/>
+                  <text x="400" y="43" class="eco-hub-label">BIGPIC SOLUTIONS</text>
+                  <text x="400" y="62" class="eco-sub">Capital · Technology · CyberCab</text>
+                </g>
+
+                <!-- Division: Capital -->
+                <g class="eco-node bp-div eco-source eco-clickable" data-eco-modal="bp-capital">
+                  <rect x="20" y="128" width="230" height="55" rx="8"/>
+                  <text x="135" y="150" class="eco-label">Capital</text>
+                  <text x="135" y="167" class="eco-sub">Investment Operations</text>
+                </g>
+
+                <!-- Division: Technology -->
+                <g class="eco-node bp-div eco-source eco-clickable" data-eco-modal="bp-technology">
+                  <rect x="285" y="128" width="230" height="55" rx="8"/>
+                  <text x="400" y="150" class="eco-label">Technology</text>
+                  <text x="400" y="167" class="eco-sub">IT Services &amp; Security</text>
+                </g>
+
+                <!-- Division: CyberCab -->
+                <g class="eco-node bp-div eco-source bp-dev eco-clickable" data-eco-modal="bp-cybercab">
+                  <rect x="550" y="128" width="230" height="55" rx="8"/>
+                  <text x="665" y="148" class="eco-label">CyberCab</text>
+                  <text x="665" y="163" class="eco-sub">Autonomous Fleet</text>
+                  <text x="665" y="177" class="bp-dev-label">IN DEVELOPMENT</text>
+                </g>
+
+                <!-- Column Labels -->
+                <text x="135" y="230" class="eco-col-label">INVESTMENT</text>
+                <text x="400" y="230" class="eco-col-label">SERVICES</text>
+                <text x="665" y="230" class="eco-col-label">FLEET</text>
+
+                <!-- Capabilities: Capital -->
+                <g class="eco-node bp-cap eco-tool eco-clickable" data-eco-modal="bp-trading">
+                  <rect x="20" y="240" width="230" height="40" rx="6"/>
+                  <text x="135" y="256" class="eco-label">Trading Systems</text>
+                  <text x="135" y="270" class="eco-sub">HERMES · TERMINUS · Strategies</text>
+                </g>
+                <g class="eco-node bp-cap-2 eco-tool eco-clickable" data-eco-modal="bp-intelligence">
+                  <rect x="20" y="290" width="230" height="40" rx="6"/>
+                  <text x="135" y="306" class="eco-label">Market Intelligence</text>
+                  <text x="135" y="320" class="eco-sub">Wingman · Scanners · APIs</text>
+                </g>
+                <g class="eco-node bp-cap-3 eco-tool eco-clickable" data-eco-modal="bp-research">
+                  <rect x="20" y="340" width="230" height="40" rx="6"/>
+                  <text x="135" y="356" class="eco-label">Research &amp; Publishing</text>
+                  <text x="135" y="370" class="eco-sub">9 Theses · Eagle Eye · Briefs</text>
+                </g>
+
+                <!-- Capabilities: Technology -->
+                <g class="eco-node bp-cap eco-tool eco-clickable" data-eco-modal="bp-pentester">
+                  <rect x="285" y="240" width="230" height="40" rx="6"/>
+                  <text x="400" y="256" class="eco-label">Pentester Platform</text>
+                  <text x="400" y="270" class="eco-sub">Automated Security Assessments</text>
+                </g>
+                <g class="eco-node bp-cap-2 eco-tool eco-clickable" data-eco-modal="bp-consulting">
+                  <rect x="285" y="290" width="230" height="40" rx="6"/>
+                  <text x="400" y="306" class="eco-label">IT Consulting</text>
+                  <text x="400" y="320" class="eco-sub">Remote Infrastructure &amp; Cloud</text>
+                </g>
+                <g class="eco-node bp-cap-3 eco-tool eco-clickable" data-eco-modal="bp-automation">
+                  <rect x="285" y="340" width="230" height="40" rx="6"/>
+                  <text x="400" y="356" class="eco-label">AI Automation</text>
+                  <text x="400" y="370" class="eco-sub">Workflow &amp; Process Automation</text>
+                </g>
+
+                <!-- Capabilities: CyberCab -->
+                <g class="eco-node bp-cap eco-tool bp-dev eco-clickable" data-eco-modal="bp-revenue">
+                  <rect x="550" y="240" width="230" height="40" rx="6"/>
+                  <text x="665" y="256" class="eco-label">Revenue Modeling</text>
+                  <text x="665" y="270" class="eco-sub">Unit Economics · ROI Analysis</text>
+                </g>
+                <g class="eco-node bp-cap-2 eco-tool bp-dev eco-clickable" data-eco-modal="bp-fleet">
+                  <rect x="550" y="290" width="230" height="40" rx="6"/>
+                  <text x="665" y="306" class="eco-label">Fleet Planning</text>
+                  <text x="665" y="320" class="eco-sub">Acquisition · Operations</text>
+                </g>
+                <g class="eco-node bp-cap-3 bp-dev">
+                  <rect x="550" y="340" width="230" height="40" rx="6"/>
+                  <text x="665" y="364" class="bp-dev-label" style="font-size: 9px; letter-spacing: 0.2em">LAUNCHING 2026</text>
+                </g>
+              </svg>
+            </div>
+
             <div class="project-cards">
+              <div class="project-card" data-eco-modal="bp-capital">
+                <div class="project-card-top">
+                  <h4>BigPic Capital</h4>
+                </div>
+                <p>AI-native investment operating system — trading agents, verified strategies, 9 sector theses.</p>
+              </div>
+              <div class="project-card" data-eco-modal="bp-technology">
+                <div class="project-card-top">
+                  <h4>BigPic Technology</h4>
+                </div>
+                <p>IT consulting &amp; security — automated pentesting, AI automation, remote infrastructure.</p>
+              </div>
+              <div class="project-card" data-eco-modal="bp-cybercab">
+                <div class="project-card-top">
+                  <h4>BigPic CyberCab</h4>
+                  <span class="lang-badge" style="background: rgba(255,193,7,0.15); color: #ffc107">In Dev</span>
+                </div>
+                <p>Autonomous vehicle fleet ownership — Tesla CyberCab revenue modeling &amp; fleet planning.</p>
+              </div>
               <div class="project-card" data-eco-modal="bigpicmarkets">
                 <div class="project-card-top">
                   <h4>bigpic-markets</h4>
@@ -1089,7 +1221,178 @@
         <a href="https://github.com/DaryllGomas/MrCrabs" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
       </div>
 
-      <!-- BigPic Solutions modals -->
+      <!-- BigPic Solutions — organizational modals -->
+      <div class="skill-modal" id="eco-modal-bp-parent">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Solutions</h3>
+        <span class="skill-modal-pct">Parent Organization</span>
+        <p>A multi-division technology company spanning investment operations, IT consulting, and autonomous fleet management. Built on AI-native principles with 25+ years of technology expertise.</p>
+        <ul>
+          <li>BigPic Capital — AI-powered investment research &amp; trading</li>
+          <li>BigPic Technology — IT consulting &amp; security services</li>
+          <li>BigPic CyberCab — autonomous vehicle fleet (in development)</li>
+          <li>AI-augmented operations across all divisions</li>
+        </ul>
+        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-capital">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Capital</h3>
+        <span class="skill-modal-pct">Investment Operations</span>
+        <p>An AI-native investment operating system that replicates a full institutional team — research, macro strategy, quant analysis, risk management, and trading execution — with AI agents and automated pipelines.</p>
+        <ul>
+          <li>HERMES trading execution agent with verified strategy library</li>
+          <li>TERMINUS price level engine aggregating 11 data sources</li>
+          <li>Wingman market intelligence with real-time scanner APIs</li>
+          <li>9 completed sector investment theses with interactive reports</li>
+          <li>Published at markets.bigpicsolutions.com</li>
+        </ul>
+        <a href="https://markets.bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">markets.bigpicsolutions.com &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-technology">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Technology</h3>
+        <span class="skill-modal-pct">IT Services &amp; Security</span>
+        <p>Remote IT consulting and automation services specializing in AI-augmented infrastructure, cloud advisory, and productized security assessments for the SMB market.</p>
+        <ul>
+          <li>BigPic Pentester — automated network security platform</li>
+          <li>Compliance frameworks: PCI DSS, HIPAA, cyber insurance</li>
+          <li>Remote IT consulting and cloud infrastructure</li>
+          <li>AI workflow automation services</li>
+        </ul>
+        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-cybercab">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic CyberCab</h3>
+        <span class="skill-modal-pct">Autonomous Fleet — In Development</span>
+        <p>A venture focused on autonomous vehicle fleet ownership. Building financial models and operational plans for Tesla CyberCab fleet deployment on the autonomous ride-hailing network.</p>
+        <ul>
+          <li>Unit economics modeling across utilization scenarios</li>
+          <li>Revenue projections: $36K–$78K gross per vehicle per year</li>
+          <li>Competitive landscape analysis (Waymo, Tesla, Zoox)</li>
+          <li>Phased deployment: research &rarr; first vehicle &rarr; fleet scaling</li>
+        </ul>
+        <span class="skill-modal-tagline" style="color: #ffc107">Currently in Research &amp; Planning Phase</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-trading">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Trading Systems</h3>
+        <span class="skill-modal-pct">HERMES · TERMINUS · Strategies</span>
+        <p>The execution layer of BigPic Capital. HERMES is the trading agent with a comprehensive methodology, TERMINUS identifies price levels from 11 sources, and the strategy library holds backtested edges.</p>
+        <ul>
+          <li>HERMES — 83K-word trading methodology with execution rules</li>
+          <li>TERMINUS — Python engine: gamma, VWAP, volume profile, Gann, pivots</li>
+          <li>Mean Reversion v4: 81.2% win rate over 203 trades (10yr backtest)</li>
+          <li>Buyback Blackout: 77% win rate, verified across 106 events</li>
+          <li>7-dimension Convergence scoring engine for capital deployment</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-intelligence">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Market Intelligence</h3>
+        <span class="skill-modal-pct">Wingman · Scanners · APIs</span>
+        <p>Real-time market intelligence infrastructure. Wingman provides session-aware market analysis while remote scanner APIs deliver live options flow, gamma data, and sentiment fusion scores.</p>
+        <ul>
+          <li>Wingman — living market regime tracking and trading rules</li>
+          <li>Options API — real-time quotes, gamma, IV, flow analysis</li>
+          <li>Intel API — market outlook, sentiment scores, trade journal</li>
+          <li>15 Claude AI skills for session workflow automation</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-research">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Research &amp; Publishing</h3>
+        <span class="skill-modal-pct">Sector Theses · Reports · Briefs</span>
+        <p>A complete research pipeline producing institutional-quality investment research across 9 high-growth sectors, weekly macro reports, and daily pre-market intelligence briefs.</p>
+        <ul>
+          <li>9 sector theses: AI, Nuclear, Space, Quantum, Robotics, Cyber, Minerals, Defense, Energy</li>
+          <li>Eagle Eye — automated weekly macro cycle reports</li>
+          <li>Morning Briefs — daily pre-market structure analysis</li>
+          <li>Interactive HTML data stories published to BigPic Markets</li>
+        </ul>
+        <a href="https://markets.bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">markets.bigpicsolutions.com &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-pentester">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Pentester Platform</h3>
+        <span class="skill-modal-pct">Automated Security Assessments</span>
+        <p>A productized network security assessment platform targeting the SMB market gap between basic scanning and enterprise pentest firms. Fully automated multi-phase engagements with compliance-mapped reporting.</p>
+        <ul>
+          <li>Service tiers: External ($2.5K), Internal ($5K), Comprehensive ($10K+)</li>
+          <li>Compliance: PCI DSS v4.0, HIPAA Security Rule, Cyber Insurance</li>
+          <li>Tools: Nmap, Nuclei, Lynis, Faraday, Ansible remediation</li>
+          <li>CLI suite: bigpic-scan, bigpic-report, bigpic-engage, bigpic-remediate</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-consulting">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>IT Consulting</h3>
+        <span class="skill-modal-pct">Remote Infrastructure &amp; Cloud</span>
+        <p>Remote IT consulting services providing cloud infrastructure advisory, system administration, and technology strategy for small and medium businesses.</p>
+        <ul>
+          <li>Cloud infrastructure and migration advisory</li>
+          <li>Network architecture and administration</li>
+          <li>MSP partnership and subcontracting</li>
+          <li>25+ years of hands-on technology expertise</li>
+        </ul>
+        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-automation">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>AI Automation</h3>
+        <span class="skill-modal-pct">Workflow &amp; Process Automation</span>
+        <p>AI-augmented workflow automation services that streamline business operations using Claude AI agents, custom skill systems, and automated pipelines.</p>
+        <ul>
+          <li>Custom AI agent development with Claude SDK</li>
+          <li>Skill-based automation (inbox processing, reporting, analysis)</li>
+          <li>Automated document workflows and data pipelines</li>
+          <li>Process optimization through AI-native tooling</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-revenue">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Revenue Modeling</h3>
+        <span class="skill-modal-pct">Unit Economics &amp; ROI Analysis</span>
+        <p>Financial modeling for the CyberCab fleet venture. Revenue projections, cost analysis, and ROI scenarios across utilization rates, fare structures, and market conditions.</p>
+        <ul>
+          <li>Vehicle cost under $30K with 75/25 owner/Tesla revenue split</li>
+          <li>Scenarios: urban ($1.50/mi), suburban ($1/mi), high-fare ($2/mi)</li>
+          <li>Payback period: 1–3 years depending on utilization</li>
+          <li>Fleet scaling models: 1, 3, 5, 10 vehicle scenarios</li>
+        </ul>
+        <span class="skill-modal-tagline" style="color: #ffc107">In Development</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-fleet">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Fleet Planning</h3>
+        <span class="skill-modal-pct">Acquisition · Operations · Logistics</span>
+        <p>Operational planning for autonomous vehicle fleet management — vehicle acquisition, home charging infrastructure, maintenance protocols, insurance, and tax optimization.</p>
+        <ul>
+          <li>Phased approach: research &rarr; first vehicle &rarr; fleet scaling</li>
+          <li>Home wireless charging infrastructure planning</li>
+          <li>Insurance and regulatory requirements research</li>
+          <li>Target market and deployment city identification</li>
+        </ul>
+        <span class="skill-modal-tagline" style="color: #ffc107">In Development</span>
+      </div>
+
+      <!-- BigPic Solutions — repo modals -->
       <div class="skill-modal" id="eco-modal-bigpicmarkets">
         <button class="skill-modal-close" aria-label="Close">&times;</button>
         <h3>BigPic Markets</h3>
@@ -1101,7 +1404,7 @@
           <li>Daily pre-market morning briefs</li>
           <li>Hosted at markets.bigpicsolutions.com</li>
         </ul>
-        <a href="https://github.com/DaryllGomas/bigpic-markets" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
       </div>
 
       <div class="skill-modal" id="eco-modal-bigpictech">
@@ -1115,7 +1418,7 @@
           <li>Neural-network themed design</li>
           <li>25+ years of technology expertise</li>
         </ul>
-        <a href="https://github.com/DaryllGomas/bigpic-technology" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
       </div>
 
       <div class="skill-modal" id="eco-modal-bigpicsolutions">

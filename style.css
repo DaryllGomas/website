@@ -1169,6 +1169,79 @@ a:hover {
   opacity: 0.5;
 }
 
+/* BigPic Solutions — org chart lines & nodes */
+.bp-line {
+  fill: none;
+  stroke: url(#bp-grad);
+  stroke-width: 1.5;
+  opacity: 0;
+  stroke-dasharray: 6 4;
+  transition: opacity 0.8s ease;
+}
+
+.ecosystem-diagram.is-visible .bp-line {
+  opacity: 0.45;
+  animation: eco-flow 6s linear infinite;
+}
+
+.ecosystem-diagram.is-visible .bp-line-t1 {
+  transition-delay: 0.2s;
+}
+
+.bp-bracket {
+  stroke: url(#bp-grad);
+  stroke-width: 2;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.ecosystem-diagram.is-visible .bp-bracket {
+  opacity: 0.12;
+  transition-delay: 0.6s;
+}
+
+.bp-bracket-dev {
+  stroke: rgba(255, 193, 7, 0.5) !important;
+}
+
+/* Division and capability reveal timing */
+.ecosystem-diagram.is-visible .bp-div {
+  transition-delay: 0.3s;
+}
+
+.ecosystem-diagram.is-visible .bp-cap {
+  transition-delay: 0.6s;
+}
+
+.ecosystem-diagram.is-visible .bp-cap-2 {
+  transition-delay: 0.75s;
+}
+
+.ecosystem-diagram.is-visible .bp-cap-3 {
+  transition-delay: 0.9s;
+}
+
+/* In-development styling */
+.bp-dev rect {
+  stroke: rgba(255, 193, 7, 0.3) !important;
+  stroke-dasharray: 5 3;
+}
+
+.bp-dev-label {
+  fill: #ffc107;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 7px;
+  font-weight: 600;
+  text-anchor: middle;
+  letter-spacing: 0.12em;
+}
+
+/* BigPic node hover uses bp-glow filter */
+.bp-dev:hover rect {
+  stroke: #ffc107 !important;
+  filter: url(#bp-glow);
+}
+
 @media (max-width: 768px) {
   .ecosystem-diagram {
     padding: var(--space-sm) 0;
