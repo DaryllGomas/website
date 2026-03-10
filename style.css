@@ -1186,6 +1186,10 @@ a:hover {
   padding: var(--space-sm) var(--space-lg) var(--space-lg);
 }
 
+.project-card[data-eco-modal] {
+  cursor: pointer;
+}
+
 .project-card {
   display: block;
   padding: var(--space-md);
