@@ -245,6 +245,63 @@ function initCertModals() {
 
 
 // ================================================
+// ECOSYSTEM DIAGRAM MODALS
+// Click a node in the trading ecosystem diagram
+// to open its detail modal.
+// ================================================
+function initEcoModals() {
+  var overlay = document.getElementById('eco-modal-overlay');
+  if (!overlay) return;
+
+  var allModals = overlay.querySelectorAll('.skill-modal');
+  var nodes = document.querySelectorAll('[data-eco-modal]');
+
+  function openModal(id) {
+    allModals.forEach(function (m) {
+      m.style.display = 'none';
+    });
+    var target = document.getElementById('eco-modal-' + id);
+    if (target) {
+      target.style.display = 'block';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeModal() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  nodes.forEach(function (node) {
+    node.addEventListener('click', function () {
+      openModal(node.dataset.ecoModal);
+    });
+  });
+
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) {
+      closeModal();
+    }
+  });
+
+  overlay.querySelectorAll('.skill-modal-close').forEach(function (btn) {
+    btn.addEventListener('click', closeModal);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  allModals.forEach(function (m) {
+    m.style.display = 'none';
+  });
+}
+
+
+// ================================================
 // INIT
 // ================================================
 document.addEventListener('DOMContentLoaded', function () {
@@ -253,4 +310,5 @@ document.addEventListener('DOMContentLoaded', function () {
   initCursorGlow();
   initSkillModals();
   initCertModals();
+  initEcoModals();
 });

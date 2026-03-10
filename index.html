@@ -380,284 +380,295 @@
         <div class="projects-accordion reveal-stagger">
 
           <details class="project-category reveal" open>
-            <summary><span class="category-marker"></span>AI &amp; Automation</summary>
+            <summary><span class="category-marker"></span>Trading Ecosystem</summary>
+
+            <!-- Architecture Diagram -->
+            <div class="ecosystem-diagram reveal">
+              <svg viewBox="0 0 800 420" class="ecosystem-svg" role="img" aria-label="Trading ecosystem architecture — data flows from sources through the central Data hub to analysis tools and outputs">
+                <defs>
+                  <linearGradient id="eco-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#7b2ff2"/>
+                    <stop offset="100%" stop-color="#00d4ff"/>
+                  </linearGradient>
+                  <filter id="eco-glow">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Connection Lines -->
+                <g class="eco-lines">
+                  <!-- Sources → Hub -->
+                  <path d="M 160 155 C 215 155, 215 210, 270 210" class="eco-line eco-line-in"/>
+                  <path d="M 160 275 C 215 275, 215 210, 270 210" class="eco-line eco-line-in"/>
+                  <!-- Hub → Tools -->
+                  <path d="M 510 195 C 550 195, 555 50, 590 50" class="eco-line eco-line-out"/>
+                  <path d="M 510 200 C 548 200, 555 115, 590 115" class="eco-line eco-line-out"/>
+                  <path d="M 510 207 C 545 207, 555 180, 590 180" class="eco-line eco-line-out"/>
+                  <path d="M 510 220 C 545 220, 555 245, 590 245" class="eco-line eco-line-out"/>
+                  <path d="M 510 230 C 548 230, 555 310, 590 310" class="eco-line eco-line-out"/>
+                  <path d="M 510 240 C 550 240, 555 375, 590 375" class="eco-line eco-line-out"/>
+                </g>
+
+                <!-- Source Nodes -->
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="schwab">
+                  <rect x="10" y="133" width="150" height="44" rx="6"/>
+                  <text x="85" y="158" class="eco-label">Schwab API</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="scout">
+                  <rect x="10" y="253" width="150" height="44" rx="6"/>
+                  <text x="85" y="271" class="eco-label">Scout-Win</text>
+                  <text x="85" y="289" class="eco-sub">X · YouTube · RSS</text>
+                </g>
+
+                <!-- Central Hub -->
+                <g class="eco-node eco-hub eco-clickable" data-eco-modal="data">
+                  <rect x="270" y="170" width="240" height="80" rx="10"/>
+                  <text x="390" y="203" class="eco-hub-label">DATA</text>
+                  <text x="390" y="228" class="eco-sub">33 symbols · SQLite · REST API</text>
+                </g>
+
+                <!-- Tool Nodes -->
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="signal">
+                  <rect x="590" y="30" width="195" height="40" rx="6"/>
+                  <text x="688" y="46" class="eco-label">Signal Engine</text>
+                  <text x="688" y="62" class="eco-sub">15+ algo strategies</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="wingman">
+                  <rect x="590" y="95" width="195" height="40" rx="6"/>
+                  <text x="688" y="111" class="eco-label">Wingman</text>
+                  <text x="688" y="127" class="eco-sub">Trading workstation</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="options">
+                  <rect x="590" y="160" width="195" height="40" rx="6"/>
+                  <text x="688" y="176" class="eco-label">Options-Calc</text>
+                  <text x="688" y="192" class="eco-sub">GEX analysis</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="divergence">
+                  <rect x="590" y="225" width="195" height="40" rx="6"/>
+                  <text x="688" y="248" class="eco-label">Divergence Scanner</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="fibonacci">
+                  <rect x="590" y="290" width="195" height="40" rx="6"/>
+                  <text x="688" y="313" class="eco-label">Fibonacci Backtester</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="tradingprep">
+                  <rect x="590" y="355" width="195" height="40" rx="6"/>
+                  <text x="688" y="371" class="eco-label">Trading Prep</text>
+                  <text x="688" y="387" class="eco-sub">Claude Code reports</text>
+                </g>
+
+                <!-- Column Labels -->
+                <text x="85" y="118" class="eco-col-label">SOURCES</text>
+                <text x="390" y="158" class="eco-col-label">HUB</text>
+                <text x="688" y="18" class="eco-col-label">TOOLS</text>
+              </svg>
+            </div>
+
             <div class="project-cards">
-              <a href="https://github.com/Namkuzu-da-OS/openclaw" target="_blank" rel="noopener" class="project-card">
+              <a href="https://github.com/Namkuzu-da-OS/trade-signal-backend" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
-                  <h4>openclaw</h4>
-                  <span class="lang-badge lang-ts">TypeScript</span>
+                  <h4>trade-signal-backend</h4>
+                  <span class="lang-badge lang-js">JavaScript</span>
                 </div>
-                <p>Your own personal AI assistant. Any OS. Any Platform.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/claude-mem" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>claude-mem</h4>
-                  <span class="lang-badge lang-ts">TypeScript</span>
-                </div>
-                <p>Claude Code plugin — auto-captures sessions and injects context into future sessions.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/Swarm-AI" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>Swarm-AI</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Multi-agent swarm intelligence framework.</p>
+                <p>Algorithmic trading engine — 15+ strategies, Claude AI integration, paper trading &amp; alerts.</p>
               </a>
               <a href="https://github.com/Namkuzu-da-OS/wingman" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>wingman</h4>
                   <span class="lang-badge lang-js">JavaScript</span>
                 </div>
-                <p>AI-powered assistant companion.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/WM-Voice" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>WM-Voice</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Voice-enabled AI interface.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/whisper-writer" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>whisper-writer</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Whisper-powered speech-to-text writing tool.</p>
-              </a>
-              <a href="https://github.com/DaryllGomas/RealtimeTTS" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>RealtimeTTS</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Converts text to speech in realtime.</p>
-              </a>
-              <a href="https://github.com/DaryllGomas/VideoToText" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>VideoToText</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Transcribe videos to text.</p>
-              </a>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Finance &amp; Market Analysis</summary>
-            <div class="project-cards">
-              <a href="https://github.com/DaryllGomas/bigpic-markets" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>bigpic-markets</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>BigPic Solutions — Investment Research &amp; Market Intelligence.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/trading-prep" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>trading-prep</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Automated pre-market trading research reports powered by Claude Code.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/market-intel-dashboard" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>market-intel-dashboard</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Public market intelligence dashboard.</p>
+                <p>AI-assisted trading workstation — dashboard, VWAP + divergence system, backtesting.</p>
               </a>
               <a href="https://github.com/Namkuzu-da-OS/Options-Calc" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>Options-Calc</h4>
                   <span class="lang-badge lang-py">Python</span>
                 </div>
-                <p>Options pricing calculator.</p>
+                <p>Gamma exposure (GEX) analysis — dealer positioning, call/put walls, AI trade suggestions.</p>
               </a>
               <a href="https://github.com/Namkuzu-da-OS/Divergance-Scanner" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>Divergance-Scanner</h4>
                   <span class="lang-badge lang-py">Python</span>
                 </div>
-                <p>Market divergence scanner for trade signals.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/buyback-blackout-analyzer" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>buyback-blackout-analyzer</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Quantitative analysis for trading during corporate buyback blackout periods.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/fibonacci-backtester" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>fibonacci-backtester</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>DiNapoli Fibonacci levels backtesting system.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/trade-signal-backend" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>trade-signal-backend</h4>
-                  <span class="lang-badge lang-js">JavaScript</span>
-                </div>
-                <p>Backend service for trade signal processing.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/EagleEye" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>EagleEye</h4>
-                </div>
-                <p>Birds-eye view of macro cycles and flows for long-term investing.</p>
-              </a>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>CyberSecurity &amp; Recon</summary>
-            <div class="project-cards">
-              <a href="https://github.com/Namkuzu-da-OS/shannon" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>shannon</h4>
-                  <span class="lang-badge lang-ts">TypeScript</span>
-                </div>
-                <p>Autonomous AI security tester — 96.15% success rate on the XBOW Benchmark.</p>
+                <p>Inter-market divergence scanner — relative strength, correlation breakdowns, sector rotation.</p>
               </a>
               <a href="https://github.com/Namkuzu-da-OS/Scout-Win" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>Scout-Win</h4>
                   <span class="lang-badge lang-html">HTML</span>
                 </div>
-                <p>Recon dashboard for security reconnaissance.</p>
+                <p>Automated market recon — scrapes X, YouTube, RSS into a structured intelligence dashboard.</p>
+              </a>
+              <a href="https://github.com/Namkuzu-da-OS/trading-prep" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>trading-prep</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Automated pre-market &amp; EOD research reports powered by Claude Code.</p>
+              </a>
+              <a href="https://github.com/Namkuzu-da-OS/buyback-blackout-analyzer" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>buyback-blackout-analyzer</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Identifies trading opportunities during corporate buyback blackout periods.</p>
+              </a>
+              <a href="https://github.com/Namkuzu-da-OS/fibonacci-backtester" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>fibonacci-backtester</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>DiNapoli Fibonacci levels backtesting against real market data via Schwab API.</p>
+              </a>
+              <a href="https://github.com/Namkuzu-da-OS/market-intel-dashboard" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>market-intel-dashboard</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Public-facing market intelligence dashboard.</p>
               </a>
               <a href="https://github.com/Namkuzu-da-OS/monitoring-dashboard" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>monitoring-dashboard</h4>
                   <span class="lang-badge lang-ts">TypeScript</span>
                 </div>
-                <p>Infrastructure monitoring dashboard.</p>
+                <p>Health monitoring for the trading platform services.</p>
               </a>
-              <a href="https://github.com/Namkuzu-da-OS/MeatballLabs" target="_blank" rel="noopener" class="project-card">
+              <a href="https://github.com/DaryllGomas/MrCrabs" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
-                  <h4>MeatballLabs</h4>
+                  <h4>MrCrabs</h4>
                   <span class="lang-badge lang-html">HTML</span>
                 </div>
-                <p>Security lab environment and experiments.</p>
+                <p>Investment research dashboard — market sentiment, metrics &amp; signals.</p>
               </a>
             </div>
           </details>
 
           <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Cloud &amp; Web Development</summary>
+            <summary><span class="category-marker"></span>BigPic Solutions</summary>
             <div class="project-cards">
-              <a href="https://github.com/DaryllGomas/BigPicSolutions" target="_blank" rel="noopener" class="project-card">
+              <a href="https://github.com/DaryllGomas/bigpic-markets" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
-                  <h4>BigPicSolutions</h4>
+                  <h4>bigpic-markets</h4>
                   <span class="lang-badge lang-html">HTML</span>
                 </div>
-                <p>BigPic Solutions — business website.</p>
+                <p>Investment research site — sector coverage, weekly macro reports, daily pre-market briefs.</p>
               </a>
               <a href="https://github.com/DaryllGomas/bigpic-technology" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>bigpic-technology</h4>
                   <span class="lang-badge lang-html">HTML</span>
                 </div>
-                <p>BigPic Solutions — Technology Services.</p>
+                <p>AI-powered IT support &amp; technology services — 25+ years of expertise.</p>
               </a>
-              <a href="https://github.com/Namkuzu-da-OS/codeflow" target="_blank" rel="noopener" class="project-card">
+              <a href="https://github.com/DaryllGomas/BigPicSolutions" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
-                  <h4>codeflow</h4>
+                  <h4>BigPicSolutions</h4>
                   <span class="lang-badge lang-html">HTML</span>
                 </div>
-                <p>Code visualization and workflow tool.</p>
-              </a>
-              <a href="https://github.com/DaryllGomas/serverless-resume-api" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>serverless-resume-api</h4>
-                  <span class="lang-badge lang-bicep">Bicep</span>
-                </div>
-                <p>Resume API built on Azure serverless infrastructure.</p>
+                <p>BigPic Solutions main business website.</p>
               </a>
             </div>
           </details>
 
           <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Blockchain &amp; Web3</summary>
+            <summary><span class="category-marker"></span>AI &amp; Voice Tools</summary>
             <div class="project-cards">
-              <a href="https://github.com/DaryllGomas/BreakTheCode" target="_blank" rel="noopener" class="project-card">
+              <a href="https://github.com/Namkuzu-da-OS/WM-Voice" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
-                  <h4>BreakTheCode</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Breaking your genetic code.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/ZOLSEASON" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>ZOLSEASON</h4>
-                </div>
-                <p>Unite Sol and ZCash — cross-chain exploration.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/BitTensor" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>BitTensor</h4>
-                </div>
-                <p>Bittensor decentralized AI network exploration.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/zcash" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>zcash</h4>
-                </div>
-                <p>Learning about ZCash privacy-focused cryptocurrency.</p>
-              </a>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Data &amp; Research</summary>
-            <div class="project-cards">
-              <a href="https://github.com/Namkuzu-da-OS/twitter-algorithm-analysis" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>twitter-algorithm-analysis</h4>
-                  <span class="lang-badge lang-rust">Rust</span>
-                </div>
-                <p>Analysis of X's open-sourced 'For You' feed algorithm with actionable strategies.</p>
-              </a>
-              <a href="https://github.com/Namkuzu-da-OS/Data" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>Data</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Data analysis and visualization projects.</p>
-              </a>
-              <a href="https://github.com/DaryllGomas/Coding" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>Coding</h4>
+                  <h4>WM-Voice</h4>
                   <span class="lang-badge lang-py">Python</span>
                 </div>
-                <p>Python coding projects and exercises.</p>
+                <p>Hands-free Linux voice assistant — Claude Agent SDK, Whisper STT, Kokoro TTS.</p>
+              </a>
+              <a href="https://github.com/DaryllGomas/VideoToText" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>VideoToText</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Download and transcribe X/Twitter videos using OpenAI Whisper.</p>
+              </a>
+              <a href="https://github.com/Namkuzu-da-OS/Swarm-AI" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>Swarm-AI</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Service DAO blueprint for an AI-augmented vibe-coding freelancer collective.</p>
               </a>
             </div>
           </details>
 
           <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Creative &amp; Personal</summary>
+            <summary><span class="category-marker"></span>Interactive Experiences</summary>
             <div class="project-cards">
               <a href="https://github.com/DaryllGomas/Book" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>Book</h4>
                   <span class="lang-badge lang-js">JavaScript</span>
                 </div>
-                <p>Digital book project.</p>
-              </a>
-              <a href="https://github.com/DaryllGomas/Ancients" target="_blank" rel="noopener" class="project-card">
-                <div class="project-card-top">
-                  <h4>Ancients</h4>
-                  <span class="lang-badge lang-js">JavaScript</span>
-                </div>
-                <p>Interactive experience exploring ancient wisdom.</p>
+                <p>"Enter Zen From There" — WebGL portal linking three interactive sub-projects.</p>
               </a>
               <a href="https://github.com/DaryllGomas/Zen" target="_blank" rel="noopener" class="project-card">
                 <div class="project-card-top">
                   <h4>Zen</h4>
                   <span class="lang-badge lang-html">HTML</span>
                 </div>
-                <p>A meditative digital experience.</p>
+                <p>Interactive Zen meditation — breathing guide, sand garden, ambient sounds, timer.</p>
+              </a>
+              <a href="https://github.com/DaryllGomas/Ancients" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>Ancients</h4>
+                  <span class="lang-badge lang-js">JavaScript</span>
+                </div>
+                <p>Interactive history timeline — WebGL cosmic portal, alternative civilization theories.</p>
+              </a>
+              <a href="https://github.com/DaryllGomas/BreakTheCode" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>BreakTheCode</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>"Breaking Your Genetic Code" — immersive digital book on consciousness expansion.</p>
+              </a>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Research &amp; Analysis</summary>
+            <div class="project-cards">
+              <a href="https://github.com/Namkuzu-da-OS/twitter-algorithm-analysis" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>twitter-algorithm-analysis</h4>
+                  <span class="lang-badge lang-rust">Rust</span>
+                </div>
+                <p>Decompiled X's "For You" algorithm — actionable posting rules and scoring formulas.</p>
+              </a>
+              <a href="https://github.com/Namkuzu-da-OS/ZOLSEASON" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>ZOLSEASON</h4>
+                </div>
+                <p>Privacy-preserving bridge concept uniting Zcash and Solana.</p>
+              </a>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Cloud &amp; Development</summary>
+            <div class="project-cards">
+              <a href="https://github.com/DaryllGomas/serverless-resume-api" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>serverless-resume-api</h4>
+                  <span class="lang-badge lang-bicep">Bicep</span>
+                </div>
+                <p>Resume API on Azure Functions — .NET 6, Blob Storage, GitHub Actions CI/CD.</p>
+              </a>
+              <a href="https://github.com/DaryllGomas/Coding" target="_blank" rel="noopener" class="project-card">
+                <div class="project-card-top">
+                  <h4>Coding</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Personal coding sandbox — hands-on practice projects across platforms.</p>
               </a>
             </div>
           </details>
@@ -874,6 +885,154 @@
           <li>Secure on-prem AI for data sovereignty</li>
           <li>Strategic understanding of the AI landscape</li>
         </ul>
+      </div>
+
+    </div>
+
+    <!-- ============================================
+         ECOSYSTEM MODALS
+         ============================================ -->
+    <div class="skill-modal-overlay" id="eco-modal-overlay">
+
+      <div class="skill-modal" id="eco-modal-schwab">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Schwab API</h3>
+        <span class="skill-modal-pct">Data Source</span>
+        <p>The primary external data feed powering the entire trading ecosystem. Provides real-time and historical market data across multiple asset classes.</p>
+        <ul>
+          <li>Real-time price data for stocks, ETFs, and options</li>
+          <li>Historical OHLCV data for backtesting strategies</li>
+          <li>Options chains with Greeks, IV, and open interest</li>
+          <li>Account and position data for portfolio tracking</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds into &rarr; DATA hub, Options-Calc</span>
+        <span class="eco-modal-repo eco-external">External Service</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-scout">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Scout-Win</h3>
+        <span class="skill-modal-pct">Intelligence Gathering</span>
+        <p>Automated market reconnaissance system that scrapes multiple sources and generates a structured intelligence dashboard for daily trading decisions.</p>
+        <ul>
+          <li>Scrapes X/Twitter for market sentiment and breaking news</li>
+          <li>Monitors YouTube for analyst commentary and trade ideas</li>
+          <li>Aggregates RSS feeds from financial news sources</li>
+          <li>Generates a consolidated dashboard (dash.html) for morning prep</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds into &rarr; DATA hub, Trading Prep</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-data">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>DATA</h3>
+        <span class="skill-modal-pct">Central Hub &mdash; The Backbone</span>
+        <p>The shared data backbone that every other tool in the ecosystem queries. Collects, processes, and stores market data from multiple sources, then exposes it via REST API.</p>
+        <ul>
+          <li>Tracks 33 symbols across ETFs and individual stocks</li>
+          <li>Stores price data, IV/HV, VIX, and volume in SQLite</li>
+          <li>Processes RSS feeds and YouTube content metadata</li>
+          <li>REST API (port 3000/3443) for all downstream tools</li>
+          <li>Matrix-style web interface for direct data exploration</li>
+        </ul>
+        <span class="skill-modal-tagline">Every tool in the ecosystem connects here</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-signal">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Signal Engine</h3>
+        <span class="skill-modal-pct">trade-signal-backend &mdash; Algorithmic Core</span>
+        <p>The algorithmic trading engine at the heart of the platform. Runs 15+ strategies with multi-timeframe analysis and Claude AI integration for intelligent trade vetting.</p>
+        <ul>
+          <li>15+ strategies: ORB, Golden Setup, VWAP Reversion, Mean Reversion, and more</li>
+          <li>Multi-timeframe analysis across intraday and swing periods</li>
+          <li>Claude AI integration for trade veto and learning loop</li>
+          <li>Paper trading with realistic slippage modeling</li>
+          <li>Real-time alerts via SSE, Discord, and Telegram</li>
+          <li>SQLite backend with 40+ tables tracking strategy performance</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub &nbsp;|&nbsp; Outputs &rarr; Wingman, Alerts</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-wingman">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Wingman</h3>
+        <span class="skill-modal-pct">AI-Assisted Trading Workstation</span>
+        <p>The comprehensive trading dashboard and daily command center. Combines all strategies, analysis tools, and market data into a single AI-assisted workstation.</p>
+        <ul>
+          <li>Full web dashboard with strategy views and daily workflows</li>
+          <li>VWAP + Divergence integrated trading system</li>
+          <li>Built-in backtesting tools for strategy validation</li>
+          <li>Earnings scanner for upcoming catalysts</li>
+          <li>Daily workflow pages for structured pre-market and EOD routines</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub, Signal Engine</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-options">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Options-Calc</h3>
+        <span class="skill-modal-pct">Gamma Exposure Analysis</span>
+        <p>Schwab Trading Dashboard focused on gamma exposure (GEX) analysis. Shows where market makers are positioned and where price is likely to pin, reverse, or accelerate.</p>
+        <ul>
+          <li>Dealer positioning and gamma exposure visualization</li>
+          <li>Call/put walls and gamma flip level detection</li>
+          <li>0DTE expected move calculations</li>
+          <li>AI-powered (Claude) trade setup suggestions</li>
+          <li>Real-time data streaming from Schwab API + Yahoo</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub, Schwab API</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-divergence">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Divergence Scanner</h3>
+        <span class="skill-modal-pct">Inter-Market Analysis</span>
+        <p>Real-time scanner that detects relative strength shifts, correlation breakdowns, and sector rotation signals across markets. Catches moves before they become obvious.</p>
+        <ul>
+          <li>Real-time inter-market divergence detection</li>
+          <li>Relative strength shift identification</li>
+          <li>Correlation breakdown alerts</li>
+          <li>Sector rotation heatmap visualization</li>
+          <li>3-tier alert system with SQLite persistence</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub (Schwab API)</span>
+        <a href="https://github.com/Namkuzu-da-OS/Divergance-Scanner" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-fibonacci">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Fibonacci Backtester</h3>
+        <span class="skill-modal-pct">Strategy Validation</span>
+        <p>Backtesting system for DiNapoli Fibonacci Levels — testing the methodology against real market data to validate entry and exit strategies.</p>
+        <ul>
+          <li>DiNapoli Fibnodes, Confluence, and Agreement analysis</li>
+          <li>Objective profit points based on Fibonacci extensions</li>
+          <li>Historical backtesting against real Schwab API data</li>
+          <li>Performance metrics and win-rate analysis</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub (historical data)</span>
+        <a href="https://github.com/Namkuzu-da-OS/fibonacci-backtester" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-tradingprep">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Trading Prep</h3>
+        <span class="skill-modal-pct">Research Automation</span>
+        <p>Automated pre-market and end-of-day research report generator. Uses Claude Code to synthesize market data, signals, and intelligence into actionable daily briefs.</p>
+        <ul>
+          <li>Automated pre-market morning research reports</li>
+          <li>End-of-day recap and performance analysis</li>
+          <li>Powered by Claude Code with custom prompt templates</li>
+          <li>Shell scripts for scheduled report generation</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub, Scout-Win, Signal Engine</span>
+        <a href="https://github.com/Namkuzu-da-OS/trading-prep" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
       </div>
 
     </div>

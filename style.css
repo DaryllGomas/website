@@ -1044,6 +1044,140 @@ a:hover {
   color: var(--accent-violet);
 }
 
+/* Ecosystem Architecture Diagram */
+.ecosystem-diagram {
+  padding: var(--space-md) var(--space-sm);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ecosystem-svg {
+  width: 100%;
+  height: auto;
+  min-width: 500px;
+}
+
+/* Connection lines — flowing dashes */
+.eco-line {
+  fill: none;
+  stroke: url(#eco-grad);
+  stroke-width: 1.5;
+  opacity: 0;
+  stroke-dasharray: 6 4;
+  transition: opacity 0.8s ease;
+}
+
+.ecosystem-diagram.is-visible .eco-line {
+  opacity: 0.45;
+  animation: eco-flow 6s linear infinite;
+}
+
+.ecosystem-diagram.is-visible .eco-line-in {
+  transition-delay: 0.2s;
+}
+
+.ecosystem-diagram.is-visible .eco-line-out {
+  transition-delay: 0.6s;
+}
+
+@keyframes eco-flow {
+  to { stroke-dashoffset: -100; }
+}
+
+/* Nodes */
+.eco-node {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.ecosystem-diagram.is-visible .eco-node {
+  opacity: 1;
+}
+
+.ecosystem-diagram.is-visible .eco-source {
+  transition-delay: 0.1s;
+}
+
+.ecosystem-diagram.is-visible .eco-hub {
+  transition-delay: 0.4s;
+}
+
+.ecosystem-diagram.is-visible .eco-tool {
+  transition-delay: 0.7s;
+}
+
+.eco-node rect {
+  fill: rgba(15, 15, 24, 0.85);
+  stroke-width: 1;
+  transition: stroke 0.3s ease, filter 0.3s ease;
+}
+
+.eco-source rect {
+  stroke: rgba(123, 47, 242, 0.4);
+}
+
+.eco-hub rect {
+  stroke: url(#eco-grad);
+  stroke-width: 2;
+}
+
+.eco-tool rect {
+  stroke: rgba(0, 212, 255, 0.25);
+}
+
+.eco-clickable {
+  cursor: pointer;
+}
+
+.eco-node:hover rect {
+  stroke: var(--accent-cyan);
+  filter: url(#eco-glow);
+}
+
+/* Text */
+.eco-label {
+  fill: var(--text-primary);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+
+.eco-hub-label {
+  fill: var(--accent-cyan);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  text-anchor: middle;
+  letter-spacing: 0.15em;
+}
+
+.eco-sub {
+  fill: var(--text-muted);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 9px;
+  text-anchor: middle;
+}
+
+.eco-col-label {
+  fill: var(--text-muted);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  text-anchor: middle;
+  letter-spacing: 0.2em;
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .ecosystem-diagram {
+    padding: var(--space-sm) 0;
+  }
+  .ecosystem-svg {
+    min-width: 600px;
+  }
+}
+
 /* Project Cards Grid */
 .project-cards {
   display: grid;
@@ -1365,6 +1499,42 @@ a:hover {
   padding-top: var(--space-md);
   border-top: 1px solid var(--border-subtle);
   font-style: italic;
+}
+
+/* Ecosystem modal repo link / badge */
+.eco-modal-repo {
+  display: inline-block;
+  margin-top: var(--space-sm);
+  font-family: var(--font-display);
+  font-size: var(--size-xs);
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.eco-modal-repo.eco-public {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.25);
+  color: var(--accent-cyan);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.eco-modal-repo.eco-public:hover {
+  background: rgba(0, 212, 255, 0.18);
+  border-color: var(--accent-cyan);
+}
+
+.eco-modal-repo.eco-private {
+  background: rgba(136, 136, 160, 0.08);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.eco-modal-repo.eco-external {
+  background: rgba(123, 47, 242, 0.08);
+  border: 1px solid rgba(123, 47, 242, 0.2);
+  color: rgba(123, 47, 242, 0.7);
 }
 
 
