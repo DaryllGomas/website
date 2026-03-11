@@ -380,6 +380,106 @@
         <div class="projects-accordion reveal-stagger">
 
           <details class="project-category reveal" open>
+            <summary><span class="category-marker"></span>Namkuzu-da OS</summary>
+
+            <!-- System Architecture Diagram -->
+            <div class="ecosystem-diagram reveal">
+              <svg viewBox="0 0 800 400" class="ecosystem-svg" role="img" aria-label="Namkuzu-da OS architecture — AI-powered operating system with Claude Code brain, voice control, and automated pipelines">
+                <defs>
+                  <linearGradient id="nkd-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#7b2ff2"/>
+                    <stop offset="100%" stop-color="#00d4ff"/>
+                  </linearGradient>
+                  <filter id="nkd-glow">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Connection Lines: Interfaces → Brain -->
+                <g class="eco-lines">
+                  <path d="M 160 137 C 215 137, 215 195, 270 195" class="nkd-line nkd-line-in"/>
+                  <path d="M 160 210 C 215 210, 215 210, 270 210" class="nkd-line nkd-line-in"/>
+                  <path d="M 160 283 C 215 283, 215 225, 270 225" class="nkd-line nkd-line-in"/>
+                </g>
+
+                <!-- Connection Lines: Brain → Services -->
+                <g class="eco-lines">
+                  <path d="M 530 195 C 585 195, 585 120, 640 120" class="nkd-line nkd-line-out"/>
+                  <path d="M 530 210 C 585 210, 585 210, 640 210" class="nkd-line nkd-line-out"/>
+                  <path d="M 530 225 C 585 225, 585 300, 640 300" class="nkd-line nkd-line-out"/>
+                </g>
+
+                <!-- Interface Nodes (Left) -->
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-voice">
+                  <rect x="10" y="115" width="150" height="44" rx="6"/>
+                  <text x="85" y="133" class="eco-label">Voice Control</text>
+                  <text x="85" y="148" class="eco-sub">WM-Voice · Whisper STT</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-terminal">
+                  <rect x="10" y="188" width="150" height="44" rx="6"/>
+                  <text x="85" y="206" class="eco-label">Terminal Stack</text>
+                  <text x="85" y="221" class="eco-sub">Wezterm · Zellij · Starship</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-display">
+                  <rect x="10" y="261" width="150" height="44" rx="6"/>
+                  <text x="85" y="279" class="eco-label">Display System</text>
+                  <text x="85" y="294" class="eco-sub">4 Monitors · Night/Day</text>
+                </g>
+
+                <!-- Central Brain Hub -->
+                <g class="eco-node eco-hub eco-clickable" data-eco-modal="nkd-os">
+                  <rect x="270" y="170" width="260" height="80" rx="10" style="stroke: url(#nkd-grad); stroke-width: 2"/>
+                  <text x="400" y="203" class="eco-hub-label">CLAUDE CODE</text>
+                  <text x="400" y="228" class="eco-sub">Namkuzu-da OS · Agentic Brain</text>
+                </g>
+
+                <!-- Service Nodes (Right) -->
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-pipelines">
+                  <rect x="640" y="95" width="150" height="50" rx="6"/>
+                  <text x="715" y="114" class="eco-label">Market Pipelines</text>
+                  <text x="715" y="129" class="eco-sub">Morning Briefs · Eagle Eye</text>
+                  <text x="715" y="140" class="eco-sub">8 Automated Cron Jobs</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-knowledge">
+                  <rect x="640" y="185" width="150" height="50" rx="6"/>
+                  <text x="715" y="204" class="eco-label">Knowledge System</text>
+                  <text x="715" y="219" class="eco-sub">Living Thesis · Research</text>
+                  <text x="715" y="230" class="eco-sub">YouTube → Knowledge Base</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-services">
+                  <rect x="640" y="275" width="150" height="50" rx="6"/>
+                  <text x="715" y="294" class="eco-label">System Services</text>
+                  <text x="715" y="309" class="eco-sub">Backup · Bluetooth · GPU</text>
+                  <text x="715" y="320" class="eco-sub">Synology NAS · rclone</text>
+                </g>
+
+                <!-- Column Labels -->
+                <text x="85" y="100" class="eco-col-label">INTERFACES</text>
+                <text x="400" y="158" class="eco-col-label">BRAIN</text>
+                <text x="715" y="80" class="eco-col-label">SERVICES</text>
+              </svg>
+            </div>
+
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="nkd-os">
+                <div class="project-card-top">
+                  <h4>namkuzu-da</h4>
+                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">Shell</span>
+                </div>
+                <p>AI-native operating system — Claude Code brain, voice control, 8 automated pipelines, 4-monitor workstation.</p>
+              </div>
+              <div class="project-card" data-eco-modal="nkd-voice">
+                <div class="project-card-top">
+                  <h4>WM-Voice</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Hands-free voice assistant — Whisper STT, Kokoro TTS, Claude Agent SDK. Accessibility-first design.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
             <summary><span class="category-marker"></span>Trading Ecosystem</summary>
 
             <!-- Architecture Diagram -->
@@ -1143,6 +1243,114 @@
         </ul>
         <span class="skill-modal-tagline">Queries &larr; DATA hub, Scout-Win, Signal Engine</span>
         <a href="https://github.com/Namkuzu-da-OS/trading-prep" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <!-- Namkuzu-da OS modals -->
+      <div class="skill-modal" id="eco-modal-nkd-os">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Namkuzu-da OS</h3>
+        <span class="skill-modal-pct">AI-Native Operating System</span>
+        <p>A custom AI-powered computing environment built on Ubuntu 24.04 LTS with Claude Code as the orchestration brain. Designed for accessibility (hands-free operation) with voice control, automated pipelines, and agentic AI driving every workflow.</p>
+        <ul>
+          <li>Claude Code as system brain — xdotool, wmctrl, scrot for desktop control</li>
+          <li>8 automated cron pipelines (market analysis, research, backups)</li>
+          <li>RTX 3070 Ti with CUDA for local AI inference</li>
+          <li>4-monitor workstation with night/day display modes</li>
+          <li>Custom systemd services, shell toolbox, and Chrome extensions</li>
+          <li>Synology NAS nightly backups with email alerts</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-voice">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Voice Control</h3>
+        <span class="skill-modal-pct">WM-Voice · Whisper Writer</span>
+        <p>Hands-free voice interface for the entire system. WM-Voice provides a Claude-powered voice assistant, while Whisper Writer enables CUDA-accelerated dictation to any application via hotkey.</p>
+        <ul>
+          <li>WM-Voice — Faster-Whisper (large-v3-turbo) + Kokoro TTS + Claude Agent SDK</li>
+          <li>Whisper Writer — voice dictation to any app via Insert key</li>
+          <li>Silero VAD for voice activity detection</li>
+          <li>RTX 3070 Ti CUDA acceleration for real-time transcription</li>
+          <li>Accessibility-first — designed for hands-free operation</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-terminal">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Terminal Stack</h3>
+        <span class="skill-modal-pct">GPU-Accelerated Development Environment</span>
+        <p>A modern, GPU-accelerated terminal environment optimized for AI-assisted development. Multiple panes for Claude Code, file management, and shell access.</p>
+        <ul>
+          <li>Wezterm — GPU-accelerated terminal with Tokyo Night theme</li>
+          <li>Zellij — terminal multiplexer with dev.kdl layout</li>
+          <li>Starship — cross-shell prompt with git integration</li>
+          <li>Yazi — terminal file manager with previews</li>
+          <li>Modern CLI: eza, bat, fzf, zoxide, fd, ripgrep</li>
+        </ul>
+        <span class="skill-modal-tagline">Core Development Interface</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-display">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Display System</h3>
+        <span class="skill-modal-pct">4-Monitor Workstation</span>
+        <p>A multi-monitor command center managed via xrandr with automated display modes for extended trading and development sessions.</p>
+        <ul>
+          <li>Primary: 1440p center (DP-0) — main workspace</li>
+          <li>Top: 1440p (HDMI-0) — video and night mode display</li>
+          <li>Sides: dual 1080p portrait (DP-3, DP-5)</li>
+          <li>Night mode: reduced brightness + amber gamma tint</li>
+          <li>Day mode: full brightness + normal gamma</li>
+        </ul>
+        <span class="skill-modal-tagline">Custom xrandr + Gamma Scripts</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-pipelines">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Market Pipelines</h3>
+        <span class="skill-modal-pct">8 Automated Cron Jobs</span>
+        <p>Fully autonomous market intelligence pipelines that run daily without human intervention. Claude Opus analyzes data, writes reports, and publishes to the web — all on schedule.</p>
+        <ul>
+          <li>4:30 AM — Morning Brief: 26 RSS feeds + Schwab API → Claude analysis → HTML publish</li>
+          <li>4:30 AM — Trading Prep: pre-market structure analysis</li>
+          <li>5:00 AM — Auto-inject into BigPic Capital daily notes</li>
+          <li>4:00 PM Sun — Eagle Eye: weekly macro cycle report</li>
+          <li>5:00 PM Sun — Auto-inject weekly notes</li>
+          <li>Every 15 min — Google Drive sync + GPU health monitoring</li>
+        </ul>
+        <span class="skill-modal-tagline">Zero-Touch Daily Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-knowledge">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Knowledge System</h3>
+        <span class="skill-modal-pct">Living Thesis · Research Synthesis</span>
+        <p>An automated knowledge management pipeline. One-click YouTube transcript extraction flows through Claude-powered analysis into a structured, evolving knowledge base.</p>
+        <ul>
+          <li>Living Thesis Chrome extension — one-click YouTube → knowledge base</li>
+          <li>4-stage pipeline: validate → download → extract → incorporate</li>
+          <li>Native messaging bridge from browser to Claude</li>
+          <li>Topic synthesis and cross-referencing via Claude</li>
+          <li>Zero-prompt automation — fully hands-off after click</li>
+        </ul>
+        <span class="skill-modal-tagline">Browser → Claude → Knowledge Base</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-services">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>System Services</h3>
+        <span class="skill-modal-pct">Backup · Bluetooth · GPU Monitoring</span>
+        <p>Custom systemd services and automation scripts that keep the workstation running reliably. Nightly backups, auto-connecting peripherals, and hardware monitoring.</p>
+        <ul>
+          <li>Nightly rsync backup to Synology NAS with email alerts on failure</li>
+          <li>Bluetooth auto-switch — D-Bus monitoring for A2DP headset connect</li>
+          <li>GPU health monitor — RTX 3070 Ti temp/utilization logged every 15 min</li>
+          <li>Google Drive mount via rclone (full VFS cache, 720h retention)</li>
+          <li>Realtek BT adapter fix — modprobe reload at boot</li>
+        </ul>
+        <span class="skill-modal-tagline">Systemd + Custom Shell Toolbox</span>
       </div>
 
       <!-- Trading Ecosystem — additional modals -->
