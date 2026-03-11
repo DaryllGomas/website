@@ -384,7 +384,7 @@
 
             <!-- System Architecture Diagram -->
             <div class="ecosystem-diagram reveal">
-              <svg viewBox="0 0 800 400" class="ecosystem-svg" role="img" aria-label="Namkuzu-da OS architecture — AI-powered operating system with Claude Code brain, voice control, and automated pipelines">
+              <svg viewBox="0 0 800 420" class="ecosystem-svg" role="img" aria-label="Namkuzu-da OS architecture — data flows from voice, market feeds, and web content through the Claude Code brain to published reports, knowledge base, and system control">
                 <defs>
                   <linearGradient id="nkd-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stop-color="#7b2ff2"/>
@@ -396,68 +396,71 @@
                   </filter>
                 </defs>
 
-                <!-- Connection Lines: Interfaces → Brain -->
+                <!-- Connection Lines: Inputs → Brain -->
                 <g class="eco-lines">
-                  <path d="M 160 137 C 215 137, 215 195, 270 195" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 160 210 C 215 210, 215 210, 270 210" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 160 283 C 215 283, 215 225, 270 225" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 140 C 215 140, 215 195, 270 195" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 215 C 215 215, 215 210, 270 210" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 290 C 215 290, 215 225, 270 225" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
                 </g>
 
-                <!-- Connection Lines: Brain → Services -->
+                <!-- Connection Lines: Brain → Outputs -->
                 <g class="eco-lines">
-                  <path d="M 530 195 C 585 195, 585 120, 640 120" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 530 210 C 585 210, 585 210, 640 210" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 530 225 C 585 225, 585 300, 640 300" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 195 C 585 195, 585 125, 640 125" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 210 C 585 210, 585 215, 640 215" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 225 C 585 225, 585 305, 640 305" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
                 </g>
 
-                <!-- Interface Nodes (Left) -->
+                <!-- Input Nodes (Left) -->
                 <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-voice">
-                  <rect x="10" y="115" width="150" height="44" rx="6"/>
-                  <text x="85" y="133" class="eco-label">Voice Control</text>
-                  <text x="85" y="148" class="eco-sub">WM-Voice · Whisper STT</text>
+                  <rect x="10" y="118" width="150" height="44" rx="6"/>
+                  <text x="85" y="136" class="eco-label">Voice Input</text>
+                  <text x="85" y="151" class="eco-sub">Whisper STT · Microphone</text>
                 </g>
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-terminal">
-                  <rect x="10" y="188" width="150" height="44" rx="6"/>
-                  <text x="85" y="206" class="eco-label">Terminal Stack</text>
-                  <text x="85" y="221" class="eco-sub">Wezterm · Zellij · Starship</text>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-marketdata">
+                  <rect x="10" y="193" width="150" height="44" rx="6"/>
+                  <text x="85" y="211" class="eco-label">Market Data</text>
+                  <text x="85" y="226" class="eco-sub">Schwab · 26 RSS · FRED</text>
                 </g>
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-display">
-                  <rect x="10" y="261" width="150" height="44" rx="6"/>
-                  <text x="85" y="279" class="eco-label">Display System</text>
-                  <text x="85" y="294" class="eco-sub">4 Monitors · Night/Day</text>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-web">
+                  <rect x="10" y="268" width="150" height="44" rx="6"/>
+                  <text x="85" y="286" class="eco-label">Web &amp; Research</text>
+                  <text x="85" y="301" class="eco-sub">YouTube · Browser · Inbox</text>
                 </g>
 
                 <!-- Central Brain Hub -->
                 <g class="eco-node eco-hub eco-clickable" data-eco-modal="nkd-os">
                   <rect x="270" y="170" width="260" height="80" rx="10" style="stroke: url(#nkd-grad); stroke-width: 2"/>
-                  <text x="400" y="203" class="eco-hub-label">CLAUDE CODE</text>
-                  <text x="400" y="228" class="eco-sub">Namkuzu-da OS · Agentic Brain</text>
+                  <text x="400" y="200" class="eco-hub-label">NAMKUZU-DA OS</text>
+                  <text x="400" y="222" class="eco-sub">Claude Code · 20+ Skills · 8 Pipelines</text>
                 </g>
 
-                <!-- Service Nodes (Right) -->
+                <!-- Infrastructure subtitle -->
+                <text x="400" y="270" class="eco-sub" style="opacity: 0.35">Wezterm · Zellij · RTX 3070 Ti · Synology NAS · Ubuntu 24.04</text>
+
+                <!-- Output Nodes (Right) -->
                 <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-pipelines">
-                  <rect x="640" y="95" width="150" height="50" rx="6"/>
-                  <text x="715" y="114" class="eco-label">Market Pipelines</text>
-                  <text x="715" y="129" class="eco-sub">Morning Briefs · Eagle Eye</text>
-                  <text x="715" y="140" class="eco-sub">8 Automated Cron Jobs</text>
+                  <rect x="640" y="100" width="150" height="50" rx="6"/>
+                  <text x="715" y="119" class="eco-label">Published Intel</text>
+                  <text x="715" y="134" class="eco-sub">Morning Briefs · Eagle Eye</text>
+                  <text x="715" y="145" class="eco-sub">markets.bigpicsolutions.com</text>
                 </g>
                 <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-knowledge">
-                  <rect x="640" y="185" width="150" height="50" rx="6"/>
-                  <text x="715" y="204" class="eco-label">Knowledge System</text>
-                  <text x="715" y="219" class="eco-sub">Living Thesis · Research</text>
-                  <text x="715" y="230" class="eco-sub">YouTube → Knowledge Base</text>
+                  <rect x="640" y="190" width="150" height="50" rx="6"/>
+                  <text x="715" y="209" class="eco-label">Knowledge Base</text>
+                  <text x="715" y="224" class="eco-sub">Living Thesis · Synthesis</text>
+                  <text x="715" y="235" class="eco-sub">YouTube → Knowledge</text>
                 </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-services">
-                  <rect x="640" y="275" width="150" height="50" rx="6"/>
-                  <text x="715" y="294" class="eco-label">System Services</text>
-                  <text x="715" y="309" class="eco-sub">Backup · Bluetooth · GPU</text>
-                  <text x="715" y="320" class="eco-sub">Synology NAS · rclone</text>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-control">
+                  <rect x="640" y="280" width="150" height="50" rx="6"/>
+                  <text x="715" y="299" class="eco-label">System Control</text>
+                  <text x="715" y="314" class="eco-sub">Voice TTS · Desktop · Display</text>
+                  <text x="715" y="325" class="eco-sub">4 Monitors · xdotool</text>
                 </g>
 
                 <!-- Column Labels -->
-                <text x="85" y="100" class="eco-col-label">INTERFACES</text>
+                <text x="85" y="103" class="eco-col-label">INPUTS</text>
                 <text x="400" y="158" class="eco-col-label">BRAIN</text>
-                <text x="715" y="80" class="eco-col-label">SERVICES</text>
+                <text x="715" y="85" class="eco-col-label">OUTPUTS</text>
               </svg>
             </div>
 
@@ -1264,17 +1267,47 @@
 
       <div class="skill-modal" id="eco-modal-nkd-voice">
         <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Voice Control</h3>
-        <span class="skill-modal-pct">WM-Voice · Whisper Writer</span>
-        <p>Hands-free voice interface for the entire system. WM-Voice provides a Claude-powered voice assistant, while Whisper Writer enables CUDA-accelerated dictation to any application via hotkey.</p>
+        <h3>Voice Input</h3>
+        <span class="skill-modal-pct">Speech → Transcription → Claude</span>
+        <p>Hands-free voice input layer. Spoken commands are captured by the microphone, transcribed in real-time using CUDA-accelerated Whisper, and fed directly into Claude Code for processing and action.</p>
         <ul>
-          <li>WM-Voice — Faster-Whisper (large-v3-turbo) + Kokoro TTS + Claude Agent SDK</li>
-          <li>Whisper Writer — voice dictation to any app via Insert key</li>
-          <li>Silero VAD for voice activity detection</li>
+          <li>WM-Voice — Faster-Whisper (large-v3-turbo) + Silero VAD</li>
+          <li>Whisper Writer — hotkey dictation to any application via Insert key</li>
           <li>RTX 3070 Ti CUDA acceleration for real-time transcription</li>
           <li>Accessibility-first — designed for hands-free operation</li>
+          <li>Voice output via Kokoro TTS feeds back through System Control</li>
         </ul>
         <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-marketdata">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Market Data</h3>
+        <span class="skill-modal-pct">APIs · RSS · Economic Data</span>
+        <p>The raw data pipeline feeding the brain. Market quotes, news feeds, and economic indicators flow in on automated schedules — 26 RSS feeds, Schwab broker API, and FRED economic data.</p>
+        <ul>
+          <li>Schwab API proxy at 192.168.10.60 — real-time quotes &amp; technicals</li>
+          <li>26 RSS feeds — financial news, sector coverage, macro analysis</li>
+          <li>FRED API — economic indicators and macro data</li>
+          <li>33 tracked symbols across sectors</li>
+          <li>Collected automatically by cron at 4:30 AM Mon–Fri</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds Morning Briefs, Eagle Eye &amp; Trading Prep</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-web">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Web &amp; Research</h3>
+        <span class="skill-modal-pct">YouTube · Browser · Inbox</span>
+        <p>Web content and research inputs that feed the knowledge system. YouTube transcripts, browser research, and inbox files are routed through Claude for extraction, analysis, and integration.</p>
+        <ul>
+          <li>Living Thesis Chrome extension — one-click YouTube transcript capture</li>
+          <li>Native messaging bridge from browser → Claude Code</li>
+          <li>Inbox file processing via /inbox skill</li>
+          <li>Web research amplification via /enhance skill</li>
+          <li>Polymarket prediction data via /predict skill</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds Knowledge Base &amp; Research Pipeline</span>
       </div>
 
       <div class="skill-modal" id="eco-modal-nkd-terminal">
@@ -1309,9 +1342,9 @@
 
       <div class="skill-modal" id="eco-modal-nkd-pipelines">
         <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Market Pipelines</h3>
-        <span class="skill-modal-pct">8 Automated Cron Jobs</span>
-        <p>Fully autonomous market intelligence pipelines that run daily without human intervention. Claude Opus analyzes data, writes reports, and publishes to the web — all on schedule.</p>
+        <h3>Published Intelligence</h3>
+        <span class="skill-modal-pct">8 Automated Cron Jobs → Live Reports</span>
+        <p>The brain's primary output. Market data flows in, Claude Opus analyzes it, writes institutional-quality reports, and publishes them to the web — all autonomously on schedule, zero human intervention.</p>
         <ul>
           <li>4:30 AM — Morning Brief: 26 RSS feeds + Schwab API → Claude analysis → HTML publish</li>
           <li>4:30 AM — Trading Prep: pre-market structure analysis</li>
@@ -1351,6 +1384,22 @@
           <li>Realtek BT adapter fix — modprobe reload at boot</li>
         </ul>
         <span class="skill-modal-tagline">Systemd + Custom Shell Toolbox</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-control">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>System Control</h3>
+        <span class="skill-modal-pct">Voice TTS · Desktop · Display</span>
+        <p>The brain's physical output layer. Claude controls the workstation — speaking responses via Kokoro TTS, manipulating windows and applications, and managing the 4-monitor display environment.</p>
+        <ul>
+          <li>Kokoro TTS — Claude speaks responses aloud via Docker container</li>
+          <li>xdotool + wmctrl — window management and keyboard automation</li>
+          <li>scrot — screenshot capture for visual context</li>
+          <li>4-monitor xrandr control with night/day gamma modes</li>
+          <li>Systemd services: backup, Bluetooth auto-switch, GPU monitoring</li>
+          <li>Synology NAS nightly rsync with email alerts on failure</li>
+        </ul>
+        <span class="skill-modal-tagline">Brain → Physical World</span>
       </div>
 
       <!-- Trading Ecosystem — additional modals -->
