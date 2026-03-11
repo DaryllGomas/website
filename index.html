@@ -384,7 +384,7 @@
 
             <!-- System Architecture Diagram -->
             <div class="ecosystem-diagram reveal">
-              <svg viewBox="0 0 800 420" class="ecosystem-svg" role="img" aria-label="Namkuzu-da OS architecture — data flows from voice, market feeds, and web content through the Claude Code brain to published reports, knowledge base, and system control">
+              <svg viewBox="0 0 800 450" class="ecosystem-svg" role="img" aria-label="Namkuzu-da OS architecture — data flows from voice, market feeds, web content, and cloud storage through the Claude Code brain to published reports, knowledge base, system control, and alerts">
                 <defs>
                   <linearGradient id="nkd-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
                     <stop offset="0%" stop-color="#7b2ff2"/>
@@ -398,69 +398,82 @@
 
                 <!-- Connection Lines: Inputs → Brain -->
                 <g class="eco-lines">
-                  <path d="M 160 140 C 215 140, 215 195, 270 195" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 160 215 C 215 215, 215 210, 270 210" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 160 290 C 215 290, 215 225, 270 225" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 111 C 215 111, 215 185, 270 185" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 177 C 215 177, 215 200, 270 200" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 243 C 215 243, 215 215, 270 215" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 309 C 215 309, 215 230, 270 230" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
                 </g>
 
                 <!-- Connection Lines: Brain → Outputs -->
                 <g class="eco-lines">
-                  <path d="M 530 195 C 585 195, 585 125, 640 125" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 530 210 C 585 210, 585 215, 640 215" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 530 225 C 585 225, 585 305, 640 305" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 185 C 585 185, 585 108, 640 108" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 200 C 585 200, 585 176, 640 176" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 215 C 585 215, 585 244, 640 244" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 230 C 585 230, 585 312, 640 312" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
                 </g>
 
                 <!-- Input Nodes (Left) -->
                 <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-voice">
-                  <rect x="10" y="118" width="150" height="44" rx="6"/>
-                  <text x="85" y="136" class="eco-label">Voice Input</text>
-                  <text x="85" y="151" class="eco-sub">Whisper STT · Microphone</text>
+                  <rect x="10" y="89" width="150" height="44" rx="6"/>
+                  <text x="85" y="107" class="eco-label">Voice Input</text>
+                  <text x="85" y="122" class="eco-sub">Whisper STT · Microphone</text>
                 </g>
                 <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-marketdata">
-                  <rect x="10" y="193" width="150" height="44" rx="6"/>
-                  <text x="85" y="211" class="eco-label">Market Data</text>
-                  <text x="85" y="226" class="eco-sub">Schwab · 26 RSS · FRED</text>
+                  <rect x="10" y="155" width="150" height="44" rx="6"/>
+                  <text x="85" y="173" class="eco-label">Market Data</text>
+                  <text x="85" y="188" class="eco-sub">Schwab · 26 RSS · FRED</text>
                 </g>
                 <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-web">
-                  <rect x="10" y="268" width="150" height="44" rx="6"/>
-                  <text x="85" y="286" class="eco-label">Web &amp; Research</text>
-                  <text x="85" y="301" class="eco-sub">YouTube · Browser · Inbox</text>
+                  <rect x="10" y="221" width="150" height="44" rx="6"/>
+                  <text x="85" y="239" class="eco-label">Web &amp; Research</text>
+                  <text x="85" y="254" class="eco-sub">YouTube · Browser · Inbox</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-gdrive">
+                  <rect x="10" y="287" width="150" height="44" rx="6"/>
+                  <text x="85" y="305" class="eco-label">Cloud &amp; Network</text>
+                  <text x="85" y="320" class="eco-sub">Google Drive · LAN APIs</text>
                 </g>
 
                 <!-- Central Brain Hub -->
                 <g class="eco-node eco-hub eco-clickable" data-eco-modal="nkd-os">
-                  <rect x="270" y="170" width="260" height="80" rx="10" style="stroke: url(#nkd-grad); stroke-width: 2"/>
-                  <text x="400" y="200" class="eco-hub-label">NAMKUZU-DA OS</text>
-                  <text x="400" y="222" class="eco-sub">Claude Code · 20+ Skills · 8 Pipelines</text>
+                  <rect x="270" y="168" width="260" height="80" rx="10" style="stroke: url(#nkd-grad); stroke-width: 2"/>
+                  <text x="400" y="198" class="eco-hub-label">NAMKUZU-DA OS</text>
+                  <text x="400" y="220" class="eco-sub">Claude Code · 20+ Skills · 8 Pipelines · SQLite</text>
                 </g>
 
                 <!-- Infrastructure subtitle -->
-                <text x="400" y="270" class="eco-sub" style="opacity: 0.35">Wezterm · Zellij · RTX 3070 Ti · Synology NAS · Ubuntu 24.04</text>
+                <text x="400" y="270" class="eco-sub" style="opacity: 0.35">Wezterm · Zellij · RTX 3070 Ti · NAS · Bluetooth · Ubuntu 24.04</text>
 
                 <!-- Output Nodes (Right) -->
                 <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-pipelines">
-                  <rect x="640" y="100" width="150" height="50" rx="6"/>
-                  <text x="715" y="119" class="eco-label">Published Intel</text>
-                  <text x="715" y="134" class="eco-sub">Morning Briefs · Eagle Eye</text>
-                  <text x="715" y="145" class="eco-sub">markets.bigpicsolutions.com</text>
+                  <rect x="640" y="83" width="150" height="50" rx="6"/>
+                  <text x="715" y="102" class="eco-label">Published Intel</text>
+                  <text x="715" y="117" class="eco-sub">Morning Briefs · Eagle Eye</text>
+                  <text x="715" y="128" class="eco-sub">markets.bigpicsolutions.com</text>
                 </g>
                 <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-knowledge">
-                  <rect x="640" y="190" width="150" height="50" rx="6"/>
-                  <text x="715" y="209" class="eco-label">Knowledge Base</text>
-                  <text x="715" y="224" class="eco-sub">Living Thesis · Synthesis</text>
-                  <text x="715" y="235" class="eco-sub">YouTube → Knowledge</text>
+                  <rect x="640" y="151" width="150" height="50" rx="6"/>
+                  <text x="715" y="170" class="eco-label">Knowledge Base</text>
+                  <text x="715" y="185" class="eco-sub">Living Thesis · Synthesis</text>
+                  <text x="715" y="196" class="eco-sub">YouTube → Knowledge</text>
                 </g>
                 <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-control">
-                  <rect x="640" y="280" width="150" height="50" rx="6"/>
-                  <text x="715" y="299" class="eco-label">System Control</text>
-                  <text x="715" y="314" class="eco-sub">Voice TTS · Desktop · Display</text>
-                  <text x="715" y="325" class="eco-sub">4 Monitors · xdotool</text>
+                  <rect x="640" y="219" width="150" height="50" rx="6"/>
+                  <text x="715" y="238" class="eco-label">System Control</text>
+                  <text x="715" y="253" class="eco-sub">Voice TTS · Desktop · Display</text>
+                  <text x="715" y="264" class="eco-sub">4 Monitors · xdotool</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-alerts">
+                  <rect x="640" y="287" width="150" height="50" rx="6"/>
+                  <text x="715" y="306" class="eco-label">Alerts &amp; Delivery</text>
+                  <text x="715" y="321" class="eco-sub">Email · Google Drive</text>
+                  <text x="715" y="332" class="eco-sub">Automated Notifications</text>
                 </g>
 
                 <!-- Column Labels -->
-                <text x="85" y="103" class="eco-col-label">INPUTS</text>
-                <text x="400" y="158" class="eco-col-label">BRAIN</text>
-                <text x="715" y="85" class="eco-col-label">OUTPUTS</text>
+                <text x="85" y="74" class="eco-col-label">INPUTS</text>
+                <text x="400" y="155" class="eco-col-label">BRAIN</text>
+                <text x="715" y="68" class="eco-col-label">OUTPUTS</text>
               </svg>
             </div>
 
@@ -1400,6 +1413,36 @@
           <li>Synology NAS nightly rsync with email alerts on failure</li>
         </ul>
         <span class="skill-modal-tagline">Brain → Physical World</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-gdrive">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Cloud & Network</h3>
+        <span class="skill-modal-pct">Google Drive · LAN APIs · Scanner Infrastructure</span>
+        <p>The distributed data layer. Google Drive mounts via rclone feed all three BigPic divisions into the brain, while local network APIs serve real-time market and scanner data from dedicated machines.</p>
+        <ul>
+          <li>rclone — 2 Google Drive mounts (BigPic Capital &amp; Technology)</li>
+          <li>Options API — GEX analysis, dealer positioning (dedicated LAN server)</li>
+          <li>Intel API — market intelligence aggregation (dedicated LAN server)</li>
+          <li>Scanner API — divergence &amp; momentum scanning (secondary LAN node)</li>
+          <li>Synology NAS — nightly rsync backup with failure alerts</li>
+        </ul>
+        <span class="skill-modal-tagline">Cloud + LAN → Brain</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-alerts">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Alerts & Delivery</h3>
+        <span class="skill-modal-pct">Email · Google Drive · Automated Notifications</span>
+        <p>The outbound delivery system. Automated pipelines push finished intelligence products to email, save reports to Google Drive for team access, and trigger notifications when critical market events fire.</p>
+        <ul>
+          <li>msmtp — sends automated reports to daryll@bigpicsolutions.com</li>
+          <li>Google Drive export — morning briefs, EOD summaries, research saved to shared folders</li>
+          <li>Cron-triggered alerts — pre-market (5:45 AM), EOD (4:15 PM), weekend research</li>
+          <li>Error alerting — NAS backup failures, service health, pipeline errors</li>
+          <li>Webhook integrations — future Slack/Discord delivery planned</li>
+        </ul>
+        <span class="skill-modal-tagline">Brain → World</span>
       </div>
 
       <!-- Trading Ecosystem — additional modals -->
