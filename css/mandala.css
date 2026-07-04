@@ -36,7 +36,7 @@ html.mandala-active #scene {
    have to fight .hero's existing overflow:hidden.
    ------------------------------------------------ */
 html.mandala-active .hero {
-  min-height: 250vh;
+  min-height: 180vh;
 }
 
 html.mandala-active .hero-content,

@@ -22,8 +22,17 @@
     }
   }
 
+  // ?motion=1 forces the system ON (preview/testing on machines with OS-level
+  // reduced-motion, e.g. Windows "Animation effects" off); ?motion=0 forces OFF.
+  var motionOverride = null;
+  try {
+    motionOverride = new URLSearchParams(window.location.search).get('motion');
+  } catch (e) { /* ancient browser — no override */ }
+
   var prefersReducedMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (motionOverride === '1') prefersReducedMotion = false;
+  if (motionOverride === '0') prefersReducedMotion = true;
   var isMobileViewport = window.innerWidth < 768;
   var hasDeps = typeof THREE !== 'undefined' &&
     typeof gsap !== 'undefined' &&
@@ -39,7 +48,7 @@
 
   var renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: false });
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: true });
   } catch (e) {
     return; // WebGL context creation failed — leave everything untouched
   }
@@ -47,7 +56,7 @@
   // ---- We're committed: boot the system ----
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0x07070c, 1); // matches --bg-void
+  renderer.setClearColor(0x000000, 0); // transparent — site's ambient-bg shows through
 
   document.documentElement.classList.add('mandala-active');
   var staticMandala = document.querySelector('.hero .mandala');
@@ -351,17 +360,20 @@
     mouseSmooth.lerp(mouseTarget, 0.08);
 
     // --- camera dive through the core ---
-    var dive = gsap.utils.clamp(0, 1, prog / 0.55);
+    // Tightened pacing vs the mockup: on the real site the hero shaft is
+    // long real-scroll, so the dive completes sooner and the constellation
+    // forms AHEAD of the camera while still flying — no dead black stretch.
+    var dive = gsap.utils.clamp(0, 1, prog / 0.42);
     var diveEase = dive * dive * (3 - 2 * dive); // smoothstep
     camera.position.z = 3.1 - diveEase * 3.35;   // 3.1 -> -0.25 (through!)
 
     // after fly-through, pull back to view the constellation
-    var settle = gsap.utils.clamp(0, 1, (prog - 0.55) / 0.35);
+    var settle = gsap.utils.clamp(0, 1, (prog - 0.42) / 0.30);
     var settleEase = settle * settle * (3 - 2 * settle);
     if (settle > 0) camera.position.z = -0.25 + settleEase * 2.45; // -> 2.2
 
-    // --- morph ---
-    mat.uniforms.uMorph.value = gsap.utils.clamp(0, 1, (prog - 0.50) / 0.32);
+    // --- morph --- (starts mid-dive so stars are already out there)
+    mat.uniforms.uMorph.value = gsap.utils.clamp(0, 1, (prog - 0.26) / 0.34);
     mat.uniforms.uT.value = t;
     mat.uniforms.uMouse.value.copy(mouseSmooth);
     mat.uniforms.uMouseStr.value = 1.0 - mat.uniforms.uMorph.value * 0.5;
