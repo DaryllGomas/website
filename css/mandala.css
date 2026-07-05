@@ -76,6 +76,9 @@ html.mandala-active .hero-scroll-indicator {
 html.mandala-active .hero-name {
   animation: none !important;
   opacity: 0;
+  /* entrance animates letter-spacing wide -> tight; without nowrap the
+     wide phase wraps the name onto two lines, then snaps (the "glitch") */
+  white-space: nowrap;
 }
 
 html.mandala-active .hero-name.shimmer {

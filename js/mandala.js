@@ -330,7 +330,7 @@
 
   // Name entrance — blur-in with letter tracking (keeps the shimmer gradient seamless)
   gsap.fromTo('.hero-name',
-    { opacity: 0, scale: 1.18, filter: 'blur(22px)', letterSpacing: '0.35em' },
+    { opacity: 0, scale: 1.18, filter: 'blur(22px)', letterSpacing: '0.16em' },
     { opacity: 1, scale: 1, filter: 'blur(0px)', letterSpacing: '0.01em', duration: 2.0, ease: 'expo.out', delay: 0.5 });
   gsap.fromTo('.hero-greeting, .hero-title, .hero-line, .hero-scroll-indicator',
     { opacity: 0 }, { opacity: 1, duration: 1.6, delay: 1.5, stagger: 0.2 });
