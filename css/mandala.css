@@ -1,0 +1,100 @@
+/* ================================================
+   LIVING MANDALA — WebGL particle hero
+   New file. Does NOT touch style.css / sass.
+   Everything here is scoped under html.mandala-active
+   so that when JS decides NOT to boot the system
+   (WebGL unsupported, prefers-reduced-motion, or
+   viewport < 768px) the site renders exactly as
+   before — zero visual change, zero cost.
+   ================================================ */
+
+/* Canvas is inert/hidden until JS confirms the system booted. */
+#scene {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  outline: none;
+  pointer-events: none;
+}
+
+html.mandala-active #scene {
+  display: block;
+}
+
+/* Existing static SVG mandala becomes the fallback — hidden
+   the moment the particle system takes over. */
+.mandala--static-hidden {
+  opacity: 0 !important;
+  visibility: hidden;
+}
+
+/* ------------------------------------------------
+   Hero becomes a tall "dive" shaft. Content is
+   pinned via a fixed overlay (mirrors the approved
+   mockup) rather than position:sticky, so we don't
+   have to fight .hero's existing overflow:hidden.
+   ------------------------------------------------ */
+html.mandala-active .hero {
+  min-height: 180vh;
+}
+
+html.mandala-active .hero-content,
+html.mandala-active .hero-scroll-indicator {
+  position: fixed;
+  left: 50%;
+  z-index: 10;
+  will-change: transform, opacity, filter;
+}
+
+html.mandala-active .hero-content {
+  top: 50%;
+  width: 100%;
+  max-width: 900px;
+  padding: 0 var(--space-xl);
+  transform: translate(-50%, -50%);
+}
+
+html.mandala-active .hero-scroll-indicator {
+  bottom: var(--space-lg);
+  transform: translateX(-50%);
+}
+
+/* Hand the hero text's entrance over to GSAP. The built-in
+   fadeInUp keyframes (with fill-mode forwards) would otherwise
+   permanently pin opacity:1 and fight the JS-driven blur-in. We
+   keep the decorative infinite animations (shimmer / breathing)
+   running underneath. */
+html.mandala-active .hero-greeting,
+html.mandala-active .hero-title,
+html.mandala-active .hero-line,
+html.mandala-active .hero-scroll-indicator {
+  animation: none !important;
+  opacity: 0;
+}
+
+html.mandala-active .hero-name {
+  animation: none !important;
+  opacity: 0;
+}
+
+html.mandala-active .hero-name.shimmer {
+  animation: gradientText 8s ease-in-out 1.5s infinite;
+}
+
+html.mandala-active .hero-line.breathing {
+  animation: lineBreath 4s ease-in-out 2s infinite;
+}
+
+/* ------------------------------------------------
+   Lenis smooth scroll — recommended override so the
+   native CSS smooth-scroll doesn't fight Lenis's own
+   rAF-driven scrolling.
+   ------------------------------------------------ */
+html.mandala-active.lenis {
+  scroll-behavior: auto !important;
+}
+
+html.mandala-active.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
