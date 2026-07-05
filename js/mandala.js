@@ -29,10 +29,10 @@
     motionOverride = new URLSearchParams(window.location.search).get('motion');
   } catch (e) { /* ancient browser — no override */ }
 
-  var prefersReducedMotion = window.matchMedia &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (motionOverride === '1') prefersReducedMotion = false;
-  if (motionOverride === '0') prefersReducedMotion = true;
+  // Boot for everyone. OS-level reduced-motion no longer blocks the experience
+  // (too many Windows machines ship with animation effects off). Anyone who
+  // needs a motion-free page can opt out explicitly with ?motion=0.
+  var prefersReducedMotion = (motionOverride === '0');
   var isMobileViewport = window.innerWidth < 768;
   var hasDeps = typeof THREE !== 'undefined' &&
     typeof gsap !== 'undefined' &&
