@@ -30,8 +30,12 @@ import { CORPUS } from "./corpus.js";
 
 function mount() {
   try {
+    // Must be the self-contained browser bundle (transformers.min.js), NOT
+    // transformers.web.js — the .web build does a bare `import
+    // "onnxruntime-web/webgpu"` that only a bundler can resolve, so it
+    // throws "Failed to resolve module specifier" in a raw browser import.
     const TRANSFORMERS_CDN_URL =
-      "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0/dist/transformers.web.js";
+      "https://cdn.jsdelivr.net/npm/@huggingface/transformers@4.2.0/dist/transformers.min.js";
     const MODEL_ID = "Xenova/all-MiniLM-L6-v2";
     const NOTICE_SEEN_KEY = "concierge_notice_seen_v1";
     const CACHE_KEY = "concierge_embeddings_v1";
