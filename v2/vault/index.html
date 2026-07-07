@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Vault // Access Granted</title>
+<style>
+  :root {
+    --bg: #030604;
+    --bg-violet: #0a0614;
+    --green: #39ff9d;
+    --green-dim: #1f8a5c;
+    --green-bright: #b6ffdb;
+    --violet: #c792ff;
+    --cyan: #5cf1ff;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background: var(--bg);
+  }
+
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, 'Cascadia Code', 'SFMono-Regular',
+      'Source Code Pro', Menlo, Consolas, 'Liberation Mono', monospace;
+    color: var(--green);
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(199, 146, 255, 0.10), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 50% 100%, rgba(92, 241, 255, 0.08), transparent 60%),
+      linear-gradient(180deg, var(--bg-violet) 0%, var(--bg) 45%, var(--bg) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8vh 20px;
+    position: relative;
+    overflow-x: hidden;
+    text-shadow: 0 0 4px rgba(57, 255, 157, 0.45), 0 0 14px rgba(57, 255, 157, 0.12);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* CRT scanline overlay, pure CSS */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(0, 0, 0, 0.26) 2px,
+      rgba(0, 0, 0, 0) 3px
+    );
+    mix-blend-mode: multiply;
+  }
+
+  /* vignette */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 3;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.6) 100%);
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    border: 1px solid rgba(92, 241, 255, 0.35);
+    border-radius: 2px;
+    padding: 4px 10px;
+    margin-bottom: 22px;
+    text-shadow: 0 0 6px rgba(92, 241, 255, 0.6);
+    opacity: 0;
+    animation: fade-in 0.6s ease forwards;
+  }
+
+  pre.mandala {
+    color: var(--green);
+    font-size: 11px;
+    line-height: 1.15;
+    white-space: pre;
+    margin: 0 auto 26px;
+    display: inline-block;
+    text-align: left;
+    text-shadow: 0 0 8px rgba(57, 255, 157, 0.65), 0 0 22px rgba(199, 146, 255, 0.25);
+    opacity: 0;
+    animation: fade-in 1s ease 0.15s forwards, spin-glow 12s linear infinite 1.2s;
+    transform-origin: 50% 50%;
+  }
+
+  h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    letter-spacing: 0.06em;
+    margin: 0 0 18px;
+    background: linear-gradient(120deg, var(--green-bright) 0%, var(--green) 40%, var(--cyan) 70%, var(--violet) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 0 18px rgba(57, 255, 157, 0.35));
+    opacity: 0;
+    animation: fade-in 0.7s ease 0.35s forwards;
+  }
+
+  p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--green-bright);
+    margin: 0 0 18px;
+    opacity: 0;
+    animation: fade-in 0.7s ease forwards;
+  }
+
+  p.delay-1 { animation-delay: 0.55s; }
+  p.delay-2 { animation-delay: 0.75s; }
+  p.delay-3 { animation-delay: 0.95s; }
+
+  .keyword {
+    color: var(--violet);
+    text-shadow: 0 0 8px rgba(199, 146, 255, 0.7);
+    font-weight: 600;
+  }
+
+  .links {
+    margin-top: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+    opacity: 0;
+    animation: fade-in 0.7s ease 1.15s forwards;
+  }
+
+  a {
+    color: var(--cyan);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(92, 241, 255, 0.4);
+    padding-bottom: 1px;
+    transition: color 0.15s ease, border-color 0.15s ease, text-shadow 0.15s ease;
+  }
+
+  a:hover, a:focus-visible {
+    color: var(--green-bright);
+    border-color: var(--green-bright);
+    text-shadow: 0 0 8px rgba(182, 255, 219, 0.8);
+  }
+
+  .links .prompt {
+    color: var(--green-dim);
+    margin-right: 6px;
+    text-shadow: none;
+  }
+
+  .back {
+    margin-top: 30px;
+    font-size: 12px;
+    opacity: 0;
+    animation: fade-in 0.7s ease 1.35s forwards;
+  }
+
+  .back a {
+    color: var(--green-dim);
+    border-color: rgba(31, 138, 92, 0.4);
+  }
+
+  .back a:hover, .back a:focus-visible {
+    color: var(--green);
+    border-color: var(--green);
+  }
+
+  .cursor-tail {
+    display: inline-block;
+    width: 8px;
+    height: 14px;
+    background: var(--green);
+    margin-left: 2px;
+    vertical-align: -2px;
+    animation: blink 1s steps(1) infinite;
+    box-shadow: 0 0 8px rgba(57, 255, 157, 0.8);
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin-glow {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(57, 255, 157, 0.5)); }
+    50% { filter: drop-shadow(0 0 14px rgba(199, 146, 255, 0.55)); }
+  }
+
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0; }
+  }
+
+  @media (max-width: 640px) {
+    pre.mandala { font-size: 8.5px; }
+    p { font-size: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tag, pre.mandala, h1, p, .links, .back { animation: none; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">access granted</span>
+
+  <pre class="mandala" aria-hidden="true">                     ' .... '
+                    ... .. ...
+                  '..********..'
+                  ..** .... **..
+                 ..**.. ** ..**..
+                '.**..******..**.'
+                . *..**....**..* .
+                . *. *..  ..* .* .
+               ...*.**. @@ .**.*...
+               ...*.**. @@ .**.*...
+                . *. *..  ..* .* .
+                . *..**....**..* .
+                '.**..******..**.'
+                 ..**.. ** ..**..
+                  ..** .... **..
+                  '..********..'
+                    ... .. ...
+                     ' .... '</pre>
+
+  <h1>YOU FOUND THE VAULT</h1>
+
+  <p class="delay-1">
+    You didn't just click around — you found a signal, chased it, and broke
+    the cipher. The center held. The noise concealed nothing you couldn't
+    decode.
+  </p>
+
+  <p class="delay-2">
+    That kind of curiosity is rare. Most people bounce off a locked door.
+    You picked it.
+  </p>
+
+  <p class="delay-3">
+    If you want to talk shop, compare notes, or just say hi — reach out and
+    lead with the word you decrypted: <span class="keyword">stillness</span>.
+    It'll skip the small talk.<span class="cursor-tail" aria-hidden="true"></span>
+  </p>
+
+  <div class="links">
+    <div><span class="prompt">$</span><a href="https://github.com/DaryllGomas" target="_blank" rel="noopener noreferrer">github.com/DaryllGomas</a></div>
+  </div>
+
+  <div class="back">
+    <a href="../index.html">&larr; return to the surface</a>
+  </div>
+</main>
+</body>
+</html>

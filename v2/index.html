@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daryll Gomas — Living Mandala</title>
+  <meta name="description" content="Daryll Gomas — a living 3D mandala portfolio. Cybersecurity, AI automation, and systems engineering, rendered as a scroll-driven particle journey.">
+  <meta name="author" content="Daryll Gomas">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://daryllgomas.com/v2/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Daryll Gomas — Living Mandala">
+  <meta property="og:description" content="A living 3D mandala portfolio — cybersecurity, AI automation, and systems engineering as a scroll-driven particle journey.">
+  <meta property="og:url" content="https://daryllgomas.com/v2/">
+  <meta property="og:image" content="https://daryllgomas.com/images/AI_Left.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Daryll Gomas">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Daryll Gomas — Living Mandala">
+  <meta name="twitter:description" content="A living 3D mandala portfolio — cybersecurity, AI automation, and systems engineering as a scroll-driven particle journey.">
+  <meta name="twitter:image" content="https://daryllgomas.com/images/AI_Left.jpg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/v2.css">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+  <!-- Pinned dependency: Three.js r0.169.0, ESM build (jsdelivr, curl-verified 200) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"
+    }
+  }
+  </script>
+
+  <!-- GSAP 3.12.5 + ScrollTrigger (cdnjs, curl-verified 200) — classic scripts,
+       loaded before the module graph so window.gsap / window.ScrollTrigger
+       exist when journey.js runs. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- Lenis 1.1.14 (unpkg, curl-verified 200) — sets window.Lenis -->
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+</head>
+<body>
+
+  <!-- Living Mandala WebGL canvas — inert until main.js confirms WebGL
+       support and (unless prefers-reduced-motion) boots the render loop.
+       CSS gradient fallback covers the no-WebGL / no-JS case. -->
+  <canvas id="v2-scene" aria-hidden="true"></canvas>
+  <div class="void-gradient" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Thin fixed progress rail — chapter index, left edge -->
+  <nav class="progress-rail" aria-label="Chapter progress">
+    <ol>
+      <li class="rail-dot" data-chapter="0"><span class="rail-num">00</span><span class="rail-label">Arrival</span></li>
+      <li class="rail-dot" data-chapter="1"><span class="rail-num">01</span><span class="rail-label">Signal</span></li>
+      <li class="rail-dot" data-chapter="2"><span class="rail-num">02</span><span class="rail-label">Shield</span></li>
+      <li class="rail-dot" data-chapter="3"><span class="rail-num">03</span><span class="rail-label">Synthesis</span></li>
+      <li class="rail-dot" data-chapter="4"><span class="rail-num">04</span><span class="rail-label">Artifacts</span></li>
+      <li class="rail-dot" data-chapter="5"><span class="rail-num">05</span><span class="rail-label">Stillness</span></li>
+      <li class="rail-dot" data-chapter="6"><span class="rail-num">06</span><span class="rail-label">Contact</span></li>
+    </ol>
+  </nav>
+
+  <main>
+    <!-- Scroll-distance spacers — invisible in the fallback (no-JS /
+         reduced-motion) flow; become the ~700vh scroll track that
+         journey.js's ScrollTriggers measure once .js-journey is active. -->
+    <div class="scroll-spacers" aria-hidden="true">
+      <div class="spacer" data-chapter="0"></div>
+      <div class="spacer" data-chapter="1"></div>
+      <div class="spacer" data-chapter="2"></div>
+      <div class="spacer" data-chapter="3"></div>
+      <div class="spacer" data-chapter="4"></div>
+      <div class="spacer" data-chapter="5"></div>
+      <div class="spacer" data-chapter="6"></div>
+    </div>
+
+    <!-- Chapter content — real, crisp DOM text (not WebGL text).
+         Default: static, stacked, always visible (fallback).
+         With .js-journey on <html>: fixed overlays, one active at a time. -->
+    <div class="chapters">
+
+      <section class="chapter" data-chapter="0" id="chapter-0">
+        <div class="chapter-inner">
+          <span class="eyebrow">00 / ARRIVAL</span>
+          <h1 class="display-huge">Daryll Gomas</h1>
+          <p class="lede">Cybersecurity professional. Technology enthusiast. Lifelong learner.</p>
+          <div class="hairline" aria-hidden="true"></div>
+          <p class="scroll-cue"><span class="scroll-cue-mark" aria-hidden="true"></span>Scroll</p>
+        </div>
+      </section>
+
+      <section class="chapter" data-chapter="1" id="chapter-1">
+        <div class="chapter-inner">
+          <span class="eyebrow">01 / SIGNAL</span>
+          <h2 class="display-lg">Who I Am</h2>
+          <p>I've always existed at the intersection of soul and technology. My father worked as a Sr. Engineer at IBM since the &rsquo;70s &mdash; later a reverend &mdash; and brought home cutting-edge tech before it reached the market. I grew up native to this digital land before it was even built.</p>
+          <p>That head start gave me a forward-looking perspective and a long, rewarding career I remain passionate about. At 51, I&rsquo;m more excited about what&rsquo;s coming than ever.</p>
+        </div>
+      </section>
+
+      <section class="chapter" data-chapter="2" id="chapter-2">
+        <div class="chapter-inner">
+          <span class="eyebrow">02 / SHIELD</span>
+          <h2 class="display-lg">CyberSecurity</h2>
+          <p>Consistently thinking in terms of attack surface and defense &mdash; a strong blue-team architecture brain, not just a checklist follower. 2FA enforcement across M365, SIEM implementation, vulnerability scanning architecture, zero-cloud AI inference for data control, and an incident-response mindset earned from real attacks.</p>
+          <span class="section-label">Verified Knowledge</span>
+          <ul class="cert-rows">
+            <li>Network+ (Udemy)</li>
+            <li>SOC Core Skills</li>
+            <li>Addigy Certification</li>
+            <li>Pre-Security</li>
+            <li>Linux Certification</li>
+            <li>TryHackMe &mdash; PenTest</li>
+            <li>Cyber Defense</li>
+            <li>Apple Certified Support Professional</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="chapter" data-chapter="3" id="chapter-3">
+        <div class="chapter-inner">
+          <span class="eyebrow">03 / SYNTHESIS</span>
+          <h2 class="display-lg">Systems, Automated</h2>
+          <p>Not just using AI &mdash; deploying it on infrastructure, building with it, thinking about where it goes next. LLM deployment on local hardware, multi-GPU inference servers, secure on-prem AI for data sovereignty, and AI-assisted automation across every workflow.</p>
+          <p>Namkuzu-da OS runs Claude Code as the system brain &mdash; voice control, eight automated pipelines, and agentic orchestration driving the whole stack.</p>
+        </div>
+      </section>
+
+      <section class="chapter" data-chapter="4" id="chapter-4">
+        <div class="chapter-inner chapter-inner--wide">
+          <span class="eyebrow">04 / ARTIFACTS</span>
+          <h2 class="display-lg">Selected Work</h2>
+          <ul class="artifact-rows">
+            <li class="artifact-row">
+              <a href="https://daryllgomas.github.io/Zen/" target="_blank" rel="noopener">
+                <span class="artifact-name">Zen</span>
+                <span class="artifact-desc">Interactive Zen meditation — breathing guide, sand garden, ambient sounds.</span>
+                <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+            <li class="artifact-row">
+              <a href="https://daryllgomas.github.io/Ancients/" target="_blank" rel="noopener">
+                <span class="artifact-name">Ancients</span>
+                <span class="artifact-desc">Interactive history timeline — WebGL cosmic portal, alternative civilization theories.</span>
+                <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+            <li class="artifact-row">
+              <a href="https://daryllgomas.github.io/BreakTheCode/" target="_blank" rel="noopener">
+                <span class="artifact-name">BreakTheCode</span>
+                <span class="artifact-desc">"Breaking Your Genetic Code" — immersive digital book on consciousness expansion.</span>
+                <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+            <li class="artifact-row artifact-row--static">
+              <span class="artifact-name">Namkuzu-da OS</span>
+              <span class="artifact-desc">AI-native operating system — Claude Code brain, voice control, 8 automated pipelines.</span>
+            </li>
+            <li class="artifact-row">
+              <a href="https://github.com/DaryllGomas" target="_blank" rel="noopener">
+                <span class="artifact-name">GitHub</span>
+                <span class="artifact-desc">Full archive of projects and experiments.</span>
+                <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="chapter" data-chapter="5" id="chapter-5">
+        <div class="chapter-inner chapter-inner--sparse">
+          <span class="eyebrow">05 / STILLNESS</span>
+          <blockquote class="pull-quote">Some call me an optimist, some call me a dreamer, but in the words of John Lennon &mdash; &ldquo;I know I&rsquo;m not the only one.&rdquo;</blockquote>
+        </div>
+      </section>
+
+      <section class="chapter" data-chapter="6" id="chapter-6">
+        <div class="chapter-inner">
+          <span class="eyebrow">06 / CONTACT</span>
+          <h2 class="display-lg">Let&rsquo;s Connect</h2>
+          <ul class="contact-rows">
+            <li><a href="mailto:daryll.gomas@gmail.com">daryll.gomas@gmail.com</a></li>
+            <li><a href="https://github.com/DaryllGomas" target="_blank" rel="noopener">GitHub &nbsp;/&nbsp; DaryllGomas</a></li>
+            <li><a href="https://www.linkedin.com/in/daryll-gomas" target="_blank" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://twitter.com/DaryllGomas" target="_blank" rel="noopener">X &nbsp;/&nbsp; @DaryllGomas</a></li>
+            <li><a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">bigpicsolutions.com</a></li>
+          </ul>
+          <p class="footnote">&copy; 2026 Daryll Gomas</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/breach.js"></script>
+  <script type="module" src="js/concierge.js"></script>
+</body>
+</html>
