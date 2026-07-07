@@ -37,11 +37,14 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
      is already settled, per spec — no new morph target). */
   const CHAPTERS = [
     { id: 0, morph: 'galaxy',  cam: { pos: [0.00, 0.20, 6.20], look: [0, 0.00, 0] } },
-    { id: 1, morph: 'mandala', cam: { pos: [0.00, 0.35, 5.30], look: [0, 0.05, 0] } },
+    /* mandala + enso lie in the XZ plane (like the galaxy disc) — the
+       camera cranes overhead for those chapters so the geometry reads
+       face-on instead of edge-on. Keyhole is upright (XY), level cam. */
+    { id: 1, morph: 'mandala', cam: { pos: [0.00, 5.60, 1.90], look: [-0.70, 0.00, 0] } },
     { id: 2, morph: 'keyhole', cam: { pos: [0.55, 0.10, 4.60], look: [0, 0.10, 0] } },
     { id: 3, morph: 'network', cam: { pos: [-0.60, 0.30, 4.90], look: [0, 0.00, 0] } },
     { id: 4, morph: null,      cam: { pos: [0.00, 0.15, 7.60], look: [0, 0.00, 0] } },
-    { id: 5, morph: 'enso',    cam: { pos: [0.30, 0.00, 4.10], look: [0, 0.00, 0] } },
+    { id: 5, morph: 'enso',    cam: { pos: [0.20, 4.40, 1.60], look: [-0.50, 0.00, 0] } },
     { id: 6, morph: 'core',    cam: { pos: [0.00, 0.10, 5.50], look: [0, 0.00, 0] } },
   ];
 

@@ -130,7 +130,8 @@ function setupPointer() {
 function loop() {
   rafId = requestAnimationFrame(loop);
 
-  const dt = Math.min(clock.getDelta(), 0.1);
+  const rawDt = clock.getDelta();
+  const dt = Math.min(rawDt, 0.1);
   const elapsed = clock.getElapsedTime();
 
   particleSystem.update(dt, elapsed);
@@ -140,11 +141,15 @@ function loop() {
   camera.lookAt(camera.userData.lookTarget);
 
   renderer.render(scene, camera);
-  fpsWatchdog(dt);
+  fpsWatchdog(rawDt);
 }
 
 function fpsWatchdog(dt) {
   if (watchdogTriggered || dt <= 0) return;
+  // Frame gaps > 250ms are browser RAF throttling (occluded window) or
+  // one-off hitches, not sustained GPU load — don't let them poison the
+  // average and falsely halve quality.
+  if (dt > 0.25) return;
   fpsWindow.push(1 / dt);
   if (fpsWindow.length > 120) fpsWindow.shift();
   if (fpsWindow.length >= 120) {
