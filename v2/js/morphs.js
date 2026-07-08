@@ -402,9 +402,9 @@ export function shieldStructure() {
 
 export function shield(count) {
   return pointsFromStructure(shieldStructure(), count, {
-    segFrac: 0.3, auraFrac: 0.44, dotFrac: 0,
+    segFrac: 0.12, auraFrac: 0.34, dotFrac: 0,
     jitter: 0.012, depthJitter: 0.09,
-    dust: { rMin: 1.6, rMax: 3.4, yAmp: 2.6, behind: true },
+    dust: { rMin: 1.8, rMax: 4.6, yAmp: 3.4, behind: true },
   });
 }
 
@@ -509,9 +509,9 @@ export function osmapStructure() {
 
 export function osmap(count) {
   return pointsFromStructure(osmapStructure(), count, {
-    segFrac: 0.26, auraFrac: 0.34, dotFrac: 0.28,
+    segFrac: 0.18, auraFrac: 0.3, dotFrac: 0.28,
     jitter: 0.012, depthJitter: 0.09,
-    dust: { rMin: 2.8, rMax: 4.2, yAmp: 2.8, behind: true },
+    dust: { rMin: 3.0, rMax: 4.8, yAmp: 3.0, behind: true },
   });
 }
 
@@ -607,12 +607,15 @@ export function chipStructure(explode) {
     }
   }
 
-  // dot emitters: lattices, bump/ball rows (explode lift baked into y)
+  // dot emitters: lattices, bump/ball rows (explode lift baked into y).
+  // NOTE: cumulative selection weight lives in `cum` — lattice emitters
+  // already use `w` for their WIDTH, and overwriting it scattered the
+  // compute-die lattice across ±19 world units.
   const dots = [];
   let dotWeight = 0;
   function emitter(w, params) {
     dotWeight += w;
-    dots.push({ ...params, w: dotWeight, y: params.y + lift(params.layer) });
+    dots.push({ ...params, cum: dotWeight, y: params.y + lift(params.layer) });
   }
   // die top lattice — dense silicon texture
   emitter(38, { kind: 'lattice', cx: 0, cz: 0, w: 0.82, d: 0.82, y: -0.10, nx: 16, nz: 16, layer: 'die' });
@@ -660,7 +663,7 @@ function buildChip(count, explode) {
       // structured dots
       const target = rng() * dotWeight;
       let d = dots[0];
-      for (const cand of dots) { if (cand.w >= target) { d = cand; break; } }
+      for (const cand of dots) { if (cand.cum >= target) { d = cand; break; } }
       if (d.kind === 'lattice') {
         const ix = (rng() * d.nx) | 0, iz = (rng() * d.nz) | 0;
         arr[i3] = d.cx - d.w / 2 + (ix + 0.5) * (d.w / d.nx) + (rng() - 0.5) * 0.006;
@@ -690,52 +693,58 @@ export function chip(count) { return buildChip(count, 0); }
 export function chipExploded(count) { return buildChip(count, 1); }
 
 /* ---------- 5. enso — hand-drawn zen circle (stillness chapter) ----------
-   A single clean brush stroke: thin ring with subtle pressure
-   variation, density-tapered tails with a gentle inward curl, and a
-   few ink flecks near the opening. */
+   A brush stroke with an honest opening: tight luminous core inside a
+   soft brush body, density-tapered tails with a slight curl, a few
+   ink specks just past the stroke ends, starfield below the plane.
+   Density budgeted — the old version rammed 97% of all particles into
+   ~11 units of arc and read as a solid tube. */
 export function enso(count) {
   const arr = new Float32Array(count * 3);
-  const gap = 42 * (Math.PI / 180);
+  const gap = 52 * (Math.PI / 180);
   const start = Math.PI * 0.5 + gap / 2;
   const sweep = Math.PI * 2 - gap;
   const R = 1.75;
-  const thickness = 0.13;
 
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
+    const pick = Math.random();
 
-    if (Math.random() < 0.025) {
-      // ink flecks scattered near the stroke opening
-      const a = Math.PI * 0.5 + (Math.random() - 0.5) * 1.2;
-      const r = R * (0.82 + Math.random() * 0.34);
-      arr[i3] = Math.cos(a) * r;
-      arr[i3 + 2] = Math.sin(a) * r;
+    if (pick < 0.02) {
+      // sparse ink specks just past the two stroke ends
+      const end = Math.random() < 0.5 ? 0 : 1;
+      const theta = start + sweep * end + (end ? 1 : -1) * Math.random() * 0.5;
+      const r = R * (0.9 + Math.random() * 0.2);
+      arr[i3] = Math.cos(theta) * r;
+      arr[i3 + 2] = Math.sin(theta) * r;
       arr[i3 + 1] = (Math.random() - 0.5) * 0.05;
-      continue;
+    } else if (pick < 0.62) {
+      // the stroke: tight core (< 0.28) or soft brush body around it
+      const tight = pick < 0.28;
+      const th = tight ? 0.05 : 0.2;
+      let t = Math.random();
+      const tail = Math.min(t, 1 - t);
+      if (tail < 0.1 && Math.random() > tail / 0.1) t = 0.1 + Math.random() * 0.8;
+
+      let theta = start + sweep * t;
+      let r = R + (Math.random() - 0.5) * th * (0.65 + 0.35 * Math.sin(t * Math.PI * 4));
+      const tailT = Math.min(t, 1 - t);
+      if (tailT < 0.07) {
+        const amt = (0.07 - tailT) / 0.07;
+        const dir = t < 0.5 ? -1 : 1;
+        theta += amt * dir * 0.5;
+        r *= 1 - amt * 0.15;
+      }
+      arr[i3] = Math.cos(theta) * r;
+      arr[i3 + 1] = (Math.random() - 0.5) * th * 0.4;
+      arr[i3 + 2] = Math.sin(theta) * r;
+    } else {
+      // starfield below the stroke plane (the crane camera looks down)
+      const rr = 2.2 + Math.random() * 1.9;
+      const theta = Math.random() * Math.PI * 2;
+      arr[i3] = Math.cos(theta) * rr;
+      arr[i3 + 1] = -0.5 - Math.random() * 1.6;
+      arr[i3 + 2] = Math.sin(theta) * rr;
     }
-
-    // density taper: resample toward mid-stroke so the tails thin out
-    let t = Math.random();
-    const tail = Math.min(t, 1 - t);
-    if (tail < 0.1 && Math.random() > tail / 0.1) {
-      t = 0.1 + Math.random() * 0.8;
-    }
-
-    let theta = start + sweep * t;
-    let r = R + (Math.random() - 0.5) * thickness * (0.65 + 0.35 * Math.sin(t * Math.PI * 4));
-
-    // taper + gentle inward curl at the two tail ends
-    const tailT = Math.min(t, 1 - t);
-    if (tailT < 0.07) {
-      const amt = (0.07 - tailT) / 0.07;
-      const dir = t < 0.5 ? -1 : 1;
-      theta += amt * dir * 0.9;
-      r *= 1 - amt * 0.22;
-    }
-
-    arr[i3] = Math.cos(theta) * r;
-    arr[i3 + 1] = (Math.random() - 0.5) * thickness * 0.4;
-    arr[i3 + 2] = Math.sin(theta) * r;
   }
   return arr;
 }
@@ -828,7 +837,7 @@ export function ensoStructure() {
   // particle stroke wobbles and curls around it; a wobbling skeleton
   // fights the brush instead of anchoring it.
   const st = newStructure();
-  const gap = 42 * (Math.PI / 180);
+  const gap = 52 * (Math.PI / 180);
   const start = Math.PI * 0.5 + gap / 2;
   const sweep = Math.PI * 2 - gap;
   const pts = [];
@@ -840,6 +849,7 @@ export function ensoStructure() {
   addPolyline(st, pts);
   return st;
 }
+/* keep the skeleton's opening in sync with enso()'s 52° gap */
 
 export function beaconStructure() {
   const st = newStructure();
