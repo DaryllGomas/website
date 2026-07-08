@@ -37,10 +37,10 @@ const VERTEX_SHADER = /* glsl */ `
     // gentle ambient drift — amplitude must stay well below the finest
     // structural detail in the morph targets (rings/petals jitter ~0.01),
     // or the drift smears the geometry into fog. Life, not blur.
-    float driftT = uTime * 0.12 + aSeed * 6.2831853;
-    pos.x += sin(driftT + aSeed * 3.1) * 0.028;
-    pos.y += cos(driftT * 1.3 + aSeed * 5.7) * 0.028;
-    pos.z += sin(driftT * 0.7 + aSeed * 2.4) * 0.02;
+    float driftT = uTime * 0.1 + aSeed * 6.2831853;
+    pos.x += sin(driftT + aSeed * 3.1) * 0.014;
+    pos.y += cos(driftT * 1.3 + aSeed * 5.7) * 0.014;
+    pos.z += sin(driftT * 0.7 + aSeed * 2.4) * 0.01;
 
     // radial breathing pulse — ramped in/out per chapter via uPulseAmt
     float pulse = 1.0 + sin(uTime * 0.6) * 0.035 * uPulseAmt;
@@ -80,9 +80,11 @@ const FRAGMENT_SHADER = /* glsl */ `
     float d = length(c);
     // Star profile: bright crisp core + faint wide halo. A single soft
     // falloff (the old profile) turns 200k additive points into bloom
-    // soup; the hard core is what keeps fine geometry legible.
-    float core = smoothstep(0.18, 0.05, d);
-    float halo = smoothstep(0.5, 0.14, d) * 0.3;
+    // soup; the hard core is what keeps fine geometry legible. The
+    // vector line layer (lines.js) carries the sharpness at rest, so
+    // the halo stays subtle.
+    float core = smoothstep(0.16, 0.04, d);
+    float halo = smoothstep(0.5, 0.14, d) * 0.18;
     float alpha = core + halo;
     if (alpha < 0.02) discard;
 
@@ -231,6 +233,9 @@ export function createParticleSystem(count, initialTarget = 'galaxy') {
     reduceQuality,
     get currentTarget() {
       return currentTargetName;
+    },
+    get isAnimating() {
+      return animating;
     },
   };
 }

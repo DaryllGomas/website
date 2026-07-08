@@ -9,6 +9,7 @@
 
 import * as THREE from 'three';
 import { createParticleSystem } from './particles.js';
+import { createLineLayer } from './lines.js';
 import { initJourney } from './journey.js';
 import { initArtifacts } from './artifacts.js';
 
@@ -37,7 +38,7 @@ function detectWebGL() {
 
 function pickTier() {
   const w = window.innerWidth;
-  const rawDpr = window.devicePixelRatio || 1;
+  const rawDpr = Math.max(window.devicePixelRatio || 1, 1); // floor: supersample when zoomed out
   if (w < 768) {
     return { count: 50000, dpr: Math.min(rawDpr, 1.5), mobile: true };
   }
@@ -50,9 +51,16 @@ let renderer = null;
 let scene = null;
 let camera = null;
 let particleSystem = null;
+let lineLayer = null;
 let journeyAPI = null;
 let clock = null;
 let rafId = null;
+
+// Floor at 1: when the browser is zoomed out devicePixelRatio drops
+// below 1 — rendering at ratio 1 supersamples instead of going soft.
+function pickDPR() {
+  return Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
+}
 
 const fpsWindow = [];
 let watchdogTriggered = false;
@@ -79,6 +87,10 @@ function buildScene(tier) {
   particleSystem.setDPR(tier.dpr);
   scene.add(particleSystem.object3D);
 
+  // vector ink layer rides inside the particle object so rotation matches
+  lineLayer = createLineLayer(particleSystem);
+  particleSystem.object3D.add(lineLayer.object3D);
+
   clock = new THREE.Clock();
 }
 
@@ -88,7 +100,7 @@ function onResize() {
   camera.updateProjectionMatrix();
   // Browser zoom changes devicePixelRatio — a stale ratio renders the
   // canvas at the wrong resolution and the whole scene goes soft.
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = pickDPR();
   renderer.setPixelRatio(dpr);
   if (particleSystem) particleSystem.setDPR(dpr);
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -141,6 +153,7 @@ function loop() {
   const elapsed = clock.getElapsedTime();
 
   particleSystem.update(dt, elapsed);
+  if (lineLayer) lineLayer.update(dt);
   if (journeyAPI && typeof journeyAPI.update === 'function') {
     journeyAPI.update(dt, elapsed);
   }
@@ -203,7 +216,7 @@ function renderStaticFrame() {
   camera.userData.lookTarget = new THREE.Vector3(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const dpr = pickDPR();
   renderer.setPixelRatio(dpr);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
@@ -215,13 +228,18 @@ function renderStaticFrame() {
   particleSystem.update(0, 2.0); // settle shimmer/time uniforms for a pleasant static look
   scene.add(particleSystem.object3D);
 
+  // full-strength vector ink for the hero — this is the crisp layer
+  lineLayer = createLineLayer(particleSystem);
+  particleSystem.object3D.add(lineLayer.object3D);
+  lineLayer.forceShow('mandala');
+
   frameStaticCamera();
   renderer.render(scene, camera);
   root.classList.add('mandala-active');
 
   window.addEventListener('resize', () => {
     frameStaticCamera();
-    const newDpr = Math.min(window.devicePixelRatio || 1, 2);
+    const newDpr = pickDPR();
     renderer.setPixelRatio(newDpr);
     particleSystem.setDPR(newDpr);
     renderer.setSize(window.innerWidth, window.innerHeight);

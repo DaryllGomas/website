@@ -19,6 +19,134 @@ function mulberry32(seed) {
   };
 }
 
+/* ============================================================
+   Shared structure infrastructure — a shape is a list of straight
+   segments (its vector skeleton) plus dot emitters. Particles are
+   sampled FROM the skeleton (length-weighted, small jitter) and the
+   very same skeleton renders as crisp 1px GPU lines via lines.js —
+   SVG-sharp at rest, particle-alive in motion.
+   ============================================================ */
+
+function addSeg(st, x1, y1, z1, x2, y2, z2) {
+  const len = Math.hypot(x2 - x1, y2 - y1, z2 - z1);
+  st.totalLen += len;
+  st.segs.push([x1, y1, z1, x2, y2, z2, st.totalLen]);
+}
+
+function addPolyline(st, pts, closed = false) {
+  for (let i = 1; i < pts.length; i++) {
+    addSeg(st, pts[i - 1][0], pts[i - 1][1], pts[i - 1][2], pts[i][0], pts[i][1], pts[i][2]);
+  }
+  if (closed && pts.length > 2) {
+    const a = pts[pts.length - 1], b = pts[0];
+    addSeg(st, a[0], a[1], a[2], b[0], b[1], b[2]);
+  }
+}
+
+/* circle in the XZ plane (y via relief fn) or XY plane */
+function addCircle(st, R, n, opts = {}) {
+  const { plane = 'xz', y = 0, relief = null, cx = 0, cy = 0 } = opts;
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    if (plane === 'xz') {
+      pts.push([Math.cos(a) * R, relief ? relief(R) : y, Math.sin(a) * R]);
+    } else {
+      pts.push([cx + Math.cos(a) * R, cy + Math.sin(a) * R, 0]);
+    }
+  }
+  addPolyline(st, pts);
+}
+
+/* radially-oriented ellipse outline (petal) in the XZ plane */
+function addPetal(st, k, petals, rc, a, b, n, relief) {
+  const phi = (k / petals) * Math.PI * 2;
+  const cosP = Math.cos(phi), sinP = Math.sin(phi);
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const s = (i / n) * Math.PI * 2;
+    const lx = Math.cos(s) * a, ly = Math.sin(s) * b;
+    const r = rc + lx;
+    const x = cosP * r - sinP * ly;
+    const z = sinP * r + cosP * ly;
+    pts.push([x, relief ? relief(Math.hypot(x, z)) : 0, z]);
+  }
+  addPolyline(st, pts);
+}
+
+function newStructure() {
+  return { segs: [], totalLen: 0, dots: [], dotWeight: 0 };
+}
+
+function addDots(st, w, params) {
+  st.dotWeight += w;
+  st.dots.push({ w: st.dotWeight, ...params });
+}
+
+/**
+ * Sample `count` particles from a structure: fractions of skeleton
+ * segments (length-weighted), dot emitters, and ambient dust.
+ */
+function pointsFromStructure(st, count, opts = {}) {
+  const {
+    rng = Math.random,
+    segFrac = 0.78, dotFrac = 0.16,
+    jitter = 0.012, depthJitter = 0,
+    dust = null, // {rMin, rMax, yAmp}
+  } = opts;
+  const arr = new Float32Array(count * 3);
+  const segEnd = segFrac, dotEnd = segFrac + dotFrac;
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    const pick = rng();
+
+    if (pick < segEnd && st.segs.length) {
+      const target = rng() * st.totalLen;
+      let lo = 0, hi = st.segs.length - 1;
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (st.segs[mid][6] < target) lo = mid + 1; else hi = mid; }
+      const s = st.segs[lo];
+      const t = rng();
+      arr[i3] = s[0] + (s[3] - s[0]) * t + (rng() - 0.5) * jitter;
+      arr[i3 + 1] = s[1] + (s[4] - s[1]) * t + (rng() - 0.5) * jitter;
+      arr[i3 + 2] = s[2] + (s[5] - s[2]) * t + (rng() - 0.5) * (depthJitter || jitter);
+    } else if (pick < dotEnd && st.dots.length) {
+      const target = rng() * st.dotWeight;
+      let d = st.dots[0];
+      for (const cand of st.dots) { if (cand.w >= target) { d = cand; break; } }
+      const a = rng() * Math.PI * 2;
+      const rr = Math.pow(rng(), 1.5) * d.spread;
+      arr[i3] = d.x + Math.cos(a) * rr;
+      arr[i3 + 1] = d.y + (rng() - 0.5) * (d.ySpread || 0.01);
+      arr[i3 + 2] = d.z + Math.sin(a) * rr;
+    } else if (dust) {
+      const r = dust.rMin + rng() * (dust.rMax - dust.rMin);
+      const theta = rng() * Math.PI * 2;
+      arr[i3] = Math.cos(theta) * r;
+      arr[i3 + 1] = (rng() - 0.5) * dust.yAmp;
+      arr[i3 + 2] = Math.sin(theta) * r;
+    } else if (st.segs.length) {
+      // no dust configured — put the remainder on the skeleton
+      const s = st.segs[(rng() * st.segs.length) | 0];
+      const t = rng();
+      arr[i3] = s[0] + (s[3] - s[0]) * t + (rng() - 0.5) * jitter;
+      arr[i3 + 1] = s[1] + (s[4] - s[1]) * t + (rng() - 0.5) * jitter;
+      arr[i3 + 2] = s[2] + (s[5] - s[2]) * t + (rng() - 0.5) * (depthJitter || jitter);
+    }
+  }
+  return arr;
+}
+
+/* skeleton → flat Float32Array of segment endpoints for LineSegments */
+function segsToPositions(st) {
+  const out = new Float32Array(st.segs.length * 6);
+  st.segs.forEach((s, i) => {
+    out[i * 6] = s[0]; out[i * 6 + 1] = s[1]; out[i * 6 + 2] = s[2];
+    out[i * 6 + 3] = s[3]; out[i * 6 + 4] = s[4]; out[i * 6 + 5] = s[5];
+  });
+  return out;
+}
+
 /* ---------- generic reusable shape-from-canvas sampler ---------- */
 /**
  * Draws an arbitrary silhouette on an offscreen 2D canvas, samples
@@ -211,145 +339,143 @@ export function mandala(count) {
 }
 
 /* ---------- 3. shield — SHIELD / cybersecurity chapter ----------
-   A heater shield drawn as strokes (line art, matching the mandala's
-   language): outer outline, inner offset outline, and a circuit-node
-   emblem — a center ring with four traces ending in node dots. */
+   A heater shield as a vector skeleton (upright, XY plane): outer +
+   inner outlines, circuit-node emblem (center ring, four traces,
+   small node rings). Particles sample the skeleton; the same
+   skeleton renders as crisp lines. */
+function quadPts(p0, c, p1, n) {
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    const mt = 1 - t;
+    pts.push([
+      mt * mt * p0[0] + 2 * mt * t * c[0] + t * t * p1[0],
+      mt * mt * p0[1] + 2 * mt * t * c[1] + t * t * p1[1],
+      0,
+    ]);
+  }
+  return pts;
+}
+
+export function shieldStructure() {
+  const st = newStructure();
+  const W = 0.85, TOP = 0.98, WAIST = 0.21, TIP = -1.21;
+
+  for (const s of [1.0, 0.84]) {
+    const w = W * s, top = TOP * s, waist = WAIST * s, tip = TIP * s;
+    const outline = [
+      ...quadPts([-w, top], [0, top + 0.09 * s], [w, top], 22),
+      ...quadPts([w, top], [w * 0.92, waist], [w * 0.73, waist - 0.42 * s], 14),
+      ...quadPts([w * 0.73, waist - 0.42 * s], [w * 0.45, tip + 0.31 * s], [0, tip], 18),
+      ...quadPts([0, tip], [-w * 0.45, tip + 0.31 * s], [-w * 0.73, waist - 0.42 * s], 18),
+      ...quadPts([-w * 0.73, waist - 0.42 * s], [-w * 0.92, waist], [-w, top], 14),
+    ];
+    addPolyline(st, outline);
+  }
+
+  // circuit-node emblem
+  addCircle(st, 0.22, 44, { plane: 'xy' });
+  addCircle(st, 0.035, 10, { plane: 'xy' });
+  for (let k = 0; k < 4; k++) {
+    const a = Math.PI / 4 + k * (Math.PI / 2);
+    addSeg(st,
+      Math.cos(a) * 0.22, Math.sin(a) * 0.22, 0,
+      Math.cos(a) * 0.54, Math.sin(a) * 0.54, 0);
+    addCircle(st, 0.04, 12, { plane: 'xy', cx: Math.cos(a) * 0.54, cy: Math.sin(a) * 0.54 });
+  }
+  return st;
+}
+
 export function shield(count) {
-  return sampleShapeFromCanvas((ctx, size) => {
-    const cx = size * 0.5;
-    const cy = size * 0.48;
-    ctx.strokeStyle = '#fff';
-    ctx.fillStyle = '#fff';
-    ctx.lineCap = 'round';
-
-    const outline = (s) => {
-      const w = 165 * s;
-      const top = cy - 190 * s;
-      const waist = cy - 40 * s;
-      const tip = cy + 235 * s;
-      ctx.beginPath();
-      ctx.moveTo(cx - w, top);
-      ctx.quadraticCurveTo(cx, top - 18 * s, cx + w, top);
-      ctx.quadraticCurveTo(cx + w * 0.92, waist, cx + w * 0.73, waist + 82 * s);
-      ctx.quadraticCurveTo(cx + w * 0.45, tip - 60 * s, cx, tip);
-      ctx.quadraticCurveTo(cx - w * 0.45, tip - 60 * s, cx - w * 0.73, waist + 82 * s);
-      ctx.quadraticCurveTo(cx - w * 0.92, waist, cx - w, top);
-      ctx.stroke();
-    };
-
-    ctx.lineWidth = 7;
-    outline(1.0);
-    ctx.lineWidth = 4;
-    outline(0.84);
-
-    // circuit-node emblem
-    const er = 42;
-    ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.arc(cx, cy, er, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.lineWidth = 4;
-    for (let k = 0; k < 4; k++) {
-      const a = Math.PI / 4 + k * (Math.PI / 2);
-      const x1 = cx + Math.cos(a) * er;
-      const y1 = cy + Math.sin(a) * er;
-      const x2 = cx + Math.cos(a) * (er + 62);
-      const y2 = cy + Math.sin(a) * (er + 62);
-      ctx.beginPath();
-      ctx.moveTo(x1, y1);
-      ctx.lineTo(x2, y2);
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(x2, y2, 7, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.beginPath();
-    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-    ctx.fill();
-  }, count, 640, 3.3, 0.14);
+  return pointsFromStructure(shieldStructure(), count, {
+    segFrac: 0.94, dotFrac: 0,
+    jitter: 0.012, depthJitter: 0.09,
+    dust: { rMin: 1.4, rMax: 2.3, yAmp: 2.4 },
+  });
 }
 
 /* ---------- 3b. glyphs — ARTIFACTS chapter ----------
-   An ancient ring of runes: two boundary circles, 14 abstract glyphs
-   around the ring, a petroglyph spiral at the center. Drawn flat in
-   the XZ plane (camera cranes overhead) and seeded so the "script"
-   is the same on every visit. */
-export function glyphs(count) {
+   An ancient ring of runes as a flat XZ vector skeleton: two boundary
+   circles, 14 seeded abstract glyphs on the band, a petroglyph spiral
+   at the center, four radial ticks. Same seed every visit — the
+   "script" is stable. */
+export function glyphsStructure() {
   const rng = mulberry32(0xa27157);
-  const arr = sampleShapeFromCanvas((ctx, size) => {
-    const cx = size * 0.5;
-    const cy = size * 0.5;
-    ctx.strokeStyle = '#fff';
-    ctx.fillStyle = '#fff';
-    ctx.lineCap = 'round';
+  const st = newStructure();
+  const Y = 0.01;
 
-    // ring boundaries
-    ctx.lineWidth = 3;
-    ctx.beginPath(); ctx.arc(cx, cy, 356, 0, Math.PI * 2); ctx.stroke();
-    ctx.beginPath(); ctx.arc(cx, cy, 296, 0, Math.PI * 2); ctx.stroke();
+  addCircle(st, 2.13, 170, { y: Y });
+  addCircle(st, 1.77, 150, { y: Y });
 
-    // 14 glyph slots on the band between the circles
-    const glyphR = 326;
-    for (let g = 0; g < 14; g++) {
-      const a = (g / 14) * Math.PI * 2;
-      ctx.save();
-      ctx.translate(cx + Math.cos(a) * glyphR, cy + Math.sin(a) * glyphR);
-      ctx.rotate(a + Math.PI / 2);
-      ctx.lineWidth = 5;
-      const strokes = 2 + ((rng() * 3) | 0);
-      for (let s = 0; s < strokes; s++) {
-        const kind = (rng() * 5) | 0;
-        const ox = (rng() - 0.5) * 26;
-        if (kind === 0) {           // vertical bar
-          ctx.beginPath(); ctx.moveTo(ox, -20); ctx.lineTo(ox, 20); ctx.stroke();
-        } else if (kind === 1) {    // cross bar
-          const oy = (rng() - 0.5) * 30;
-          ctx.beginPath(); ctx.moveTo(-16, oy); ctx.lineTo(16, oy); ctx.stroke();
-        } else if (kind === 2) {    // diagonal
-          const d = rng() < 0.5 ? 1 : -1;
-          ctx.beginPath(); ctx.moveTo(-14 * d, -18); ctx.lineTo(14 * d, 18); ctx.stroke();
-        } else if (kind === 3) {    // arc
-          ctx.beginPath();
-          ctx.arc(ox * 0.5, 0, 13, rng() * Math.PI, rng() * Math.PI + Math.PI * (0.8 + rng() * 0.9));
-          ctx.stroke();
-        } else {                    // dot
-          ctx.beginPath(); ctx.arc(ox, (rng() - 0.5) * 30, 4.5, 0, Math.PI * 2); ctx.fill();
+  // 14 glyphs on the band; local frame: T = tangent, Rd = radial
+  const glyphR = 1.95;
+  for (let g = 0; g < 14; g++) {
+    const a = (g / 14) * Math.PI * 2;
+    const cx = Math.cos(a) * glyphR, cz = Math.sin(a) * glyphR;
+    const Rd = [Math.cos(a), Math.sin(a)];
+    const T = [-Math.sin(a), Math.cos(a)];
+    const P = (u, v) => [cx + T[0] * u + Rd[0] * v, Y, cz + T[1] * u + Rd[1] * v];
+
+    const strokes = 2 + ((rng() * 3) | 0);
+    for (let s = 0; s < strokes; s++) {
+      const kind = (rng() * 5) | 0;
+      const ou = (rng() - 0.5) * 0.156;
+      if (kind === 0) {          // bar along the radial axis
+        const p1 = P(ou, -0.12), p2 = P(ou, 0.12);
+        addSeg(st, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2]);
+      } else if (kind === 1) {   // cross bar
+        const ov = (rng() - 0.5) * 0.18;
+        const p1 = P(-0.096, ov), p2 = P(0.096, ov);
+        addSeg(st, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2]);
+      } else if (kind === 2) {   // diagonal
+        const d = rng() < 0.5 ? 1 : -1;
+        const p1 = P(-0.084 * d, -0.108), p2 = P(0.084 * d, 0.108);
+        addSeg(st, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2]);
+      } else if (kind === 3) {   // arc
+        const a0 = rng() * Math.PI;
+        const sweep = Math.PI * (0.8 + rng() * 0.9);
+        const pts = [];
+        for (let i = 0; i <= 10; i++) {
+          const aa = a0 + (i / 10) * sweep;
+          pts.push(P(ou * 0.5 + Math.cos(aa) * 0.078, Math.sin(aa) * 0.078));
         }
+        addPolyline(st, pts);
+      } else {                   // small ring "dot"
+        const ov = (rng() - 0.5) * 0.18;
+        const pts = [];
+        for (let i = 0; i <= 8; i++) {
+          const aa = (i / 8) * Math.PI * 2;
+          pts.push(P(ou + Math.cos(aa) * 0.027, ov + Math.sin(aa) * 0.027));
+        }
+        addPolyline(st, pts);
       }
-      ctx.restore();
     }
-
-    // center petroglyph spiral
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    for (let t = 0; t <= 1.001; t += 0.01) {
-      const a = t * Math.PI * 6;
-      const r = 14 + t * 96;
-      const x = cx + Math.cos(a) * r;
-      const y = cy + Math.sin(a) * r;
-      if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    // four radial ticks between spiral and ring
-    ctx.lineWidth = 3;
-    for (let k = 0; k < 4; k++) {
-      const a = Math.PI / 4 + k * (Math.PI / 2);
-      ctx.beginPath();
-      ctx.moveTo(cx + Math.cos(a) * 150, cy + Math.sin(a) * 150);
-      ctx.lineTo(cx + Math.cos(a) * 240, cy + Math.sin(a) * 240);
-      ctx.stroke();
-    }
-  }, count, 768, 4.6, 0.14);
-
-  // sampler emits upright XY — lay the ring flat into XZ for the crane cam
-  for (let i = 0; i < count; i++) {
-    const i3 = i * 3;
-    const y = arr[i3 + 1];
-    arr[i3 + 1] = arr[i3 + 2] * 0.6 + (Math.random() - 0.5) * 0.02;
-    arr[i3 + 2] = -y;
   }
-  return arr;
+
+  // center petroglyph spiral
+  const spiral = [];
+  for (let i = 0; i <= 100; i++) {
+    const t = i / 100;
+    const a = t * Math.PI * 6;
+    const r = 0.084 + t * 0.575;
+    spiral.push([Math.cos(a) * r, Y, Math.sin(a) * r]);
+  }
+  addPolyline(st, spiral);
+
+  // four radial ticks between spiral and band
+  for (let k = 0; k < 4; k++) {
+    const a = Math.PI / 4 + k * (Math.PI / 2);
+    addSeg(st, Math.cos(a) * 0.9, Y, Math.sin(a) * 0.9, Math.cos(a) * 1.44, Y, Math.sin(a) * 1.44);
+  }
+  return st;
+}
+
+export function glyphs(count) {
+  return pointsFromStructure(glyphsStructure(), count, {
+    segFrac: 0.9, dotFrac: 0,
+    jitter: 0.012,
+    dust: { rMin: 2.3, rMax: 2.8, yAmp: 0.16 },
+  });
 }
 
 /* ---------- 4. chip — SYNTHESIS chapter: CoWoS superchip ----------
@@ -360,8 +486,7 @@ export function glyphs(count) {
    style. Both variants use the SAME seeded RNG so particle i belongs
    to the same component in both — morphing chipExploded → chip makes
    the parts literally slide together into the assembly. */
-function buildChip(count, explode) {
-  const rng = mulberry32(0xc0405);
+export function chipStructure(explode) {
   const e = explode;
 
   // explode lift per layer (world units at e=1)
@@ -421,10 +546,13 @@ function buildChip(count, explode) {
     }
   }
 
-  // dot emitters: lattices, bump/ball rows
+  // dot emitters: lattices, bump/ball rows (explode lift baked into y)
   const dots = [];
   let dotWeight = 0;
-  function emitter(w, params) { dotWeight += w; dots.push({ w: dotWeight, ...params }); }
+  function emitter(w, params) {
+    dotWeight += w;
+    dots.push({ ...params, w: dotWeight, y: params.y + lift(params.layer) });
+  }
   // die top lattice — dense silicon texture
   emitter(38, { kind: 'lattice', cx: 0, cz: 0, w: 0.82, d: 0.82, y: -0.10, nx: 16, nz: 16, layer: 'die' });
   // HBM top lattices
@@ -441,6 +569,13 @@ function buildChip(count, explode) {
   // solder balls under the substrate, two front rows
   emitter(9, { kind: 'row', x1: -1.35, z1: 0.86, x2: 1.35, z2: 0.86, y: -0.70, n: 26, layer: 'solder' });
   emitter(9, { kind: 'row', x1: -1.35, z1: 0.7, x2: 1.35, z2: 0.7, y: -0.70, n: 26, layer: 'solder' });
+
+  return { segs, totalLen, dots, dotWeight };
+}
+
+function buildChip(count, explode) {
+  const rng = mulberry32(0xc0405);
+  const { segs, totalLen, dots, dotWeight } = chipStructure(explode);
 
   const arr = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
@@ -462,17 +597,16 @@ function buildChip(count, explode) {
       const target = rng() * dotWeight;
       let d = dots[0];
       for (const cand of dots) { if (cand.w >= target) { d = cand; break; } }
-      const dy = lift(d.layer);
       if (d.kind === 'lattice') {
         const ix = (rng() * d.nx) | 0, iz = (rng() * d.nz) | 0;
         arr[i3] = d.cx - d.w / 2 + (ix + 0.5) * (d.w / d.nx) + (rng() - 0.5) * 0.006;
-        arr[i3 + 1] = d.y + dy + (rng() - 0.5) * 0.006;
+        arr[i3 + 1] = d.y + (rng() - 0.5) * 0.006;
         arr[i3 + 2] = d.cz - d.d / 2 + (iz + 0.5) * (d.d / d.nz) + (rng() - 0.5) * 0.006;
       } else {
         const k = (rng() * d.n) | 0;
         const t = (k + 0.5) / d.n;
         arr[i3] = d.x1 + (d.x2 - d.x1) * t + (rng() - 0.5) * 0.006;
-        arr[i3 + 1] = d.y + dy + (rng() - 0.5) * 0.006;
+        arr[i3 + 1] = d.y + (rng() - 0.5) * 0.006;
         arr[i3 + 2] = d.z1 + (d.z2 - d.z1) * t + (rng() - 0.5) * 0.006;
       }
     } else {
@@ -598,4 +732,71 @@ export function beacon(count) {
   return arr;
 }
 
+/* ============================================================
+   Vector skeletons for shapes whose particle generators are custom
+   (mandala / enso / beacon keep their handcrafted distributions;
+   these skeletons trace the same geometry for the line layer).
+   Constants MUST match the generators above.
+   ============================================================ */
+const mandalaRelief = (r) => 0.06 * Math.sin(r * 2.4);
+
+export function mandalaStructure() {
+  const st = newStructure();
+  for (const R of [0.3, 1.02, 2.24, 2.34]) {
+    addCircle(st, R, R > 2 ? 170 : 110, { relief: mandalaRelief });
+  }
+  for (let k = 0; k < 8; k++) addPetal(st, k, 8, 0.62, 0.34, 0.16, 56, mandalaRelief);
+  for (let k = 0; k < 12; k++) {
+    addPetal(st, k, 12, 1.62, 0.55, 0.24, 64, mandalaRelief);
+    addPetal(st, k, 12, 1.55, 0.36, 0.13, 44, mandalaRelief);
+  }
+  for (let k = 0; k < 24; k++) {
+    const phi = (k / 24) * Math.PI * 2 + Math.PI / 24;
+    addSeg(st,
+      Math.cos(phi) * 0.34, mandalaRelief(0.34), Math.sin(phi) * 0.34,
+      Math.cos(phi) * 0.98, mandalaRelief(0.98), Math.sin(phi) * 0.98);
+  }
+  return st;
+}
+
+export function ensoStructure() {
+  const st = newStructure();
+  const gap = 42 * (Math.PI / 180);
+  const start = Math.PI * 0.5 + gap / 2;
+  const sweep = Math.PI * 2 - gap;
+  const pts = [];
+  for (let i = 0; i <= 150; i++) {
+    const t = i / 150;
+    const theta = start + sweep * t;
+    const r = 1.75 * (1 + 0.03 * Math.sin(t * Math.PI * 4));
+    pts.push([Math.cos(theta) * r, 0, Math.sin(theta) * r]);
+  }
+  addPolyline(st, pts);
+  return st;
+}
+
+export function beaconStructure() {
+  const st = newStructure();
+  addCircle(st, 0.5, 90, {});
+  addCircle(st, 1.0, 120, {});
+  addCircle(st, 1.5, 150, {});
+  addCircle(st, 2.0, 170, {});
+  for (let k = 0; k < 12; k++) {
+    const phi = (k / 12) * Math.PI * 2;
+    addSeg(st, Math.cos(phi) * 0.92, 0, Math.sin(phi) * 0.92, Math.cos(phi) * 1.08, 0, Math.sin(phi) * 1.08);
+  }
+  return st;
+}
+
 export const GENERATORS = { galaxy, mandala, shield, chip, chipExploded, glyphs, enso, beacon };
+
+/* Crisp line-layer specs: skeleton builder + settled opacity per shape.
+   galaxy stays pure particle cloud — no skeleton (that's the point). */
+export const LINES = {
+  mandala: { build: () => segsToPositions(mandalaStructure()), opacity: 0.5 },
+  shield:  { build: () => segsToPositions(shieldStructure()), opacity: 0.55 },
+  chip:    { build: () => segsToPositions(chipStructure(0)), opacity: 0.5 },
+  glyphs:  { build: () => segsToPositions(glyphsStructure()), opacity: 0.5 },
+  enso:    { build: () => segsToPositions(ensoStructure()), opacity: 0.3 },
+  beacon:  { build: () => segsToPositions(beaconStructure()), opacity: 0.45 },
+};
