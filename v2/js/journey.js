@@ -32,20 +32,21 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
   gsap.ticker.lagSmoothing(0);
 
   /* id matches data-chapter on .spacer / .chapter / .rail-dot.
-     morph: null means "keep current shape" (ARTIFACTS pulls the
-     camera back + slows into an orbital read of whatever shape
-     is already settled, per spec — no new morph target). */
+     Every chapter's shape reflects its topic. Flat XZ shapes
+     (galaxy, mandala, glyph ring, enso, beacon) get craned cameras
+     and keep the slow ambient spin; upright/3D shapes (shield, chip)
+     set spin:false so they ease back to facing instead of drifting
+     edge-on. morphThen queues a second morph right after the first —
+     SYNTHESIS forms the exploded CoWoS stack out of the incoming
+     particles, then the layers slide together into the assembly. */
   const CHAPTERS = [
-    { id: 0, morph: 'galaxy',  cam: { pos: [0.00, 0.20, 6.20], look: [0, 0.00, 0] } },
-    /* mandala + enso lie in the XZ plane (like the galaxy disc) — the
-       camera cranes overhead for those chapters so the geometry reads
-       face-on instead of edge-on. Keyhole is upright (XY), level cam. */
-    { id: 1, morph: 'mandala', cam: { pos: [0.00, 5.60, 1.90], look: [-0.70, 0.00, 0] } },
-    { id: 2, morph: 'keyhole', cam: { pos: [0.55, 0.10, 4.60], look: [0, 0.10, 0] } },
-    { id: 3, morph: 'network', cam: { pos: [-0.60, 0.30, 4.90], look: [0, 0.00, 0] } },
-    { id: 4, morph: null,      cam: { pos: [0.00, 0.15, 7.60], look: [0, 0.00, 0] } },
-    { id: 5, morph: 'enso',    cam: { pos: [0.20, 4.40, 1.60], look: [-0.50, 0.00, 0] } },
-    { id: 6, morph: 'core',    cam: { pos: [0.00, 0.10, 5.50], look: [0, 0.00, 0] } },
+    { id: 0, morph: 'galaxy',  spin: true,  cam: { pos: [0.00, 0.20, 6.20], look: [0, 0.00, 0] } },
+    { id: 1, morph: 'mandala', spin: true,  cam: { pos: [0.00, 5.60, 1.90], look: [-0.70, 0.00, 0] } },
+    { id: 2, morph: 'shield',  spin: false, cam: { pos: [0.55, 0.10, 4.60], look: [0, 0.10, 0] } },
+    { id: 3, morph: 'chipExploded', morphThen: 'chip', spin: false, cam: { pos: [-0.45, 1.85, 4.65], look: [0, -0.20, 0] } },
+    { id: 4, morph: 'glyphs',  spin: true,  cam: { pos: [0.00, 8.20, 3.00], look: [0, 0.00, 0] } },
+    { id: 5, morph: 'enso',    spin: true,  cam: { pos: [0.20, 4.40, 1.60], look: [-0.50, 0.00, 0] } },
+    { id: 6, morph: 'beacon',  spin: true,  cam: { pos: [0.00, 5.80, 1.50], look: [0, 0.00, 0] } },
   ];
 
   const chapterEls = CHAPTERS.map((c) => document.querySelector(`.chapter[data-chapter="${c.id}"]`));
@@ -84,6 +85,7 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
     const chapter = CHAPTERS[index];
     if (particleSystem) {
       if (chapter.morph) particleSystem.morphTo(chapter.morph);
+      if (chapter.morphThen) particleSystem.morphTo(chapter.morphThen); // queued: runs when the first completes
       // mandala breathing: radial pulse ramps in only for chapter 01, out otherwise
       gsap.to(particleSystem.uniforms.uPulseAmt, {
         value: chapter.id === 1 ? 1 : 0,
@@ -137,6 +139,7 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
     const chapter = CHAPTERS[index];
     if (particleSystem) {
       if (chapter.morph) particleSystem.morphTo(chapter.morph);
+      if (chapter.morphThen) particleSystem.morphTo(chapter.morphThen);
       gsap.to(particleSystem.uniforms.uPulseAmt, {
         value: chapter.id === 1 ? 1 : 0,
         duration: 1.2,
@@ -207,10 +210,20 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
     });
   }
 
-  /* ---------- slow ambient rotation — doubles as ARTIFACTS "orbital ring" read ---------- */
+  /* ---------- slow ambient rotation ----------
+     Flat, rotationally-composed shapes spin; upright/3D shapes
+     (shield, chip) instead ease back to face the camera — otherwise
+     the constant spin slowly turns them edge-on. */
   function applyRotation(dt) {
-    if (particleSystem && particleSystem.object3D) {
-      particleSystem.object3D.rotation.y += dt * 0.025;
+    if (!particleSystem || !particleSystem.object3D) return;
+    const obj = particleSystem.object3D;
+    const chapter = CHAPTERS[activeIndex];
+    if (!chapter || chapter.spin !== false) {
+      obj.rotation.y += dt * 0.025;
+    } else {
+      // shortest signed distance to the nearest facing angle (multiple of 2π)
+      const err = Math.atan2(Math.sin(obj.rotation.y), Math.cos(obj.rotation.y));
+      obj.rotation.y -= err * Math.min(dt * 1.5, 1);
     }
   }
 

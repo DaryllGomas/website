@@ -6,6 +6,19 @@
    sampling. Consumed by particles.js, which owns the blending.
    ============================================================ */
 
+/* Deterministic PRNG — shapes that must correspond across two generator
+   calls (chip exploded vs assembled) or stay stable across visits
+   (glyph ring) seed one of these instead of using Math.random. */
+function mulberry32(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 /* ---------- generic reusable shape-from-canvas sampler ---------- */
 /**
  * Draws an arbitrary silhouette on an offscreen 2D canvas, samples
@@ -197,129 +210,392 @@ export function mandala(count) {
   return arr;
 }
 
-/* ---------- 3. keyhole — cyber/shield chapter ---------- */
-export function keyhole(count) {
+/* ---------- 3. shield — SHIELD / cybersecurity chapter ----------
+   A heater shield drawn as strokes (line art, matching the mandala's
+   language): outer outline, inner offset outline, and a circuit-node
+   emblem — a center ring with four traces ending in node dots. */
+export function shield(count) {
   return sampleShapeFromCanvas((ctx, size) => {
-    ctx.fillStyle = '#fff';
     const cx = size * 0.5;
-    const cy = size * 0.36;
-    const r = size * 0.155;
+    const cy = size * 0.48;
+    ctx.strokeStyle = '#fff';
+    ctx.fillStyle = '#fff';
+    ctx.lineCap = 'round';
 
-    // circular bow
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, Math.PI * 2);
-    ctx.fill();
+    const outline = (s) => {
+      const w = 165 * s;
+      const top = cy - 190 * s;
+      const waist = cy - 40 * s;
+      const tip = cy + 235 * s;
+      ctx.beginPath();
+      ctx.moveTo(cx - w, top);
+      ctx.quadraticCurveTo(cx, top - 18 * s, cx + w, top);
+      ctx.quadraticCurveTo(cx + w * 0.92, waist, cx + w * 0.73, waist + 82 * s);
+      ctx.quadraticCurveTo(cx + w * 0.45, tip - 60 * s, cx, tip);
+      ctx.quadraticCurveTo(cx - w * 0.45, tip - 60 * s, cx - w * 0.73, waist + 82 * s);
+      ctx.quadraticCurveTo(cx - w * 0.92, waist, cx - w, top);
+      ctx.stroke();
+    };
 
-    // flared stem
+    ctx.lineWidth = 7;
+    outline(1.0);
+    ctx.lineWidth = 4;
+    outline(0.84);
+
+    // circuit-node emblem
+    const er = 42;
+    ctx.lineWidth = 5;
     ctx.beginPath();
-    ctx.moveTo(cx - r * 0.32, cy + r * 0.72);
-    ctx.lineTo(cx + r * 0.32, cy + r * 0.72);
-    ctx.lineTo(cx + r * 1.05, size * 0.86);
-    ctx.lineTo(cx - r * 1.05, size * 0.86);
-    ctx.closePath();
+    ctx.arc(cx, cy, er, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.lineWidth = 4;
+    for (let k = 0; k < 4; k++) {
+      const a = Math.PI / 4 + k * (Math.PI / 2);
+      const x1 = cx + Math.cos(a) * er;
+      const y1 = cy + Math.sin(a) * er;
+      const x2 = cx + Math.cos(a) * (er + 62);
+      const y2 = cy + Math.sin(a) * (er + 62);
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(x2, y2, 7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.arc(cx, cy, 6, 0, Math.PI * 2);
     ctx.fill();
-  }, count, 512, 3.4, 0.2);
+  }, count, 640, 3.3, 0.14);
 }
 
-/* ---------- 4. network — AI / synthesis chapter ---------- */
-export function network(count) {
-  const nodeCount = 40;
-  const nodes = [];
-  for (let i = 0; i < nodeCount; i++) {
-    const r = 1.5 + Math.random() * 0.9;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    nodes.push([
-      r * Math.sin(phi) * Math.cos(theta),
-      r * Math.sin(phi) * Math.sin(theta),
-      r * Math.cos(phi),
-    ]);
-  }
+/* ---------- 3b. glyphs — ARTIFACTS chapter ----------
+   An ancient ring of runes: two boundary circles, 14 abstract glyphs
+   around the ring, a petroglyph spiral at the center. Drawn flat in
+   the XZ plane (camera cranes overhead) and seeded so the "script"
+   is the same on every visit. */
+export function glyphs(count) {
+  const rng = mulberry32(0xa27157);
+  const arr = sampleShapeFromCanvas((ctx, size) => {
+    const cx = size * 0.5;
+    const cy = size * 0.5;
+    ctx.strokeStyle = '#fff';
+    ctx.fillStyle = '#fff';
+    ctx.lineCap = 'round';
 
-  const edgeCount = 55;
-  const edges = [];
-  for (let i = 0; i < edgeCount; i++) {
-    edges.push([
-      nodes[(Math.random() * nodeCount) | 0],
-      nodes[(Math.random() * nodeCount) | 0],
-    ]);
-  }
+    // ring boundaries
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(cx, cy, 356, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, 296, 0, Math.PI * 2); ctx.stroke();
 
-  const arr = new Float32Array(count * 3);
+    // 14 glyph slots on the band between the circles
+    const glyphR = 326;
+    for (let g = 0; g < 14; g++) {
+      const a = (g / 14) * Math.PI * 2;
+      ctx.save();
+      ctx.translate(cx + Math.cos(a) * glyphR, cy + Math.sin(a) * glyphR);
+      ctx.rotate(a + Math.PI / 2);
+      ctx.lineWidth = 5;
+      const strokes = 2 + ((rng() * 3) | 0);
+      for (let s = 0; s < strokes; s++) {
+        const kind = (rng() * 5) | 0;
+        const ox = (rng() - 0.5) * 26;
+        if (kind === 0) {           // vertical bar
+          ctx.beginPath(); ctx.moveTo(ox, -20); ctx.lineTo(ox, 20); ctx.stroke();
+        } else if (kind === 1) {    // cross bar
+          const oy = (rng() - 0.5) * 30;
+          ctx.beginPath(); ctx.moveTo(-16, oy); ctx.lineTo(16, oy); ctx.stroke();
+        } else if (kind === 2) {    // diagonal
+          const d = rng() < 0.5 ? 1 : -1;
+          ctx.beginPath(); ctx.moveTo(-14 * d, -18); ctx.lineTo(14 * d, 18); ctx.stroke();
+        } else if (kind === 3) {    // arc
+          ctx.beginPath();
+          ctx.arc(ox * 0.5, 0, 13, rng() * Math.PI, rng() * Math.PI + Math.PI * (0.8 + rng() * 0.9));
+          ctx.stroke();
+        } else {                    // dot
+          ctx.beginPath(); ctx.arc(ox, (rng() - 0.5) * 30, 4.5, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      ctx.restore();
+    }
+
+    // center petroglyph spiral
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    for (let t = 0; t <= 1.001; t += 0.01) {
+      const a = t * Math.PI * 6;
+      const r = 14 + t * 96;
+      const x = cx + Math.cos(a) * r;
+      const y = cy + Math.sin(a) * r;
+      if (t === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // four radial ticks between spiral and ring
+    ctx.lineWidth = 3;
+    for (let k = 0; k < 4; k++) {
+      const a = Math.PI / 4 + k * (Math.PI / 2);
+      ctx.beginPath();
+      ctx.moveTo(cx + Math.cos(a) * 150, cy + Math.sin(a) * 150);
+      ctx.lineTo(cx + Math.cos(a) * 240, cy + Math.sin(a) * 240);
+      ctx.stroke();
+    }
+  }, count, 768, 4.6, 0.14);
+
+  // sampler emits upright XY — lay the ring flat into XZ for the crane cam
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
-    if (Math.random() < 0.7) {
-      const node = nodes[(Math.random() * nodeCount) | 0];
-      const g = () => (Math.random() + Math.random() + Math.random() - 1.5) * 0.09;
-      arr[i3] = node[0] + g();
-      arr[i3 + 1] = node[1] + g();
-      arr[i3 + 2] = node[2] + g();
-    } else {
-      const [a, b] = edges[(Math.random() * edgeCount) | 0];
-      const t = Math.random();
-      arr[i3] = a[0] + (b[0] - a[0]) * t;
-      arr[i3 + 1] = a[1] + (b[1] - a[1]) * t;
-      arr[i3 + 2] = a[2] + (b[2] - a[2]) * t;
-    }
+    const y = arr[i3 + 1];
+    arr[i3 + 1] = arr[i3 + 2] * 0.6 + (Math.random() - 0.5) * 0.02;
+    arr[i3 + 2] = -y;
   }
   return arr;
 }
 
-/* ---------- 5. enso — hand-drawn zen circle (stillness chapter) ---------- */
-export function enso(count) {
-  const arr = new Float32Array(count * 3);
-  const gap = 40 * (Math.PI / 180);
-  const start = Math.PI * 0.5 + gap / 2;
-  const sweep = Math.PI * 2 - gap;
-  const R = 1.75;
-  const thickness = 0.24;
+/* ---------- 4. chip — SYNTHESIS chapter: CoWoS superchip ----------
+   The heart of AI as a wireframe CoWoS package: substrate → silicon
+   interposer → central compute die flanked by four HBM stacks (with
+   layer striations), RDL traces, microbump rows, solder balls.
+   `explode` (0..1) lifts each layer apart vertically, exploded-view
+   style. Both variants use the SAME seeded RNG so particle i belongs
+   to the same component in both — morphing chipExploded → chip makes
+   the parts literally slide together into the assembly. */
+function buildChip(count, explode) {
+  const rng = mulberry32(0xc0405);
+  const e = explode;
 
-  for (let i = 0; i < count; i++) {
-    const i3 = i * 3;
-    const t = Math.random();
-    let theta = start + sweep * t;
-    let r = R + (Math.random() - 0.5) * thickness * (0.6 + 0.4 * Math.sin(t * Math.PI * 5));
+  // explode lift per layer (world units at e=1)
+  const LIFT = { substrate: 0, solder: -0.45, interposer: 0.6, rdl: 0.6, bump: 0.85, die: 1.25, hbm: 1.0 };
+  const lift = (layer) => LIFT[layer] * e;
 
-    // taper + spiral drift near the two tail ends of the brush stroke
-    const tailT = Math.min(t, 1 - t);
-    if (tailT < 0.08) {
-      const spiralAmt = (0.08 - tailT) / 0.08;
-      const dir = t < 0.5 ? -1 : 1;
-      theta += spiralAmt * dir * 2.6;
-      r *= 1 - spiralAmt * 0.55;
-    }
-
-    arr[i3] = Math.cos(theta) * r;
-    arr[i3 + 1] = (Math.random() - 0.5) * thickness * 0.5;
-    arr[i3 + 2] = Math.sin(theta) * r;
+  const segs = [];   // [x1,y1,z1, x2,y2,z2, cumLen]
+  let totalLen = 0;
+  function seg(x1, y1, z1, x2, y2, z2, layer) {
+    const dy = lift(layer);
+    const len = Math.hypot(x2 - x1, y2 - y1, z2 - z1);
+    totalLen += len;
+    segs.push([x1, y1 + dy, z1, x2, y2 + dy, z2, totalLen]);
   }
-  return arr;
-}
+  function rectLoop(cx, cz, w, d, y, layer) {
+    const hw = w / 2, hd = d / 2;
+    seg(cx - hw, y, cz - hd, cx + hw, y, cz - hd, layer);
+    seg(cx + hw, y, cz - hd, cx + hw, y, cz + hd, layer);
+    seg(cx + hw, y, cz + hd, cx - hw, y, cz + hd, layer);
+    seg(cx - hw, y, cz + hd, cx - hw, y, cz - hd, layer);
+  }
+  function verticals(cx, cz, w, d, y1, y2, layer) {
+    const hw = w / 2, hd = d / 2;
+    seg(cx - hw, y1, cz - hd, cx - hw, y2, cz - hd, layer);
+    seg(cx + hw, y1, cz - hd, cx + hw, y2, cz - hd, layer);
+    seg(cx + hw, y1, cz + hd, cx + hw, y2, cz + hd, layer);
+    seg(cx - hw, y1, cz + hd, cx - hw, y2, cz + hd, layer);
+  }
 
-/* ---------- 6. core — contact chapter: dense sphere + orbiting shell ---------- */
-export function core(count) {
+  // substrate (anchor layer)
+  rectLoop(0, 0, 3.0, 2.0, -0.52, 'substrate');
+  rectLoop(0, 0, 3.0, 2.0, -0.66, 'substrate');
+  verticals(0, 0, 3.0, 2.0, -0.66, -0.52, 'substrate');
+  // silicon interposer
+  rectLoop(0, 0, 2.2, 1.35, -0.40, 'interposer');
+  rectLoop(0, 0, 2.2, 1.35, -0.49, 'interposer');
+  verticals(0, 0, 2.2, 1.35, -0.49, -0.40, 'interposer');
+  // compute die
+  rectLoop(0, 0, 0.9, 0.9, -0.10, 'die');
+  rectLoop(0, 0, 0.9, 0.9, -0.40, 'die');
+  verticals(0, 0, 0.9, 0.9, -0.40, -0.10, 'die');
+  // four HBM stacks with layer striations
+  const HBM = [[-0.82, -0.36], [-0.82, 0.36], [0.82, -0.36], [0.82, 0.36]];
+  for (const [hx, hz] of HBM) {
+    rectLoop(hx, hz, 0.52, 0.72, -0.12, 'hbm');
+    rectLoop(hx, hz, 0.52, 0.72, -0.40, 'hbm');
+    verticals(hx, hz, 0.52, 0.72, -0.40, -0.12, 'hbm');
+    for (const sy of [-0.33, -0.26, -0.19]) {
+      rectLoop(hx, hz, 0.52, 0.72, sy, 'hbm'); // stacked-die striations
+    }
+  }
+  // RDL traces on the interposer top: die edge → each HBM inner edge
+  for (const [hx, hz] of HBM) {
+    const sx = Math.sign(hx);
+    for (const off of [-0.08, 0, 0.08]) {
+      seg(sx * 0.45, -0.395, hz * 0.72 + off, sx * 0.56, -0.395, hz + off, 'rdl');
+    }
+  }
+
+  // dot emitters: lattices, bump/ball rows
+  const dots = [];
+  let dotWeight = 0;
+  function emitter(w, params) { dotWeight += w; dots.push({ w: dotWeight, ...params }); }
+  // die top lattice — dense silicon texture
+  emitter(38, { kind: 'lattice', cx: 0, cz: 0, w: 0.82, d: 0.82, y: -0.10, nx: 16, nz: 16, layer: 'die' });
+  // HBM top lattices
+  for (const [hx, hz] of HBM) {
+    emitter(4, { kind: 'lattice', cx: hx, cz: hz, w: 0.44, d: 0.64, y: -0.12, nx: 5, nz: 7, layer: 'hbm' });
+  }
+  // substrate top sparse guide lattice
+  emitter(7, { kind: 'lattice', cx: 0, cz: 0, w: 2.8, d: 1.8, y: -0.52, nx: 15, nz: 10, layer: 'substrate' });
+  // microbump rows under die + HBM front edges
+  emitter(8, { kind: 'row', x1: -0.42, z1: 0.42, x2: 0.42, z2: 0.42, y: -0.405, n: 26, layer: 'bump' });
+  for (const [hx, hz] of HBM) {
+    emitter(3, { kind: 'row', x1: hx - 0.22, z1: hz + 0.33, x2: hx + 0.22, z2: hz + 0.33, y: -0.405, n: 12, layer: 'bump' });
+  }
+  // solder balls under the substrate, two front rows
+  emitter(9, { kind: 'row', x1: -1.35, z1: 0.86, x2: 1.35, z2: 0.86, y: -0.70, n: 26, layer: 'solder' });
+  emitter(9, { kind: 'row', x1: -1.35, z1: 0.7, x2: 1.35, z2: 0.7, y: -0.70, n: 26, layer: 'solder' });
+
   const arr = new Float32Array(count * 3);
-  const coreFraction = 0.55;
-
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
-    if (Math.random() < coreFraction) {
-      const r = Math.pow(Math.random(), 1.5) * 0.5;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      arr[i3] = r * Math.sin(phi) * Math.cos(theta);
-      arr[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      arr[i3 + 2] = r * Math.cos(phi);
+    const pick = rng();
+
+    if (pick < 0.56) {
+      // wireframe edges, length-weighted
+      const target = rng() * totalLen;
+      let lo = 0, hi = segs.length - 1;
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (segs[mid][6] < target) lo = mid + 1; else hi = mid; }
+      const s = segs[lo];
+      const t = rng();
+      arr[i3] = s[0] + (s[3] - s[0]) * t + (rng() - 0.5) * 0.008;
+      arr[i3 + 1] = s[1] + (s[4] - s[1]) * t + (rng() - 0.5) * 0.008;
+      arr[i3 + 2] = s[2] + (s[5] - s[2]) * t + (rng() - 0.5) * 0.008;
+    } else if (pick < 0.96) {
+      // structured dots
+      const target = rng() * dotWeight;
+      let d = dots[0];
+      for (const cand of dots) { if (cand.w >= target) { d = cand; break; } }
+      const dy = lift(d.layer);
+      if (d.kind === 'lattice') {
+        const ix = (rng() * d.nx) | 0, iz = (rng() * d.nz) | 0;
+        arr[i3] = d.cx - d.w / 2 + (ix + 0.5) * (d.w / d.nx) + (rng() - 0.5) * 0.006;
+        arr[i3 + 1] = d.y + dy + (rng() - 0.5) * 0.006;
+        arr[i3 + 2] = d.cz - d.d / 2 + (iz + 0.5) * (d.d / d.nz) + (rng() - 0.5) * 0.006;
+      } else {
+        const k = (rng() * d.n) | 0;
+        const t = (k + 0.5) / d.n;
+        arr[i3] = d.x1 + (d.x2 - d.x1) * t + (rng() - 0.5) * 0.006;
+        arr[i3 + 1] = d.y + dy + (rng() - 0.5) * 0.006;
+        arr[i3 + 2] = d.z1 + (d.z2 - d.z1) * t + (rng() - 0.5) * 0.006;
+      }
     } else {
-      const r = 1.4 + Math.random() * 0.55;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos((Math.random() * 2 - 1) * 0.6);
+      // ambient dust shell — the "sand" the superchip forms from
+      const r = 2.3 + rng() * 0.6;
+      const theta = rng() * Math.PI * 2;
+      const phi = Math.acos(2 * rng() - 1);
       arr[i3] = r * Math.sin(phi) * Math.cos(theta);
-      arr[i3 + 1] = r * Math.cos(phi) * 0.4;
+      arr[i3 + 1] = r * Math.cos(phi) * 0.55;
       arr[i3 + 2] = r * Math.sin(phi) * Math.sin(theta);
     }
   }
   return arr;
 }
 
-export const GENERATORS = { galaxy, mandala, keyhole, network, enso, core };
+export function chip(count) { return buildChip(count, 0); }
+export function chipExploded(count) { return buildChip(count, 1); }
+
+/* ---------- 5. enso — hand-drawn zen circle (stillness chapter) ----------
+   A single clean brush stroke: thin ring with subtle pressure
+   variation, density-tapered tails with a gentle inward curl, and a
+   few ink flecks near the opening. */
+export function enso(count) {
+  const arr = new Float32Array(count * 3);
+  const gap = 42 * (Math.PI / 180);
+  const start = Math.PI * 0.5 + gap / 2;
+  const sweep = Math.PI * 2 - gap;
+  const R = 1.75;
+  const thickness = 0.13;
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+
+    if (Math.random() < 0.025) {
+      // ink flecks scattered near the stroke opening
+      const a = Math.PI * 0.5 + (Math.random() - 0.5) * 1.2;
+      const r = R * (0.82 + Math.random() * 0.34);
+      arr[i3] = Math.cos(a) * r;
+      arr[i3 + 2] = Math.sin(a) * r;
+      arr[i3 + 1] = (Math.random() - 0.5) * 0.05;
+      continue;
+    }
+
+    // density taper: resample toward mid-stroke so the tails thin out
+    let t = Math.random();
+    const tail = Math.min(t, 1 - t);
+    if (tail < 0.1 && Math.random() > tail / 0.1) {
+      t = 0.1 + Math.random() * 0.8;
+    }
+
+    let theta = start + sweep * t;
+    let r = R + (Math.random() - 0.5) * thickness * (0.65 + 0.35 * Math.sin(t * Math.PI * 4));
+
+    // taper + gentle inward curl at the two tail ends
+    const tailT = Math.min(t, 1 - t);
+    if (tailT < 0.07) {
+      const amt = (0.07 - tailT) / 0.07;
+      const dir = t < 0.5 ? -1 : 1;
+      theta += amt * dir * 0.9;
+      r *= 1 - amt * 0.22;
+    }
+
+    arr[i3] = Math.cos(theta) * r;
+    arr[i3 + 1] = (Math.random() - 0.5) * thickness * 0.4;
+    arr[i3 + 2] = Math.sin(theta) * r;
+  }
+  return arr;
+}
+
+/* ---------- 6. beacon — CONTACT chapter: a signal going out ----------
+   A luminous point of contact with crisp concentric ripples expanding
+   outward (density fading with distance), radar ticks crossing the
+   second ring, and sparse outer dust. Flat in XZ, camera cranes. */
+export function beacon(count) {
+  const arr = new Float32Array(count * 3);
+  const RINGS = [
+    { R: 0.5, w: 0.26 },
+    { R: 1.0, w: 0.22 },
+    { R: 1.5, w: 0.16 },
+    { R: 2.0, w: 0.11 },
+  ];
+  const ringTotal = RINGS.reduce((a, r) => a + r.w, 0);
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    const pick = Math.random();
+
+    if (pick < 0.09) {
+      // the point of contact — dense luminous center
+      const r = Math.pow(Math.random(), 1.7) * 0.16;
+      const a = Math.random() * Math.PI * 2;
+      arr[i3] = Math.cos(a) * r;
+      arr[i3 + 2] = Math.sin(a) * r;
+      arr[i3 + 1] = (Math.random() - 0.5) * 0.04;
+    } else if (pick < 0.84) {
+      // concentric ripples
+      let sel = Math.random() * ringTotal;
+      let ring = RINGS[0];
+      for (const cand of RINGS) { sel -= cand.w; if (sel <= 0) { ring = cand; break; } }
+      const theta = Math.random() * Math.PI * 2;
+      const r = ring.R + (Math.random() - 0.5) * 0.014;
+      arr[i3] = Math.cos(theta) * r;
+      arr[i3 + 2] = Math.sin(theta) * r;
+      arr[i3 + 1] = (Math.random() - 0.5) * 0.02;
+    } else if (pick < 0.93) {
+      // 12 radar ticks crossing the second ring
+      const k = (Math.random() * 12) | 0;
+      const phi = (k / 12) * Math.PI * 2;
+      const r = 0.92 + Math.random() * 0.16;
+      const tj = (Math.random() - 0.5) * 0.01;
+      arr[i3] = Math.cos(phi) * r - Math.sin(phi) * tj;
+      arr[i3 + 2] = Math.sin(phi) * r + Math.cos(phi) * tj;
+      arr[i3 + 1] = (Math.random() - 0.5) * 0.02;
+    } else {
+      // sparse dust past the last ripple
+      const r = 2.2 + Math.random() * 0.5;
+      const theta = Math.random() * Math.PI * 2;
+      arr[i3] = Math.cos(theta) * r;
+      arr[i3 + 2] = Math.sin(theta) * r;
+      arr[i3 + 1] = (Math.random() - 0.5) * 0.08;
+    }
+  }
+  return arr;
+}
+
+export const GENERATORS = { galaxy, mandala, shield, chip, chipExploded, glyphs, enso, beacon };
