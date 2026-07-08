@@ -433,6 +433,142 @@ html.js-journey .chapter {
   }
 }
 
+/* ---------- chapter 04: artifact catalog (category accordions) ----------
+   Progressive enhancement: every project row ships as static HTML inside
+   its .artifact-group-panel, so with zero JS every category renders fully
+   expanded (aria-expanded="true" in the markup) — nothing is ever hidden
+   behind a JS requirement. js/artifacts.js flips html.js-artifacts on and
+   collapses panels by default, animating open/close via inline max-height
+   (set from JS, transitioned here in CSS). */
+.artifact-catalog {
+  border-top: 1px solid var(--line);
+}
+
+.artifact-group {
+  border-bottom: 1px solid var(--line);
+}
+
+.artifact-group-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 1.25rem;
+  padding: 1.05rem 0;
+  margin: 0;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: padding-left 0.35s ease;
+}
+
+.artifact-group-header:hover,
+.artifact-group-header:focus-visible {
+  padding-left: 0.75rem;
+}
+
+.artifact-group-header:focus-visible {
+  outline: 1px solid var(--cyan);
+  outline-offset: 6px;
+}
+
+.artifact-group-name {
+  flex: 1;
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+  transition: color 0.35s ease;
+}
+
+.artifact-group-header:hover .artifact-group-name,
+.artifact-group-header:focus-visible .artifact-group-name {
+  color: var(--cyan);
+}
+
+.artifact-group-count {
+  min-width: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  color: var(--text-faint);
+  text-align: right;
+}
+
+/* Chevron: matches the root site's marker convention (a rotating stroke
+   pair), flipped from a "+"-style corner into a "v" on open. */
+.artifact-group-chevron {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--text-faint);
+  border-bottom: 1px solid var(--text-faint);
+  transform: rotate(45deg);
+  transition: transform 0.4s ease, border-color 0.35s ease;
+}
+
+.artifact-group.is-open .artifact-group-chevron {
+  transform: rotate(-135deg);
+  border-color: var(--cyan);
+}
+
+.artifact-group-panel {
+  overflow: hidden;
+}
+
+/* Collapsed-by-default + animated only once JS confirms it's running —
+   see js/artifacts.js. No-JS visitors get every row, always expanded. */
+html.js-artifacts .artifact-group-panel {
+  max-height: 0;
+  transition: max-height 0.45s ease;
+}
+
+.artifact-group-panel .artifact-rows {
+  border-top: 1px solid var(--line-soft);
+}
+
+.artifact-group-panel .artifact-row:last-child {
+  border-bottom: none;
+}
+
+/* Internal scroll frame — journey mode only. In html.js-journey, .chapter
+   becomes a fixed, full-viewport overlay (position: absolute; inset: 0 —
+   see the "chapters" rules above) and the real page-scroll distance comes
+   entirely from the fixed-height .spacer track (100vh × 7, independent of
+   chapter content). journey.js's ScrollTrigger measurements never read
+   this element's height, so expanding a 12-row category can't desync the
+   chapter transitions — but without a cap, tall expanded content would
+   still visually overflow the fixed-size chapter box top/bottom (nothing
+   clips it, and window scroll is captured by Lenis for chapter transitions,
+   not for scrolling inside a fixed panel). Capping + scrolling internally
+   keeps the outer chapter geometry stable regardless of how many
+   categories are open. In the plain-flow fallback (reduced motion / no
+   WebGL / no JS) .chapter has no fixed height, so the catalog simply
+   grows the page instead — no cap applied there. */
+html.js-journey .artifact-catalog {
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+html.js-journey .artifact-catalog::-webkit-scrollbar {
+  width: 6px;
+}
+
+html.js-journey .artifact-catalog::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html.js-journey .artifact-catalog::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 3px;
+}
+
 /* ---------- chapter 05: stillness ---------- */
 .pull-quote {
   font-family: var(--font-display);
@@ -483,6 +619,12 @@ html.js-journey .chapter {
 
   .artifact-row a,
   .artifact-row.artifact-row--static {
+    transition: none;
+  }
+
+  .artifact-group-header,
+  .artifact-group-chevron,
+  .artifact-group-panel {
     transition: none;
   }
 }

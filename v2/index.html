@@ -140,32 +140,304 @@
         <div class="chapter-inner chapter-inner--wide">
           <span class="eyebrow">04 / ARTIFACTS</span>
           <h2 class="display-lg">Selected Work</h2>
+
+          <!-- Full ~35-project catalog, 7 categories. Every panel and row
+               is static HTML (aria-expanded="true" by default) — with
+               zero JS every category renders fully expanded. js/artifacts.js
+               progressively collapses panels and animates the toggle;
+               see the html.js-artifacts rules in v2.css. -->
+          <div class="artifact-catalog" id="artifact-catalog" data-lenis-prevent>
+
+            <div class="artifact-group">
+              <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-trading">
+                <span class="artifact-group-name">Trading Ecosystem</span>
+                <span class="artifact-group-count">12</span>
+                <span class="artifact-group-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="artifact-group-panel" id="artifact-panel-trading">
+                <ul class="artifact-rows">
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">trade-signal-backend</span>
+                    <span class="artifact-desc">Algorithmic trading engine — 15+ strategies, Claude AI vetting, paper trading &amp; alerts.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Wingman</span>
+                    <span class="artifact-desc">AI-assisted trading workstation — dashboard, VWAP + divergence system, backtesting.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Options-Calc</span>
+                    <span class="artifact-desc">Gamma exposure (GEX) analysis — dealer positioning, call/put walls, AI trade suggestions.</span>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/Namkuzu-da-OS/Divergance-Scanner" target="_blank" rel="noopener">
+                      <span class="artifact-name">Divergance-Scanner</span>
+                      <span class="artifact-desc">Inter-market divergence detector — relative strength shifts, correlation breakdowns.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Scout-Win</span>
+                    <span class="artifact-desc">Automated market recon — scrapes X, YouTube, and RSS into one intelligence dashboard.</span>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/Namkuzu-da-OS/trading-prep" target="_blank" rel="noopener">
+                      <span class="artifact-name">trading-prep</span>
+                      <span class="artifact-desc">Automated pre-market and end-of-day research reports, powered by Claude Code.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/Namkuzu-da-OS/buyback-blackout-analyzer" target="_blank" rel="noopener">
+                      <span class="artifact-name">buyback-blackout-analyzer</span>
+                      <span class="artifact-desc">Finds trading edges in corporate buyback blackout windows before earnings.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/Namkuzu-da-OS/fibonacci-backtester" target="_blank" rel="noopener">
+                      <span class="artifact-name">fibonacci-backtester</span>
+                      <span class="artifact-desc">DiNapoli Fibonacci levels backtested against real Schwab API market data.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/DaryllGomas/MrCrabs" target="_blank" rel="noopener">
+                      <span class="artifact-name">MrCrabs</span>
+                      <span class="artifact-desc">Single-page research dashboard — market sentiment cards for equities, crypto, macro.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">TERMINUS</span>
+                    <span class="artifact-desc">Price-level confluence engine — fuses 11 data sources into scored institutional levels.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Convergence Engine</span>
+                    <span class="artifact-desc">7-dimension capital deployment scoring — decision science, not gut feel.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Prediction Market Scanner</span>
+                    <span class="artifact-desc">Polymarket scanner — whale tracking, sentiment, Claude AI probability estimation.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="artifact-group">
+              <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-research">
+                <span class="artifact-group-name">Research &amp; Analysis</span>
+                <span class="artifact-group-count">6</span>
+                <span class="artifact-group-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="artifact-group-panel" id="artifact-panel-research">
+                <ul class="artifact-rows">
+                  <li class="artifact-row">
+                    <a href="https://github.com/Namkuzu-da-OS/twitter-algorithm-analysis" target="_blank" rel="noopener">
+                      <span class="artifact-name">twitter-algorithm-analysis</span>
+                      <span class="artifact-desc">Decompiled X's "For You" algorithm into actionable posting rules.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/Namkuzu-da-OS/ZOLSEASON" target="_blank" rel="noopener">
+                      <span class="artifact-name">ZOLSEASON</span>
+                      <span class="artifact-desc">Research proposing a privacy-preserving bridge between Zcash and Solana.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Quantitative Research Lab</span>
+                    <span class="artifact-desc">31,000-line platform — 39-ticker universe, regime detection, signal discovery.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Breadth-Exhaustion-Signal</span>
+                    <span class="artifact-desc">Market breadth research — 27 years of NYSE data, Monte Carlo validated.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Gann Square of Nine Backtester</span>
+                    <span class="artifact-desc">56KB backtester — six Gann techniques stress-tested on 33 years of S&amp;P 500 data.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Mean Reversion Strategy Lab</span>
+                    <span class="artifact-desc">20,736-combination parameter sweep with walk-forward, out-of-sample validation.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="artifact-group">
+              <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-bigpic">
+                <span class="artifact-group-name">BigPic Solutions</span>
+                <span class="artifact-group-count">5</span>
+                <span class="artifact-group-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="artifact-group-panel" id="artifact-panel-bigpic">
+                <ul class="artifact-rows">
+                  <li class="artifact-row">
+                    <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">
+                      <span class="artifact-name">BigPic Solutions</span>
+                      <span class="artifact-desc">AI-native R&amp;D company — Capital, Technology, and CyberCab, run by agentic AI.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://markets.bigpicsolutions.com/" target="_blank" rel="noopener">
+                      <span class="artifact-name">BigPic Capital</span>
+                      <span class="artifact-desc">AI-native investment OS — trading agents, TERMINUS, nine published sector theses.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">
+                      <span class="artifact-name">BigPic Technology</span>
+                      <span class="artifact-desc">IT consulting &amp; security — automated pentesting, AI automation, remote infrastructure.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">BigPic CyberCab</span>
+                    <span class="artifact-desc">Autonomous vehicle fleet venture — Tesla CyberCab revenue modeling, in development.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Invoicing Platform</span>
+                    <span class="artifact-desc">Flask + Stripe invoicing — client management, PDF generation, QR payment links.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="artifact-group">
+              <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-namkuzu">
+                <span class="artifact-group-name">Namkuzu-da OS</span>
+                <span class="artifact-group-count">5</span>
+                <span class="artifact-group-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="artifact-group-panel" id="artifact-panel-namkuzu">
+                <ul class="artifact-rows">
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Namkuzu-da OS</span>
+                    <span class="artifact-desc">AI-native operating system — Claude Code brain, voice control, 8 automated pipelines.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Agentic Business Orchestration</span>
+                    <span class="artifact-desc">Directory-as-agent architecture — cd into a folder, Claude assumes that division's role.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Living Thesis Pipeline</span>
+                    <span class="artifact-desc">Two-stage pipeline — YouTube transcripts to Claude extraction to a knowledge base.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Published Intelligence</span>
+                    <span class="artifact-desc">8 automated cron jobs — market data to Claude analysis to live reports, zero touch.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Market Data</span>
+                    <span class="artifact-desc">Schwab API, 26 RSS feeds, and FRED data — collected automatically at 4:30 AM weekdays.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="artifact-group">
+              <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-interactive">
+                <span class="artifact-group-name">Interactive Experiences</span>
+                <span class="artifact-group-count">4</span>
+                <span class="artifact-group-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="artifact-group-panel" id="artifact-panel-interactive">
+                <ul class="artifact-rows">
+                  <li class="artifact-row">
+                    <a href="https://www.justsomedude.org/" target="_blank" rel="noopener">
+                      <span class="artifact-name">Book</span>
+                      <span class="artifact-desc">"Enter Zen From There" — WebGL portal hub for three interactive experiences.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://daryllgomas.github.io/Zen/" target="_blank" rel="noopener">
+                      <span class="artifact-name">Zen</span>
+                      <span class="artifact-desc">Interactive Zen meditation — breathing guide, sand garden, ambient sounds.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://daryllgomas.github.io/Ancients/" target="_blank" rel="noopener">
+                      <span class="artifact-name">Ancients</span>
+                      <span class="artifact-desc">Interactive history timeline — WebGL cosmic portal, alternative civilization theories.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://daryllgomas.github.io/BreakTheCode/" target="_blank" rel="noopener">
+                      <span class="artifact-name">BreakTheCode</span>
+                      <span class="artifact-desc">"Breaking Your Genetic Code" — immersive digital book on consciousness expansion.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="artifact-group">
+              <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-aivoice">
+                <span class="artifact-group-name">AI &amp; Voice Tools</span>
+                <span class="artifact-group-count">3</span>
+                <span class="artifact-group-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="artifact-group-panel" id="artifact-panel-aivoice">
+                <ul class="artifact-rows">
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">WM-Voice</span>
+                    <span class="artifact-desc">Hands-free Linux voice assistant — Claude Agent SDK, Whisper STT, Kokoro TTS.</span>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/DaryllGomas/VideoToText" target="_blank" rel="noopener">
+                      <span class="artifact-name">VideoToText</span>
+                      <span class="artifact-desc">Downloads and transcribes X/Twitter videos to text using OpenAI Whisper.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/Namkuzu-da-OS/Swarm-AI" target="_blank" rel="noopener">
+                      <span class="artifact-name">Swarm-AI</span>
+                      <span class="artifact-desc">Service DAO blueprint for an AI-augmented, vibe-coding freelancer collective.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="artifact-group">
+              <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-cyber">
+                <span class="artifact-group-name">Cybersecurity</span>
+                <span class="artifact-group-count">3</span>
+                <span class="artifact-group-chevron" aria-hidden="true"></span>
+              </button>
+              <div class="artifact-group-panel" id="artifact-panel-cyber">
+                <ul class="artifact-rows">
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Cyber Defense Command Center</span>
+                    <span class="artifact-desc">Distributed security platform — scanning agents, REST API, React dashboard.</span>
+                  </li>
+                  <li class="artifact-row artifact-row--static">
+                    <span class="artifact-name">Pentester Platform</span>
+                    <span class="artifact-desc">4-tool CLI suite — automated scans, CVSS classification, compliance-mapped reports.</span>
+                  </li>
+                  <li class="artifact-row">
+                    <a href="https://github.com/DaryllGomas/Coding" target="_blank" rel="noopener">
+                      <span class="artifact-name">CyberSec Tools</span>
+                      <span class="artifact-desc">8 hand-written offensive security tools — port scanner, hash cracker, WiFi cracker &amp; more.</span>
+                      <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
           <ul class="artifact-rows">
-            <li class="artifact-row">
-              <a href="https://daryllgomas.github.io/Zen/" target="_blank" rel="noopener">
-                <span class="artifact-name">Zen</span>
-                <span class="artifact-desc">Interactive Zen meditation — breathing guide, sand garden, ambient sounds.</span>
-                <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
-              </a>
-            </li>
-            <li class="artifact-row">
-              <a href="https://daryllgomas.github.io/Ancients/" target="_blank" rel="noopener">
-                <span class="artifact-name">Ancients</span>
-                <span class="artifact-desc">Interactive history timeline — WebGL cosmic portal, alternative civilization theories.</span>
-                <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
-              </a>
-            </li>
-            <li class="artifact-row">
-              <a href="https://daryllgomas.github.io/BreakTheCode/" target="_blank" rel="noopener">
-                <span class="artifact-name">BreakTheCode</span>
-                <span class="artifact-desc">"Breaking Your Genetic Code" — immersive digital book on consciousness expansion.</span>
-                <span class="artifact-arrow" aria-hidden="true">&rarr;</span>
-              </a>
-            </li>
-            <li class="artifact-row artifact-row--static">
-              <span class="artifact-name">Namkuzu-da OS</span>
-              <span class="artifact-desc">AI-native operating system — Claude Code brain, voice control, 8 automated pipelines.</span>
-            </li>
             <li class="artifact-row">
               <a href="https://github.com/DaryllGomas" target="_blank" rel="noopener">
                 <span class="artifact-name">GitHub</span>

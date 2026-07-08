@@ -10,6 +10,7 @@
 import * as THREE from 'three';
 import { createParticleSystem } from './particles.js';
 import { initJourney } from './journey.js';
+import { initArtifacts } from './artifacts.js';
 
 const root = document.documentElement;
 const canvas = document.getElementById('v2-scene');
@@ -207,6 +208,10 @@ function renderStaticFrame() {
 
 /* ---------- boot ---------- */
 function boot() {
+  // Chapter-4 accordion is independent of WebGL/motion — wire it in every
+  // branch below.
+  initArtifacts();
+
   if (!hasWebGL) {
     root.classList.add('no-webgl');
     // DOM/CSS journey (scroll reveals) still works without particles/camera.

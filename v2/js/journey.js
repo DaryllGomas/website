@@ -75,8 +75,8 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
     if (prevEl) gsap.set(prevEl, { pointerEvents: 'none' });
     if (nextEl) gsap.set(nextEl, { pointerEvents: 'auto' });
 
-    if (prevEl) gsap.to(prevEl, { autoAlpha: 0, y: -16, duration: 0.6, ease: 'power2.out' });
-    if (nextEl) gsap.fromTo(nextEl, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out' });
+    if (prevEl) gsap.to(prevEl, { autoAlpha: 0, y: -16, duration: 0.6, ease: 'power2.out', overwrite: 'auto' });
+    if (nextEl) gsap.fromTo(nextEl, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.8, ease: 'power2.out', overwrite: 'auto' });
 
     railDots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
     activeIndex = index;
@@ -104,6 +104,61 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
       onEnterBack: () => goToChapter(i),
     });
   });
+
+  /* Resize / zoom hardening. The crossfade above is event-driven, so a
+     ScrollTrigger.refresh() (fired by window resize or browser zoom)
+     landing mid-tween can strand several chapters half-visible at once.
+     After every refresh, kill in-flight chapter tweens and hard-set each
+     chapter to its resting state for the current scroll position. Each
+     spacer is 100vh, active while it straddles the viewport center, so
+     round(scrollY / vh) is the chapter that should be showing. */
+  function expectedIndex() {
+    const vh = window.innerHeight || 1;
+    return Math.max(0, Math.min(CHAPTERS.length - 1, Math.round(window.scrollY / vh)));
+  }
+
+  function resyncNow() {
+    const index = expectedIndex();
+    chapterEls.forEach((el, i) => {
+      if (!el) return;
+      gsap.killTweensOf(el);
+      gsap.set(el, {
+        autoAlpha: i === index ? 1 : 0,
+        y: i === index ? 0 : 16,
+        pointerEvents: i === index ? 'auto' : 'none',
+      });
+    });
+    railDots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+    activeIndex = index;
+  }
+
+  // Deferred with a timer, not requestAnimationFrame: when the GPU/frame
+  // pipeline stalls (observed on real hardware), rAF callbacks stop firing
+  // entirely while timers keep running — and a stall is precisely when
+  // tween-driven chapter state goes wrong. 120ms is past refresh()'s
+  // scroll-position restore.
+  ScrollTrigger.addEventListener('refresh', () => setTimeout(resyncNow, 120));
+
+  /* Self-healing watchdog. Whatever desyncs the crossfade — browser zoom,
+     window resize, a frame stall freezing tweens mid-flight, or a spurious
+     trigger storm — the invariant is checkable: when the scroll position
+     has settled well inside one chapter's zone, exactly that chapter
+     should be fully visible. Require two consecutive bad ticks so a
+     legitimate in-flight crossfade (≤0.8s) is never snapped. */
+  let desyncTicks = 0;
+  setInterval(() => {
+    const vh = window.innerHeight || 1;
+    const pos = window.scrollY / vh;
+    const index = Math.round(pos);
+    if (Math.abs(pos - index) > 0.3) { desyncTicks = 0; return; }
+    const el = chapterEls[Math.max(0, Math.min(CHAPTERS.length - 1, index))];
+    const wrong = index !== activeIndex || (el && parseFloat(getComputedStyle(el).opacity) < 0.9);
+    desyncTicks = wrong ? desyncTicks + 1 : 0;
+    if (desyncTicks >= 2) {
+      desyncTicks = 0;
+      resyncNow();
+    }
+  }, 700);
 
   /* ---------- camera choreography: continuous scroll-progress lerp ---------- */
   const basePos = { x: CHAPTERS[0].cam.pos[0], y: CHAPTERS[0].cam.pos[1], z: CHAPTERS[0].cam.pos[2] };
