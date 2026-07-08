@@ -116,9 +116,16 @@ function pointsFromStructure(st, count, opts = {}) {
       for (const cand of st.dots) { if (cand.w >= target) { d = cand; break; } }
       const a = rng() * Math.PI * 2;
       const rr = Math.pow(rng(), 1.5) * d.spread;
-      arr[i3] = d.x + Math.cos(a) * rr;
-      arr[i3 + 1] = d.y + (rng() - 0.5) * (d.ySpread || 0.01);
-      arr[i3 + 2] = d.z + Math.sin(a) * rr;
+      if (d.plane === 'xy') {
+        // upright shapes: cluster spreads in the XY plane, depth jitter in z
+        arr[i3] = d.x + Math.cos(a) * rr;
+        arr[i3 + 1] = d.y + Math.sin(a) * rr;
+        arr[i3 + 2] = (d.z || 0) + (rng() - 0.5) * (d.zSpread || 0.05);
+      } else {
+        arr[i3] = d.x + Math.cos(a) * rr;
+        arr[i3 + 1] = d.y + (rng() - 0.5) * (d.ySpread || 0.01);
+        arr[i3 + 2] = d.z + Math.sin(a) * rr;
+      }
     } else if (dust) {
       const r = dust.rMin + rng() * (dust.rMax - dust.rMin);
       const theta = rng() * Math.PI * 2;
@@ -394,87 +401,133 @@ export function shield(count) {
   });
 }
 
-/* ---------- 3b. glyphs — ARTIFACTS chapter ----------
-   An ancient ring of runes as a flat XZ vector skeleton: two boundary
-   circles, 14 seeded abstract glyphs on the band, a petroglyph spiral
-   at the center, four radial ticks. Same seed every visit — the
-   "script" is stable. */
-export function glyphsStructure() {
-  const rng = mulberry32(0xa27157);
+/* ---------- 3b. The Living System Map — ARTIFACTS chapter ----------
+   Two levels, both upright (XY plane, facing the level camera):
+
+   osmap    — the Namkuzu-da OS diagram: four INPUT nodes feeding the
+              Claude brain, four OUTPUT nodes flowing out. Edges are
+              quadratic curves; sysmap.js streams flow particles along
+              the same curves and anchors DOM labels/cards to the same
+              layout, so everything shares one source of truth here.
+   sysbloom — the drill-in: 7 category rings around a hub, holding all
+              44 real systems from the honest inventory. */
+import { SYSTEMS_DATA } from './systems-data.js';
+
+export function osmapLayout() {
+  const CX = 0.55;
+  const YS = [1.32, 0.44, -0.44, -1.32];
+  const brain = { x: CX, y: 0, r: 0.42, r2: 0.34 };
+  const inIds = ['voice', 'market', 'web', 'cloud'];
+  const outIds = ['intel', 'kb', 'control', 'alerts'];
+  const nodes = [];
+  const edges = []; // quadratic {a, c, b} — flow runs a → b
+
+  inIds.forEach((id, i) => {
+    const x = CX - 2.35, y = YS[i];
+    nodes.push({ id, x, y, r: 0.24, side: 'in' });
+    edges.push({
+      a: [x + 0.24, y, 0],
+      c: [(x + CX) / 2 - 0.2, y * 0.62, 0],
+      b: [CX - brain.r - 0.03, y * 0.18, 0],
+    });
+  });
+  outIds.forEach((id, i) => {
+    const x = CX + 2.35, y = YS[i];
+    nodes.push({ id, x, y, r: 0.24, side: 'out' });
+    edges.push({
+      a: [CX + brain.r + 0.03, y * 0.18, 0],
+      c: [(x + CX) / 2 + 0.2, y * 0.62, 0],
+      b: [x - 0.24, y, 0],
+    });
+  });
+  return { brain, nodes, edges };
+}
+
+export function sysbloomLayout() {
+  const CX = 0.45;
+  const hub = { x: CX, y: 0, r: 0.2 };
+  const cats = SYSTEMS_DATA.categories.map((c, k) => {
+    const a = -Math.PI / 2 + (k / SYSTEMS_DATA.categories.length) * Math.PI * 2;
+    return { id: c.id, name: c.name, x: CX + Math.cos(a) * 2.0, y: Math.sin(a) * 1.28, r: 0.5 };
+  });
+  const byCat = {};
+  cats.forEach((c) => { byCat[c.id] = []; });
+  SYSTEMS_DATA.systems.forEach((s) => { (byCat[s.cat] || (byCat[s.cat] = [])).push(s); });
+
+  const systems = [];
+  const GOLDEN = 2.39996;
+  for (const c of cats) {
+    const list = byCat[c.id] || [];
+    list.forEach((s, i) => {
+      const rr = 0.36 * Math.sqrt((i + 0.5) / list.length);
+      const aa = i * GOLDEN;
+      systems.push({
+        id: s.id, cat: c.id, status: s.status,
+        x: c.x + Math.cos(aa) * rr,
+        y: c.y + Math.sin(aa) * rr * 0.9,
+        r: 0.055,
+      });
+    });
+  }
+  const spines = cats.map((c) => {
+    const dx = c.x - hub.x, dy = c.y - hub.y;
+    const len = Math.hypot(dx, dy);
+    const ux = dx / len, uy = dy / len;
+    return {
+      a: [hub.x + ux * hub.r, hub.y + uy * hub.r, 0],
+      c: [hub.x + dx * 0.5, hub.y + dy * 0.5, 0],
+      b: [c.x - ux * c.r, c.y - uy * c.r, 0],
+    };
+  });
+  return { hub, cats, systems, spines };
+}
+
+function addQuadEdge(st, e, n) {
+  addPolyline(st, quadPts([e.a[0], e.a[1]], [e.c[0], e.c[1]], [e.b[0], e.b[1]], n));
+}
+
+export function osmapStructure() {
   const st = newStructure();
-  const Y = 0.01;
-
-  addCircle(st, 2.13, 170, { y: Y });
-  addCircle(st, 1.77, 150, { y: Y });
-
-  // 14 glyphs on the band; local frame: T = tangent, Rd = radial
-  const glyphR = 1.95;
-  for (let g = 0; g < 14; g++) {
-    const a = (g / 14) * Math.PI * 2;
-    const cx = Math.cos(a) * glyphR, cz = Math.sin(a) * glyphR;
-    const Rd = [Math.cos(a), Math.sin(a)];
-    const T = [-Math.sin(a), Math.cos(a)];
-    const P = (u, v) => [cx + T[0] * u + Rd[0] * v, Y, cz + T[1] * u + Rd[1] * v];
-
-    const strokes = 2 + ((rng() * 3) | 0);
-    for (let s = 0; s < strokes; s++) {
-      const kind = (rng() * 5) | 0;
-      const ou = (rng() - 0.5) * 0.156;
-      if (kind === 0) {          // bar along the radial axis
-        const p1 = P(ou, -0.12), p2 = P(ou, 0.12);
-        addSeg(st, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2]);
-      } else if (kind === 1) {   // cross bar
-        const ov = (rng() - 0.5) * 0.18;
-        const p1 = P(-0.096, ov), p2 = P(0.096, ov);
-        addSeg(st, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2]);
-      } else if (kind === 2) {   // diagonal
-        const d = rng() < 0.5 ? 1 : -1;
-        const p1 = P(-0.084 * d, -0.108), p2 = P(0.084 * d, 0.108);
-        addSeg(st, p1[0], p1[1], p1[2], p2[0], p2[1], p2[2]);
-      } else if (kind === 3) {   // arc
-        const a0 = rng() * Math.PI;
-        const sweep = Math.PI * (0.8 + rng() * 0.9);
-        const pts = [];
-        for (let i = 0; i <= 10; i++) {
-          const aa = a0 + (i / 10) * sweep;
-          pts.push(P(ou * 0.5 + Math.cos(aa) * 0.078, Math.sin(aa) * 0.078));
-        }
-        addPolyline(st, pts);
-      } else {                   // small ring "dot"
-        const ov = (rng() - 0.5) * 0.18;
-        const pts = [];
-        for (let i = 0; i <= 8; i++) {
-          const aa = (i / 8) * Math.PI * 2;
-          pts.push(P(ou + Math.cos(aa) * 0.027, ov + Math.sin(aa) * 0.027));
-        }
-        addPolyline(st, pts);
-      }
-    }
+  const L = osmapLayout();
+  addCircle(st, L.brain.r, 60, { plane: 'xy', cx: L.brain.x, cy: L.brain.y });
+  addCircle(st, L.brain.r2, 50, { plane: 'xy', cx: L.brain.x, cy: L.brain.y });
+  addDots(st, 10, { plane: 'xy', x: L.brain.x, y: L.brain.y, z: 0, spread: 0.17, zSpread: 0.1 });
+  for (const nd of L.nodes) {
+    addCircle(st, nd.r, 40, { plane: 'xy', cx: nd.x, cy: nd.y });
+    addDots(st, 1.1, { plane: 'xy', x: nd.x, y: nd.y, z: 0, spread: 0.05, zSpread: 0.06 });
   }
+  for (const e of L.edges) addQuadEdge(st, e, 20);
+  return st;
+}
 
-  // center petroglyph spiral
-  const spiral = [];
-  for (let i = 0; i <= 100; i++) {
-    const t = i / 100;
-    const a = t * Math.PI * 6;
-    const r = 0.084 + t * 0.575;
-    spiral.push([Math.cos(a) * r, Y, Math.sin(a) * r]);
-  }
-  addPolyline(st, spiral);
+export function osmap(count) {
+  return pointsFromStructure(osmapStructure(), count, {
+    segFrac: 0.72, dotFrac: 0.22,
+    jitter: 0.012, depthJitter: 0.09,
+    dust: { rMin: 2.7, rMax: 3.2, yAmp: 2.4 },
+  });
+}
 
-  // four radial ticks between spiral and band
-  for (let k = 0; k < 4; k++) {
-    const a = Math.PI / 4 + k * (Math.PI / 2);
-    addSeg(st, Math.cos(a) * 0.9, Y, Math.sin(a) * 0.9, Math.cos(a) * 1.44, Y, Math.sin(a) * 1.44);
+export function sysbloomStructure() {
+  const st = newStructure();
+  const L = sysbloomLayout();
+  addCircle(st, L.hub.r, 40, { plane: 'xy', cx: L.hub.x, cy: L.hub.y });
+  addDots(st, 4, { plane: 'xy', x: L.hub.x, y: L.hub.y, z: 0, spread: 0.09, zSpread: 0.08 });
+  for (const c of L.cats) addCircle(st, c.r, 60, { plane: 'xy', cx: c.x, cy: c.y });
+  for (const e of L.spines) addQuadEdge(st, e, 14);
+  for (const s of L.systems) {
+    addCircle(st, s.r, 12, { plane: 'xy', cx: s.x, cy: s.y });
+    // live systems burn brighter than descriptive/experimental ones
+    addDots(st, s.status === 'live' ? 0.5 : 0.22, { plane: 'xy', x: s.x, y: s.y, z: 0, spread: 0.02, zSpread: 0.04 });
   }
   return st;
 }
 
-export function glyphs(count) {
-  return pointsFromStructure(glyphsStructure(), count, {
-    segFrac: 0.9, dotFrac: 0,
-    jitter: 0.012,
-    dust: { rMin: 2.3, rMax: 2.8, yAmp: 0.16 },
+export function sysbloom(count) {
+  return pointsFromStructure(sysbloomStructure(), count, {
+    segFrac: 0.66, dotFrac: 0.28,
+    jitter: 0.01, depthJitter: 0.07,
+    dust: { rMin: 2.7, rMax: 3.2, yAmp: 2.2 },
   });
 }
 
@@ -791,15 +844,16 @@ export function beaconStructure() {
   return st;
 }
 
-export const GENERATORS = { galaxy, mandala, shield, chip, chipExploded, glyphs, enso, beacon };
+export const GENERATORS = { galaxy, mandala, shield, chip, chipExploded, osmap, sysbloom, enso, beacon };
 
 /* Crisp line-layer specs: skeleton builder + settled opacity per shape.
    galaxy stays pure particle cloud — no skeleton (that's the point). */
 export const LINES = {
-  mandala: { build: () => segsToPositions(mandalaStructure()), opacity: 0.5 },
-  shield:  { build: () => segsToPositions(shieldStructure()), opacity: 0.55 },
-  chip:    { build: () => segsToPositions(chipStructure(0)), opacity: 0.5 },
-  glyphs:  { build: () => segsToPositions(glyphsStructure()), opacity: 0.5 },
-  enso:    { build: () => segsToPositions(ensoStructure()), opacity: 0.3 },
-  beacon:  { build: () => segsToPositions(beaconStructure()), opacity: 0.45 },
+  mandala:  { build: () => segsToPositions(mandalaStructure()), opacity: 0.5 },
+  shield:   { build: () => segsToPositions(shieldStructure()), opacity: 0.55 },
+  chip:     { build: () => segsToPositions(chipStructure(0)), opacity: 0.5 },
+  osmap:    { build: () => segsToPositions(osmapStructure()), opacity: 0.55 },
+  sysbloom: { build: () => segsToPositions(sysbloomStructure()), opacity: 0.5 },
+  enso:     { build: () => segsToPositions(ensoStructure()), opacity: 0.3 },
+  beacon:   { build: () => segsToPositions(beaconStructure()), opacity: 0.45 },
 };

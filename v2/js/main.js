@@ -10,6 +10,7 @@
 import * as THREE from 'three';
 import { createParticleSystem } from './particles.js';
 import { createLineLayer } from './lines.js';
+import { createSystemsMap } from './sysmap.js';
 import { initJourney } from './journey.js';
 import { initArtifacts } from './artifacts.js';
 
@@ -52,6 +53,7 @@ let scene = null;
 let camera = null;
 let particleSystem = null;
 let lineLayer = null;
+let sysMap = null;
 let journeyAPI = null;
 let clock = null;
 let rafId = null;
@@ -90,6 +92,10 @@ function buildScene(tier) {
   // vector ink layer rides inside the particle object so rotation matches
   lineLayer = createLineLayer(particleSystem);
   particleSystem.object3D.add(lineLayer.object3D);
+
+  // Living System Map (chapter 04): flow particles + labels + drill-in
+  sysMap = createSystemsMap({ particleSystem, camera });
+  if (sysMap.object3D) particleSystem.object3D.add(sysMap.object3D);
 
   clock = new THREE.Clock();
 }
@@ -154,6 +160,7 @@ function loop() {
 
   particleSystem.update(dt, elapsed);
   if (lineLayer) lineLayer.update(dt);
+  if (sysMap) sysMap.update(dt);
   if (journeyAPI && typeof journeyAPI.update === 'function') {
     journeyAPI.update(dt, elapsed);
   }

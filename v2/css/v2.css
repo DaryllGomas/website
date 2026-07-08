@@ -382,6 +382,182 @@ html.js-journey .chapter {
   .cert-rows { grid-template-columns: 1fr; }
 }
 
+/* ---------- chapter 04: living system map (DOM overlay) ----------
+   sysmap.js renders node labels + a hover info card into #sysmap-layer,
+   a fixed full-viewport layer sitting above the canvas (z-0) and below
+   the chapter text (z-10). Positions (left/top) and opacity are set
+   inline by JS per-frame; only the visual language lives here. */
+.sysmap-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.sysmap-label {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  text-shadow: 0 0 8px rgba(7, 7, 12, 0.9);
+}
+
+.sysmap-label--brain {
+  color: var(--cyan);
+  font-size: 0.7rem;
+  letter-spacing: 0.24em;
+}
+
+.sysmap-label--sub {
+  font-size: 0.55rem;
+  color: var(--text-faint);
+  letter-spacing: 0.14em;
+}
+
+.sysmap-label--cat {
+  color: var(--text-dim);
+  font-size: 0.58rem;
+}
+
+.sysmap-label--hot {
+  color: var(--cyan);
+}
+
+.sysmap-card {
+  position: absolute;
+  max-width: 320px;
+  padding: 0.95rem 1.1rem;
+  background: rgba(11, 11, 20, 0.92);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.sysmap-card-name {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+
+.sysmap-card-status {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--line);
+  color: var(--text-faint);
+}
+
+.sysmap-card-status--live {
+  color: var(--cyan);
+  border-color: rgba(0, 212, 255, 0.4);
+}
+
+.sysmap-card-status--descriptive {
+  color: var(--text-faint);
+  border-color: var(--line);
+}
+
+.sysmap-card-status--experimental {
+  color: var(--violet);
+  border-color: rgba(123, 47, 242, 0.4);
+}
+
+.sysmap-card-desc {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.55;
+  margin-top: 0.5rem;
+}
+
+.sysmap-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.6rem;
+}
+
+.sysmap-tag {
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  color: var(--text-faint);
+  border: 1px solid var(--line-soft);
+  padding: 0.12rem 0.45rem;
+}
+
+/* ---------- chapter 04: map hint + controls ----------
+   Plain-flow / no-JS default: hidden — the accordion catalog is the whole
+   story there. html.js-journey turns them on to introduce the map. */
+.map-hint,
+.map-controls {
+  display: none;
+}
+
+.map-hint {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  max-width: 30rem;
+  margin: 0 0 0.6rem;
+}
+
+.map-controls {
+  gap: 1.5rem;
+  margin-top: 0.8rem;
+}
+
+html.js-journey .map-hint {
+  display: block;
+}
+
+html.js-journey .map-controls {
+  display: flex;
+}
+
+.map-back,
+.map-list-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.map-back:hover,
+.map-back:focus-visible,
+.map-list-toggle:hover,
+.map-list-toggle:focus-visible {
+  color: var(--cyan);
+}
+
+.map-back:focus-visible,
+.map-list-toggle:focus-visible {
+  outline: 1px solid var(--cyan);
+  outline-offset: 6px;
+}
+
+.map-list-toggle[aria-pressed="true"] {
+  color: var(--cyan);
+}
+
 /* ---------- chapter 04: artifacts ---------- */
 .artifact-rows {
   border-top: 1px solid var(--line);
@@ -467,6 +643,21 @@ html.js-journey .chapter {
    behind a JS requirement. js/artifacts.js flips html.js-artifacts on and
    collapses panels by default, animating open/close via inline max-height
    (set from JS, transitioned here in CSS). */
+
+/* Journey mode: the map is the hero, so the catalog + GitHub archive row
+   (both wrapped in #artifact-catalog-wrap — see index.html) are hidden by
+   default and only reappear when sysmap.js toggles html.js-journey
+   #chapter-4.show-list (the "Browse as list" control). Plain-flow / no-JS
+   / reduced-motion visitors never get html.js-journey at all, so the wrap
+   stays visible exactly as before — no regression there. */
+html.js-journey #chapter-4 .artifact-catalog-wrap {
+  display: none;
+}
+
+html.js-journey #chapter-4.show-list .artifact-catalog-wrap {
+  display: block;
+}
+
 .artifact-catalog {
   border-top: 1px solid var(--line);
 }
@@ -725,6 +916,13 @@ html.js-journey .artifact-catalog::-webkit-scrollbar-thumb {
   .artifact-group-header,
   .artifact-group-chevron,
   .artifact-group-panel {
+    transition: none;
+  }
+
+  .sysmap-label,
+  .sysmap-card,
+  .map-back,
+  .map-list-toggle {
     transition: none;
   }
 }

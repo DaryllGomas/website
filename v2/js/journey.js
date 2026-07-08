@@ -44,7 +44,7 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
     { id: 1, morph: 'mandala', spin: true,  cam: { pos: [0.00, 5.60, 1.90], look: [-0.70, 0.00, 0] } },
     { id: 2, morph: 'shield',  spin: false, cam: { pos: [0.55, 0.10, 4.60], look: [0, 0.10, 0] } },
     { id: 3, morph: 'chipExploded', morphThen: 'chip', spin: false, cam: { pos: [-0.45, 1.85, 4.65], look: [0, -0.20, 0] } },
-    { id: 4, morph: 'glyphs',  spin: true,  cam: { pos: [0.00, 8.20, 3.00], look: [0, 0.00, 0] } },
+    { id: 4, morph: 'osmap',   spin: false, cam: { pos: [0.15, 0.05, 6.90], look: [0.15, 0.00, 0] } },
     { id: 5, morph: 'enso',    spin: true,  cam: { pos: [0.20, 4.40, 1.60], look: [-0.50, 0.00, 0] } },
     { id: 6, morph: 'beacon',  spin: true,  cam: { pos: [0.00, 5.80, 1.50], look: [0, 0.00, 0] } },
   ];

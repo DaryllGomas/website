@@ -70,6 +70,12 @@
     </ol>
   </nav>
 
+  <!-- Systems-map DOM overlay — node labels + hover info cards for the
+       chapter-4 "Living System Map". Empty at load; sysmap.js populates
+       it. Sits above the canvas (z-0) and below the chapter text (z-10);
+       see .sysmap-layer in v2.css. -->
+  <div class="sysmap-layer" id="sysmap-layer" aria-hidden="true"></div>
+
   <main>
     <!-- Scroll-distance spacers — invisible in the fallback (no-JS /
          reduced-motion) flow; become the ~700vh scroll track that
@@ -140,12 +146,22 @@
         <div class="chapter-inner chapter-inner--wide">
           <span class="eyebrow">04 / ARTIFACTS</span>
           <h2 class="display-lg">Selected Work</h2>
+          <p class="map-hint">A living map of the operating system behind everything here &mdash; hover to explore, click the core to go deeper.</p>
+          <div class="map-controls">
+            <button type="button" class="map-back" id="map-back" hidden>&#9666; Back to OS map</button>
+            <button type="button" class="map-list-toggle" id="map-list-toggle" aria-pressed="false">Browse as list</button>
+          </div>
 
           <!-- Full ~35-project catalog, 7 categories. Every panel and row
                is static HTML (aria-expanded="true" by default) — with
                zero JS every category renders fully expanded. js/artifacts.js
                progressively collapses panels and animates the toggle;
-               see the html.js-artifacts rules in v2.css. -->
+               see the html.js-artifacts rules in v2.css. In journey mode
+               this whole block (plus the GitHub archive row after it) is
+               wrapped in #artifact-catalog-wrap, which sysmap.js hides by
+               default and shows again via the "Browse as list" toggle —
+               see the .artifact-catalog-wrap rules in v2.css. -->
+          <div class="artifact-catalog-wrap" id="artifact-catalog-wrap">
           <div class="artifact-catalog" id="artifact-catalog" data-lenis-prevent>
 
             <!-- Two independent column stacks (not CSS grid/multicol rows) —
@@ -459,6 +475,7 @@
               </a>
             </li>
           </ul>
+          </div>
         </div>
       </section>
 
