@@ -520,22 +520,23 @@ export function chipStructure(explode) {
   rectLoop(0, 0, 3.0, 2.0, -0.52, 'substrate');
   rectLoop(0, 0, 3.0, 2.0, -0.66, 'substrate');
   verticals(0, 0, 3.0, 2.0, -0.66, -0.52, 'substrate');
-  // silicon interposer
+  // silicon interposer — top loop + verticals only; from the raised 3/4
+  // camera a bottom loop projects just inside the top one and reads as a
+  // smeared double line (same for die/HBM below: hidden-edge clutter)
   rectLoop(0, 0, 2.2, 1.35, -0.40, 'interposer');
-  rectLoop(0, 0, 2.2, 1.35, -0.49, 'interposer');
   verticals(0, 0, 2.2, 1.35, -0.49, -0.40, 'interposer');
   // compute die
   rectLoop(0, 0, 0.9, 0.9, -0.10, 'die');
-  rectLoop(0, 0, 0.9, 0.9, -0.40, 'die');
   verticals(0, 0, 0.9, 0.9, -0.40, -0.10, 'die');
   // four HBM stacks with layer striations
   const HBM = [[-0.82, -0.36], [-0.82, 0.36], [0.82, -0.36], [0.82, 0.36]];
   for (const [hx, hz] of HBM) {
     rectLoop(hx, hz, 0.52, 0.72, -0.12, 'hbm');
-    rectLoop(hx, hz, 0.52, 0.72, -0.40, 'hbm');
     verticals(hx, hz, 0.52, 0.72, -0.40, -0.12, 'hbm');
+    // stacked-die striations on the camera-facing (+z) face only —
+    // full loops through all four faces X-ray into visual soup
     for (const sy of [-0.33, -0.26, -0.19]) {
-      rectLoop(hx, hz, 0.52, 0.72, sy, 'hbm'); // stacked-die striations
+      seg(hx - 0.26, sy, hz + 0.36, hx + 0.26, sy, hz + 0.36, 'hbm');
     }
   }
   // RDL traces on the interposer top: die edge → each HBM inner edge
@@ -760,16 +761,18 @@ export function mandalaStructure() {
 }
 
 export function ensoStructure() {
+  // Plain centerline arc, stopped short of the brush tails — the
+  // particle stroke wobbles and curls around it; a wobbling skeleton
+  // fights the brush instead of anchoring it.
   const st = newStructure();
   const gap = 42 * (Math.PI / 180);
   const start = Math.PI * 0.5 + gap / 2;
   const sweep = Math.PI * 2 - gap;
   const pts = [];
-  for (let i = 0; i <= 150; i++) {
-    const t = i / 150;
+  for (let i = 0; i <= 130; i++) {
+    const t = 0.05 + (i / 130) * 0.9;
     const theta = start + sweep * t;
-    const r = 1.75 * (1 + 0.03 * Math.sin(t * Math.PI * 4));
-    pts.push([Math.cos(theta) * r, 0, Math.sin(theta) * r]);
+    pts.push([Math.cos(theta) * 1.75, 0, Math.sin(theta) * 1.75]);
   }
   addPolyline(st, pts);
   return st;

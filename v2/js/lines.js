@@ -71,6 +71,13 @@ export function createLineLayer(particleSystem) {
     const speed = target > material.opacity ? 1.4 : 5.0;
     material.opacity += (target - material.opacity) * Math.min(dt * speed, 1);
     object3D.visible = material.opacity > 0.015;
+
+    // The mandala chapter breathes the particles radially (uPulseAmt in
+    // the vertex shader). The ink must breathe in perfect sync or the
+    // particle rings slide off the vector rings — a visible double image.
+    const u = particleSystem.uniforms;
+    const pulse = 1 + Math.sin(u.uTime.value * 0.6) * 0.035 * u.uPulseAmt.value;
+    object3D.scale.set(pulse, 1, pulse);
   }
 
   /* static (reduced-motion) mode: show a shape's ink at full strength
