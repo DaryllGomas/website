@@ -21,6 +21,7 @@ const VERTEX_SHADER = /* glsl */ `
   uniform float uSize;
   uniform float uDPR;
   uniform float uPulseAmt;
+  uniform float uDrift;
 
   varying float vSeed;
   varying float vRadius;
@@ -37,10 +38,13 @@ const VERTEX_SHADER = /* glsl */ `
     // gentle ambient drift — amplitude must stay well below the finest
     // structural detail in the morph targets (rings/petals jitter ~0.01),
     // or the drift smears the geometry into fog. Life, not blur.
+    // uDrift is state-aware (particles.js update): ~1 while morphing so
+    // the motion feels organic, easing to ~0.3 once a shape settles —
+    // a settled stroke must not wander pixels away from its ink line.
     float driftT = uTime * 0.1 + aSeed * 6.2831853;
-    pos.x += sin(driftT + aSeed * 3.1) * 0.014;
-    pos.y += cos(driftT * 1.3 + aSeed * 5.7) * 0.014;
-    pos.z += sin(driftT * 0.7 + aSeed * 2.4) * 0.01;
+    pos.x += sin(driftT + aSeed * 3.1) * 0.014 * uDrift;
+    pos.y += cos(driftT * 1.3 + aSeed * 5.7) * 0.014 * uDrift;
+    pos.z += sin(driftT * 0.7 + aSeed * 2.4) * 0.01 * uDrift;
 
     // radial breathing pulse — ramped in/out per chapter via uPulseAmt
     float pulse = 1.0 + sin(uTime * 0.6) * 0.035 * uPulseAmt;
@@ -84,7 +88,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     // vector line layer (lines.js) carries the sharpness at rest, so
     // the halo stays subtle.
     float core = smoothstep(0.16, 0.04, d);
-    float halo = smoothstep(0.5, 0.14, d) * 0.18;
+    float halo = smoothstep(0.5, 0.14, d) * 0.12;
     float alpha = core + halo;
     if (alpha < 0.02) discard;
 
@@ -134,6 +138,7 @@ export function createParticleSystem(count, initialTarget = 'galaxy') {
     uSize: { value: 3.0 },
     uDPR: { value: 1 },
     uPulseAmt: { value: 0 },
+    uDrift: { value: 1 },
     uColorA: { value: new THREE.Color('#00d4ff') },
     uColorB: { value: new THREE.Color('#7b2ff2') },
   };
@@ -184,6 +189,9 @@ export function createParticleSystem(count, initialTarget = 'galaxy') {
 
   function update(dt, elapsed) {
     uniforms.uTime.value = elapsed;
+    // breathe drift up during morphs, calm it once settled (sharpness)
+    const driftTarget = animating ? 1 : 0.3;
+    uniforms.uDrift.value += (driftTarget - uniforms.uDrift.value) * Math.min(dt * 1.5, 1);
     if (!animating) return;
 
     animT += dt / ANIM_DURATION;

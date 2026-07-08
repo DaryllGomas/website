@@ -91,25 +91,29 @@ function pointsFromStructure(st, count, opts = {}) {
   const {
     rng = Math.random,
     segFrac = 0.78, dotFrac = 0.16,
+    auraFrac = 0, // same strokes, ~10× jitter: diffuse glow without saturating the line
     jitter = 0.012, depthJitter = 0,
-    dust = null, // {rMin, rMax, yAmp}
+    dust = null, // {rMin, rMax, yAmp, behind}  behind: push dust past the shape plane (-z)
   } = opts;
   const arr = new Float32Array(count * 3);
-  const segEnd = segFrac, dotEnd = segFrac + dotFrac;
+  const segEnd = segFrac, auraEnd = segFrac + auraFrac, dotEnd = auraEnd + dotFrac;
 
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
     const pick = rng();
 
-    if (pick < segEnd && st.segs.length) {
+    if (pick < auraEnd && st.segs.length) {
+      const aura = pick >= segEnd;
+      const j = aura ? jitter * 10 : jitter;
+      const dj = aura ? (depthJitter || jitter) * 6 : (depthJitter || jitter);
       const target = rng() * st.totalLen;
       let lo = 0, hi = st.segs.length - 1;
       while (lo < hi) { const mid = (lo + hi) >> 1; if (st.segs[mid][6] < target) lo = mid + 1; else hi = mid; }
       const s = st.segs[lo];
       const t = rng();
-      arr[i3] = s[0] + (s[3] - s[0]) * t + (rng() - 0.5) * jitter;
-      arr[i3 + 1] = s[1] + (s[4] - s[1]) * t + (rng() - 0.5) * jitter;
-      arr[i3 + 2] = s[2] + (s[5] - s[2]) * t + (rng() - 0.5) * (depthJitter || jitter);
+      arr[i3] = s[0] + (s[3] - s[0]) * t + (rng() - 0.5) * j;
+      arr[i3 + 1] = s[1] + (s[4] - s[1]) * t + (rng() - 0.5) * j;
+      arr[i3 + 2] = s[2] + (s[5] - s[2]) * t + (rng() - 0.5) * dj;
     } else if (pick < dotEnd && st.dots.length) {
       const target = rng() * st.dotWeight;
       let d = st.dots[0];
@@ -131,7 +135,10 @@ function pointsFromStructure(st, count, opts = {}) {
       const theta = rng() * Math.PI * 2;
       arr[i3] = Math.cos(theta) * r;
       arr[i3 + 1] = (rng() - 0.5) * dust.yAmp;
-      arr[i3 + 2] = Math.sin(theta) * r;
+      // starfield depth: keep ambience BEHIND the shape plane so it reads
+      // as space, not as foreground blur floating over the diagram
+      const z = Math.sin(theta) * r;
+      arr[i3 + 2] = dust.behind ? -Math.abs(z) - 0.6 : z;
     } else if (st.segs.length) {
       // no dust configured — put the remainder on the skeleton
       const s = st.segs[(rng() * st.segs.length) | 0];
@@ -395,9 +402,9 @@ export function shieldStructure() {
 
 export function shield(count) {
   return pointsFromStructure(shieldStructure(), count, {
-    segFrac: 0.94, dotFrac: 0,
+    segFrac: 0.3, auraFrac: 0.44, dotFrac: 0,
     jitter: 0.012, depthJitter: 0.09,
-    dust: { rMin: 1.4, rMax: 2.3, yAmp: 2.4 },
+    dust: { rMin: 1.6, rMax: 3.4, yAmp: 2.6, behind: true },
   });
 }
 
@@ -502,9 +509,9 @@ export function osmapStructure() {
 
 export function osmap(count) {
   return pointsFromStructure(osmapStructure(), count, {
-    segFrac: 0.72, dotFrac: 0.22,
+    segFrac: 0.26, auraFrac: 0.34, dotFrac: 0.28,
     jitter: 0.012, depthJitter: 0.09,
-    dust: { rMin: 2.7, rMax: 3.2, yAmp: 2.4 },
+    dust: { rMin: 2.8, rMax: 4.2, yAmp: 2.8, behind: true },
   });
 }
 
@@ -525,9 +532,9 @@ export function sysbloomStructure() {
 
 export function sysbloom(count) {
   return pointsFromStructure(sysbloomStructure(), count, {
-    segFrac: 0.66, dotFrac: 0.28,
+    segFrac: 0.26, auraFrac: 0.3, dotFrac: 0.32,
     jitter: 0.01, depthJitter: 0.07,
-    dust: { rMin: 2.7, rMax: 3.2, yAmp: 2.2 },
+    dust: { rMin: 2.8, rMax: 4.2, yAmp: 2.6, behind: true },
   });
 }
 
@@ -636,16 +643,19 @@ function buildChip(count, explode) {
     const i3 = i * 3;
     const pick = rng();
 
-    if (pick < 0.56) {
-      // wireframe edges, length-weighted
+    if (pick < 0.58) {
+      // wireframe edges, length-weighted — tight core line (< 0.30) or
+      // diffuse aura around the same strokes (0.30–0.58). Branch constants
+      // must stay identical between explode variants (rng correspondence).
+      const j = pick < 0.3 ? 0.008 : 0.07;
       const target = rng() * totalLen;
       let lo = 0, hi = segs.length - 1;
       while (lo < hi) { const mid = (lo + hi) >> 1; if (segs[mid][6] < target) lo = mid + 1; else hi = mid; }
       const s = segs[lo];
       const t = rng();
-      arr[i3] = s[0] + (s[3] - s[0]) * t + (rng() - 0.5) * 0.008;
-      arr[i3 + 1] = s[1] + (s[4] - s[1]) * t + (rng() - 0.5) * 0.008;
-      arr[i3 + 2] = s[2] + (s[5] - s[2]) * t + (rng() - 0.5) * 0.008;
+      arr[i3] = s[0] + (s[3] - s[0]) * t + (rng() - 0.5) * j;
+      arr[i3 + 1] = s[1] + (s[4] - s[1]) * t + (rng() - 0.5) * j;
+      arr[i3 + 2] = s[2] + (s[5] - s[2]) * t + (rng() - 0.5) * j;
     } else if (pick < 0.96) {
       // structured dots
       const target = rng() * dotWeight;
@@ -850,10 +860,10 @@ export const GENERATORS = { galaxy, mandala, shield, chip, chipExploded, osmap, 
    galaxy stays pure particle cloud — no skeleton (that's the point). */
 export const LINES = {
   mandala:  { build: () => segsToPositions(mandalaStructure()), opacity: 0.5 },
-  shield:   { build: () => segsToPositions(shieldStructure()), opacity: 0.55 },
-  chip:     { build: () => segsToPositions(chipStructure(0)), opacity: 0.5 },
-  osmap:    { build: () => segsToPositions(osmapStructure()), opacity: 0.55 },
-  sysbloom: { build: () => segsToPositions(sysbloomStructure()), opacity: 0.5 },
+  shield:   { build: () => segsToPositions(shieldStructure()), opacity: 0.7 },
+  chip:     { build: () => segsToPositions(chipStructure(0)), opacity: 0.65 },
+  osmap:    { build: () => segsToPositions(osmapStructure()), opacity: 0.8 },
+  sysbloom: { build: () => segsToPositions(sysbloomStructure()), opacity: 0.75 },
   enso:     { build: () => segsToPositions(ensoStructure()), opacity: 0.3 },
-  beacon:   { build: () => segsToPositions(beaconStructure()), opacity: 0.45 },
+  beacon:   { build: () => segsToPositions(beaconStructure()), opacity: 0.55 },
 };
