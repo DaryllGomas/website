@@ -130,6 +130,20 @@ export function initJourney({ camera, particleSystem, reducedMotion }) {
     });
     railDots.forEach((dot, i) => dot.classList.toggle('is-active', i === index));
     activeIndex = index;
+
+    // Keep the particle state in sync too — if this resync wins the race
+    // against goToChapter, the later onEnter early-returns on activeIndex
+    // and the morph would otherwise never fire. morphTo is idempotent.
+    const chapter = CHAPTERS[index];
+    if (particleSystem) {
+      if (chapter.morph) particleSystem.morphTo(chapter.morph);
+      gsap.to(particleSystem.uniforms.uPulseAmt, {
+        value: chapter.id === 1 ? 1 : 0,
+        duration: 1.2,
+        ease: 'power2.out',
+        overwrite: true,
+      });
+    }
   }
 
   // Deferred with a timer, not requestAnimationFrame: when the GPU/frame

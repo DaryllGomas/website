@@ -34,11 +34,13 @@ const VERTEX_SHADER = /* glsl */ `
     float e = smoothstep(0.0, 1.0, staggerT);
     vec3 pos = mix(aFrom, aTo, e);
 
-    // gentle ambient drift
-    float driftT = uTime * 0.15 + aSeed * 6.2831853;
-    pos.x += sin(driftT + aSeed * 3.1) * 0.06;
-    pos.y += cos(driftT * 1.3 + aSeed * 5.7) * 0.06;
-    pos.z += sin(driftT * 0.7 + aSeed * 2.4) * 0.04;
+    // gentle ambient drift — amplitude must stay well below the finest
+    // structural detail in the morph targets (rings/petals jitter ~0.01),
+    // or the drift smears the geometry into fog. Life, not blur.
+    float driftT = uTime * 0.12 + aSeed * 6.2831853;
+    pos.x += sin(driftT + aSeed * 3.1) * 0.028;
+    pos.y += cos(driftT * 1.3 + aSeed * 5.7) * 0.028;
+    pos.z += sin(driftT * 0.7 + aSeed * 2.4) * 0.02;
 
     // radial breathing pulse — ramped in/out per chapter via uPulseAmt
     float pulse = 1.0 + sin(uTime * 0.6) * 0.035 * uPulseAmt;
@@ -76,14 +78,19 @@ const FRAGMENT_SHADER = /* glsl */ `
   void main() {
     vec2 c = gl_PointCoord - 0.5;
     float d = length(c);
-    float alpha = smoothstep(0.5, 0.0, d);
-    if (alpha < 0.01) discard;
+    // Star profile: bright crisp core + faint wide halo. A single soft
+    // falloff (the old profile) turns 200k additive points into bloom
+    // soup; the hard core is what keeps fine geometry legible.
+    float core = smoothstep(0.18, 0.05, d);
+    float halo = smoothstep(0.5, 0.14, d) * 0.3;
+    float alpha = core + halo;
+    if (alpha < 0.02) discard;
 
     float mixT = clamp(vRadius / 3.2, 0.0, 1.0);
     float shimmer = 0.5 + 0.5 * sin(uTime * 0.6 + vSeed * 12.0);
     vec3 color = mix(uColorA, uColorB, mixT) + shimmer * 0.05;
 
-    gl_FragColor = vec4(color, alpha * 0.85 * clamp(vDepthAtten, 0.2, 1.0));
+    gl_FragColor = vec4(color, alpha * 0.9 * clamp(vDepthAtten, 0.2, 1.0));
   }
 `;
 
@@ -120,7 +127,9 @@ export function createParticleSystem(count, initialTarget = 'galaxy') {
     uTime: { value: 0 },
     uPointer: { value: new THREE.Vector3(9999, 9999, 9999) },
     uPointerActive: { value: 0 },
-    uSize: { value: 2.4 },
+    // Sized for the star profile above: the visible core is ~1/3 of the
+    // point sprite, so the sprite runs larger than the old soft-blob tuning.
+    uSize: { value: 3.0 },
     uDPR: { value: 1 },
     uPulseAmt: { value: 0 },
     uColorA: { value: new THREE.Color('#00d4ff') },

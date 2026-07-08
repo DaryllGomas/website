@@ -86,6 +86,11 @@ function onResize() {
   if (!renderer || !camera) return;
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+  // Browser zoom changes devicePixelRatio — a stale ratio renders the
+  // canvas at the wrong resolution and the whole scene goes soft.
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(dpr);
+  if (particleSystem) particleSystem.setDPR(dpr);
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
@@ -176,31 +181,49 @@ function stopLoop() {
 }
 
 /* ---------- reduced-motion: one static frame, no RAF loop ---------- */
+function frameStaticCamera() {
+  // The mandala lies flat in the XZ plane — the camera must crane
+  // overhead or the hero renders as an edge-on smear (the original
+  // static frame looked at it from the side). Pull back further on
+  // narrow/portrait viewports so the full disc (r≈2.35) stays framed.
+  const aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = aspect;
+  const dist = 6.2 / Math.min(1, Math.max(aspect, 0.45));
+  camera.position.set(0, dist, dist * 0.26);
+  camera.userData.lookTarget.set(0, 0, 0);
+  camera.lookAt(camera.userData.lookTarget);
+  camera.updateProjectionMatrix();
+}
+
 function renderStaticFrame() {
   const tier = pickTier();
   scene = new THREE.Scene();
 
   camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 0.4, 5.6);
   camera.userData.lookTarget = new THREE.Vector3(0, 0, 0);
-  camera.lookAt(camera.userData.lookTarget);
 
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(dpr);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setClearColor(0x000000, 0);
 
-  particleSystem = createParticleSystem(Math.min(tier.count, 60000), 'mandala');
-  particleSystem.setDPR(1);
+  // Static frame renders once — density is cheap here, and the line-art
+  // mandala needs it to read as drawn strokes.
+  particleSystem = createParticleSystem(Math.min(tier.count, 90000), 'mandala');
+  particleSystem.setDPR(dpr);
   particleSystem.update(0, 2.0); // settle shimmer/time uniforms for a pleasant static look
   scene.add(particleSystem.object3D);
 
+  frameStaticCamera();
   renderer.render(scene, camera);
   root.classList.add('mandala-active');
 
   window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    frameStaticCamera();
+    const newDpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(newDpr);
+    particleSystem.setDPR(newDpr);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.render(scene, camera);
   });

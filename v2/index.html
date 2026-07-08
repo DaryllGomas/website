@@ -148,6 +148,13 @@
                see the html.js-artifacts rules in v2.css. -->
           <div class="artifact-catalog" id="artifact-catalog" data-lenis-prevent>
 
+            <!-- Two independent column stacks (not CSS grid/multicol rows) —
+                 see the .artifact-catalog rules in v2.css: at >=1100px this
+                 becomes a flex row of two ordinary block-flow columns, so
+                 opening a tall category in one column never forces a
+                 matching row height (and dead space) in the other. -->
+            <div class="artifact-column">
+
             <div class="artifact-group">
               <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-trading">
                 <span class="artifact-group-name">Trading Ecosystem</span>
@@ -338,6 +345,10 @@
               </div>
             </div>
 
+            </div>
+
+            <div class="artifact-column">
+
             <div class="artifact-group">
               <button type="button" class="artifact-group-header" aria-expanded="true" aria-controls="artifact-panel-interactive">
                 <span class="artifact-group-name">Interactive Experiences</span>
@@ -433,6 +444,8 @@
                   </li>
                 </ul>
               </div>
+            </div>
+
             </div>
 
           </div>

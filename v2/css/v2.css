@@ -164,8 +164,24 @@ html.js-journey .progress-rail {
   display: none;
 }
 
+/* Labels only ever reserve space at >=1100px (unchanged gate). Within that,
+   show a label only for the active chapter's dot — the rest stay reserved
+   in layout but invisible — so the rail reads as a single quiet indicator
+   instead of a wall of text competing with chapter copy. Hovering the rail
+   reveals every label at once, restoring "navigation at a glance". */
 @media (min-width: 1100px) {
-  .rail-label { display: inline; }
+  .rail-label {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  .rail-dot.is-active .rail-label,
+  .progress-rail:hover .rail-label {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* ---------- scroll spacers (JS-journey scroll track) ---------- */
@@ -214,6 +230,17 @@ html.js-journey .chapter {
   inset: 0;
   opacity: 0;
   pointer-events: none;
+  /* Reserve a real gutter so chapter text never underlaps the fixed rail.
+     Measured in Chrome against the live rail markup (Space Grotesk, the
+     widest labels "Synthesis"/"Artifacts"): the rail's rightmost extent
+     with a label showing runs ~134.5px at 1100px viewport width up to
+     ~141.5px at ~2550px width (rail's own left offset caps at 2.5rem
+     there). This clamp stays flat at 10.5rem (168px, ~33px clearance) for
+     widths up to ~1867px, eases up to 11.5rem (184px, ~42px clearance) by
+     ~2044px, and stays flat after — comfortably clearing the rail across
+     the whole 1100-2600px range without over-padding at either end.
+     Plain-flow mode (no .js-journey) is untouched — same padding as always. */
+  padding-left: clamp(10.5rem, 9vw, 11.5rem);
 }
 
 .chapter-inner {
@@ -448,7 +475,54 @@ html.js-journey .chapter {
   border-bottom: 1px solid var(--line);
 }
 
+/* Two-column category layout at wider viewports: two independent
+   .artifact-column stacks (see index.html) laid out side by side with
+   plain flexbox — deliberately NOT CSS Grid and NOT CSS multicol.
+   A grid's 2-up rows pair item N with item N+1 and size the whole row to
+   the taller of the two; since only one group is ever open at a time
+   (see artifacts.js) but category sizes vary a lot (12 items vs 3), a
+   grid row containing the open "Trading Ecosystem" paired with a closed
+   neighbor forces that neighbor's column to inherit the same huge row
+   height, leaving a tall dead gap under the shorter header —
+   reintroducing the "dead space" complaint this redesign is fixing.
+   CSS multicol (column-count) avoids the row-pairing problem but proved
+   unreliable in testing: content fragmentation interacting with the JS
+   accordion's inline max-height changes intermittently left an opened
+   panel's computed height stuck at 0 despite the correct inline style.
+   Two ordinary flex children, each a normal block-flow column, sidestep
+   both problems — each column's height reflects only its own content,
+   with no row-height coupling and no fragmentation-layout involved.
+   Each group gets its own top hairline instead of relying on the old
+   shared catalog-level top border (which only ever drew one line, above
+   the very first item). */
+@media (min-width: 1100px) {
+  .artifact-catalog {
+    display: flex;
+    align-items: flex-start;
+    gap: clamp(2rem, 4vw, 4rem);
+    border-top: none;
+  }
+
+  .artifact-column {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .artifact-group {
+    border-top: 1px solid var(--line);
+    border-bottom: none;
+  }
+
+  /* Narrower per-column width — shrink the fixed name column so
+     descriptions still get room to breathe at ~26rem per column. */
+  .artifact-catalog .artifact-row a,
+  .artifact-catalog .artifact-row.artifact-row--static {
+    grid-template-columns: 9rem 1fr auto;
+  }
+}
+
 .artifact-group-header {
+  position: relative; /* anchors the is-open gradient underline below */
   display: flex;
   align-items: center;
   width: 100%;
@@ -462,6 +536,20 @@ html.js-journey .chapter {
   text-align: left;
   cursor: pointer;
   transition: padding-left 0.35s ease;
+}
+
+/* Open-state accent: a thin cyan -> violet underline directly beneath the
+   header, in the same gradient language as .hairline elsewhere — marks
+   which category is currently expanded without a box/card. */
+.artifact-group.is-open .artifact-group-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--cyan), var(--violet));
+  opacity: 0.7;
 }
 
 .artifact-group-header:hover,
@@ -485,16 +573,24 @@ html.js-journey .chapter {
 }
 
 .artifact-group-header:hover .artifact-group-name,
-.artifact-group-header:focus-visible .artifact-group-name {
+.artifact-group-header:focus-visible .artifact-group-name,
+.artifact-group.is-open .artifact-group-name {
   color: var(--cyan);
 }
 
 .artifact-group-count {
   min-width: 1.5rem;
   font-family: var(--font-display);
-  font-size: 0.8rem;
-  color: var(--text-faint);
+  font-size: 0.7rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
   text-align: right;
+  transition: color 0.35s ease;
+}
+
+.artifact-group.is-open .artifact-group-count {
+  color: var(--cyan);
 }
 
 /* Chevron: matches the root site's marker convention (a rotating stroke
@@ -503,8 +599,8 @@ html.js-journey .chapter {
   width: 8px;
   height: 8px;
   flex-shrink: 0;
-  border-right: 1px solid var(--text-faint);
-  border-bottom: 1px solid var(--text-faint);
+  border-right: 1px solid var(--text-dim);
+  border-bottom: 1px solid var(--text-dim);
   transform: rotate(45deg);
   transition: transform 0.4s ease, border-color 0.35s ease;
 }
@@ -615,6 +711,10 @@ html.js-journey .artifact-catalog::-webkit-scrollbar-thumb {
 
   .scroll-cue-mark {
     animation: none;
+  }
+
+  .rail-label {
+    transition: none;
   }
 
   .artifact-row a,

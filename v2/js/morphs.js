@@ -92,38 +92,107 @@ export function galaxy(count) {
   return arr;
 }
 
-/* ---------- 2. mandala — layered polar rose curves ---------- */
+/* ---------- 2. mandala — 12-fold sacred-geometry line art ----------
+   Built as strokes, not fills: a bindu core, concentric guide rings,
+   an 8-petal inner lotus, 24 radial spokes, a 12-petal outer lotus
+   with nested veins, and dot accents at the interstices. Jitter is
+   kept an order of magnitude below the stroke spacing so every curve
+   reads as a drawn line — the old rose-curve fog is what made the
+   mandala unreadable. Lies in the XZ plane (cameras crane overhead). */
 export function mandala(count) {
   const arr = new Float32Array(count * 3);
-  const rings = [
-    { R: 1.0, k: 6, n: 0 },
-    { R: 1.65, k: 8, n: 1 },
-    { R: 2.3, k: 12, n: 2 },
-  ];
-  const coreFraction = 0.12;
-  const golden = 137.508 * (Math.PI / 180);
+  const TAU = Math.PI * 2;
+
+  // relief: gentle radial wave so the disc catches depth without
+  // breaking the overhead line-art read
+  const relief = (r) => 0.06 * Math.sin(r * 2.4);
+
+  // place a point on an ellipse-outline "petal": ring of petals at
+  // radius rc, petal long axis radial (half-length a), width b
+  function petalOutline(i3, k, petals, rc, a, b, jitter) {
+    const phi = (k / petals) * TAU;
+    const s = Math.random() * TAU;
+    const lx = Math.cos(s) * a;           // radial offset in petal frame
+    const ly = Math.sin(s) * b;           // tangential offset
+    const r = rc + lx;
+    const cosP = Math.cos(phi);
+    const sinP = Math.sin(phi);
+    const x = cosP * r - sinP * ly + (Math.random() - 0.5) * jitter;
+    const z = sinP * r + cosP * ly + (Math.random() - 0.5) * jitter;
+    arr[i3] = x;
+    arr[i3 + 2] = z;
+    arr[i3 + 1] = relief(Math.sqrt(x * x + z * z)) + (Math.random() - 0.5) * 0.02;
+  }
+
+  function ring(i3, R, jitter) {
+    const theta = Math.random() * TAU;
+    const r = R + (Math.random() - 0.5) * jitter;
+    arr[i3] = Math.cos(theta) * r;
+    arr[i3 + 2] = Math.sin(theta) * r;
+    arr[i3 + 1] = relief(r) + (Math.random() - 0.5) * 0.02;
+  }
+
+  function dotCluster(i3, phi, R, spread) {
+    const a = Math.random() * TAU;
+    const rr = Math.pow(Math.random(), 1.5) * spread;
+    const x = Math.cos(phi) * R + Math.cos(a) * rr;
+    const z = Math.sin(phi) * R + Math.sin(a) * rr;
+    arr[i3] = x;
+    arr[i3 + 2] = z;
+    arr[i3 + 1] = relief(R) + (Math.random() - 0.5) * 0.015;
+  }
 
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
+    const pick = Math.random();
 
-    if (Math.random() < coreFraction) {
-      const r = Math.random() * 0.26;
-      const a = Math.random() * Math.PI * 2;
+    if (pick < 0.04) {
+      // bindu — dense luminous center
+      const r = Math.pow(Math.random(), 1.6) * 0.14;
+      const a = Math.random() * TAU;
       arr[i3] = Math.cos(a) * r;
-      arr[i3 + 1] = (Math.random() - 0.5) * 0.05;
       arr[i3 + 2] = Math.sin(a) * r;
-      continue;
+      arr[i3 + 1] = (Math.random() - 0.5) * 0.02;
+    } else if (pick < 0.07) {
+      ring(i3, 0.3, 0.01); // bindu ring
+    } else if (pick < 0.28) {
+      // inner lotus — 8 petal outlines
+      petalOutline(i3, (Math.random() * 8) | 0, 8, 0.62, 0.34, 0.16, 0.012);
+    } else if (pick < 0.32) {
+      ring(i3, 1.02, 0.01); // middle guide ring
+    } else if (pick < 0.41) {
+      // 24 radial spokes between bindu ring and middle ring
+      const k = (Math.random() * 24) | 0;
+      const phi = (k / 24) * TAU + Math.PI / 24;
+      const r = 0.34 + Math.random() * 0.64;
+      const tj = (Math.random() - 0.5) * 0.01;
+      arr[i3] = Math.cos(phi) * r - Math.sin(phi) * tj;
+      arr[i3 + 2] = Math.sin(phi) * r + Math.cos(phi) * tj;
+      arr[i3 + 1] = relief(r) + (Math.random() - 0.5) * 0.02;
+    } else if (pick < 0.69) {
+      // outer lotus — 12 petal outlines
+      petalOutline(i3, (Math.random() * 12) | 0, 12, 1.62, 0.55, 0.24, 0.012);
+    } else if (pick < 0.77) {
+      // nested vein inside each outer petal
+      petalOutline(i3, (Math.random() * 12) | 0, 12, 1.55, 0.36, 0.13, 0.01);
+    } else if (pick < 0.82) {
+      ring(i3, 2.24, 0.01); // outer ring
+    } else if (pick < 0.85) {
+      ring(i3, 2.34, 0.008); // outermost fine ring
+    } else if (pick < 0.89) {
+      // 12 dot accents between outer petals
+      dotCluster(i3, ((Math.random() * 12 | 0) + 0.5) / 12 * TAU, 2.1, 0.045);
+    } else if (pick < 0.92) {
+      // 8 dot accents between inner petals
+      dotCluster(i3, ((Math.random() * 8 | 0) + 0.5) / 8 * TAU, 1.14, 0.04);
+    } else {
+      // sparse dust beyond the outermost ring — breath, not fog
+      const r = 2.45 + Math.random() * 0.35;
+      const theta = Math.random() * TAU;
+      arr[i3] = Math.cos(theta) * r;
+      arr[i3 + 2] = Math.sin(theta) * r;
+      arr[i3 + 1] = (Math.random() - 0.5) * 0.1;
     }
-
-    const ring = rings[(Math.random() * rings.length) | 0];
-    const theta = Math.random() * Math.PI * 2 + ring.n * golden;
-    const rose = 0.55 + 0.45 * Math.cos(ring.k * theta);
-    const jitter = (Math.random() - 0.5) * 0.04;
-    const r = ring.R * rose + jitter;
-
-    arr[i3] = Math.cos(theta) * r;
-    arr[i3 + 1] = 0.16 * Math.sin(r * 1.3) + (Math.random() - 0.5) * 0.02;
-    arr[i3 + 2] = Math.sin(theta) * r;
   }
   return arr;
 }
