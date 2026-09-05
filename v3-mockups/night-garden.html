@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Direction B — Night Garden · Daryll Gomas</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     DIRECTION B — "NIGHT GARDEN"
+     The night identity kept — but as a zen rock garden of stars.
+     Ink lines instead of particle soup. Text is sovereign, always.
+     One warm accent: lantern amber against the cold night.
+     Type: Shippori Mincho (the garden) / IBM Plex (the machines).
+     ============================================================ */
+  :root {
+    --night: #0b0f15;
+    --night-deep: #070a0f;
+    --moon: #e6ecf2;
+    --moon-dim: rgba(230,236,242,.68);
+    --moon-faint: rgba(230,236,242,.42);
+    --lantern: #d9a05b;
+    --ink-line: rgba(168,190,214,.5);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 300;
+    background:
+      radial-gradient(120% 90% at 80% -10%, #101722 0%, var(--night) 55%, var(--night-deep) 100%);
+    color: var(--moon);
+    overflow-x: hidden;
+  }
+
+  /* sparse stars — margins only, never dense, never under the column */
+  .stars {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(1.2px 1.2px at 8% 12%,  rgba(220,232,246,.9), transparent 60%),
+      radial-gradient(1px 1px at 15% 34%, rgba(220,232,246,.6), transparent 60%),
+      radial-gradient(1.6px 1.6px at 90% 8%, rgba(220,232,246,.95), transparent 60%),
+      radial-gradient(1.2px 1.2px at 84% 28%, rgba(220,232,246,.7), transparent 60%),
+      radial-gradient(1px 1px at 94% 55%, rgba(220,232,246,.6), transparent 60%),
+      radial-gradient(1.4px 1.4px at 78% 74%, rgba(220,232,246,.65), transparent 60%),
+      radial-gradient(1px 1px at 6% 68%,  rgba(220,232,246,.55), transparent 60%),
+      radial-gradient(1.2px 1.2px at 12% 90%, rgba(220,232,246,.65), transparent 60%),
+      radial-gradient(1px 1px at 32% 7%,  rgba(220,232,246,.7), transparent 60%),
+      radial-gradient(1.3px 1.3px at 45% 15%, rgba(220,232,246,.8), transparent 60%),
+      radial-gradient(1px 1px at 58% 5%,  rgba(220,232,246,.6), transparent 60%),
+      radial-gradient(1px 1px at 70% 18%, rgba(220,232,246,.65), transparent 60%),
+      radial-gradient(1.2px 1.2px at 25% 22%, rgba(220,232,246,.55), transparent 60%),
+      radial-gradient(1px 1px at 40% 88%, rgba(220,232,246,.5), transparent 60%),
+      radial-gradient(1.2px 1.2px at 62% 93%, rgba(220,232,246,.55), transparent 60%),
+      radial-gradient(1px 1px at 88% 82%, rgba(220,232,246,.6), transparent 60%);
+    animation: breathe-stars 11s ease-in-out infinite alternate;
+  }
+  @keyframes breathe-stars { from { opacity: .9; } to { opacity: .5; } }
+
+  /* ---------- the garden mandala: fine ink lines, breathing ---------- */
+  .garden-art {
+    position: fixed; z-index: 1; pointer-events: none;
+    top: 50%; right: -6vmin;
+    width: min(72vmin, 780px); height: min(72vmin, 780px);
+    transform: translateY(-50%);
+    opacity: .9;
+    transition: opacity 1.2s ease;
+  }
+  /* the garden empties itself for the ensō — one circle at a time */
+  body.in-stillness .garden-art { opacity: 0; }
+  .garden-art svg { width: 100%; height: 100%; overflow: visible; }
+  .mandala-spin { transform-box: fill-box; transform-origin: center; animation: slow-spin 240s linear infinite; }
+  @keyframes slow-spin { to { transform: rotate(360deg); } }
+  .mandala-breathe { transform-box: fill-box; transform-origin: center; animation: breathe 9s ease-in-out infinite alternate; }
+  @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.02); } }
+
+  /* on narrow screens the art yields entirely — it never sits under text */
+  @media (max-width: 1020px) {
+    .garden-art { opacity: .16; right: -30vmin; }
+  }
+
+  /* ---------- structure ---------- */
+  main { position: relative; z-index: 10; }
+  section {
+    min-height: 88vh;
+    display: flex; align-items: center;
+    padding: 12vh clamp(1.4rem, 7vw, 8rem);
+  }
+  .col { max-width: 560px; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem; letter-spacing: .34em; text-transform: uppercase;
+    color: var(--lantern);
+    display: block; margin-bottom: 1.7rem;
+  }
+  h1, h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: .01em;
+  }
+  h1 { font-size: clamp(2.9rem, 8.4vw, 5.6rem); font-weight: 400; }
+  h2 { font-size: clamp(1.9rem, 5vw, 3rem); margin-bottom: 1.5rem; }
+  .lede {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(1.05rem, 2.3vw, 1.3rem);
+    color: var(--moon-dim);
+    margin-top: 1.3rem;
+    line-height: 1.7;
+  }
+  p { font-size: clamp(.97rem, 1.9vw, 1.06rem); line-height: 1.85; color: var(--moon-dim); margin-bottom: 1.15rem; max-width: 54ch; }
+  em { font-family: 'Shippori Mincho', serif; font-style: normal; color: var(--moon); }
+
+  /* raked-sand divider between sections */
+  .rake {
+    height: 46px; margin: 0 clamp(1.4rem, 7vw, 8rem);
+    display: flex; align-items: center; gap: 0;
+    opacity: .5;
+  }
+  .rake svg { width: 200px; height: 26px; }
+
+  .scroll-cue {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .7rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--moon-faint); margin-top: 4.2rem;
+  }
+  .scroll-cue::before {
+    content: ""; display: inline-block; width: 1px; height: 30px;
+    background: var(--lantern); margin-right: 1rem; vertical-align: middle;
+  }
+
+  /* certs — stone tablets */
+  .tablets { list-style: none; margin-top: 2.3rem; max-width: 520px; }
+  .tablets li {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .8rem; letter-spacing: .05em; color: var(--moon-dim);
+    padding: .68rem .2rem;
+    border-bottom: 1px solid rgba(168,190,214,.16);
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .tablets .where { font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--moon-faint); }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+    letter-spacing: .32em; text-transform: uppercase; color: var(--moon-faint);
+    display: block; margin-top: 2.8rem;
+  }
+
+  /* work — the garden's stones: each category a placed stone */
+  .stones { margin-top: 2.4rem; max-width: 600px; }
+  .stone {
+    display: grid; grid-template-columns: auto 1fr auto; gap: 1.2rem; align-items: baseline;
+    padding: 1.05rem .2rem;
+    border-bottom: 1px solid rgba(168,190,214,.16);
+    transition: border-color .3s ease;
+  }
+  .stone:hover { border-color: var(--lantern); }
+  .stone-mark { width: 9px; height: 9px; border-radius: 50% 46% 52% 48%; background: var(--ink-line); align-self: center; }
+  .stone:nth-child(2) .stone-mark { border-radius: 44% 56% 48% 52%; }
+  .stone:nth-child(3) .stone-mark { border-radius: 52% 44% 58% 46%; }
+  .stone-name { font-family: 'Shippori Mincho', serif; font-size: clamp(1.08rem, 2.5vw, 1.45rem); color: var(--moon); }
+  .stone-count { font-family: 'IBM Plex Mono', monospace; font-size: .72rem; letter-spacing: .16em; color: var(--lantern); white-space: nowrap; }
+  .stone-desc { grid-column: 2 / 4; font-size: .86rem; color: var(--moon-faint); margin: 0; }
+
+  /* stillness — the ensō gets its own dedicated ground */
+  .stillness {
+    flex-direction: column; justify-content: center; text-align: center;
+    min-height: 100vh; position: relative;
+  }
+  .enso-wrap { width: min(52vmin, 380px); height: min(52vmin, 380px); margin-bottom: 3rem; position: relative; }
+  .enso-wrap svg { width: 100%; height: 100%; }
+  .enso-path {
+    fill: none; stroke: var(--moon); stroke-linecap: round;
+    opacity: .85;
+  }
+  .quote {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(1.25rem, 3.4vw, 1.9rem); line-height: 1.6;
+    max-width: 26ch; color: var(--moon);
+  }
+  .quote-attr {
+    font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
+    letter-spacing: .3em; text-transform: uppercase; color: var(--moon-faint);
+    margin-top: 1.6rem;
+  }
+
+  /* contact */
+  .contact-list { list-style: none; margin-top: 2.6rem; max-width: 560px; }
+  .contact-list li { border-bottom: 1px solid rgba(168,190,214,.18); }
+  .contact-list a {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 1.05rem .2rem; text-decoration: none; color: var(--moon);
+    font-family: 'Shippori Mincho', serif; font-size: clamp(1.1rem, 2.6vw, 1.5rem);
+    transition: color .3s ease, padding-left .3s ease;
+  }
+  .contact-list a:hover { color: var(--lantern); padding-left: .9rem; }
+  .contact-list .k {
+    font-family: 'IBM Plex Mono', monospace; font-size: .68rem;
+    letter-spacing: .26em; text-transform: uppercase; color: var(--moon-faint);
+  }
+
+  /* the artist's seal */
+  .seal {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 52px; height: 52px; margin-top: 3.4rem;
+    border: 1.5px solid var(--lantern); border-radius: 6px;
+    font-family: 'Shippori Mincho', serif; font-weight: 600; font-size: 1.15rem;
+    color: var(--lantern); letter-spacing: .05em;
+    transform: rotate(-3deg);
+  }
+
+  footer {
+    position: relative; z-index: 10;
+    padding: 3rem clamp(1.4rem, 7vw, 8rem);
+    font-family: 'IBM Plex Mono', monospace; font-size: .68rem; letter-spacing: .22em;
+    color: var(--moon-faint);
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" aria-hidden="true"></div>
+
+<!-- The garden: raked sand rings + fine-line mandala, all ink, no particles -->
+<div class="garden-art" aria-hidden="true">
+  <svg viewBox="-120 -120 240 240">
+    <!-- raked sand: concentric arcs -->
+    <g stroke="rgba(168,190,214,.14)" stroke-width="0.45" fill="none">
+      <circle r="112"/><circle r="104"/><circle r="96"/>
+    </g>
+    <g class="mandala-breathe">
+      <g class="mandala-spin" stroke="var(--ink-line)" fill="none">
+        <circle r="84" stroke-width="0.5" opacity=".65"/>
+        <circle r="58" stroke-width="0.5" opacity=".5"/>
+        <circle r="14" stroke-width="0.7" opacity=".9"/>
+        <g id="petals" stroke-width="0.55"></g>
+        <g id="ticks" stroke-width="0.5" opacity=".55"></g>
+      </g>
+    </g>
+    <circle r="3.2" fill="var(--lantern)" opacity=".9"/>
+  </svg>
+</div>
+
+<main>
+
+  <section>
+    <div class="col">
+      <span class="eyebrow">The night garden of</span>
+      <h1>Daryll Gomas</h1>
+      <p class="lede">Cybersecurity professional. Technology enthusiast. Lifelong learner. Tending machines and meaning in the same garden.</p>
+      <p class="scroll-cue">Walk</p>
+    </div>
+  </section>
+
+  <div class="rake" aria-hidden="true"><svg viewBox="0 0 200 26"><g stroke="rgba(168,190,214,.4)" stroke-width="0.7" fill="none"><path d="M0 6 H200"/><path d="M0 13 H200"/><path d="M0 20 H200"/></g></svg></div>
+
+  <section>
+    <div class="col">
+      <span class="eyebrow">Who I am</span>
+      <h2>Soul &amp; technology</h2>
+      <p>My father was a senior engineer at IBM from the &rsquo;70s on — later, a reverend. <em>Circuit and spirit, one man.</em> He brought home cutting-edge machines before the world had names for them, and I grew up native to a digital land that hadn&rsquo;t been built yet.</p>
+      <p>That head start became a long, rewarding career. At 51, I&rsquo;m more excited about what&rsquo;s coming than ever.</p>
+    </div>
+  </section>
+
+  <div class="rake" aria-hidden="true"><svg viewBox="0 0 200 26"><g stroke="rgba(168,190,214,.4)" stroke-width="0.7" fill="none"><path d="M0 6 H200"/><path d="M0 13 H200"/><path d="M0 20 H200"/></g></svg></div>
+
+  <section>
+    <div class="col">
+      <span class="eyebrow">The night watch</span>
+      <h2>Security is a practice</h2>
+      <p>Like the garden, defense is never finished — it is <em>tended</em>. Attack surface and defense as a way of seeing: a blue-team architecture brain, not a checklist follower. 2FA enforcement across M365, SIEM implementation, vulnerability scanning architecture, zero-cloud AI inference for data control, and an incident-response mindset earned from real attacks.</p>
+      <span class="section-label">Verified knowledge</span>
+      <ul class="tablets">
+        <li><span>Network+</span><span class="where">Udemy</span></li>
+        <li><span>SOC Core Skills</span><span class="where">Antisyphon</span></li>
+        <li><span>Addigy Certified</span><span class="where">Addigy</span></li>
+        <li><span>Pre-Security · Cyber Defense · PenTest</span><span class="where">TryHackMe</span></li>
+        <li><span>Linux Certification</span><span class="where">—</span></li>
+        <li><span>Apple Certified Support Professional</span><span class="where">Apple</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="rake" aria-hidden="true"><svg viewBox="0 0 200 26"><g stroke="rgba(168,190,214,.4)" stroke-width="0.7" fill="none"><path d="M0 6 H200"/><path d="M0 13 H200"/><path d="M0 20 H200"/></g></svg></div>
+
+  <section>
+    <div class="col">
+      <span class="eyebrow">Systems, automated</span>
+      <h2>The machines are<br>part of the garden</h2>
+      <p>Not just using AI — deploying it. LLMs on local hardware, multi-GPU inference servers, secure on-prem intelligence for data sovereignty. <em>Namkuzu-da OS</em> runs Claude Code as the system brain: voice control, eight automated pipelines, agentic orchestration driving the whole stack — working quietly through the night, like water.</p>
+    </div>
+  </section>
+
+  <div class="rake" aria-hidden="true"><svg viewBox="0 0 200 26"><g stroke="rgba(168,190,214,.4)" stroke-width="0.7" fill="none"><path d="M0 6 H200"/><path d="M0 13 H200"/><path d="M0 20 H200"/></g></svg></div>
+
+  <section>
+    <div class="col">
+      <span class="eyebrow">Selected work</span>
+      <h2>Thirty-eight stones,<br>carefully placed</h2>
+      <div class="stones">
+        <div class="stone"><span class="stone-mark"></span><span class="stone-name">Trading ecosystem</span><span class="stone-count">12</span><p class="stone-desc">Signal engines, gamma exposure analysis, confluence scoring, automated market recon.</p></div>
+        <div class="stone"><span class="stone-mark"></span><span class="stone-name">Research &amp; analysis</span><span class="stone-count">6</span><p class="stone-desc">Intelligence pipelines and dashboards that read the world overnight.</p></div>
+        <div class="stone"><span class="stone-mark"></span><span class="stone-name">BigPic Solutions</span><span class="stone-count">5</span><p class="stone-desc">The umbrella — technology, capital, life.</p></div>
+        <div class="stone"><span class="stone-mark"></span><span class="stone-name">Namkuzu-da OS</span><span class="stone-count">5</span><p class="stone-desc">The operating system behind everything on this page.</p></div>
+        <div class="stone"><span class="stone-mark"></span><span class="stone-name">Interactive experiences</span><span class="stone-count">4</span><p class="stone-desc">Places where code becomes play.</p></div>
+        <div class="stone"><span class="stone-mark"></span><span class="stone-name">AI &amp; voice tools</span><span class="stone-count">3</span><p class="stone-desc">Speech, agents, local inference.</p></div>
+        <div class="stone"><span class="stone-mark"></span><span class="stone-name">Cybersecurity</span><span class="stone-count">3</span><p class="stone-desc">Defense, scanning, incident response.</p></div>
+      </div>
+      <span class="section-label">Full archive on GitHub →</span>
+    </div>
+  </section>
+
+  <section class="stillness">
+    <div class="enso-wrap" aria-hidden="true">
+      <svg viewBox="-100 -100 200 200">
+        <!-- ensō: layered arcs for brush weight, drawn once on load -->
+        <path class="enso-path" id="enso1" stroke-width="7"
+          d="M -12 -88 A 89 89 0 1 0 22 -86" />
+        <path class="enso-path" id="enso2" stroke-width="3" opacity=".4"
+          d="M -18 -85 A 87 87 0 1 0 26 -82" />
+      </svg>
+    </div>
+    <p class="quote">&ldquo;Some call me an optimist, some call me a dreamer — but I know I&rsquo;m not the only one.&rdquo;</p>
+    <p class="quote-attr">after John Lennon</p>
+  </section>
+
+  <div class="rake" aria-hidden="true"><svg viewBox="0 0 200 26"><g stroke="rgba(168,190,214,.4)" stroke-width="0.7" fill="none"><path d="M0 6 H200"/><path d="M0 13 H200"/><path d="M0 20 H200"/></g></svg></div>
+
+  <section style="min-height: 92vh;">
+    <div class="col">
+      <span class="eyebrow">Let&rsquo;s connect</span>
+      <h2>Leave a stone</h2>
+      <ul class="contact-list">
+        <li><a href="mailto:daryll.gomas@gmail.com"><span>daryll.gomas@gmail.com</span><span class="k">email</span></a></li>
+        <li><a href="https://github.com/DaryllGomas" target="_blank" rel="noopener"><span>DaryllGomas</span><span class="k">github</span></a></li>
+        <li><a href="#"><span>Daryll Gomas</span><span class="k">linkedin</span></a></li>
+        <li><a href="https://x.com/DaryllGomas" target="_blank" rel="noopener"><span>@DaryllGomas</span><span class="k">x</span></a></li>
+        <li><a href="https://bigpicsolutions.com" target="_blank" rel="noopener"><span>bigpicsolutions.com</span><span class="k">business</span></a></li>
+      </ul>
+      <span class="seal">DG</span>
+    </div>
+  </section>
+
+</main>
+<footer>© 2026 DARYLL GOMAS · MOCKUP B — “NIGHT GARDEN”</footer>
+
+<script>
+/* mandala petals + ticks */
+const petals = document.getElementById('petals');
+const ticks = document.getElementById('ticks');
+const NS = 'http://www.w3.org/2000/svg';
+for (let i = 0; i < 12; i++) {
+  const a = (i / 12) * 360;
+  const petal = document.createElementNS(NS, 'ellipse');
+  petal.setAttribute('cx', 0); petal.setAttribute('cy', -36);
+  petal.setAttribute('rx', 10.5); petal.setAttribute('ry', 21);
+  petal.setAttribute('transform', `rotate(${a})`);
+  petal.setAttribute('opacity', '.6');
+  petals.appendChild(petal);
+}
+for (let i = 0; i < 48; i++) {
+  const a = (i / 48) * 360;
+  const t = document.createElementNS(NS, 'line');
+  t.setAttribute('x1', 0); t.setAttribute('y1', -84);
+  t.setAttribute('x2', 0); t.setAttribute('y2', i % 4 === 0 ? -78 : -81.5);
+  t.setAttribute('transform', `rotate(${a})`);
+  ticks.appendChild(t);
+}
+
+/* ensō draws itself once, slowly, on arrival at the stillness section */
+const enso = [document.getElementById('enso1'), document.getElementById('enso2')];
+enso.forEach(p => {
+  const L = p.getTotalLength();
+  p.style.strokeDasharray = L;
+  p.style.strokeDashoffset = L;
+});
+new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      enso.forEach(p => {
+        p.style.transition = 'stroke-dashoffset 2.8s cubic-bezier(.4, 0, .2, 1)';
+        p.style.strokeDashoffset = 0;
+      });
+    }
+  });
+}, { threshold: 0.5 }).observe(document.querySelector('.enso-wrap'));
+
+/* hide the garden mandala while the stillness section holds the floor */
+new IntersectionObserver((entries) => {
+  entries.forEach(e => document.body.classList.toggle('in-stillness', e.isIntersecting));
+}, { threshold: 0.25 }).observe(document.querySelector('.stillness'));
+</script>
+</body>
+</html>
