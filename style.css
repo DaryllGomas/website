@@ -38,8 +38,8 @@
   --size-base:  1rem;
   --size-lg:    1.125rem;
   --size-xl:    1.5rem;
-  --size-2xl:   2rem;
-  --size-3xl:   3rem;
+  --size-2xl:   clamp(1.5rem, 4vw, 2rem);
+  --size-3xl:   clamp(2rem, 5vw, 3rem);
   --size-hero:  clamp(3rem, 8vw, 7rem);
 
   /* Spacing */
@@ -68,6 +68,7 @@
   --z-base:    1;
   --z-nav:     100;
   --z-overlay: 200;
+  --z-modal:   300;
 }
 
 
@@ -113,6 +114,21 @@ a:hover {
 ::selection {
   background: var(--accent-cyan-dim);
   color: var(--accent-cyan);
+}
+
+/* Keyboard focus — visible ring on interactive elements,
+   suppressed for mouse/touch via :focus-visible */
+:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.skill-item:focus-visible,
+.cert-card:focus-visible {
+  outline: none;
+  border-color: var(--border-glow);
+  box-shadow: 0 0 0 2px var(--accent-cyan);
 }
 
 
@@ -647,6 +663,7 @@ a:hover {
 .about-text p {
   color: var(--text-secondary);
   margin-bottom: var(--space-md);
+  max-width: 68ch;
 }
 
 .about-text p:first-of-type {

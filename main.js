@@ -1,6 +1,27 @@
 'use strict';
 
 // ================================================
+// A11Y HELPER
+// Make a non-button element behave like a button:
+// expose it to the keyboard/AT and fire `onActivate`
+// on click, Enter, or Space.
+// ================================================
+function makeActivatable(el, onActivate, label) {
+  el.setAttribute('role', 'button');
+  el.setAttribute('tabindex', '0');
+  if (label) el.setAttribute('aria-label', label);
+
+  el.addEventListener('click', onActivate);
+  el.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+      e.preventDefault();
+      onActivate();
+    }
+  });
+}
+
+
+// ================================================
 // SCROLL REVEAL
 // IntersectionObserver adds .is-visible to .reveal
 // elements as they enter the viewport. Once visible,
@@ -144,6 +165,7 @@ function initSkillModals() {
 
   var allModals = overlay.querySelectorAll('.skill-modal');
   var skillItems = document.querySelectorAll('.skill-item[data-modal]');
+  var lastFocused = null;
 
   function openModal(id) {
     // Hide all modals, show the target
@@ -152,22 +174,30 @@ function initSkillModals() {
     });
     var target = document.getElementById('modal-' + id);
     if (target) {
+      lastFocused = document.activeElement;
       target.style.display = 'block';
       overlay.classList.add('active');
       document.body.style.overflow = 'hidden';
+      var closeBtn = target.querySelector('.skill-modal-close');
+      if (closeBtn) closeBtn.focus();
     }
   }
 
   function closeModal() {
     overlay.classList.remove('active');
     document.body.style.overflow = '';
+    if (lastFocused) {
+      lastFocused.focus();
+      lastFocused = null;
+    }
   }
 
-  // Click skill item to open
+  // Activate skill item (click / Enter / Space) to open
   skillItems.forEach(function (item) {
-    item.addEventListener('click', function () {
+    var name = item.querySelector('.skill-name');
+    makeActivatable(item, function () {
       openModal(item.dataset.modal);
-    });
+    }, name ? 'View details for ' + name.textContent.trim() : 'View skill details');
   });
 
   // Click overlay background to close
@@ -206,26 +236,35 @@ function initCertModals() {
   if (!overlay) return;
 
   var modalImg = document.getElementById('cert-modal-img');
+  var closeBtn = overlay.querySelector('.cert-modal-close');
   var certCards = document.querySelectorAll('.cert-card[data-cert]');
+  var lastFocused = null;
 
   function openCert(card) {
     var img = card.querySelector('img');
     if (!img) return;
+    lastFocused = document.activeElement;
     modalImg.src = img.src;
     modalImg.alt = img.alt;
     overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+    if (closeBtn) closeBtn.focus();
   }
 
   function closeCert() {
     overlay.classList.remove('active');
     document.body.style.overflow = '';
+    if (lastFocused) {
+      lastFocused.focus();
+      lastFocused = null;
+    }
   }
 
   certCards.forEach(function (card) {
-    card.addEventListener('click', function () {
+    var img = card.querySelector('img');
+    makeActivatable(card, function () {
       openCert(card);
-    });
+    }, img && img.alt ? 'View certificate: ' + img.alt : 'View certificate');
   });
 
   overlay.addEventListener('click', function (e) {
