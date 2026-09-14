@@ -22,6 +22,43 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+/* ------------------------------------------------------------------
+   Flat-mode fallback. This page is a WebGL descent, but the words are
+   the substance. If WebGL is unavailable or blocked, or the first frame
+   never paints (CDN down, shader failure, context lost), fall back to a
+   readable static document rather than stranding the visitor on the
+   loader. Classic script on purpose: it must run even if the module
+   graph never loads.
+   ------------------------------------------------------------------ */
+(function () {
+  var tripped = false;
+  function enterFlat(why) {
+    if (tripped) return;
+    tripped = true;
+    document.documentElement.classList.add('flat');
+    if (window.console && console.warn) console.warn('[big-picture] flat mode: ' + why);
+  }
+  window.__bigPictureFlat = enterFlat;
+
+  function webglAvailable() {
+    try {
+      var c = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext &&
+        (c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl')));
+    } catch (e) { return false; }
+  }
+
+  if (!webglAvailable()) { enterFlat('no webgl context available'); return; }
+
+  addEventListener('load', function () {
+    setTimeout(function () {
+      var l = document.getElementById('loader');
+      if (l && !l.classList.contains('done')) enterFlat('first frame never painted');
+    }, 10000);
+  });
+})();
+</script>
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
@@ -87,6 +124,23 @@
     background: radial-gradient(115% 115% at 50% 50%, rgba(3,5,10,.72) 38%, rgba(3,5,10,.42) 66%, rgba(3,5,10,0) 98%);
   }
   .panel p { text-shadow: 0 1px 12px rgba(3,5,10,.9); }
+
+  /* ---------- flat mode: no WebGL, just the descent as a document ---------- */
+  html.flat canvas#scene,
+  html.flat .ruler,
+  html.flat #labels,
+  html.flat .track,
+  html.flat .loader { display: none !important; }
+  html.flat .chapter {
+    position: static; inset: auto; opacity: 1; pointer-events: auto;
+    display: block;
+    padding: clamp(3rem, 9vh, 6rem) clamp(1.4rem, 6vw, 6rem);
+    border-bottom: 1px solid rgba(238,242,248,.09);
+  }
+  html.flat .chapter:last-of-type { border-bottom: 0; }
+  html.flat .chapter.center { text-align: left; }
+  html.flat .panel { padding: 0; background: none; max-width: 640px; }
+  html.flat .scroll-cue { display: none; }
   .scale-eyebrow {
     font-family: 'IBM Plex Mono', monospace;
     font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
@@ -259,7 +313,19 @@ const ANCHORS = {
 };
 
 const canvas = document.getElementById('scene');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+} catch (err) {
+  /* A probe said WebGL existed but the real context still failed. Drop to
+     flat mode, then rethrow so none of the 3D below runs. */
+  if (window.__bigPictureFlat) window.__bigPictureFlat('renderer init failed — ' + err.message);
+  throw err;
+}
+canvas.addEventListener('webglcontextlost', function (e) {
+  e.preventDefault();
+  if (window.__bigPictureFlat) window.__bigPictureFlat('webgl context lost');
+});
 renderer.setClearColor(0x04050a, 1);
 const DPR = Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
 renderer.setPixelRatio(DPR);
