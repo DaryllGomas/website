@@ -19,9 +19,8 @@
 <meta name="twitter:title" content="The Big Picture — Daryll Gomas">
 <meta name="twitter:description" content="One continuous descent from the galaxy to the atom. Cybersecurity, AI deployment, and systems thinking as a scroll-driven journey.">
 <meta name="twitter:image" content="https://daryllgomas.com/images/AI_Left.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Self-hosted. Nothing on this page reaches a third party at runtime. -->
+<link rel="stylesheet" href="assets/fonts/fonts.css">
 <script>
 /* ------------------------------------------------------------------
    Flat-mode fallback. This page is a WebGL descent, but the words are
@@ -123,12 +122,12 @@
 </script>
 <script type="importmap">
 { "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  "three": "./assets/vendor/three/three.module.min.js",
+  "three/addons/": "./assets/vendor/three/addons/"
 } }
 </script>
 <!-- Lenis: inertial smooth scrolling — the descent glides instead of stepping -->
-<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<script src="assets/vendor/lenis.min.js"></script>
 <style>
   /* ============================================================
      "THE BIG PICTURE" — one continuous descent.
@@ -742,7 +741,7 @@ function updatePointScale() { const v = (innerHeight * DPR) / 1400; PT_MATS.forE
 {
   const group = new THREE.Group();
   const tl = new THREE.TextureLoader();
-  const base = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r169/examples/textures/planets/';
+  const base = 'assets/textures/planets/';
   const mats = [];
   const SUN = new THREE.Vector3(-70, 15, 22).normalize();   // low sun — half the world in night
   sunL.position.set(-70, 15, 22);                            // keep the cloud light in sync
