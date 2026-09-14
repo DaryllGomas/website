@@ -1,2142 +1,1281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daryll Gomas — Technology Enthusiast</title>
-  <meta name="description" content="Daryll Gomas — Cybersecurity professional, technology enthusiast, and lifelong learner. Portfolio showcasing skills, achievements, and projects.">
-  <meta name="author" content="Daryll Gomas">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Big Picture — Daryll Gomas</title>
+<meta name="description" content="Daryll Gomas — one continuous descent from the galaxy to the atom. Cybersecurity professional, technology enthusiast, lifelong learner.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://daryllgomas.com/">
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Daryll Gomas — Technology Enthusiast">
-  <meta property="og:description" content="Cybersecurity professional, AI and robotics enthusiast.">
-  <meta property="og:url" content="https://daryllgomas.com">
-  <meta property="og:image" content="https://daryllgomas.com/images/AI_Left.jpg">
-  <meta property="og:site_name" content="Daryll Gomas">
+<meta property="og:title" content="The Big Picture — Daryll Gomas">
+<meta property="og:description" content="One continuous descent from the galaxy to the atom. Cybersecurity, AI deployment, and systems thinking as a scroll-driven journey.">
+<meta property="og:url" content="https://daryllgomas.com/">
+<meta property="og:image" content="https://daryllgomas.com/images/AI_Left.jpg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Daryll Gomas">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Daryll Gomas — Technology Enthusiast">
-  <meta name="twitter:image" content="https://daryllgomas.com/images/AI_Left.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Big Picture — Daryll Gomas">
+<meta name="twitter:description" content="One continuous descent from the galaxy to the atom. Cybersecurity, AI deployment, and systems thinking as a scroll-driven journey.">
+<meta name="twitter:image" content="https://daryllgomas.com/images/AI_Left.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+} }
+</script>
+<!-- Lenis: inertial smooth scrolling — the descent glides instead of stepping -->
+<script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+<style>
+  /* ============================================================
+     "THE BIG PICTURE" — one continuous descent.
+     Galaxy → Earth → a person sitting → neurons → the atom →
+     through the mandala (the floor of matter is pattern) →
+     the imagination: an Obsidian-style graph of everything built.
+     The descent ends there. You never leave the imagination.
+     ============================================================ */
+  :root {
+    --ink: #eef2f8;
+    --ink-dim: rgba(238,242,248,.78);
+    --ink-faint: rgba(238,242,248,.45);
+    --amber: #e0a45c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif; font-weight: 300;
+    background: #04050a; color: var(--ink);
+    overflow-x: hidden;
+  }
+  canvas#scene { position: fixed; inset: 0; z-index: 0; display: block; }
+  .track { height: 1400vh; }
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  /* ---------- scale ruler (right edge) ---------- */
+  .ruler {
+    position: fixed; z-index: 20; top: 8vh; bottom: 8vh; right: 18px;
+    width: 1px; background: rgba(238,242,248,.18);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .ruler .tick {
+    position: absolute; right: 0; white-space: nowrap;
+    font-size: .58rem; letter-spacing: .14em; color: var(--ink-faint);
+    transform: translateY(-50%); padding-right: 10px;
+  }
+  .ruler .tick::after { content: ""; position: absolute; right: 0; top: 50%; width: 7px; height: 1px; background: rgba(238,242,248,.4); }
+  .ruler .cursor {
+    position: absolute; right: -3px; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--amber); transform: translateY(-50%);
+    box-shadow: 0 0 8px rgba(224,164,92,.9);
+  }
+  @media (max-width: 640px) { .ruler { display: none; } }
 
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="css/mandala.css">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="canonical" href="https://daryllgomas.com">
+  /* ---------- chapters ---------- */
+  .chapter {
+    position: fixed; z-index: 10; inset: 0;
+    display: flex; align-items: center;
+    padding: 0 clamp(1.4rem, 6vw, 6rem);
+    opacity: 0; pointer-events: none;
+  }
+  .chapter.center { justify-content: center; text-align: center; }
+  .panel {
+    max-width: 580px; position: relative;
+    padding: 2.8rem 3rem;
+    /* feathered shade — no hard box edge against the bright scene */
+    background: radial-gradient(115% 115% at 50% 50%, rgba(3,5,10,.72) 38%, rgba(3,5,10,.42) 66%, rgba(3,5,10,0) 98%);
+  }
+  .panel p { text-shadow: 0 1px 12px rgba(3,5,10,.9); }
+  .scale-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: .72rem; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--amber); display: block; margin-bottom: 1.4rem;
+  }
+  .scale-eyebrow b { font-weight: 500; }
+  h1, h2 { font-family: 'Fraunces', serif; font-weight: 400; line-height: 1.06; letter-spacing: -.01em; }
+  h1 { font-size: clamp(2.9rem, 8.6vw, 5.8rem); text-shadow: 0 2px 24px rgba(4,5,10,.9); }
+  h2 { font-size: clamp(1.8rem, 4.8vw, 2.9rem); margin-bottom: 1.2rem; }
+  .lede { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.05rem, 2.3vw, 1.35rem); color: var(--ink-dim); margin-top: 1rem; }
+  p { font-size: clamp(.95rem, 1.8vw, 1.04rem); line-height: 1.75; color: var(--ink-dim); margin-bottom: 1rem; }
+  p:last-child { margin-bottom: 0; }
+  .scroll-cue {
+    font-family: 'IBM Plex Mono', monospace; font-size: .7rem;
+    letter-spacing: .3em; text-transform: uppercase; color: var(--ink-faint); margin-top: 2.6rem;
+  }
+  .scroll-cue::before { content: ""; display: inline-block; width: 1px; height: 26px; background: var(--amber); margin-right: 1rem; vertical-align: middle; }
+  .cert-log { list-style: none; margin-top: 1.4rem; columns: 2; column-gap: 2.2rem; }
+  .cert-log li { font-family: 'IBM Plex Mono', monospace; font-size: .74rem; color: var(--ink-faint); padding: .4rem 0; break-inside: avoid; border-bottom: 1px solid rgba(238,242,248,.1); }
+  .threshold-line { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.3rem, 3.4vw, 2.1rem); line-height: 1.5; max-width: 26ch; }
+  .quote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.2rem, 3vw, 1.8rem); line-height: 1.5; max-width: 30ch; margin: 0 auto 1.4rem; }
+  .contact-list { list-style: none; margin-top: 1.8rem; text-align: left; }
+  .contact-list li { border-bottom: 1px solid rgba(238,242,248,.16); }
+  .contact-list a {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 2rem;
+    padding: .85rem .2rem; text-decoration: none; color: var(--ink);
+    font-family: 'Fraunces', serif; font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+    transition: color .25s ease, padding-left .25s ease;
+  }
+  .contact-list a:hover { color: var(--amber); padding-left: .8rem; }
+  .contact-list .k { font-family: 'IBM Plex Mono', monospace; font-size: .66rem; letter-spacing: .24em; text-transform: uppercase; color: var(--ink-faint); }
+
+  /* ---------- graph labels ---------- */
+  .labels { position: fixed; inset: 0; z-index: 8; pointer-events: none; overflow: hidden; }
+  .star-label {
+    position: absolute; left: 0; top: 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: .68rem; letter-spacing: .08em;
+    color: var(--ink-dim); white-space: nowrap;
+    transform: translate(-50%, -150%);
+    text-shadow: 0 0 6px rgba(4,5,10,.95), 0 0 12px rgba(4,5,10,.8);
+    opacity: 0; transition: opacity .25s ease;
+  }
+  .star-label.hot { color: #fff; font-weight: 500; }
+  .star-label .dotc { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: .45em; vertical-align: middle; }
+  .hub-label {
+    position: absolute; left: 0; top: 0;
+    font-family: 'IBM Plex Mono', monospace; font-size: .62rem; letter-spacing: .3em;
+    text-transform: uppercase; white-space: nowrap;
+    transform: translate(-50%, -170%); opacity: 0; transition: opacity .25s ease;
+    text-shadow: 0 0 8px rgba(4,5,10,.95);
+  }
+
+  .loader {
+    position: fixed; inset: 0; z-index: 50; background: #04050a;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'IBM Plex Mono', monospace; font-size: .72rem;
+    letter-spacing: .34em; text-transform: uppercase; color: var(--ink-faint);
+    transition: opacity 1s ease;
+  }
+  .loader.done { opacity: 0; pointer-events: none; }
+</style>
 </head>
 <body>
 
-  <!-- Living Mandala WebGL canvas — inert until js/mandala.js confirms
-       WebGL support, no prefers-reduced-motion, and a desktop viewport.
-       Falls back invisibly to the static SVG mandala otherwise. -->
-  <canvas id="scene" aria-hidden="true"></canvas>
-
-  <!-- SVG Defs (hidden) — shared gradient for skill rings -->
-  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
-    <defs>
-      <linearGradient id="skillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stop-color="#00d4ff"/>
-        <stop offset="100%" stop-color="#7b2ff2"/>
-      </linearGradient>
-    </defs>
-  </svg>
-
-  <!-- Atmosphere layers -->
-  <div class="ambient-bg" aria-hidden="true"></div>
-  <div class="noise-overlay" aria-hidden="true"></div>
-
-  <!-- ============================================
-       NAVIGATION
-       ============================================ -->
-  <header class="nav-header" id="nav-header">
-    <nav class="nav-inner">
-      <a href="#hero" class="nav-logo">DG</a>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="#about" data-nav="about">About</a></li>
-        <li><a href="#skills" data-nav="skills">Skills</a></li>
-        <li><a href="#achievements" data-nav="achievements">Achievements</a></li>
-        <li><a href="#projects" data-nav="projects">Projects</a></li>
-        <li><a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">BigPic</a></li>
-        <li><a href="https://www.justsomedude.org/" target="_blank" rel="noopener">Book</a></li>
-        <li><a href="#contact" data-nav="contact">Contact</a></li>
-      </ul>
-      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </nav>
-  </header>
-
-  <main>
-
-    <!-- ============================================
-         HERO
-         ============================================ -->
-    <section class="hero" id="hero">
-
-      <!-- Digital Mandala — layered concentric rings behind hero text -->
-      <div class="mandala" aria-hidden="true">
-        <svg class="mandala-svg" viewBox="0 0 800 800">
-
-          <!-- Layer 1: Outermost ring — slow clockwise -->
-          <g class="mandala-layer mandala-layer-1">
-            <circle cx="400" cy="400" r="380" class="mandala-ring"/>
-            <circle cx="400" cy="400" r="360" class="mandala-ring mandala-ring--dashed"/>
-            <!-- 24 outer dots -->
-            <g class="mandala-dots">
-              <circle cx="400" cy="20" r="2.5"/><circle cx="557" cy="42" r="2"/><circle cx="694" cy="113" r="2.5"/>
-              <circle cx="758" cy="243" r="2"/><circle cx="780" cy="400" r="2.5"/><circle cx="758" cy="557" r="2"/>
-              <circle cx="694" cy="687" r="2.5"/><circle cx="557" cy="758" r="2"/><circle cx="400" cy="780" r="2.5"/>
-              <circle cx="243" cy="758" r="2"/><circle cx="106" cy="687" r="2.5"/><circle cx="42" cy="557" r="2"/>
-              <circle cx="20" cy="400" r="2.5"/><circle cx="42" cy="243" r="2"/><circle cx="106" cy="113" r="2.5"/>
-              <circle cx="243" cy="42" r="2"/>
-            </g>
-          </g>
-
-          <!-- Layer 2: Petal ring — 12 petals, counter-clockwise -->
-          <g class="mandala-layer mandala-layer-2">
-            <circle cx="400" cy="400" r="290" class="mandala-ring"/>
-            <!-- 12 petal arcs (ellipses rotated at 30° intervals) -->
-            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal"/>
-            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(30 400 400)"/>
-            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(60 400 400)"/>
-            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(90 400 400)"/>
-            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(120 400 400)"/>
-            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(150 400 400)"/>
-          </g>
-
-          <!-- Layer 3: Inner detailed ring — slow clockwise -->
-          <g class="mandala-layer mandala-layer-3">
-            <circle cx="400" cy="400" r="200" class="mandala-ring mandala-ring--dotted"/>
-            <circle cx="400" cy="400" r="180" class="mandala-ring"/>
-            <!-- 8 inner lotus petals (teardrop shapes via paths) -->
-            <g class="mandala-lotus">
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal"/>
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(45 400 400)"/>
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(90 400 400)"/>
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(135 400 400)"/>
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(180 400 400)"/>
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(225 400 400)"/>
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(270 400 400)"/>
-              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(315 400 400)"/>
-            </g>
-            <!-- 16 dots on inner ring -->
-            <g class="mandala-dots">
-              <circle cx="400" cy="200" r="2"/><circle cx="541" cy="259" r="1.5"/>
-              <circle cx="600" cy="400" r="2"/><circle cx="541" cy="541" r="1.5"/>
-              <circle cx="400" cy="600" r="2"/><circle cx="259" cy="541" r="1.5"/>
-              <circle cx="200" cy="400" r="2"/><circle cx="259" cy="259" r="1.5"/>
-              <circle cx="468" cy="213" r="1.5"/><circle cx="587" cy="332" r="1.5"/>
-              <circle cx="587" cy="468" r="1.5"/><circle cx="468" cy="587" r="1.5"/>
-              <circle cx="332" cy="587" r="1.5"/><circle cx="213" cy="468" r="1.5"/>
-              <circle cx="213" cy="332" r="1.5"/><circle cx="332" cy="213" r="1.5"/>
-            </g>
-          </g>
-
-          <!-- Layer 4: Core — small rings + center point, slow pulse -->
-          <g class="mandala-layer mandala-layer-4">
-            <circle cx="400" cy="400" r="100" class="mandala-ring mandala-ring--dashed"/>
-            <circle cx="400" cy="400" r="60" class="mandala-ring"/>
-            <circle cx="400" cy="400" r="30" class="mandala-ring mandala-ring--dotted"/>
-            <!-- 8 core dots -->
-            <circle cx="400" cy="340" r="2" class="mandala-dots"/><circle cx="442" cy="358" r="2" class="mandala-dots"/>
-            <circle cx="460" cy="400" r="2" class="mandala-dots"/><circle cx="442" cy="442" r="2" class="mandala-dots"/>
-            <circle cx="400" cy="460" r="2" class="mandala-dots"/><circle cx="358" cy="442" r="2" class="mandala-dots"/>
-            <circle cx="340" cy="400" r="2" class="mandala-dots"/><circle cx="358" cy="358" r="2" class="mandala-dots"/>
-            <!-- Center glow -->
-            <circle cx="400" cy="400" r="5" class="mandala-center"/>
-          </g>
-
-        </svg>
-      </div>
-
-      <div class="hero-content">
-        <p class="hero-greeting">Hello, I'm</p>
-        <h1 class="hero-name shimmer">Daryll Gomas</h1>
-        <p class="hero-title">Technology Enthusiast</p>
-        <div class="hero-line breathing" aria-hidden="true"></div>
-      </div>
-      <div class="hero-scroll-indicator" aria-hidden="true">
-        <span></span>
-      </div>
-    </section>
-
-    <!-- ============================================
-         ABOUT
-         ============================================ -->
-    <section class="section about" id="about">
-      <div class="container">
-        <div class="about-grid">
-          <div class="about-image reveal">
-            <div class="about-image-frame">
-              <img src="images/about.jpg" alt="Daryll Gomas" loading="lazy">
-              <div class="image-glow" aria-hidden="true"></div>
-            </div>
-          </div>
-          <div class="about-text reveal">
-            <span class="section-label">About Me</span>
-            <h2 class="section-heading">Who I Am</h2>
-            <p>I created this page to give a more comprehensive display of my skills and what I am learning and doing in the tech industry and in life. If you are here as a result of reading my resume, welcome!</p>
-            <p>I have always existed at the cross section of soul and technology. I have always been passionate about new things and learning. This was a gift that was passed down to me from my father, who worked as a Sr Engineer at IBM since the 70's and is now a reverend. I got to experience the personal computer revolution that Steve Jobs and so many others brought us, first hand because of that. He always brought home the latest cutting-edge technologies before they went to market and I was able to play with them for fun, which gave me a head start into the world of technology, it made me a native before this digital land was even built and I have always existed almost primarily in it. That guidance and experience has provided me with a forward-looking perspective that has enabled me to have a long, rewarding career that I remain passionate about to this day. Even now at the age of 51, I could not be more excited and hopeful about the world to come and I try my best to keep my eyes on it and help bring us all there together, in my own ways. Some call me an optimist, some call me a dreamer, but in the words of John Lennon — "I know I'm not the only one."</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         PASSIONS
-         ============================================ -->
-    <section class="section passions">
-      <div class="container">
-        <div class="passions-header reveal">
-          <span class="section-label">What Drives Me</span>
-          <h2 class="section-heading">Important Things</h2>
-        </div>
-        <div class="passions-grid reveal-stagger">
-
-          <article class="passion-card reveal">
-            <div class="passion-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/>
-              </svg>
-            </div>
-            <h3>Being Creative</h3>
-            <p>Putting things together, even when it doesn't make sense to or you're told not to do it, can lead to the most rewarding experiences and outcomes.</p>
-          </article>
-
-          <article class="passion-card reveal">
-            <div class="passion-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-              </svg>
-            </div>
-            <h3>Life Learning</h3>
-            <p>The goal in life I feel should be to never stop learning and improving. It keeps you sharp and honestly, what's the point if you're not always growing?</p>
-          </article>
-
-          <article class="passion-card reveal">
-            <div class="passion-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                <line x1="9" y1="9" x2="9.01" y2="9"/>
-                <line x1="15" y1="9" x2="15.01" y2="9"/>
-              </svg>
-            </div>
-            <h3>Keeping Balance</h3>
-            <p>As the world speeds up, don't forget to slow down. Taking a walk, hiking a mountain, balancing some rocks or just breathing can make all the difference.</p>
-          </article>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         SKILLS
-         ============================================ -->
-    <section class="section skills" id="skills">
-      <div class="container">
-        <div class="skills-header reveal">
-          <span class="section-label">Career Specialties</span>
-          <h2 class="section-heading">Skills</h2>
-          <p class="skills-intro">We are all works in progress. Right now, these are the areas in which I have experienced the most. Don't have to believe me, take ChatGPT and Claude's word for it.</p>
-        </div>
-        <div class="skills-grid reveal-stagger">
-
-          <div class="skill-item reveal" style="--skill-pct: 85" data-modal="networking">
-            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
-            </svg>
-            <div class="skill-label">
-              <span class="skill-value">85%</span>
-              <span class="skill-name">Networking</span>
-            </div>
-          </div>
-
-          <div class="skill-item reveal" style="--skill-pct: 75" data-modal="cybersecurity">
-            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
-            </svg>
-            <div class="skill-label">
-              <span class="skill-value">75%</span>
-              <span class="skill-name">CyberSecurity</span>
-            </div>
-          </div>
-
-          <div class="skill-item reveal" style="--skill-pct: 80" data-modal="virtualization">
-            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
-            </svg>
-            <div class="skill-label">
-              <span class="skill-value">80%</span>
-              <span class="skill-name">Virtualization</span>
-            </div>
-          </div>
-
-          <div class="skill-item reveal" style="--skill-pct: 70" data-modal="cloud">
-            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
-            </svg>
-            <div class="skill-label">
-              <span class="skill-value">70%</span>
-              <span class="skill-name">Cloud</span>
-            </div>
-          </div>
-
-          <div class="skill-item reveal" style="--skill-pct: 88" data-modal="syseng">
-            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
-            </svg>
-            <div class="skill-label">
-              <span class="skill-value">88%</span>
-              <span class="skill-name">Systems Engineering</span>
-            </div>
-          </div>
-
-          <div class="skill-item reveal" style="--skill-pct: 65" data-modal="blockchain">
-            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
-            </svg>
-            <div class="skill-label">
-              <span class="skill-value">65%</span>
-              <span class="skill-name">Blockchain</span>
-            </div>
-          </div>
-
-          <div class="skill-item reveal" style="--skill-pct: 75" data-modal="ai">
-            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
-              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
-              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
-            </svg>
-            <div class="skill-label">
-              <span class="skill-value">75%</span>
-              <span class="skill-name">Artificial Intelligence</span>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         ACHIEVEMENTS
-         ============================================ -->
-    <section class="section achievements" id="achievements">
-      <div class="container">
-        <div class="certs-header reveal">
-          <span class="section-label">Verified Knowledge</span>
-          <h2 class="section-heading">Achievements</h2>
-        </div>
-        <div class="certs-grid reveal-stagger">
-          <div class="cert-card reveal" data-cert="udemynetplus">
-            <img src="images/udemynetplus.jpg" alt="Network+ Certification" loading="lazy">
-          </div>
-          <div class="cert-card reveal" data-cert="soc">
-            <img src="images/SOC_Core_Skills.png" alt="SOC Core Skills" loading="lazy">
-          </div>
-          <div class="cert-card reveal" data-cert="addigy">
-            <img src="images/addigy.png" alt="Addigy Certification" loading="lazy">
-          </div>
-          <div class="cert-card reveal" data-cert="presec">
-            <img src="images/presec.png" alt="Pre-Security Certification" loading="lazy">
-          </div>
-          <div class="cert-card reveal" data-cert="linux">
-            <img src="images/linux.png" alt="Linux Certification" loading="lazy">
-          </div>
-          <div class="cert-card reveal" data-cert="pentest">
-            <img src="images/THM-07TDRGKZIH.png" alt="TryHackMe PenTest Certificate" loading="lazy">
-          </div>
-          <div class="cert-card reveal" data-cert="cyberdef">
-            <img src="images/cyber_def.png" alt="Cyber Defense Certificate" loading="lazy">
-          </div>
-          <div class="cert-card reveal" data-cert="apple">
-            <img src="images/AppleCert.png" alt="Apple Certified Support Professional" loading="lazy">
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Certificate Image Modal -->
-    <div class="cert-modal-overlay" id="cert-modal-overlay">
-      <button class="cert-modal-close" aria-label="Close">&times;</button>
-      <img class="cert-modal-img" id="cert-modal-img" src="" alt="">
-    </div>
-
-    <!-- ============================================
-         PROJECTS / LABS
-         ============================================ -->
-    <section class="section projects" id="projects">
-      <div class="container">
-        <div class="projects-header reveal">
-          <span class="section-label">Tinker Town</span>
-          <h2 class="section-heading">Labs, Projects &amp; Resources</h2>
-        </div>
-
-        <!-- ====== GitHub Projects ====== -->
-        <div class="projects-accordion reveal-stagger">
-
-          <details class="project-category reveal" open>
-            <summary><span class="category-marker"></span>Namkuzu-da OS</summary>
-
-            <!-- System Architecture Diagram -->
-            <div class="ecosystem-diagram reveal">
-              <svg viewBox="0 0 800 450" class="ecosystem-svg" role="img" aria-label="Namkuzu-da OS architecture — data flows from voice, market feeds, web content, and cloud storage through the Claude Code brain to published reports, knowledge base, system control, and alerts">
-                <defs>
-                  <linearGradient id="nkd-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#7b2ff2"/>
-                    <stop offset="100%" stop-color="#00d4ff"/>
-                  </linearGradient>
-                  <filter id="nkd-glow">
-                    <feGaussianBlur stdDeviation="4" result="b"/>
-                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                </defs>
-
-                <!-- Connection Lines: Inputs → Brain -->
-                <g class="eco-lines">
-                  <path d="M 160 111 C 215 111, 215 185, 270 185" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 160 177 C 215 177, 215 200, 270 200" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 160 243 C 215 243, 215 215, 270 215" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 160 309 C 215 309, 215 230, 270 230" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
-                </g>
-
-                <!-- Connection Lines: Brain → Outputs -->
-                <g class="eco-lines">
-                  <path d="M 530 185 C 585 185, 585 108, 640 108" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 530 200 C 585 200, 585 176, 640 176" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 530 215 C 585 215, 585 244, 640 244" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                  <path d="M 530 230 C 585 230, 585 312, 640 312" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
-                </g>
-
-                <!-- Input Nodes (Left) -->
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-voice">
-                  <rect x="10" y="89" width="150" height="44" rx="6"/>
-                  <text x="85" y="107" class="eco-label">Voice Input</text>
-                  <text x="85" y="122" class="eco-sub">Whisper STT · Microphone</text>
-                </g>
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-marketdata">
-                  <rect x="10" y="155" width="150" height="44" rx="6"/>
-                  <text x="85" y="173" class="eco-label">Market Data</text>
-                  <text x="85" y="188" class="eco-sub">Schwab · 26 RSS · FRED</text>
-                </g>
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-web">
-                  <rect x="10" y="221" width="150" height="44" rx="6"/>
-                  <text x="85" y="239" class="eco-label">Web &amp; Research</text>
-                  <text x="85" y="254" class="eco-sub">YouTube · Browser · Inbox</text>
-                </g>
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-gdrive">
-                  <rect x="10" y="287" width="150" height="44" rx="6"/>
-                  <text x="85" y="305" class="eco-label">Cloud &amp; Network</text>
-                  <text x="85" y="320" class="eco-sub">Google Drive · LAN APIs</text>
-                </g>
-
-                <!-- Central Brain Hub -->
-                <g class="eco-node eco-hub eco-clickable" data-eco-modal="nkd-os">
-                  <rect x="270" y="168" width="260" height="80" rx="10" style="stroke: url(#nkd-grad); stroke-width: 2"/>
-                  <text x="400" y="198" class="eco-hub-label">NAMKUZU-DA OS</text>
-                  <text x="400" y="220" class="eco-sub">Claude Code · 20+ Skills · 8 Pipelines · SQLite</text>
-                </g>
-
-                <!-- Infrastructure subtitle -->
-                <text x="400" y="270" class="eco-sub" style="opacity: 0.35">Wezterm · Zellij · RTX 3070 Ti · NAS · Bluetooth · Ubuntu 24.04</text>
-
-                <!-- Output Nodes (Right) -->
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-pipelines">
-                  <rect x="640" y="83" width="150" height="50" rx="6"/>
-                  <text x="715" y="102" class="eco-label">Published Intel</text>
-                  <text x="715" y="117" class="eco-sub">Morning Briefs · Eagle Eye</text>
-                  <text x="715" y="128" class="eco-sub">markets.bigpicsolutions.com</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-knowledge">
-                  <rect x="640" y="151" width="150" height="50" rx="6"/>
-                  <text x="715" y="170" class="eco-label">Knowledge Base</text>
-                  <text x="715" y="185" class="eco-sub">Living Thesis · Synthesis</text>
-                  <text x="715" y="196" class="eco-sub">YouTube → Knowledge</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-control">
-                  <rect x="640" y="219" width="150" height="50" rx="6"/>
-                  <text x="715" y="238" class="eco-label">System Control</text>
-                  <text x="715" y="253" class="eco-sub">Voice TTS · Desktop · Display</text>
-                  <text x="715" y="264" class="eco-sub">4 Monitors · xdotool</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-alerts">
-                  <rect x="640" y="287" width="150" height="50" rx="6"/>
-                  <text x="715" y="306" class="eco-label">Alerts &amp; Delivery</text>
-                  <text x="715" y="321" class="eco-sub">Email · Google Drive</text>
-                  <text x="715" y="332" class="eco-sub">Automated Notifications</text>
-                </g>
-
-                <!-- Column Labels -->
-                <text x="85" y="74" class="eco-col-label">INPUTS</text>
-                <text x="400" y="155" class="eco-col-label">BRAIN</text>
-                <text x="715" y="68" class="eco-col-label">OUTPUTS</text>
-              </svg>
-            </div>
-
-            <div class="project-cards">
-              <div class="project-card" data-eco-modal="nkd-os">
-                <div class="project-card-top">
-                  <h4>namkuzu-da</h4>
-                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">Shell</span>
-                </div>
-                <p>AI-native operating system — Claude Code brain, voice control, 8 automated pipelines, 4-monitor workstation.</p>
-              </div>
-              <div class="project-card" data-eco-modal="nkd-voice">
-                <div class="project-card-top">
-                  <h4>WM-Voice</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Hands-free voice assistant — Whisper STT, Kokoro TTS, Claude Agent SDK. Accessibility-first design.</p>
-              </div>
-              <div class="project-card" data-eco-modal="nkd-orchestration">
-                <div class="project-card-top">
-                  <h4>Agentic Orchestration</h4>
-                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">Architecture</span>
-                </div>
-                <p>Directory-as-agent system — cd into a folder and Claude assumes that division's role. Multi-tier CLAUDE.md hierarchy, skill registries, rule inheritance.</p>
-              </div>
-              <div class="project-card" data-eco-modal="nkd-thesis">
-                <div class="project-card-top">
-                  <h4>Living Thesis Pipeline</h4>
-                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">Shell</span>
-                </div>
-                <p>YouTube transcript → Claude extraction → structured knowledge base. Automated prompt-chaining pipeline for continuous learning.</p>
-              </div>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Trading Ecosystem</summary>
-
-            <!-- Architecture Diagram -->
-            <div class="ecosystem-diagram reveal">
-              <svg viewBox="0 0 800 420" class="ecosystem-svg" role="img" aria-label="Trading ecosystem architecture — data flows from sources through the central Data hub to analysis tools and outputs">
-                <defs>
-                  <linearGradient id="eco-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#7b2ff2"/>
-                    <stop offset="100%" stop-color="#00d4ff"/>
-                  </linearGradient>
-                  <filter id="eco-glow">
-                    <feGaussianBlur stdDeviation="4" result="b"/>
-                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                </defs>
-
-                <!-- Connection Lines -->
-                <g class="eco-lines">
-                  <!-- Sources → Hub -->
-                  <path d="M 160 155 C 215 155, 215 210, 270 210" class="eco-line eco-line-in"/>
-                  <path d="M 160 275 C 215 275, 215 210, 270 210" class="eco-line eco-line-in"/>
-                  <!-- Hub → Tools -->
-                  <path d="M 510 195 C 550 195, 555 50, 590 50" class="eco-line eco-line-out"/>
-                  <path d="M 510 200 C 548 200, 555 115, 590 115" class="eco-line eco-line-out"/>
-                  <path d="M 510 207 C 545 207, 555 180, 590 180" class="eco-line eco-line-out"/>
-                  <path d="M 510 220 C 545 220, 555 245, 590 245" class="eco-line eco-line-out"/>
-                  <path d="M 510 230 C 548 230, 555 310, 590 310" class="eco-line eco-line-out"/>
-                  <path d="M 510 240 C 550 240, 555 375, 590 375" class="eco-line eco-line-out"/>
-                </g>
-
-                <!-- Source Nodes -->
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="schwab">
-                  <rect x="10" y="133" width="150" height="44" rx="6"/>
-                  <text x="85" y="158" class="eco-label">Schwab API</text>
-                </g>
-                <g class="eco-node eco-source eco-clickable" data-eco-modal="scout">
-                  <rect x="10" y="253" width="150" height="44" rx="6"/>
-                  <text x="85" y="271" class="eco-label">Scout-Win</text>
-                  <text x="85" y="289" class="eco-sub">X · YouTube · RSS</text>
-                </g>
-
-                <!-- Central Hub -->
-                <g class="eco-node eco-hub eco-clickable" data-eco-modal="data">
-                  <rect x="270" y="170" width="240" height="80" rx="10"/>
-                  <text x="390" y="203" class="eco-hub-label">DATA</text>
-                  <text x="390" y="228" class="eco-sub">33 symbols · SQLite · REST API</text>
-                </g>
-
-                <!-- Tool Nodes -->
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="signal">
-                  <rect x="590" y="30" width="195" height="40" rx="6"/>
-                  <text x="688" y="46" class="eco-label">Signal Engine</text>
-                  <text x="688" y="62" class="eco-sub">15+ algo strategies</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="wingman">
-                  <rect x="590" y="95" width="195" height="40" rx="6"/>
-                  <text x="688" y="111" class="eco-label">Wingman</text>
-                  <text x="688" y="127" class="eco-sub">Trading workstation</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="options">
-                  <rect x="590" y="160" width="195" height="40" rx="6"/>
-                  <text x="688" y="176" class="eco-label">Options-Calc</text>
-                  <text x="688" y="192" class="eco-sub">GEX analysis</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="divergence">
-                  <rect x="590" y="225" width="195" height="40" rx="6"/>
-                  <text x="688" y="248" class="eco-label">Divergence Scanner</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="fibonacci">
-                  <rect x="590" y="290" width="195" height="40" rx="6"/>
-                  <text x="688" y="313" class="eco-label">Fibonacci Backtester</text>
-                </g>
-                <g class="eco-node eco-tool eco-clickable" data-eco-modal="tradingprep">
-                  <rect x="590" y="355" width="195" height="40" rx="6"/>
-                  <text x="688" y="371" class="eco-label">Trading Prep</text>
-                  <text x="688" y="387" class="eco-sub">Claude Code reports</text>
-                </g>
-
-                <!-- Column Labels -->
-                <text x="85" y="118" class="eco-col-label">SOURCES</text>
-                <text x="390" y="158" class="eco-col-label">HUB</text>
-                <text x="688" y="18" class="eco-col-label">TOOLS</text>
-              </svg>
-            </div>
-
-            <div class="project-cards">
-              <div class="project-card" data-eco-modal="signal">
-                <div class="project-card-top">
-                  <h4>trade-signal-backend</h4>
-                  <span class="lang-badge lang-js">JavaScript</span>
-                </div>
-                <p>Algorithmic trading engine — 15+ strategies, Claude AI integration, paper trading &amp; alerts.</p>
-              </div>
-              <div class="project-card" data-eco-modal="wingman">
-                <div class="project-card-top">
-                  <h4>wingman</h4>
-                  <span class="lang-badge lang-js">JavaScript</span>
-                </div>
-                <p>AI-assisted trading workstation — dashboard, VWAP + divergence system, backtesting.</p>
-              </div>
-              <div class="project-card" data-eco-modal="options">
-                <div class="project-card-top">
-                  <h4>Options-Calc</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Gamma exposure (GEX) analysis — dealer positioning, call/put walls, AI trade suggestions.</p>
-              </div>
-              <div class="project-card" data-eco-modal="divergence">
-                <div class="project-card-top">
-                  <h4>Divergance-Scanner</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Inter-market divergence scanner — relative strength, correlation breakdowns, sector rotation.</p>
-              </div>
-              <div class="project-card" data-eco-modal="scout">
-                <div class="project-card-top">
-                  <h4>Scout-Win</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Automated market recon — scrapes X, YouTube, RSS into a structured intelligence dashboard.</p>
-              </div>
-              <div class="project-card" data-eco-modal="tradingprep">
-                <div class="project-card-top">
-                  <h4>trading-prep</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Automated pre-market &amp; EOD research reports powered by Claude Code.</p>
-              </div>
-              <div class="project-card" data-eco-modal="buyback">
-                <div class="project-card-top">
-                  <h4>buyback-blackout-analyzer</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Identifies trading opportunities during corporate buyback blackout periods.</p>
-              </div>
-              <div class="project-card" data-eco-modal="fibonacci">
-                <div class="project-card-top">
-                  <h4>fibonacci-backtester</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>DiNapoli Fibonacci levels backtesting against real market data via Schwab API.</p>
-              </div>
-              <div class="project-card" data-eco-modal="mrcrabs">
-                <div class="project-card-top">
-                  <h4>MrCrabs</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Investment research dashboard — market sentiment, metrics &amp; signals.</p>
-              </div>
-              <div class="project-card" data-eco-modal="terminus">
-                <div class="project-card-top">
-                  <h4>TERMINUS</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Price level confluence engine — fuses 11 data sources (gamma, OI, VWAP, Gann, volume profile) into scored institutional levels.</p>
-              </div>
-              <div class="project-card" data-eco-modal="convergence">
-                <div class="project-card-top">
-                  <h4>Convergence Engine</h4>
-                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">System</span>
-                </div>
-                <p>7-dimension capital deployment scoring — thesis conviction, strategy edge, technical setup, cyclical alignment. Quantitative decision science.</p>
-              </div>
-              <div class="project-card" data-eco-modal="prediction">
-                <div class="project-card-top">
-                  <h4>Prediction Market Scanner</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Polymarket scanner — whale tracking, news sentiment, Claude AI probability estimation, Telegram alerts. Multi-criteria confidence gating.</p>
-              </div>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>BigPic Solutions</summary>
-
-            <!-- Organizational Structure Diagram -->
-            <div class="ecosystem-diagram reveal">
-              <svg viewBox="0 0 800 390" class="ecosystem-svg" role="img" aria-label="BigPic Solutions organizational structure — three divisions: Capital, Technology, and CyberCab">
-                <defs>
-                  <linearGradient id="bp-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#7b2ff2"/>
-                    <stop offset="100%" stop-color="#00d4ff"/>
-                  </linearGradient>
-                  <filter id="bp-glow">
-                    <feGaussianBlur stdDeviation="4" result="b"/>
-                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-                  </filter>
-                </defs>
-
-                <!-- Connection Lines: Parent → Divisions -->
-                <g class="eco-lines">
-                  <path d="M 400 75 C 400 102, 135 102, 135 128" class="bp-line bp-line-t1"/>
-                  <path d="M 400 75 C 400 102, 400 102, 400 128" class="bp-line bp-line-t1"/>
-                  <path d="M 400 75 C 400 102, 665 102, 665 128" class="bp-line bp-line-t1"/>
-                </g>
-
-                <!-- Vertical Brackets: Division → Capability columns -->
-                <line x1="18" y1="240" x2="18" y2="378" class="bp-bracket"/>
-                <line x1="283" y1="240" x2="283" y2="378" class="bp-bracket"/>
-                <line x1="548" y1="240" x2="548" y2="378" class="bp-bracket bp-bracket-dev"/>
-
-                <!-- Parent Hub: BigPic Solutions -->
-                <g class="eco-node eco-hub eco-clickable" data-eco-modal="bp-parent">
-                  <rect x="250" y="15" width="300" height="60" rx="12" style="stroke: url(#bp-grad); stroke-width: 2"/>
-                  <text x="400" y="43" class="eco-hub-label">BIGPIC SOLUTIONS</text>
-                  <text x="400" y="62" class="eco-sub">Agentic R&amp;D · Capital · Technology · CyberCab</text>
-                </g>
-
-                <!-- Division: Capital -->
-                <g class="eco-node bp-div eco-source eco-clickable" data-eco-modal="bp-capital">
-                  <rect x="20" y="128" width="230" height="55" rx="8"/>
-                  <text x="135" y="150" class="eco-label">Capital</text>
-                  <text x="135" y="167" class="eco-sub">Investment Operations</text>
-                </g>
-
-                <!-- Division: Technology -->
-                <g class="eco-node bp-div eco-source eco-clickable" data-eco-modal="bp-technology">
-                  <rect x="285" y="128" width="230" height="55" rx="8"/>
-                  <text x="400" y="150" class="eco-label">Technology</text>
-                  <text x="400" y="167" class="eco-sub">IT Services &amp; Security</text>
-                </g>
-
-                <!-- Division: CyberCab -->
-                <g class="eco-node bp-div eco-source bp-dev eco-clickable" data-eco-modal="bp-cybercab">
-                  <rect x="550" y="128" width="230" height="55" rx="8"/>
-                  <text x="665" y="150" class="eco-label">CyberCab</text>
-                  <text x="665" y="166" class="bp-dev-label" style="font-size: 8px; letter-spacing: 0.1em">AUTONOMOUS FLEET · IN DEV</text>
-                </g>
-
-                <!-- Column Labels -->
-                <text x="135" y="230" class="eco-col-label">INVESTMENT</text>
-                <text x="400" y="230" class="eco-col-label">SERVICES</text>
-                <text x="665" y="230" class="eco-col-label">FLEET</text>
-
-                <!-- Capabilities: Capital -->
-                <g class="eco-node bp-cap eco-tool eco-clickable" data-eco-modal="bp-trading">
-                  <rect x="20" y="240" width="230" height="40" rx="6"/>
-                  <text x="135" y="256" class="eco-label">Trading Systems</text>
-                  <text x="135" y="270" class="eco-sub">HERMES · TERMINUS · Strategies</text>
-                </g>
-                <g class="eco-node bp-cap-2 eco-tool eco-clickable" data-eco-modal="bp-intelligence">
-                  <rect x="20" y="290" width="230" height="40" rx="6"/>
-                  <text x="135" y="306" class="eco-label">Market Intelligence</text>
-                  <text x="135" y="320" class="eco-sub">Wingman · Scanners · APIs</text>
-                </g>
-                <g class="eco-node bp-cap-3 eco-tool eco-clickable" data-eco-modal="bp-research">
-                  <rect x="20" y="340" width="230" height="40" rx="6"/>
-                  <text x="135" y="356" class="eco-label">Research &amp; Publishing</text>
-                  <text x="135" y="370" class="eco-sub">9 Theses · Eagle Eye · Briefs</text>
-                </g>
-
-                <!-- Capabilities: Technology -->
-                <g class="eco-node bp-cap eco-tool eco-clickable" data-eco-modal="bp-pentester">
-                  <rect x="285" y="240" width="230" height="40" rx="6"/>
-                  <text x="400" y="256" class="eco-label">Pentester Platform</text>
-                  <text x="400" y="270" class="eco-sub">Automated Security Assessments</text>
-                </g>
-                <g class="eco-node bp-cap-2 eco-tool eco-clickable" data-eco-modal="bp-consulting">
-                  <rect x="285" y="290" width="230" height="40" rx="6"/>
-                  <text x="400" y="306" class="eco-label">IT Consulting</text>
-                  <text x="400" y="320" class="eco-sub">Remote Infrastructure &amp; Cloud</text>
-                </g>
-                <g class="eco-node bp-cap-3 eco-tool eco-clickable" data-eco-modal="bp-automation">
-                  <rect x="285" y="340" width="230" height="40" rx="6"/>
-                  <text x="400" y="356" class="eco-label">AI Automation</text>
-                  <text x="400" y="370" class="eco-sub">Workflow &amp; Process Automation</text>
-                </g>
-
-                <!-- Capabilities: CyberCab -->
-                <g class="eco-node bp-cap eco-tool bp-dev eco-clickable" data-eco-modal="bp-revenue">
-                  <rect x="550" y="240" width="230" height="40" rx="6"/>
-                  <text x="665" y="256" class="eco-label">Revenue Modeling</text>
-                  <text x="665" y="270" class="eco-sub">Unit Economics · ROI Analysis</text>
-                </g>
-                <g class="eco-node bp-cap-2 eco-tool bp-dev eco-clickable" data-eco-modal="bp-fleet">
-                  <rect x="550" y="290" width="230" height="40" rx="6"/>
-                  <text x="665" y="306" class="eco-label">Fleet Planning</text>
-                  <text x="665" y="320" class="eco-sub">Acquisition · Operations</text>
-                </g>
-                <g class="eco-node bp-cap-3 bp-dev">
-                  <rect x="550" y="340" width="230" height="40" rx="6" style="fill: rgba(255, 193, 7, 0.06)"/>
-                  <text x="665" y="364" class="bp-dev-label" style="font-size: 10px; letter-spacing: 0.2em; opacity: 0.8">LAUNCHING 2026</text>
-                </g>
-              </svg>
-            </div>
-
-            <div class="project-cards">
-              <div class="project-card" data-eco-modal="bp-capital">
-                <div class="project-card-top">
-                  <h4>BigPic Capital</h4>
-                </div>
-                <p>AI-native investment OS — trading agents, verified strategies, 9 sector theses, published research at markets.bigpicsolutions.com.</p>
-              </div>
-              <div class="project-card" data-eco-modal="bp-technology">
-                <div class="project-card-top">
-                  <h4>BigPic Technology</h4>
-                </div>
-                <p>IT consulting &amp; security — automated pentesting platform, AI automation, remote infrastructure. 25+ years expertise.</p>
-              </div>
-              <div class="project-card" data-eco-modal="bp-cybercab">
-                <div class="project-card-top">
-                  <h4>BigPic CyberCab</h4>
-                  <span class="lang-badge" style="background: rgba(255,193,7,0.15); color: #ffc107">In Dev</span>
-                </div>
-                <p>Autonomous vehicle fleet — Tesla CyberCab revenue modeling, unit economics &amp; fleet planning.</p>
-              </div>
-              <div class="project-card" data-eco-modal="bp-invoicing">
-                <div class="project-card-top">
-                  <h4>Invoicing Platform</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Flask + Stripe invoicing system — client management, PDF generation, QR payment links, lead pipeline. Production business tool.</p>
-              </div>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Cybersecurity</summary>
-            <div class="project-cards">
-              <div class="project-card" data-eco-modal="cyberdefense">
-                <div class="project-card-top">
-                  <h4>Cyber Defense Command Center</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Distributed security platform — Python scanning agents, Node.js REST API, React dashboard. Network discovery, vuln detection, DNS monitoring.</p>
-              </div>
-              <div class="project-card" data-eco-modal="pentester">
-                <div class="project-card-top">
-                  <h4>Pentester Platform</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>4-tool CLI security suite — automated scans, CVSS classification, compliance-mapped reports (PCI DSS, HIPAA). Nmap, Nuclei, Ansible.</p>
-              </div>
-              <div class="project-card" data-eco-modal="cybersectools">
-                <div class="project-card-top">
-                  <h4>CyberSec Tools</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>8 hand-written offensive security tools — port scanner, SSH brute forcer, hash cracker, WiFi cracker, subdomain &amp; directory enumeration.</p>
-              </div>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>AI &amp; Voice Tools</summary>
-            <div class="project-cards">
-              <div class="project-card" data-eco-modal="wmvoice">
-                <div class="project-card-top">
-                  <h4>WM-Voice</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Hands-free Linux voice assistant — Claude Agent SDK, Whisper STT, Kokoro TTS.</p>
-              </div>
-              <div class="project-card" data-eco-modal="videototext">
-                <div class="project-card-top">
-                  <h4>VideoToText</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Download and transcribe X/Twitter videos using OpenAI Whisper.</p>
-              </div>
-              <div class="project-card" data-eco-modal="swarmai">
-                <div class="project-card-top">
-                  <h4>Swarm-AI</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Service DAO blueprint for an AI-augmented vibe-coding freelancer collective.</p>
-              </div>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Interactive Experiences</summary>
-            <div class="project-cards">
-              <div class="project-card" data-eco-modal="book">
-                <div class="project-card-top">
-                  <h4>Book</h4>
-                  <span class="lang-badge lang-js">JavaScript</span>
-                </div>
-                <p>"Enter Zen From There" — WebGL portal linking three interactive sub-projects.</p>
-              </div>
-              <div class="project-card" data-eco-modal="zen">
-                <div class="project-card-top">
-                  <h4>Zen</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>Interactive Zen meditation — breathing guide, sand garden, ambient sounds, timer.</p>
-              </div>
-              <div class="project-card" data-eco-modal="ancients">
-                <div class="project-card-top">
-                  <h4>Ancients</h4>
-                  <span class="lang-badge lang-js">JavaScript</span>
-                </div>
-                <p>Interactive history timeline — WebGL cosmic portal, alternative civilization theories.</p>
-              </div>
-              <div class="project-card" data-eco-modal="breakthecode">
-                <div class="project-card-top">
-                  <h4>BreakTheCode</h4>
-                  <span class="lang-badge lang-html">HTML</span>
-                </div>
-                <p>"Breaking Your Genetic Code" — immersive digital book on consciousness expansion.</p>
-              </div>
-            </div>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Research &amp; Analysis</summary>
-            <div class="project-cards">
-              <div class="project-card" data-eco-modal="twitteralgo">
-                <div class="project-card-top">
-                  <h4>twitter-algorithm-analysis</h4>
-                  <span class="lang-badge lang-rust">Rust</span>
-                </div>
-                <p>Decompiled X's "For You" algorithm — actionable posting rules and scoring formulas.</p>
-              </div>
-              <div class="project-card" data-eco-modal="zolseason">
-                <div class="project-card-top">
-                  <h4>ZOLSEASON</h4>
-                </div>
-                <p>Privacy-preserving bridge concept uniting Zcash and Solana.</p>
-              </div>
-              <div class="project-card" data-eco-modal="sandbox">
-                <div class="project-card-top">
-                  <h4>Quantitative Research Lab</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>31K lines — 39-ticker universe, regime detection, signal discovery with Newey-West corrections, bootstrap validation. 5 confirmed signals.</p>
-              </div>
-              <div class="project-card" data-eco-modal="breadth">
-                <div class="project-card-top">
-                  <h4>Breadth-Exhaustion-Signal</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>Market breadth research — 27 years NYSE data, Monte Carlo null hypothesis testing, p&lt;0.05 confirmed. Modular Python architecture.</p>
-              </div>
-              <div class="project-card" data-eco-modal="gann">
-                <div class="project-card-top">
-                  <h4>Gann Square of Nine</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>56KB backtester — 6 Gann techniques vs 33 years SPY data. z=+9.51 (p=0.0000), Monte Carlo validated. Century-old theory, modern rigor.</p>
-              </div>
-              <div class="project-card" data-eco-modal="meanrevert">
-                <div class="project-card-top">
-                  <h4>Mean Reversion Lab</h4>
-                  <span class="lang-badge lang-py">Python</span>
-                </div>
-                <p>PineScript + Python walk-forward — 20,736 parameter sweep, 81.2% WR across 203 trades, out-of-sample validated at 84.3%.</p>
-              </div>
-            </div>
-          </details>
-
-        </div>
-
-        <!-- ====== Labs & Learning Resources ====== -->
-        <div class="projects-divider reveal"></div>
-        <div class="projects-header reveal">
-          <span class="section-label">Skill Building</span>
-          <h3 class="section-subheading">Labs &amp; Learning Resources</h3>
-        </div>
-        <div class="projects-accordion reveal-stagger">
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Fundamentals</summary>
-            <ul class="project-links">
-              <li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnlCJiCrOYuRYb6cne864a7G" target="_blank" rel="noopener">Professor Messer - N10-008 Net+ Training Course</a></li>
-              <li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnkL2ulFS3132mOVKuzzBxA8" target="_blank" rel="noopener">Professor Messer - Sec+ SY0-601 Training Course</a></li>
-              <li>
-                <a href="https://youtube.com/playlist?list=PLlVtbbG169nED0_vMEniWBQjSoxTsBYS3" target="_blank" rel="noopener">AZ-900 | Azure Fundamentals Certification Course</a>
-                <ul><li><a href="https://github.com/DaryllGomas/Documents/blob/main/Cloud/AZ-900_MS-Learn_Notes.pdf" target="_blank" rel="noopener">My Notion Notes (Documentation Practice)</a></li></ul>
-              </li>
-              <li>
-                <a href="https://youtu.be/u4VWQZ8KLmI" target="_blank" rel="noopener">Become an Ethical Hacker for $0 — @thecybermentor</a>
-                <ul><li><a href="https://github.com/DaryllGomas/Documents/blob/main/CyberSecurity/Becoming_a_Ethical_Hacker_for_0.pdf" target="_blank" rel="noopener">My Notion Notes (Documentation Practice)</a></li></ul>
-              </li>
-            </ul>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>CyberSecurity</summary>
-            <ul class="project-links">
-              <li><a href="https://youtu.be/RoZeVbbZ0o0" target="_blank" rel="noopener">SIEM Tutorial with Live Attacks (Azure Sentinel) — @JoshMadakor</a></li>
-              <li><a href="https://youtu.be/lT6Px9zJM3s" target="_blank" rel="noopener">Vulnerability Management (Nessus) — @JoshMadakor</a></li>
-              <li><a href="https://youtu.be/P85L2vwmBKA" target="_blank" rel="noopener">Build a CyberSecurity Lab — @collinsinfosec</a></li>
-              <li><a href="https://youtube.com/playlist?list=PLDqMNdDvMsRkmtiKcZwbhOz7MeLQE0r3G" target="_blank" rel="noopener">Cybersecurity Detection &amp; Monitoring Lab — @daycyberwox</a></li>
-            </ul>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Cloud &amp; Virtualization</summary>
-            <ul class="project-links">
-              <li><a href="https://youtu.be/apC1bOLbzbY" target="_blank" rel="noopener">Docker Fundamentals — @adriancantrill</a></li>
-              <li><a href="https://youtu.be/VIMaFk-R9xQ" target="_blank" rel="noopener">Linux Lab in the Azure Cloud — @NetworkChuck</a></li>
-              <li><a href="https://youtu.be/9J_yjmzCavg" target="_blank" rel="noopener">Virtualize Mac OS</a></li>
-            </ul>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Network &amp; Administration</summary>
-            <ul class="project-links">
-              <li><a href="https://youtu.be/MHsI8hJmggI" target="_blank" rel="noopener">Setup AD and Add Users with PowerShell — @JoshMadakor</a></li>
-              <li><a href="https://youtu.be/r8UOKHCQEW8" target="_blank" rel="noopener">Host a Website on Windows Server 2016/2019</a></li>
-              <li><a href="https://tryhackme.com/room/winadbasics" target="_blank" rel="noopener">TryHackMe — Active Directory Basics</a></li>
-            </ul>
-          </details>
-
-          <details class="project-category reveal">
-            <summary><span class="category-marker"></span>Linux &amp; Coding</summary>
-            <ul class="project-links">
-              <li><a href="https://youtu.be/rZsJieGi8os" target="_blank" rel="noopener">Linux for Ethical Hackers — @thecybermentor</a></li>
-              <li><a href="https://youtu.be/kqtD5dpn9C8" target="_blank" rel="noopener">Python for Beginners — Learn Python in 1 Hour</a></li>
-              <li><a href="https://youtu.be/be4W-pSk8Ac" target="_blank" rel="noopener">Linux Home Lab Server — @christian_tdl</a></li>
-              <li><a href="https://youtube.com/playlist?list=PLw78nfbi6DWjX8ephtrITEqdnWL1wv8qC" target="_blank" rel="noopener">CompTIA Linux+ Breakdowns and Labs — @JBizzle703</a></li>
-            </ul>
-          </details>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================
-         FOOTER / CONTACT
-         ============================================ -->
-    <footer class="section footer" id="contact">
-      <div class="container">
-        <div class="footer-content reveal">
-          <span class="section-label">Get In Touch</span>
-          <h2 class="section-heading">Let's Connect</h2>
-          <div class="footer-links">
-            <a href="https://twitter.com/DaryllGomas" target="_blank" rel="noopener" aria-label="Twitter">
-              <svg viewBox="0 0 24 24"><path d="M4 4l11.7 16h4.3L8.3 4H4zm2.1 1h1.9l9.9 14h-1.9L6.1 5z"/><line x1="4" y1="20" x2="10" y2="13"/><line x1="20" y1="4" x2="14" y2="11"/></svg>
-              <span>X / Twitter</span>
-            </a>
-            <a href="https://www.linkedin.com/in/daryll-gomas" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-              <span>LinkedIn</span>
-            </a>
-            <a href="https://github.com/DaryllGomas" target="_blank" rel="noopener" aria-label="GitHub">
-              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-              <span>GitHub</span>
-            </a>
-            <a href="mailto:daryll.gomas@gmail.com" aria-label="Email">
-              <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
-              <span>Email</span>
-            </a>
-          </div>
-          <div class="footer-external">
-            <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">BigPic Solutions</a>
-            <span class="footer-divider" aria-hidden="true"></span>
-            <a href="https://www.justsomedude.org/" target="_blank" rel="noopener">justsomedude.org</a>
-          </div>
-        </div>
-        <div class="footer-bottom">
-          <p>&copy; 2026 Daryll Gomas</p>
-        </div>
-      </div>
-    </footer>
-
-    <!-- ============================================
-         SKILL MODALS
-         ============================================ -->
-    <div class="skill-modal-overlay" id="skill-modal-overlay">
-
-      <div class="skill-modal" id="modal-networking">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Networking</h3>
-        <span class="skill-modal-pct">85% — Architecture Capable</span>
-        <p>Operating comfortably at architecture level. Not just configuring — thinking structurally.</p>
-        <ul>
-          <li>SonicWall firewall configuration and management</li>
-          <li>VLAN design and network segmentation strategy</li>
-          <li>DNS architecture including Synology as backup DNS</li>
-          <li>MSP multi-site network awareness</li>
-          <li>Packet inspection concepts</li>
-          <li>Security-first network design philosophy</li>
-        </ul>
-      </div>
-
-      <div class="skill-modal" id="modal-cybersecurity">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>CyberSecurity</h3>
-        <span class="skill-modal-pct">75% — Strong Defensive Mindset</span>
-        <p>Consistently thinking in terms of attack surface and defense. Strong blue-team architecture brain.</p>
-        <ul>
-          <li>2FA enforcement across M365 and Authenticator</li>
-          <li>Firewall upgrades for security posture improvement</li>
-          <li>Vulnerability scanning VM architecture</li>
-          <li>SIEM implementation and discussion</li>
-          <li>Zero-cloud AI inference for data control</li>
-          <li>Incident response mindset — dealt with real attacks</li>
-        </ul>
-      </div>
-
-      <div class="skill-modal" id="modal-virtualization">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Virtualization</h3>
-        <span class="skill-modal-pct">80% — Infrastructure Fluent</span>
-        <p>Understanding virtualization as infrastructure, not just lab usage.</p>
-        <ul>
-          <li>Hyper-V including performance troubleshooting</li>
-          <li>Linux VM deployment and management</li>
-          <li>Synology VM environments</li>
-          <li>Multi-GPU LLM servers in Docker</li>
-          <li>Cross-platform Mac/Windows virtualization needs</li>
-        </ul>
-      </div>
-
-      <div class="skill-modal" id="modal-cloud">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Cloud</h3>
-        <span class="skill-modal-pct">70% — Hybrid-Heavy Strength</span>
-        <p>Leaning hybrid/on-prem secure architecture more than pure cloud-native SaaS engineering.</p>
-        <ul>
-          <li>Microsoft 365 tenant management</li>
-          <li>Entra integration concepts</li>
-          <li>Multi-tenant management strategy</li>
-          <li>Authentication models and identity sync</li>
-          <li>Hybrid cloud architecture planning</li>
-        </ul>
-      </div>
-
-      <div class="skill-modal" id="modal-syseng">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Systems Engineering</h3>
-        <span class="skill-modal-pct">88% — Core Competency</span>
-        <p>This is not IT support. This is infrastructure systems engineering. 25+ years of cross-platform systems work.</p>
-        <ul>
-          <li>Windows, macOS, and Linux administration</li>
-          <li>DNS and domain consolidation planning</li>
-          <li>Infrastructure modernization strategy</li>
-          <li>RAID decisions and storage architecture</li>
-          <li>Identity architecture and access management</li>
-          <li>Automation mindset across all platforms</li>
-        </ul>
-      </div>
-
-      <div class="skill-modal" id="modal-blockchain">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Blockchain</h3>
-        <span class="skill-modal-pct">65% — Investor + Systems Awareness</span>
-        <p>Understanding the ecosystem at a structural and capital allocation level.</p>
-        <ul>
-          <li>What a blockchain is (distributed ledger, consensus, immutability)</li>
-          <li>Difference between Bitcoin-style monetary chains and smart contract platforms</li>
-          <li>Market cycles and volatility mechanics</li>
-          <li>Token economics at a macro level</li>
-          <li>Layer 1 vs Layer 2 concepts</li>
-          <li>Custody risks (self-custody vs exchange risk)</li>
-          <li>Why decentralization matters (and where it's overstated)</li>
-        </ul>
-      </div>
-
-      <div class="skill-modal" id="modal-ai">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Artificial Intelligence</h3>
-        <span class="skill-modal-pct">75% — Builder + Deployer</span>
-        <p>Not just using AI — deploying it on infrastructure, building with it, and thinking about where it's going.</p>
-        <ul>
-          <li>LLM deployment on local infrastructure</li>
-          <li>Multi-GPU server builds for AI inference</li>
-          <li>AI-assisted automation and workflow design</li>
-          <li>Secure on-prem AI for data sovereignty</li>
-          <li>Strategic understanding of the AI landscape</li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- ============================================
-         ECOSYSTEM MODALS
-         ============================================ -->
-    <div class="skill-modal-overlay" id="eco-modal-overlay">
-
-      <div class="skill-modal" id="eco-modal-schwab">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Schwab API</h3>
-        <span class="skill-modal-pct">Data Source</span>
-        <p>The primary external data feed powering the entire trading ecosystem. Provides real-time and historical market data across multiple asset classes.</p>
-        <ul>
-          <li>Real-time price data for stocks, ETFs, and options</li>
-          <li>Historical OHLCV data for backtesting strategies</li>
-          <li>Options chains with Greeks, IV, and open interest</li>
-          <li>Account and position data for portfolio tracking</li>
-        </ul>
-        <span class="skill-modal-tagline">Feeds into &rarr; DATA hub, Options-Calc</span>
-        <span class="eco-modal-repo eco-external">External Service</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-scout">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Scout-Win</h3>
-        <span class="skill-modal-pct">Intelligence Gathering</span>
-        <p>Automated market reconnaissance system that scrapes multiple sources and generates a structured intelligence dashboard for daily trading decisions.</p>
-        <ul>
-          <li>Scrapes X/Twitter for market sentiment and breaking news</li>
-          <li>Monitors YouTube for analyst commentary and trade ideas</li>
-          <li>Aggregates RSS feeds from financial news sources</li>
-          <li>Generates a consolidated dashboard (dash.html) for morning prep</li>
-        </ul>
-        <span class="skill-modal-tagline">Feeds into &rarr; DATA hub, Trading Prep</span>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-data">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>DATA</h3>
-        <span class="skill-modal-pct">Central Hub &mdash; The Backbone</span>
-        <p>The shared data backbone that every other tool in the ecosystem queries. Collects, processes, and stores market data from multiple sources, then exposes it via REST API.</p>
-        <ul>
-          <li>Tracks 33 symbols across ETFs and individual stocks</li>
-          <li>Stores price data, IV/HV, VIX, and volume in SQLite</li>
-          <li>Processes RSS feeds and YouTube content metadata</li>
-          <li>REST API (port 3000/3443) for all downstream tools</li>
-          <li>Matrix-style web interface for direct data exploration</li>
-        </ul>
-        <span class="skill-modal-tagline">Every tool in the ecosystem connects here</span>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-signal">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Signal Engine</h3>
-        <span class="skill-modal-pct">trade-signal-backend &mdash; Algorithmic Core</span>
-        <p>The algorithmic trading engine at the heart of the platform. Runs 15+ strategies with multi-timeframe analysis and Claude AI integration for intelligent trade vetting.</p>
-        <ul>
-          <li>15+ strategies: ORB, Golden Setup, VWAP Reversion, Mean Reversion, and more</li>
-          <li>Multi-timeframe analysis across intraday and swing periods</li>
-          <li>Claude AI integration for trade veto and learning loop</li>
-          <li>Paper trading with realistic slippage modeling</li>
-          <li>Real-time alerts via SSE, Discord, and Telegram</li>
-          <li>SQLite backend with 40+ tables tracking strategy performance</li>
-        </ul>
-        <span class="skill-modal-tagline">Queries &larr; DATA hub &nbsp;|&nbsp; Outputs &rarr; Wingman, Alerts</span>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-wingman">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Wingman</h3>
-        <span class="skill-modal-pct">AI-Assisted Trading Workstation</span>
-        <p>The comprehensive trading dashboard and daily command center. Combines all strategies, analysis tools, and market data into a single AI-assisted workstation.</p>
-        <ul>
-          <li>Full web dashboard with strategy views and daily workflows</li>
-          <li>VWAP + Divergence integrated trading system</li>
-          <li>Built-in backtesting tools for strategy validation</li>
-          <li>Earnings scanner for upcoming catalysts</li>
-          <li>Daily workflow pages for structured pre-market and EOD routines</li>
-        </ul>
-        <span class="skill-modal-tagline">Queries &larr; DATA hub, Signal Engine</span>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-options">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Options-Calc</h3>
-        <span class="skill-modal-pct">Gamma Exposure Analysis</span>
-        <p>Schwab Trading Dashboard focused on gamma exposure (GEX) analysis. Shows where market makers are positioned and where price is likely to pin, reverse, or accelerate.</p>
-        <ul>
-          <li>Dealer positioning and gamma exposure visualization</li>
-          <li>Call/put walls and gamma flip level detection</li>
-          <li>0DTE expected move calculations</li>
-          <li>AI-powered (Claude) trade setup suggestions</li>
-          <li>Real-time data streaming from Schwab API + Yahoo</li>
-        </ul>
-        <span class="skill-modal-tagline">Queries &larr; DATA hub, Schwab API</span>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-divergence">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Divergence Scanner</h3>
-        <span class="skill-modal-pct">Inter-Market Analysis</span>
-        <p>Real-time scanner that detects relative strength shifts, correlation breakdowns, and sector rotation signals across markets. Catches moves before they become obvious.</p>
-        <ul>
-          <li>Real-time inter-market divergence detection</li>
-          <li>Relative strength shift identification</li>
-          <li>Correlation breakdown alerts</li>
-          <li>Sector rotation heatmap visualization</li>
-          <li>3-tier alert system with SQLite persistence</li>
-        </ul>
-        <span class="skill-modal-tagline">Queries &larr; DATA hub (Schwab API)</span>
-        <a href="https://github.com/Namkuzu-da-OS/Divergance-Scanner" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-fibonacci">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Fibonacci Backtester</h3>
-        <span class="skill-modal-pct">Strategy Validation</span>
-        <p>Backtesting system for DiNapoli Fibonacci Levels — testing the methodology against real market data to validate entry and exit strategies.</p>
-        <ul>
-          <li>DiNapoli Fibnodes, Confluence, and Agreement analysis</li>
-          <li>Objective profit points based on Fibonacci extensions</li>
-          <li>Historical backtesting against real Schwab API data</li>
-          <li>Performance metrics and win-rate analysis</li>
-        </ul>
-        <span class="skill-modal-tagline">Queries &larr; DATA hub (historical data)</span>
-        <a href="https://github.com/Namkuzu-da-OS/fibonacci-backtester" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-tradingprep">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Trading Prep</h3>
-        <span class="skill-modal-pct">Research Automation</span>
-        <p>Automated pre-market and end-of-day research report generator. Uses Claude Code to synthesize market data, signals, and intelligence into actionable daily briefs.</p>
-        <ul>
-          <li>Automated pre-market morning research reports</li>
-          <li>End-of-day recap and performance analysis</li>
-          <li>Powered by Claude Code with custom prompt templates</li>
-          <li>Shell scripts for scheduled report generation</li>
-        </ul>
-        <span class="skill-modal-tagline">Queries &larr; DATA hub, Scout-Win, Signal Engine</span>
-        <a href="https://github.com/Namkuzu-da-OS/trading-prep" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <!-- Namkuzu-da OS modals -->
-      <div class="skill-modal" id="eco-modal-nkd-os">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Namkuzu-da OS</h3>
-        <span class="skill-modal-pct">AI-Native Operating System</span>
-        <p>A custom AI-powered computing environment built on Ubuntu 24.04 LTS with Claude Code as the orchestration brain. Designed for accessibility (hands-free operation) with voice control, automated pipelines, and agentic AI driving every workflow.</p>
-        <ul>
-          <li>Claude Code as system brain — xdotool, wmctrl, scrot for desktop control</li>
-          <li>8 automated cron pipelines (market analysis, research, backups)</li>
-          <li>RTX 3070 Ti with CUDA for local AI inference</li>
-          <li>4-monitor workstation with night/day display modes</li>
-          <li>Custom systemd services, shell toolbox, and Chrome extensions</li>
-          <li>Synology NAS nightly backups with email alerts</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-voice">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Voice Input</h3>
-        <span class="skill-modal-pct">Speech → Transcription → Claude</span>
-        <p>Hands-free voice input layer. Spoken commands are captured by the microphone, transcribed in real-time using CUDA-accelerated Whisper, and fed directly into Claude Code for processing and action.</p>
-        <ul>
-          <li>WM-Voice — Faster-Whisper (large-v3-turbo) + Silero VAD</li>
-          <li>Whisper Writer — hotkey dictation to any application via Insert key</li>
-          <li>RTX 3070 Ti CUDA acceleration for real-time transcription</li>
-          <li>Accessibility-first — designed for hands-free operation</li>
-          <li>Voice output via Kokoro TTS feeds back through System Control</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-marketdata">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Market Data</h3>
-        <span class="skill-modal-pct">APIs · RSS · Economic Data</span>
-        <p>The raw data pipeline feeding the brain. Market quotes, news feeds, and economic indicators flow in on automated schedules — 26 RSS feeds, Schwab broker API, and FRED economic data.</p>
-        <ul>
-          <li>Schwab API proxy at 192.168.10.60 — real-time quotes &amp; technicals</li>
-          <li>26 RSS feeds — financial news, sector coverage, macro analysis</li>
-          <li>FRED API — economic indicators and macro data</li>
-          <li>33 tracked symbols across sectors</li>
-          <li>Collected automatically by cron at 4:30 AM Mon–Fri</li>
-        </ul>
-        <span class="skill-modal-tagline">Feeds Morning Briefs, Eagle Eye &amp; Trading Prep</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-web">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Web &amp; Research</h3>
-        <span class="skill-modal-pct">YouTube · Browser · Inbox</span>
-        <p>Web content and research inputs that feed the knowledge system. YouTube transcripts, browser research, and inbox files are routed through Claude for extraction, analysis, and integration.</p>
-        <ul>
-          <li>Living Thesis Chrome extension — one-click YouTube transcript capture</li>
-          <li>Native messaging bridge from browser → Claude Code</li>
-          <li>Inbox file processing via /inbox skill</li>
-          <li>Web research amplification via /enhance skill</li>
-          <li>Polymarket prediction data via /predict skill</li>
-        </ul>
-        <span class="skill-modal-tagline">Feeds Knowledge Base &amp; Research Pipeline</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-terminal">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Terminal Stack</h3>
-        <span class="skill-modal-pct">GPU-Accelerated Development Environment</span>
-        <p>A modern, GPU-accelerated terminal environment optimized for AI-assisted development. Multiple panes for Claude Code, file management, and shell access.</p>
-        <ul>
-          <li>Wezterm — GPU-accelerated terminal with Tokyo Night theme</li>
-          <li>Zellij — terminal multiplexer with dev.kdl layout</li>
-          <li>Starship — cross-shell prompt with git integration</li>
-          <li>Yazi — terminal file manager with previews</li>
-          <li>Modern CLI: eza, bat, fzf, zoxide, fd, ripgrep</li>
-        </ul>
-        <span class="skill-modal-tagline">Core Development Interface</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-display">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Display System</h3>
-        <span class="skill-modal-pct">4-Monitor Workstation</span>
-        <p>A multi-monitor command center managed via xrandr with automated display modes for extended trading and development sessions.</p>
-        <ul>
-          <li>Primary: 1440p center (DP-0) — main workspace</li>
-          <li>Top: 1440p (HDMI-0) — video and night mode display</li>
-          <li>Sides: dual 1080p portrait (DP-3, DP-5)</li>
-          <li>Night mode: reduced brightness + amber gamma tint</li>
-          <li>Day mode: full brightness + normal gamma</li>
-        </ul>
-        <span class="skill-modal-tagline">Custom xrandr + Gamma Scripts</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-pipelines">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Published Intelligence</h3>
-        <span class="skill-modal-pct">8 Automated Cron Jobs → Live Reports</span>
-        <p>The brain's primary output. Market data flows in, Claude Opus analyzes it, writes institutional-quality reports, and publishes them to the web — all autonomously on schedule, zero human intervention.</p>
-        <ul>
-          <li>4:30 AM — Morning Brief: 26 RSS feeds + Schwab API → Claude analysis → HTML publish</li>
-          <li>4:30 AM — Trading Prep: pre-market structure analysis</li>
-          <li>5:00 AM — Auto-inject into BigPic Capital daily notes</li>
-          <li>4:00 PM Sun — Eagle Eye: weekly macro cycle report</li>
-          <li>5:00 PM Sun — Auto-inject weekly notes</li>
-          <li>Every 15 min — Google Drive sync + GPU health monitoring</li>
-        </ul>
-        <span class="skill-modal-tagline">Zero-Touch Daily Operations</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-knowledge">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Knowledge System</h3>
-        <span class="skill-modal-pct">Living Thesis · Research Synthesis</span>
-        <p>An automated knowledge management pipeline. One-click YouTube transcript extraction flows through Claude-powered analysis into a structured, evolving knowledge base.</p>
-        <ul>
-          <li>Living Thesis Chrome extension — one-click YouTube → knowledge base</li>
-          <li>4-stage pipeline: validate → download → extract → incorporate</li>
-          <li>Native messaging bridge from browser to Claude</li>
-          <li>Topic synthesis and cross-referencing via Claude</li>
-          <li>Zero-prompt automation — fully hands-off after click</li>
-        </ul>
-        <span class="skill-modal-tagline">Browser → Claude → Knowledge Base</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-services">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>System Services</h3>
-        <span class="skill-modal-pct">Backup · Bluetooth · GPU Monitoring</span>
-        <p>Custom systemd services and automation scripts that keep the workstation running reliably. Nightly backups, auto-connecting peripherals, and hardware monitoring.</p>
-        <ul>
-          <li>Nightly rsync backup to Synology NAS with email alerts on failure</li>
-          <li>Bluetooth auto-switch — D-Bus monitoring for A2DP headset connect</li>
-          <li>GPU health monitor — RTX 3070 Ti temp/utilization logged every 15 min</li>
-          <li>Google Drive mount via rclone (full VFS cache, 720h retention)</li>
-          <li>Realtek BT adapter fix — modprobe reload at boot</li>
-        </ul>
-        <span class="skill-modal-tagline">Systemd + Custom Shell Toolbox</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-control">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>System Control</h3>
-        <span class="skill-modal-pct">Voice TTS · Desktop · Display</span>
-        <p>The brain's physical output layer. Claude controls the workstation — speaking responses via Kokoro TTS, manipulating windows and applications, and managing the 4-monitor display environment.</p>
-        <ul>
-          <li>Kokoro TTS — Claude speaks responses aloud via Docker container</li>
-          <li>xdotool + wmctrl — window management and keyboard automation</li>
-          <li>scrot — screenshot capture for visual context</li>
-          <li>4-monitor xrandr control with night/day gamma modes</li>
-          <li>Systemd services: backup, Bluetooth auto-switch, GPU monitoring</li>
-          <li>Synology NAS nightly rsync with email alerts on failure</li>
-        </ul>
-        <span class="skill-modal-tagline">Brain → Physical World</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-gdrive">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Cloud & Network</h3>
-        <span class="skill-modal-pct">Google Drive · LAN APIs · Scanner Infrastructure</span>
-        <p>The distributed data layer. Google Drive mounts via rclone feed all three BigPic divisions into the brain, while local network APIs serve real-time market and scanner data from dedicated machines.</p>
-        <ul>
-          <li>rclone — 2 Google Drive mounts (BigPic Capital &amp; Technology)</li>
-          <li>Options API — GEX analysis, dealer positioning (dedicated LAN server)</li>
-          <li>Intel API — market intelligence aggregation (dedicated LAN server)</li>
-          <li>Scanner API — divergence &amp; momentum scanning (secondary LAN node)</li>
-          <li>Synology NAS — nightly rsync backup with failure alerts</li>
-        </ul>
-        <span class="skill-modal-tagline">Cloud + LAN → Brain</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-alerts">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Alerts & Delivery</h3>
-        <span class="skill-modal-pct">Email · Google Drive · Automated Notifications</span>
-        <p>The outbound delivery system. Automated pipelines push finished intelligence products to email, save reports to Google Drive for team access, and trigger notifications when critical market events fire.</p>
-        <ul>
-          <li>msmtp — sends automated reports to daryll@bigpicsolutions.com</li>
-          <li>Google Drive export — morning briefs, EOD summaries, research saved to shared folders</li>
-          <li>Cron-triggered alerts — pre-market (5:45 AM), EOD (4:15 PM), weekend research</li>
-          <li>Error alerting — NAS backup failures, service health, pipeline errors</li>
-          <li>Webhook integrations — future Slack/Discord delivery planned</li>
-        </ul>
-        <span class="skill-modal-tagline">Brain → World</span>
-      </div>
-
-      <!-- Namkuzu-da OS — additional modals -->
-      <div class="skill-modal" id="eco-modal-nkd-orchestration">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Agentic Business Orchestration</h3>
-        <span class="skill-modal-pct">Directory-as-Agent Architecture</span>
-        <p>A multi-tier system where Google Drive directories become autonomous AI-managed business units. Each directory has a CLAUDE.md that auto-loads context — cd into a folder and Claude assumes that division's role. An orchestrator layer coordinates across divisions with rule inheritance, skill registries, and shared infrastructure.</p>
-        <ul>
-          <li>Multi-tier CLAUDE.md hierarchy — root orchestrator inherits rules to all divisions</li>
-          <li>16 specialized Claude Code skills (/hermes, /pulse, /predict, /kungfu, /analyst, etc.)</li>
-          <li>Google Drive as shared skill library synced via rclone FUSE mounts</li>
-          <li>Automatic role-switching — context changes based on working directory</li>
-          <li>Cross-division coordination — Capital, Technology, CyberCab share infrastructure</li>
-          <li>Experimental agent teams for multi-agent workflows</li>
-        </ul>
-        <span class="skill-modal-tagline">Filesystem as Org Chart</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-nkd-thesis">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Living Thesis Pipeline</h3>
-        <span class="skill-modal-pct">Knowledge Management Automation</span>
-        <p>A two-stage Claude Code pipeline that takes unstructured video content and integrates it into a structured research corpus. Stage 1 downloads YouTube transcripts and extracts key claims. Stage 2 incorporates extracted claims into a topic-organized knowledge base.</p>
-        <ul>
-          <li>YouTube transcript download and validation</li>
-          <li>Claude-powered key claims extraction (Stage 1)</li>
-          <li>Structured knowledge base integration (Stage 2)</li>
-          <li>Topic-organized research corpus with cross-references</li>
-          <li>Error handling, cleanup traps, and logging</li>
-          <li>Feeds the morning brief and research report pipelines</li>
-        </ul>
-        <span class="skill-modal-tagline">Unstructured → Structured Knowledge</span>
-      </div>
-
-      <!-- Trading Ecosystem — additional modals -->
-      <div class="skill-modal" id="eco-modal-buyback">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Buyback Blackout Analyzer</h3>
-        <span class="skill-modal-pct">Quantitative Analysis</span>
-        <p>Identifies trading opportunities during corporate buyback blackout periods — windows when companies halt share repurchases before earnings, creating predictable price patterns.</p>
-        <ul>
-          <li>Analyzes historical price data during blackout windows</li>
-          <li>Detects predictable patterns when large buyback programs pause</li>
-          <li>Quantifies edge from reduced institutional buying pressure</li>
-          <li>Integrated with Schwab API for real-time data</li>
-        </ul>
-        <a href="https://github.com/Namkuzu-da-OS/buyback-blackout-analyzer" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-mrcrabs">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>MrCrabs</h3>
-        <span class="skill-modal-pct">Investment Research Dashboard</span>
-        <p>A single-page investment research dashboard displaying real-time market sentiment, metrics, and research signals. Named with the right energy for the mission.</p>
-        <ul>
-          <li>Market sentiment cards for equities, crypto, liquidity, macro</li>
-          <li>Structured research data and signal tracking</li>
-          <li>YAML-based master plan with real-time market signals</li>
-        </ul>
-        <a href="https://github.com/DaryllGomas/MrCrabs" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-terminus">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>TERMINUS</h3>
-        <span class="skill-modal-pct">Multi-Source Price Level Confluence Engine</span>
-        <p>A Python engine that aggregates 11 independent data sources and produces confluence-scored price levels ranked by institutional significance. Outputs structured JSON for downstream AI agents (HERMES) and markdown for human review.</p>
-        <ul>
-          <li>11 data sources: gamma levels, open interest, VWAP, pivot points, SMA, swing points, gap fills, volume profile, round numbers, Fibonacci, Gann Square of Nine</li>
-          <li>Weighted scoring algorithm — each source contributes independently</li>
-          <li>Gann Square of Nine component validated at z=+9.51 against 33 years of data</li>
-          <li>JSON output feeds HERMES trading execution agent</li>
-          <li>Real-time Schwab API integration for live market data</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">11 Sources → 1 Truth</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-convergence">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Convergence Scoring Engine</h3>
-        <span class="skill-modal-pct">Quantitative Capital Deployment</span>
-        <p>A 7-dimension scoring system that replaces subjective gut-feel with multi-factor scoring for capital deployment decisions. Each dimension draws from independent data sources to avoid double-counting signals.</p>
-        <ul>
-          <li>7 dimensions: thesis conviction, strategy edge, technical setup, cyclical alignment, catalyst proximity, risk/reward, position sizing</li>
-          <li>Source independence enforcement — no signal counted twice</li>
-          <li>Strategy library with verified win rates and sample sizes</li>
-          <li>Portfolio phase management (Hyper-Growth through Income)</li>
-          <li>Deployment rules with numerical thresholds</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">Decision Science, Not Gut Feel</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-prediction">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Prediction Market Scanner</h3>
-        <span class="skill-modal-pct">Polymarket AI Analysis Pipeline</span>
-        <p>An async Python system that scans Polymarket for trading opportunities. Tracks whale wallets, gathers news sentiment, calculates signal confluence, and feeds everything to Claude AI for probability estimation. Only high-confidence alerts reach Telegram.</p>
-        <ul>
-          <li>Polymarket Gamma API integration — real-time prediction market probabilities</li>
-          <li>Whale wallet tracking — large position changes as leading indicators</li>
-          <li>News sentiment aggregation and enrichment</li>
-          <li>Claude AI probability estimation with confidence scoring</li>
-          <li>Multi-criteria filtering: edge &ge; 10%, confluence &ge; 3/5</li>
-          <li>Telegram delivery for high-confidence alerts only</li>
-          <li>SQLite persistence and prompt/response artifact logging</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">Crowd Wisdom → Trading Edge</span>
-      </div>
-
-      <!-- BigPic Solutions — organizational modals -->
-      <div class="skill-modal" id="eco-modal-bp-parent">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BigPic Solutions</h3>
-        <span class="skill-modal-pct">Research &amp; Development</span>
-        <p>An AI-native R&amp;D company powered by agentic systems — Claude AI agents, custom skill frameworks, and automated pipelines drive every division. Three operating units span investment operations, IT consulting, and autonomous fleet management.</p>
-        <ul>
-          <li>BigPic Capital — AI-powered investment research &amp; trading</li>
-          <li>BigPic Technology — IT consulting &amp; security services</li>
-          <li>BigPic CyberCab — autonomous vehicle fleet (in development)</li>
-          <li>Agentic AI across all divisions — 20+ custom Claude skills, automated workflows, and AI-driven decision support</li>
-        </ul>
-        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
-        <a href="https://github.com/DaryllGomas/BigPicSolutions" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-capital">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BigPic Capital</h3>
-        <span class="skill-modal-pct">Investment Operations</span>
-        <p>An AI-native investment operating system that replicates a full institutional team — research, macro strategy, quant analysis, risk management, and trading execution — with AI agents and automated pipelines.</p>
-        <ul>
-          <li>HERMES trading execution agent with verified strategy library</li>
-          <li>TERMINUS price level engine aggregating 11 data sources</li>
-          <li>Wingman market intelligence with real-time scanner APIs</li>
-          <li>9 completed sector investment theses with interactive reports</li>
-          <li>Published at markets.bigpicsolutions.com</li>
-        </ul>
-        <a href="https://markets.bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">markets.bigpicsolutions.com &rarr;</a>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-technology">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BigPic Technology</h3>
-        <span class="skill-modal-pct">IT Services &amp; Security</span>
-        <p>Remote IT consulting and automation services specializing in AI-augmented infrastructure, cloud advisory, and productized security assessments for the SMB market.</p>
-        <ul>
-          <li>BigPic Pentester — automated network security platform</li>
-          <li>Compliance frameworks: PCI DSS, HIPAA, cyber insurance</li>
-          <li>Remote IT consulting and cloud infrastructure</li>
-          <li>AI workflow automation services</li>
-        </ul>
-        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-cybercab">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BigPic CyberCab</h3>
-        <span class="skill-modal-pct">Autonomous Fleet — In Development</span>
-        <p>A venture focused on autonomous vehicle fleet ownership. Building financial models and operational plans for Tesla CyberCab fleet deployment on the autonomous ride-hailing network.</p>
-        <ul>
-          <li>Unit economics modeling across utilization scenarios</li>
-          <li>Revenue projections: $36K–$78K gross per vehicle per year</li>
-          <li>Competitive landscape analysis (Waymo, Tesla, Zoox)</li>
-          <li>Phased deployment: research &rarr; first vehicle &rarr; fleet scaling</li>
-        </ul>
-        <span class="skill-modal-tagline" style="color: #ffc107">Currently in Research &amp; Planning Phase</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-trading">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Trading Systems</h3>
-        <span class="skill-modal-pct">HERMES · TERMINUS · Strategies</span>
-        <p>The execution layer of BigPic Capital. HERMES is the trading agent with a comprehensive methodology, TERMINUS identifies price levels from 11 sources, and the strategy library holds backtested edges.</p>
-        <ul>
-          <li>HERMES — 83K-word trading methodology with execution rules</li>
-          <li>TERMINUS — Python engine: gamma, VWAP, volume profile, Gann, pivots</li>
-          <li>Mean Reversion v4: 81.2% win rate over 203 trades (10yr backtest)</li>
-          <li>Buyback Blackout: 77% win rate, verified across 106 events</li>
-          <li>7-dimension Convergence scoring engine for capital deployment</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Internal Operations</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-intelligence">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Market Intelligence</h3>
-        <span class="skill-modal-pct">Wingman · Scanners · APIs</span>
-        <p>Real-time market intelligence infrastructure. Wingman provides session-aware market analysis while remote scanner APIs deliver live options flow, gamma data, and sentiment fusion scores.</p>
-        <ul>
-          <li>Wingman — living market regime tracking and trading rules</li>
-          <li>Options API — real-time quotes, gamma, IV, flow analysis</li>
-          <li>Intel API — market outlook, sentiment scores, trade journal</li>
-          <li>15 Claude AI skills for session workflow automation</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Internal Operations</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-research">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Research &amp; Publishing</h3>
-        <span class="skill-modal-pct">Sector Theses · Reports · Briefs</span>
-        <p>A complete research pipeline producing institutional-quality investment research across 9 high-growth sectors, weekly macro reports, and daily pre-market intelligence briefs.</p>
-        <ul>
-          <li>9 sector theses: AI, Nuclear, Space, Quantum, Robotics, Cyber, Minerals, Defense, Energy</li>
-          <li>Eagle Eye — automated weekly macro cycle reports</li>
-          <li>Morning Briefs — daily pre-market structure analysis</li>
-          <li>Interactive HTML data stories published to BigPic Markets</li>
-        </ul>
-        <a href="https://markets.bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">markets.bigpicsolutions.com &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-pentester">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Pentester Platform</h3>
-        <span class="skill-modal-pct">Automated Security Assessments</span>
-        <p>A productized network security assessment platform targeting the SMB market gap between basic scanning and enterprise pentest firms. Fully automated multi-phase engagements with compliance-mapped reporting.</p>
-        <ul>
-          <li>Service tiers: External ($2.5K), Internal ($5K), Comprehensive ($10K+)</li>
-          <li>Compliance: PCI DSS v4.0, HIPAA Security Rule, Cyber Insurance</li>
-          <li>Tools: Nmap, Nuclei, Lynis, Faraday, Ansible remediation</li>
-          <li>CLI suite: bigpic-scan, bigpic-report, bigpic-engage, bigpic-remediate</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Internal Operations</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-consulting">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>IT Consulting</h3>
-        <span class="skill-modal-pct">Remote Infrastructure &amp; Cloud</span>
-        <p>Remote IT consulting services providing cloud infrastructure advisory, system administration, and technology strategy for small and medium businesses.</p>
-        <ul>
-          <li>Cloud infrastructure and migration advisory</li>
-          <li>Network architecture and administration</li>
-          <li>MSP partnership and subcontracting</li>
-          <li>25+ years of hands-on technology expertise</li>
-        </ul>
-        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-automation">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>AI Automation</h3>
-        <span class="skill-modal-pct">Workflow &amp; Process Automation</span>
-        <p>AI-augmented workflow automation services that streamline business operations using Claude AI agents, custom skill systems, and automated pipelines.</p>
-        <ul>
-          <li>Custom AI agent development with Claude SDK</li>
-          <li>Skill-based automation (inbox processing, reporting, analysis)</li>
-          <li>Automated document workflows and data pipelines</li>
-          <li>Process optimization through AI-native tooling</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Internal Operations</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-revenue">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Revenue Modeling</h3>
-        <span class="skill-modal-pct">Unit Economics &amp; ROI Analysis</span>
-        <p>Financial modeling for the CyberCab fleet venture. Revenue projections, cost analysis, and ROI scenarios across utilization rates, fare structures, and market conditions.</p>
-        <ul>
-          <li>Vehicle cost under $30K with 75/25 owner/Tesla revenue split</li>
-          <li>Scenarios: urban ($1.50/mi), suburban ($1/mi), high-fare ($2/mi)</li>
-          <li>Payback period: 1–3 years depending on utilization</li>
-          <li>Fleet scaling models: 1, 3, 5, 10 vehicle scenarios</li>
-        </ul>
-        <span class="skill-modal-tagline" style="color: #ffc107">In Development</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-fleet">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Fleet Planning</h3>
-        <span class="skill-modal-pct">Acquisition · Operations · Logistics</span>
-        <p>Operational planning for autonomous vehicle fleet management — vehicle acquisition, home charging infrastructure, maintenance protocols, insurance, and tax optimization.</p>
-        <ul>
-          <li>Phased approach: research &rarr; first vehicle &rarr; fleet scaling</li>
-          <li>Home wireless charging infrastructure planning</li>
-          <li>Insurance and regulatory requirements research</li>
-          <li>Target market and deployment city identification</li>
-        </ul>
-        <span class="skill-modal-tagline" style="color: #ffc107">In Development</span>
-      </div>
-
-      <!-- BigPic Solutions — repo modals -->
-      <div class="skill-modal" id="eco-modal-bigpicmarkets">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BigPic Markets</h3>
-        <span class="skill-modal-pct">Investment Research</span>
-        <p>Thematic investment research site covering high-growth sectors with deep-dive analysis, weekly macro reports, and daily pre-market briefs.</p>
-        <ul>
-          <li>Sector coverage: AI, nuclear, space, quantum, robotics, cybersecurity</li>
-          <li>Weekly "Eagle Eye" macro cycle reports</li>
-          <li>Daily pre-market morning briefs</li>
-          <li>Hosted at markets.bigpicsolutions.com</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bigpictech">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BigPic Technology</h3>
-        <span class="skill-modal-pct">Technology Services</span>
-        <p>Company website for BigPic Solutions — AI-powered IT support and technology services built on 25+ years of hands-on expertise.</p>
-        <ul>
-          <li>AI-augmented tech support and consulting</li>
-          <li>Client invoicing and reporting portal</li>
-          <li>Neural-network themed design</li>
-          <li>25+ years of technology expertise</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bigpicsolutions">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BigPic Solutions</h3>
-        <span class="skill-modal-pct">Business Website</span>
-        <p>The main BigPic Solutions business website — the public-facing brand for IT consulting and technology services.</p>
-        <ul>
-          <li>Company landing page and service overview</li>
-          <li>Client contact and inquiry forms</li>
-          <li>AI-themed branding and design</li>
-        </ul>
-        <a href="https://github.com/DaryllGomas/BigPicSolutions" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-bp-invoicing">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Invoicing Platform</h3>
-        <span class="skill-modal-pct">Business Operations Tool</span>
-        <p>A production invoicing system built for BigPic Technology's consulting business. Manages clients, generates branded PDF invoices with QR payment links, and tracks the sales pipeline from lead to payment.</p>
-        <ul>
-          <li>Flask backend with SQLite persistence</li>
-          <li>Stripe integration for payment processing</li>
-          <li>ReportLab PDF generation with branded templates</li>
-          <li>QR code payment links on each invoice</li>
-          <li>Client management and job tracking</li>
-          <li>Lead pipeline and CSV export</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">Real Business, Real Tool</span>
-      </div>
-
-      <!-- Cybersecurity modals -->
-      <div class="skill-modal" id="eco-modal-cyberdefense">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Cyber Defense Command Center</h3>
-        <span class="skill-modal-pct">Distributed Security Platform</span>
-        <p>A full-stack cybersecurity monitoring platform with distributed scanning agents, a secure REST API, and a real-time visualization dashboard. Built to continuously monitor network infrastructure and detect vulnerabilities.</p>
-        <ul>
-          <li>Python scanning agents: network scanner, vulnerability scanner, DNS monitor, connection tracker, metrics collector</li>
-          <li>Node.js/Express REST API with versioned endpoints</li>
-          <li>React/Vite dashboard with Recharts visualization</li>
-          <li>SQLite + Sequelize ORM for persistence</li>
-          <li>TLS encryption, 3-tier rate limiting, CORS whitelisting</li>
-          <li>Input validation via Joi schemas, audit logging</li>
-          <li>CIDR network discovery and host enumeration</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">See Everything. Miss Nothing.</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-pentester">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Pentester Platform</h3>
-        <span class="skill-modal-pct">Automated Security Assessment Suite</span>
-        <p>A 4-tool CLI suite that orchestrates multi-phase network security assessments, classifies findings by CVSS/CWE severity, generates compliance-mapped reports, and automates remediation. Built on Kali Linux for professional engagements.</p>
-        <ul>
-          <li>bigpic-engage — client onboarding, scope definition, rules of engagement</li>
-          <li>bigpic-scan — orchestrated scanning via Nmap, Masscan, Nuclei, Nikto</li>
-          <li>bigpic-report — branded PDF/DOCX reports with SVG charts, Jinja2 + WeasyPrint</li>
-          <li>bigpic-remediate — Ansible playbooks for automated fix deployment</li>
-          <li>Compliance mapping: PCI DSS v4.0, HIPAA, Cyber Insurance</li>
-          <li>Legal templates: SOW, Authorization Letter, Data Handling Policy</li>
-          <li>Service tiers from basic scan to full engagement</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">Scan → Classify → Report → Remediate</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-cybersectools">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>CyberSec Tools</h3>
-        <span class="skill-modal-pct">Offensive Security Toolbox</span>
-        <p>A collection of 8 hand-written Python offensive security tools built from scratch. Each tool demonstrates fundamental understanding of networking, cryptography, and system exploitation — the practical skills behind the pentesting platform.</p>
-        <ul>
-          <li>Port Scanner — TCP/UDP port enumeration with service detection</li>
-          <li>Network Scanner — CIDR host discovery and ARP scanning</li>
-          <li>SSH Brute Forcer — dictionary attack with threading</li>
-          <li>Hash Cracker — multi-algorithm hash cracking (MD5, SHA, bcrypt)</li>
-          <li>WiFi Cracker — WPA/WPA2 handshake capture and cracking</li>
-          <li>Subdomain Enumerator — DNS brute-force subdomain discovery</li>
-          <li>Directory Enumerator — web path fuzzing and directory traversal</li>
-          <li>File Downloader — HTTP/FTP file retrieval with progress tracking</li>
-        </ul>
-        <a href="https://github.com/DaryllGomas/Coding" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-        <span class="skill-modal-tagline">Built From Scratch, Not Borrowed</span>
-      </div>
-
-      <!-- AI & Voice Tools modals -->
-      <div class="skill-modal" id="eco-modal-wmvoice">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>WM-Voice</h3>
-        <span class="skill-modal-pct">Hands-Free Voice Assistant</span>
-        <p>A hands-free Linux voice assistant that lets you speak commands and hear Claude's responses. Push-to-talk interface powered by cutting-edge speech AI.</p>
-        <ul>
-          <li>Claude Agent SDK for AI-powered responses</li>
-          <li>Whisper STT for speech-to-text transcription</li>
-          <li>Silero VAD for voice activity detection</li>
-          <li>Kokoro TTS in Docker for natural voice output</li>
-          <li>Push-to-talk interface for clean interactions</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-videototext">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>VideoToText</h3>
-        <span class="skill-modal-pct">Video Transcription Tool</span>
-        <p>Windows GUI and CLI tool that downloads videos from X/Twitter and transcribes them to text using OpenAI Whisper. Built for capturing and processing video content at scale.</p>
-        <ul>
-          <li>Downloads videos directly from X.com (Twitter)</li>
-          <li>OpenAI Whisper for accurate transcription</li>
-          <li>Python GUI for easy operation</li>
-          <li>Batch scripts for installation and GPU support</li>
-          <li>Logging and progress tracking</li>
-        </ul>
-        <a href="https://github.com/DaryllGomas/VideoToText" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-swarmai">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Swarm AI</h3>
-        <span class="skill-modal-pct">Service DAO Blueprint</span>
-        <p>Architectural blueprint for a vibe-coding freelancer collective — a Service DAO that combines human freelancers with autonomous AI agent swarms to deliver software at scale.</p>
-        <ul>
-          <li>Service DAO organizational model (Raid Guild, Vector DAO precedents)</li>
-          <li>Hybrid workforce: human freelancers + AI agent swarms</li>
-          <li>Vibe coding methodology — intent over syntax</li>
-          <li>Agentic frameworks: Autonolas, LangChain integration</li>
-          <li>85% revenue to developers, 50% crypto focus</li>
-        </ul>
-        <a href="https://github.com/Namkuzu-da-OS/Swarm-AI" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <!-- Interactive Experiences modals -->
-      <div class="skill-modal" id="eco-modal-book">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Book</h3>
-        <span class="skill-modal-pct">"Enter Zen From There"</span>
-        <p>A WebGL-powered portal that serves as the hub for three interconnected interactive experiences — Zen, Ancients, and BreakTheCode. Features cosmic backgrounds, 3D sacred geometry, and floating mandalas.</p>
-        <ul>
-          <li>WebGL cosmic background with particle effects</li>
-          <li>3D sacred geometry navigation elements</li>
-          <li>Interactive book as the central portal</li>
-          <li>Links to Zen, Ancients, and BreakTheCode sub-projects</li>
-        </ul>
-        <a href="https://www.justsomedude.org/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
-        <a href="https://github.com/DaryllGomas/Book" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-zen">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Zen</h3>
-        <span class="skill-modal-pct">Interactive Meditation Experience</span>
-        <p>An immersive Zen meditation website presenting the classic story "Enter Zen From There." A full digital meditation space with multiple interactive elements.</p>
-        <ul>
-          <li>Guided breathing exercises with visual feedback</li>
-          <li>Cosmic meditation mode with ambient visuals</li>
-          <li>Interactive zen garden — raking, placing stones, koi fish</li>
-          <li>Meditation timer with ambient sound library</li>
-          <li>Falling leaves, water ripple effects, fireflies</li>
-        </ul>
-        <a href="https://daryllgomas.github.io/Zen/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
-        <a href="https://github.com/DaryllGomas/Zen" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-ancients">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Ancients</h3>
-        <span class="skill-modal-pct">Interactive History Timeline</span>
-        <p>An interactive web-based history timeline spanning prehistoric to modern eras, exploring alternative theories about pre-cataclysm advanced civilizations through an immersive WebGL experience.</p>
-        <ul>
-          <li>WebGL cosmic portal effect built with Three.js</li>
-          <li>Timeline from prehistoric through modern eras</li>
-          <li>Alternative civilization theories and research</li>
-          <li>Search and filtering across historical periods</li>
-          <li>"Did You Know?" facts and deep dives</li>
-        </ul>
-        <a href="https://daryllgomas.github.io/Ancients/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
-        <a href="https://github.com/DaryllGomas/Ancients" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-breakthecode">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>BreakTheCode</h3>
-        <span class="skill-modal-pct">"Breaking Your Genetic Code"</span>
-        <p>An immersive interactive digital book exploring consciousness expansion and personal transformation. Features a cosmic theme with animated visuals across 6 chapters.</p>
-        <ul>
-          <li>Animated DNA helix and starfield backgrounds</li>
-          <li>6 chapters on awakening and breaking unconscious patterns</li>
-          <li>Meditation prompts and contemplative exercises</li>
-          <li>Pure HTML/CSS/JS — no frameworks</li>
-        </ul>
-        <a href="https://daryllgomas.github.io/BreakTheCode/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
-        <a href="https://github.com/DaryllGomas/BreakTheCode" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <!-- Research & Analysis modals -->
-      <div class="skill-modal" id="eco-modal-twitteralgo">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Twitter Algorithm Analysis</h3>
-        <span class="skill-modal-pct">Platform Intelligence</span>
-        <p>Deep analysis of X's open-sourced "For You" feed algorithm. Decompiled the scoring formula and extracted actionable posting strategies to maximize reach.</p>
-        <ul>
-          <li>Decompiled algorithm source code analysis</li>
-          <li>Scoring formula breakdown and weight mapping</li>
-          <li>Actionable posting rules for optimization</li>
-          <li>Built with Rust for performance</li>
-        </ul>
-        <a href="https://github.com/Namkuzu-da-OS/twitter-algorithm-analysis" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-zolseason">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>ZOLSEASON</h3>
-        <span class="skill-modal-pct">Cross-Chain Research</span>
-        <p>Research and vision documents proposing a privacy-preserving bridge between Zcash and Solana — combining Zcash's privacy technology with Solana's speed and throughput.</p>
-        <ul>
-          <li>Privacy-preserving cross-chain bridge concept</li>
-          <li>Zcash shielded transactions + Solana speed</li>
-          <li>Multi-AI research synthesis (Claude, Grok, Gemini)</li>
-          <li>Conceptual/whitepaper stage</li>
-        </ul>
-        <a href="https://github.com/Namkuzu-da-OS/ZOLSEASON" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-sandbox">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Quantitative Research Lab</h3>
-        <span class="skill-modal-pct">Signal Discovery &amp; Backtesting Engine</span>
-        <p>A 31,000-line Python quantitative research platform covering a 39-ticker universe (SPY/QQQ, 11 sectors, 18 individual stocks, thematic ETFs). Rigorous scientific methodology — hypotheses are tested, failed hypotheses are honestly documented, and only statistically significant signals survive.</p>
-        <ul>
-          <li>39-ticker universe with sector, thematic, and individual coverage</li>
-          <li>Regime detection via sector dispersion analysis</li>
-          <li>Signal discovery with Newey-West correction for autocorrelation</li>
-          <li>Bootstrap statistical validation (p-values, confidence intervals)</li>
-          <li>48-signal cross-sectional sweep — 5 confirmed statistically significant</li>
-          <li>Wave-bucket framework for market cycle classification</li>
-          <li>SQLite historical database with automated data collection</li>
-          <li>Documented disproven hypotheses (intellectual honesty)</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">Every Confirmed Signal Is Contrarian</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-breadth">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Breadth-Exhaustion-Signal</h3>
-        <span class="skill-modal-pct">Market Breadth Research Platform</span>
-        <p>A complete Python research platform testing market breadth exhaustion signals against 27 years of NYSE data. Thesis confirmed with p&lt;0.05 statistical significance using Monte Carlo null hypothesis testing.</p>
-        <ul>
-          <li>Modular architecture: data_loader, signal_detector, backtester, visualizer</li>
-          <li>Schwab API collector for live market data</li>
-          <li>27 years of NYSE Advance-Decline data analysis</li>
-          <li>Monte Carlo null hypothesis testing for signal validation</li>
-          <li>Sensitivity analysis with parameter heatmaps</li>
-          <li>Multiple data input modes: proxy, real ADD, Schwab live, ThinkOrSwim import</li>
-          <li>Equity curve generation and drawdown analysis</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">27 Years of Data, One Signal</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-gann">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Gann Square of Nine Backtester</h3>
-        <span class="skill-modal-pct">Century-Old Theory, Modern Rigor</span>
-        <p>A 56KB Python backtester that formalizes 6 quantifiable W.D. Gann techniques and stress-tests them against 33 years of S&amp;P 500 data with Monte Carlo null hypothesis testing. Found that Square of Nine support/resistance significantly outperforms random and round-number baselines.</p>
-        <ul>
-          <li>6 Gann techniques formalized mathematically and backtested</li>
-          <li>33 years of S&amp;P 500 daily data (1991-2024)</li>
-          <li>Square of Nine S/R: z-score +9.51 (p=0.0000)</li>
-          <li>3+ stacked Gann signals → 34% larger 5-day moves (z=+4.14)</li>
-          <li>Monte Carlo null hypothesis testing against random levels</li>
-          <li>Round-number baseline comparison for additional rigor</li>
-          <li>Feeds TERMINUS confluence engine as one of 11 data sources</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">z = +9.51 · p = 0.0000</span>
-      </div>
-
-      <div class="skill-modal" id="eco-modal-meanrevert">
-        <button class="skill-modal-close" aria-label="Close">&times;</button>
-        <h3>Mean Reversion Strategy Lab</h3>
-        <span class="skill-modal-pct">Full Strategy Development Lifecycle</span>
-        <p>A complete strategy development lab spanning indicator ideation to production deployment. Multiple PineScript versions for TradingView, Python brute-force parameter sweep (20,736 combinations), and event-driven walk-forward backtesting with out-of-sample validation.</p>
-        <ul>
-          <li>PineScript strategies for TradingView (multiple iterations)</li>
-          <li>Python brute-force sweep: 20,736 parameter combinations</li>
-          <li>Walk-forward out-of-sample validation using backtesting.py</li>
-          <li>In-sample: 81.2% WR across 203 trades</li>
-          <li>Out-of-sample: 84.3% WR (no overfitting — improved OOS)</li>
-          <li>BB%B &lt; 0.10 + IBS &lt; 0.25 = confirmed edge</li>
-          <li>Full lifecycle: ideation → sweep → validation → deployment</li>
-        </ul>
-        <span class="eco-modal-repo eco-private">Private Repository</span>
-        <span class="skill-modal-tagline">81.2% In-Sample → 84.3% Out-of-Sample</span>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- Living Mandala WebGL hero — loaded before main.js, no-ops safely
-       if WebGL/motion-preference/viewport checks fail. -->
-  <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
-  <script src="js/mandala.js"></script>
-
-  <script src="main.js"></script>
+<div class="loader" id="loader">entering the big picture</div>
+<canvas id="scene"></canvas>
+<div class="labels" id="labels"></div>
+
+<div class="ruler" id="ruler">
+  <span class="tick" style="top:0%">10<sup>21</sup> m · galaxy</span>
+  <span class="tick" style="top:16.7%">10<sup>7</sup> m · earth</span>
+  <span class="tick" style="top:31.9%">10<sup>0</sup> m · one person</span>
+  <span class="tick" style="top:44.4%">10<sup>-4</sup> m · neurons</span>
+  <span class="tick" style="top:56.9%">10<sup>-15</sup> m · pattern</span>
+  <span class="tick" style="top:69.4%">∞ · imagination</span>
+  <span class="tick" style="top:93%">10<sup>-10</sup> m · atoms · the base</span>
+  <span class="cursor" id="rulerCursor" style="top:0%"></span>
+</div>
+
+<section class="chapter" data-band="-0.08,0.08">
+  <div class="panel">
+    <span class="scale-eyebrow"><b>10²¹ m</b> — the big picture</span>
+    <h1>Daryll Gomas</h1>
+    <p class="lede">Cybersecurity professional. Technology enthusiast. Lifelong learner.</p>
+    <p class="scroll-cue">Scroll to descend</p>
+  </div>
+</section>
+
+<section class="chapter" data-band="0.125,0.235">
+  <div class="panel">
+    <span class="scale-eyebrow"><b>10⁷ m</b> — the world</span>
+    <h2>The world runs on systems.<br>Someone has to defend them.</h2>
+    <p>Attack surface and defense as a way of seeing — a blue-team architecture brain, not a checklist follower. 2FA enforcement across M365, SIEM implementation, vulnerability scanning architecture, zero-cloud AI inference for data control, and an incident-response mindset earned from real attacks.</p>
+    <ul class="cert-log">
+      <li>Network+</li><li>SOC Core Skills</li><li>Addigy Certified</li><li>Pre-Security</li>
+      <li>Linux Certification</li><li>TryHackMe — PenTest</li><li>Cyber Defense</li><li>Apple ACSP</li>
+    </ul>
+  </div>
+</section>
+
+<section class="chapter" data-band="0.26,0.375">
+  <div class="panel">
+    <span class="scale-eyebrow"><b>10⁰ m</b> — one person, sitting still</span>
+    <h2>Soul &amp; technology</h2>
+    <p>My father was a senior engineer at IBM from the &rsquo;70s on — and later, a reverend. Circuit and spirit, in one man. He brought home cutting-edge machines before the world had names for them, and I grew up native to a digital land that hadn&rsquo;t been built yet.</p>
+    <p>At 51, I&rsquo;m more excited about what&rsquo;s coming than ever.</p>
+  </div>
+</section>
+
+<section class="chapter" data-band="0.39,0.505">
+  <div class="panel">
+    <span class="scale-eyebrow"><b>10⁻⁴ → 10⁻¹⁰ m</b> — the mind&rsquo;s machinery</span>
+    <h2>I build my mind<br>outside my head</h2>
+    <p>Not just using AI — deploying it. LLMs on local hardware, multi-GPU inference servers, secure on-prem intelligence for data sovereignty. Namkuzu-da OS runs Claude Code as the system brain: voice control, eight automated pipelines, agentic orchestration driving the whole stack.</p>
+    <p>Every thought here has a corresponding machine.</p>
+  </div>
+</section>
+
+<section class="chapter center" data-band="0.53,0.605">
+  <div class="panel">
+    <span class="scale-eyebrow"><b>10⁻¹⁵ m</b> — the pattern</span>
+    <p class="threshold-line">Beneath thought there is no thing — only pattern. Pass through.</p>
+  </div>
+</section>
+
+<section class="chapter" data-band="0.63,0.85">
+  <div class="panel">
+    <span class="scale-eyebrow"><b>∞</b> — imagination</span>
+    <h2>Selected work</h2>
+    <p>Thirty-eight systems in seven constellations, all orbiting one operating system — the one that built this page. Hover a star; its connections light up.</p>
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.18em;color:var(--ink-faint);">FULL ARCHIVE → GITHUB.COM/DARYLLGOMAS</p>
+  </div>
+</section>
+
+<section class="chapter center" data-band="0.91,1.08">
+  <div class="panel">
+    <span class="scale-eyebrow"><b>10⁻¹⁰ m</b> — the base of everything</span>
+    <p class="quote">Even imagination is built from the same stuff. &ldquo;Some call me a dreamer — but I know I&rsquo;m not the only one.&rdquo;</p>
+    <ul class="contact-list">
+      <li><a href="mailto:daryll.gomas@gmail.com"><span>daryll.gomas@gmail.com</span><span class="k">email</span></a></li>
+      <li><a href="https://github.com/DaryllGomas" target="_blank" rel="noopener"><span>DaryllGomas</span><span class="k">github</span></a></li>
+      <li><a href="https://x.com/DaryllGomas" target="_blank" rel="noopener"><span>@DaryllGomas</span><span class="k">x</span></a></li>
+      <li><a href="https://bigpicsolutions.com" target="_blank" rel="noopener"><span>bigpicsolutions.com</span><span class="k">business</span></a></li>
+    </ul>
+  </div>
+</section>
+
+<div class="track"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+
+/* ============ zoom spine ============ */
+const Z_MAX = 36;
+/* Narrative order (Daryll's): galaxy → earth → person → neurons →
+   pattern → imagination → ATOMS LAST — the base of everything.
+   Even imagination is built from the same stuff. */
+const ANCHORS = {
+  galaxy:  { z: 0,    k: 1 },
+  earth:   { z: 6,    k: 1 },
+  figure:  { z: 11.5, k: 1 },
+  mind:    { z: 16,   k: 1 },
+  mandala: { z: 20.5, k: 1 },
+  graph:   { z: 25,   k: .55 },
+  atom:    { z: 33.5, k: 1 },   // saturating growth — arrives and stays
+};
+
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+renderer.setClearColor(0x04050a, 1);
+const DPR = Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
+renderer.setPixelRatio(DPR);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(55, 1, 0.01, 4000);
+camera.position.set(0, 0, 60);
+
+/* ============ post: bloom + film grade ============
+   Everything luminous actually GLOWS — galaxy core, synapses,
+   mandala lines, electrons. Then a grade pass: gentle contrast,
+   vignette, living grain, and a color-temperature arc that
+   follows the descent (cold space → warm human → electric mind
+   → gold imagination → cool atomic base). */
+const GradeShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    uTime: { value: 0 },
+    uTint: { value: new THREE.Vector3(1, 1, 1) },
+  },
+  vertexShader: `varying vec2 vUv;
+    void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse; uniform float uTime; uniform vec3 uTint;
+    varying vec2 vUv;
+    float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7)) + mod(uTime, 100.0) * 43.7) * 43758.5453); }
+    void main(){
+      /* clamp first — the S-curve below goes NEGATIVE for HDR input
+         (bloom output exceeds 1.0) and renders black holes */
+      vec3 c = clamp(texture2D(tDiffuse, vUv).rgb, 0.0, 1.0);
+      c = mix(c, c * c * (3.0 - 2.0 * c), 0.10);
+      c *= uTint;
+      vec2 q = vUv - 0.5;
+      c *= 1.0 - dot(q, q) * 0.5;
+      c += (hash(gl_FragCoord.xy * 0.7)) * 0.024 - 0.012;
+      gl_FragColor = vec4(c, 1.0);
+    }`,
+};
+/* temperature keyframes along the scroll: [p, r, g, b] */
+const TINT_KEYS = [
+  [0.00, 0.955, 0.985, 1.07],   // galaxy — cold
+  [0.18, 0.965, 1.000, 1.05],   // earth
+  [0.31, 1.065, 1.000, 0.935],  // one person — warm gold
+  [0.45, 0.945, 1.010, 1.08],   // the mind — electric
+  [0.57, 1.075, 1.005, 0.925],  // the pattern — gold
+  [0.73, 1.010, 1.000, 1.00],   // imagination — neutral
+  [1.00, 0.960, 0.990, 1.06],   // the base — cool, precise
+];
+function tintAt(p) {
+  let a = TINT_KEYS[0], b = TINT_KEYS[TINT_KEYS.length - 1];
+  for (let i = 0; i < TINT_KEYS.length - 1; i++) {
+    if (p >= TINT_KEYS[i][0] && p <= TINT_KEYS[i + 1][0]) { a = TINT_KEYS[i]; b = TINT_KEYS[i + 1]; break; }
+  }
+  const f = b[0] === a[0] ? 0 : (p - a[0]) / (b[0] - a[0]);
+  return [a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f, a[3] + (b[3] - a[3]) * f];
+}
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+/* clamp before bloom — thousands of additive points collapsing into a
+   few pixels produce absurd HDR values that overflow the bloom chain
+   into NaN (renders as a black hole). Bound the input instead. */
+composer.addPass(new ShaderPass({
+  uniforms: { tDiffuse: { value: null } },
+  vertexShader: `varying vec2 vUv;
+    void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; varying vec2 vUv;
+    void main(){ gl_FragColor = vec4(min(texture2D(tDiffuse, vUv).rgb, vec3(4.0)), 1.0); }`,
+}));
+const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.55, 0.45, 0.22);
+composer.addPass(bloomPass);
+const gradePass = new ShaderPass(GradeShader);
+composer.addPass(gradePass);
+
+scene.add(new THREE.AmbientLight(0x777788, .5));
+const sunL = new THREE.DirectionalLight(0xfff2df, 2.2);
+sunL.position.set(-60, 18, 42);
+scene.add(sunL);
+
+const stages = {};
+function registerStage(name, group, mats, update) {
+  scene.add(group); group.visible = false;
+  stages[name] = { group, mats, update: update || (() => {}) };
+}
+const fadeMat = (m, base) => ({ m, base });
+const smooth = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+const gauss = () => (Math.random() + Math.random() + Math.random() + Math.random() - 2) / 2;
+
+/* ============ SHARP POINTS ============
+   Default WebGL points are literal squares — the "blocky" look.
+   Every particle here renders through this shader instead: a hot
+   round core with a tight gaussian falloff. Sharp, star-like. */
+const PT_MATS = [];
+function makePoints(geometry, { size = .15, color = 0xffffff, vertexColors = false, opacity = 1, blending = THREE.AdditiveBlending }) {
+  const mat = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, blending,
+    uniforms: {
+      uSize: { value: size },
+      uPx: { value: 1 },
+      uOpacity: { value: opacity },
+      uColor: { value: new THREE.Color(color) },
+    },
+    defines: vertexColors ? { USE_VCOL: 1 } : {},
+    vertexShader: `
+      uniform float uSize; uniform float uPx;
+      #ifdef USE_VCOL
+        varying vec3 vColor;
+      #endif
+      void main() {
+        #ifdef USE_VCOL
+          vColor = color;
+        #endif
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = max(uSize * uPx * (820.0 / -mv.z), 1.25);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader: `
+      uniform float uOpacity; uniform vec3 uColor;
+      #ifdef USE_VCOL
+        varying vec3 vColor;
+      #endif
+      void main() {
+        vec2 uv = gl_PointCoord - 0.5;
+        float d = length(uv) * 2.0;
+        if (d > 1.0) discard;
+        float core = exp(-d * d * 7.0);
+        float glow = pow(max(0.0, 1.0 - d), 2.4) * 0.32;
+        float I = core + glow;
+        vec3 c = uColor;
+        #ifdef USE_VCOL
+          c *= vColor;
+        #endif
+        gl_FragColor = vec4(c * I, I * uOpacity);
+      }`,
+  });
+  if (vertexColors) mat.vertexColors = true;
+  Object.defineProperty(mat, 'opacity', {
+    get() { return mat.uniforms.uOpacity.value; },
+    set(v) { mat.uniforms.uOpacity.value = v; },
+  });
+  PT_MATS.push(mat);
+  return new THREE.Points(geometry, mat);
+}
+function updatePointScale() { const v = (innerHeight * DPR) / 1400; PT_MATS.forEach(m => m.uniforms.uPx.value = v); }
+
+/* ============ deep starfield (always on) ============ */
+{
+  const N = 3200, pos = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) {
+    const v = new THREE.Vector3().randomDirection().multiplyScalar(900 + Math.random() * 900);
+    pos.set([v.x, v.y, v.z], i * 3);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  scene.add(makePoints(g, { size: 2.2, color: 0xbfd2ee, opacity: .55 }));
+}
+
+/* ============ galaxy ============ */
+{
+  const group = new THREE.Group();
+  group.position.x = 6.5;   // core sits right of the hero text column
+  const N = 140000;
+  const pos = new Float32Array(N * 3), col = new Float32Array(N * 3);
+  const cCore = new THREE.Color(0xffe7c4), cMid = new THREE.Color(0xd4e2ff), cEdge = new THREE.Color(0x6f9ce0);
+  for (let i = 0; i < N; i++) {
+    const arm = i % 4;
+    const r = Math.pow(Math.random(), 0.62) * 30;
+    const spread = 0.38 / (r * 0.09 + 1);
+    const ang = (arm / 4) * Math.PI * 2 + r * 0.22 + gauss() * spread * 4;
+    pos.set([Math.cos(ang) * r + gauss() * .7, gauss() * 1.7 * Math.exp(-r / 11), Math.sin(ang) * r + gauss() * .7], i * 3);
+    const c = r < 5 ? cCore.clone().lerp(cMid, r / 5) : cMid.clone().lerp(cEdge, (r - 5) / 25);
+    const dim = .68 + .5 * Math.exp(-r / 18) + Math.random() * .25;
+    col.set([c.r * dim, c.g * dim, c.b * dim], i * 3);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const disc = makePoints(g, { size: .22, vertexColors: true, opacity: .92 });
+  disc.rotation.x = -0.42; disc.rotation.z = 0.1;
+  group.add(disc);
+
+  const NB = 1800, bp = new Float32Array(NB * 3);
+  for (let i = 0; i < NB; i++) {
+    const r = Math.pow(Math.random(), 0.55) * 29, ang = Math.random() * Math.PI * 2;
+    bp.set([Math.cos(ang) * r, gauss() * 1.5 * Math.exp(-r / 11), Math.sin(ang) * r], i * 3);
+  }
+  const bg = new THREE.BufferGeometry();
+  bg.setAttribute('position', new THREE.BufferAttribute(bp, 3));
+  const bright = makePoints(bg, { size: .6, color: 0xffffff, opacity: .95 });
+  bright.rotation.copy(disc.rotation);
+  group.add(bright);
+
+  const gMats = [fadeMat(disc.material, .92), fadeMat(bright.material, .95)];
+
+  // H-II regions — the pink star-forming knots real spirals wear
+  const NH = 260, hp = new Float32Array(NH * 3);
+  for (let i = 0; i < NH; i++) {
+    const arm = i % 4, r = 7 + Math.random() * 19;
+    const spread = 0.3 / (r * 0.09 + 1);
+    const ang = (arm / 4) * Math.PI * 2 + r * 0.22 + gauss() * spread * 3;
+    hp.set([Math.cos(ang) * r + gauss() * .5, gauss() * .8 * Math.exp(-r / 11), Math.sin(ang) * r + gauss() * .5], i * 3);
+  }
+  const hg = new THREE.BufferGeometry();
+  hg.setAttribute('position', new THREE.BufferAttribute(hp, 3));
+  const knots = makePoints(hg, { size: .42, color: 0xff9fb4, opacity: .7 });
+  knots.rotation.copy(disc.rotation);
+  group.add(knots); gMats.push(fadeMat(knots.material, .7));
+
+  // nebula clouds riding the arms — soft fuel for the bloom
+  const puffG = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const g2 = c.getContext('2d');
+    const grad = g2.createRadialGradient(64, 64, 4, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(255,255,255,.7)'); grad.addColorStop(.4, 'rgba(255,255,255,.18)'); grad.addColorStop(1, 'rgba(255,255,255,0)');
+    g2.fillStyle = grad; g2.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  })();
+  const nebGroup = new THREE.Group();
+  nebGroup.rotation.copy(disc.rotation);
+  const NEB_COLS = [0x4a6fd0, 0xb87a9a, 0x8a5f3f];
+  for (let i = 0; i < 18; i++) {
+    const arm = i % 4, r = i < 3 ? 2 + Math.random() * 3 : 7 + Math.random() * 18;
+    const ang = (arm / 4) * Math.PI * 2 + r * 0.22 + gauss() * .12;
+    const m = new THREE.SpriteMaterial({
+      map: puffG, color: i < 3 ? 0xd8a45f : NEB_COLS[i % 3],
+      transparent: true, opacity: i < 3 ? .16 : .07 + Math.random() * .06,
+      depthWrite: false, blending: THREE.AdditiveBlending,
+    });
+    const sp = new THREE.Sprite(m);
+    sp.position.set(Math.cos(ang) * r + gauss() * .6, gauss() * .9 * Math.exp(-r / 11), Math.sin(ang) * r + gauss() * .6);
+    sp.scale.setScalar(i < 3 ? 7 + Math.random() * 3 : 4.5 + Math.random() * 6);
+    nebGroup.add(sp); gMats.push(fadeMat(m, m.opacity));
+  }
+  group.add(nebGroup);
+
+  registerStage('galaxy', group, gMats,
+    (t) => { disc.rotation.y = bright.rotation.y = knots.rotation.y = nebGroup.rotation.y = t * 0.008; });
+  stages.galaxy.outStart = 5; stages.galaxy.outEnd = 40;
+}
+
+/* ============ earth ============
+   One custom shader carries the whole planet: real day/night
+   terminator from the sun direction, city lights waking up on the
+   dark side, a warm band where day rolls into night, sun glint on
+   the oceans, and atmosphere that hugs the limb — not a donut. */
+{
+  const group = new THREE.Group();
+  const tl = new THREE.TextureLoader();
+  const base = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r169/examples/textures/planets/';
+  const mats = [];
+  const SUN = new THREE.Vector3(-70, 15, 22).normalize();   // low sun — half the world in night
+  sunL.position.set(-70, 15, 22);                            // keep the cloud light in sync
+
+  const surf = new THREE.ShaderMaterial({
+    transparent: true,
+    uniforms: {
+      uDay: { value: tl.load(base + 'earth_atmos_2048.jpg') },
+      uNight: { value: tl.load(base + 'earth_lights_2048.png') },
+      uSpec: { value: tl.load(base + 'earth_specular_2048.jpg') },
+      uSun: { value: SUN },
+      uA: { value: 1 },
+    },
+    vertexShader: `
+      varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+      void main(){
+        vUv = uv;
+        vN = normalize(mat3(modelMatrix) * normal);
+        vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w;
+      }`,
+    fragmentShader: `
+      uniform sampler2D uDay, uNight, uSpec; uniform vec3 uSun; uniform float uA;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vW;
+      void main(){
+        vec3 n = normalize(vN);
+        vec3 v = normalize(cameraPosition - vW);
+        float ndl = dot(n, uSun);
+        float dayK = smoothstep(-0.08, 0.3, ndl);
+        vec3 day = texture2D(uDay, vUv).rgb * (0.035 + 1.12 * max(ndl, 0.0));
+        vec3 night = texture2D(uNight, vUv).rgb * vec3(1.0, 0.82, 0.58) * 1.7 * smoothstep(0.12, -0.16, ndl);
+        float term = pow(1.0 - abs(ndl), 11.0) * smoothstep(-0.45, 0.0, ndl);
+        vec3 c = day + night + vec3(1.0, 0.42, 0.16) * term * 0.13;
+        float sm = texture2D(uSpec, vUv).r;
+        vec3 h = normalize(uSun + v);
+        c += vec3(1.0, 0.94, 0.82) * pow(max(dot(n, h), 0.0), 90.0) * sm * 0.16 * dayK;
+        float fres = pow(1.0 - max(dot(n, v), 0.0), 2.6);
+        c += vec3(0.3, 0.55, 1.0) * fres * 0.55 * (0.18 + 0.82 * dayK);
+        gl_FragColor = vec4(c, uA);
+      }`,
+  });
+  const globe = new THREE.Mesh(new THREE.SphereGeometry(16, 96, 96), surf);
+  group.add(globe);
+  mats.push({ m: { set opacity(v) { surf.uniforms.uA.value = v; }, get opacity() { return surf.uniforms.uA.value; } }, base: 1 });
+
+  const cloudM = new THREE.MeshLambertMaterial({ map: tl.load(base + 'earth_clouds_1024.png'), transparent: true, opacity: .38, depthWrite: false });
+  const clouds = new THREE.Mesh(new THREE.SphereGeometry(16.18, 64, 64), cloudM);
+  group.add(clouds); mats.push(fadeMat(cloudM, .38));
+
+  const atmoM = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, side: THREE.BackSide, blending: THREE.AdditiveBlending,
+    uniforms: { uA: { value: 1 }, uSun: { value: SUN } },
+    vertexShader: `varying vec3 vN; varying vec3 vW;
+      void main(){ vN = normalize(mat3(modelMatrix) * normal);
+        vec4 w = modelMatrix * vec4(position, 1.0); vW = w.xyz;
+        gl_Position = projectionMatrix * viewMatrix * w; }`,
+    fragmentShader: `varying vec3 vN; varying vec3 vW; uniform float uA; uniform vec3 uSun;
+      void main(){
+        vec3 n = normalize(vN);
+        vec3 v = normalize(cameraPosition - vW);
+        float rim = pow(1.0 - abs(dot(n, v)), 4.0);
+        float sd = 0.2 + 0.8 * smoothstep(-0.5, 0.55, dot(n, uSun));
+        vec3 col = mix(vec3(0.12, 0.3, 0.85), vec3(0.5, 0.72, 1.0), sd);
+        gl_FragColor = vec4(col * rim * 1.35 * sd, rim * uA);
+      }`,
+  });
+  const atmo = new THREE.Mesh(new THREE.SphereGeometry(16.6, 64, 64), atmoM);
+  group.add(atmo);
+  mats.push({ m: { set opacity(v) { atmoM.uniforms.uA.value = v; }, get opacity() { return atmoM.uniforms.uA.value; } }, base: 1 });
+
+  group.rotation.y = 1.55; group.rotation.x = 0.18;
+  registerStage('earth', group, mats, (t) => { globe.rotation.y = 3.0 + t * 0.012; clouds.rotation.y = 3.0 + t * 0.017; });
+  stages.earth.outStart = 3.5; stages.earth.outEnd = 11;
+}
+
+/* ============ the figure — a light sculpture ============
+   A real 3D body (SDF: smooth-blended capsules) sampled to a
+   surface shell of sharp particles, rim-lit by view angle:
+   deep slate where the surface faces you, amber at the edges. */
+{
+  const v3 = (x, y, z) => new THREE.Vector3(x, y, z);
+  const sdSphere = (p, c, r) => p.distanceTo(c) - r;
+  const sdCapsule = (p, a, b, r) => {
+    const pa = p.clone().sub(a), ba = b.clone().sub(a);
+    const h = Math.min(1, Math.max(0, pa.dot(ba) / ba.dot(ba)));
+    return pa.sub(ba.multiplyScalar(h)).length() - r;
+  };
+  const smin = (a, b, k = .8) => {
+    const h = Math.min(1, Math.max(0, .5 + .5 * (b - a) / k));
+    return b * (1 - h) + a * h - k * h * (1 - h);
+  };
+  function body(p) {
+    // tight joins (small k) at the head/neck so the skull reads as a
+    // skull on a neck — not a blob melted into the shoulders
+    let d = sdSphere(p, v3(0, 9.6, 0.35), 2.45);                        // head
+    d = smin(d, sdCapsule(p, v3(0, 6.5, 0), v3(0, 8.1, 0.25), .85), .35); // neck
+    d = smin(d, sdCapsule(p, v3(0, -1.5, 0), v3(0, 5.6, -0.3), 3.5), .55); // torso
+    d = smin(d, sdSphere(p, v3(0, 0.8, 0.6), 3.1));                      // belly
+    d = smin(d, sdCapsule(p, v3(-3.6, 5.5, 0), v3(3.6, 5.5, 0), 1.55)); // shoulders
+    for (const s of [-1, 1]) {
+      d = smin(d, sdCapsule(p, v3(s * 4.2, 5.4, 0), v3(s * 5.0, 1.6, 1.2), 1.0));    // upper arm
+      d = smin(d, sdCapsule(p, v3(s * 5.0, 1.6, 1.2), v3(s * 1.0, -1.4, 3.0), .9));  // forearm
+      d = smin(d, sdCapsule(p, v3(s * 1.6, -2.8, 0.8), v3(s * 6.0, -3.8, 1.6), 2.0)); // thigh
+      d = smin(d, sdCapsule(p, v3(s * 6.0, -3.8, 1.6), v3(s * -1.6, -5.0, 3.2), 1.5), 1.1); // shin (crossed)
+    }
+    d = smin(d, sdSphere(p, v3(0, -1.6, 3.2), 1.15));                    // hands, resting
+    return d;
+  }
+  const grad = (p) => {
+    const e = .06, d = body(p);
+    return v3(
+      body(v3(p.x + e, p.y, p.z)) - d,
+      body(v3(p.x, p.y + e, p.z)) - d,
+      body(v3(p.x, p.y, p.z + e)) - d,
+    ).normalize();
+  };
+
+  const TARGET = 52000, SCALE = 1.5, YOFF = -3.9;
+  const pos = new Float32Array(TARGET * 3), col = new Float32Array(TARGET * 3);
+  const cBody = new THREE.Color(0x6d87b2), cRim = new THREE.Color(0xf5c084);
+  let n = 0, guard = 0;
+  const pp = new THREE.Vector3();
+  while (n < TARGET && guard++ < 6000000) {
+    pp.set(-8.5 + Math.random() * 17, -7 + Math.random() * 19.5, -4 + Math.random() * 9.5);
+    const d = body(pp);
+    if (Math.abs(d) < .16) {
+      const nn = grad(pp);
+      const rim = Math.pow(1 - Math.abs(nn.z), 1.7);
+      const c = cBody.clone().lerp(cRim, rim);
+      const I = .8 + .8 * rim + Math.max(0, nn.y) * .25;
+      pos.set([pp.x * SCALE + gauss() * .05, pp.y * SCALE + YOFF + gauss() * .05, pp.z * SCALE + gauss() * .05], n * 3);
+      col.set([c.r * I, c.g * I, c.b * I], n * 3);
+      n++;
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos.slice(0, n * 3), 3));
+  g.setAttribute('color', new THREE.BufferAttribute(col.slice(0, n * 3), 3));
+  const group = new THREE.Group();
+  const pts = makePoints(g, { size: .24, vertexColors: true, opacity: .95 });
+  group.add(pts);
+
+  // interior volume — a faint nebula inside the shell, so the body
+  // reads as substance instead of an empty outline
+  const TIN = 14000;
+  const ipos = new Float32Array(TIN * 3), icol = new Float32Array(TIN * 3);
+  const cIn = new THREE.Color(0x3a5684);
+  let m2 = 0, guard2 = 0;
+  while (m2 < TIN && guard2++ < 4000000) {
+    pp.set(-8.5 + Math.random() * 17, -7 + Math.random() * 19.5, -4 + Math.random() * 9.5);
+    if (body(pp) < -.3) {
+      const I = .22 + Math.random() * .3;
+      ipos.set([pp.x * SCALE, pp.y * SCALE + YOFF, pp.z * SCALE], m2 * 3);
+      icol.set([cIn.r * I, cIn.g * I, cIn.b * I], m2 * 3);
+      m2++;
+    }
+  }
+  const ig = new THREE.BufferGeometry();
+  ig.setAttribute('position', new THREE.BufferAttribute(ipos.slice(0, m2 * 3), 3));
+  ig.setAttribute('color', new THREE.BufferAttribute(icol.slice(0, m2 * 3), 3));
+  const inPts = makePoints(ig, { size: .16, vertexColors: true, opacity: .6 });
+  group.add(inPts);
+
+  // rising aura — faint amber motes drifting upward around the body
+  const NA = 420, ap = new Float32Array(NA * 3), seed = [];
+  for (let i = 0; i < NA; i++) {
+    ap.set([gauss() * 8, 0, gauss() * 4], i * 3);
+    seed.push({ x: ap[i * 3], z: ap[i * 3 + 2], ph: Math.random() * 30, sp: .5 + Math.random() * 1.1 });
+  }
+  const ag = new THREE.BufferGeometry();
+  ag.setAttribute('position', new THREE.BufferAttribute(ap, 3));
+  const aura = makePoints(ag, { size: .16, color: 0xe0a45c, opacity: .55 });
+  group.add(aura);
+
+  // head centre in group-local units — the dive target
+  const HEAD_Y = 9.6 * SCALE + YOFF;
+  registerStage('figure', group, [fadeMat(pts.material, .95), fadeMat(inPts.material, .6), fadeMat(aura.material, .4)], (t, s) => {
+    group.rotation.y = Math.sin(t * .12) * .5;
+    // visible breath — slow tide, about four seconds per cycle
+    group.scale.y = s * (1 + Math.sin(t * 1.4) * .011);
+    // as we dive past (s > ~1.15) the head slides to screen centre,
+    // so the zoom enters through the brain — not the chest
+    const kHead = smooth(1.15, 3.5, s);
+    group.position.y = -HEAD_Y * s * kHead;
+    const a = ag.attributes.position.array;
+    for (let i = 0; i < NA; i++) {
+      const k = seed[i], y = ((k.ph + t * k.sp) % 30) - 14;
+      a[i * 3] = k.x + Math.sin(t * .4 + k.ph) * .5; a[i * 3 + 1] = y; a[i * 3 + 2] = k.z;
+    }
+    ag.attributes.position.needsUpdate = true;
+  });
+  stages.figure.outStart = 2; stages.figure.outEnd = 9;
+  stages.figure.inStart = .012; stages.figure.inEnd = .1;   // arrive as a distant light, not a hotspot
+}
+
+/* ============ the mind — neurons firing ============ */
+{
+  const group = new THREE.Group();
+  const NN = 420, nodes = [];
+  for (let i = 0; i < NN; i++) {
+    const v = new THREE.Vector3().randomDirection();
+    const r = Math.pow(Math.random(), 0.45);
+    nodes.push(v.multiply(new THREE.Vector3(18 * r, 14 * r, 16 * r)));
+  }
+  const np = new Float32Array(NN * 3), nc = new Float32Array(NN * 3), nph = [];
+  const cNode = new THREE.Color(0x9fd8ff);
+  nodes.forEach((v, i) => {
+    np.set([v.x, v.y, v.z], i * 3);
+    nc.set([cNode.r, cNode.g, cNode.b], i * 3);
+    nph.push(Math.random() * Math.PI * 2);
+  });
+  const ng = new THREE.BufferGeometry();
+  ng.setAttribute('position', new THREE.BufferAttribute(np, 3));
+  ng.setAttribute('color', new THREE.BufferAttribute(nc, 3));
+  const nPts = makePoints(ng, { size: .42, vertexColors: true, opacity: .95 });
+  group.add(nPts);
+
+  const edges = [];
+  for (let i = 0; i < NN; i++) {
+    const d = nodes.map((v, j) => ({ j, d: v.distanceTo(nodes[i]) })).sort((a, b) => a.d - b.d);
+    for (let k = 1; k <= 2; k++) if (d[k]) edges.push([i, d[k].j]);
+  }
+  // organic dendrites: each connection is a bowed curve, not a wire
+  const SEGS = 6, curvePts = [];
+  const ep = new Float32Array(edges.length * SEGS * 6);
+  edges.forEach((e, i) => {
+    const A = nodes[e[0]], B = nodes[e[1]];
+    const mid = A.clone().lerp(B, .5);
+    const perp = new THREE.Vector3(gauss(), gauss(), gauss()).normalize()
+      .multiplyScalar(A.distanceTo(B) * (.12 + Math.random() * .18));
+    const ctrl = mid.add(perp);
+    const curve = new THREE.QuadraticBezierCurve3(A, ctrl, B);
+    const pts = curve.getPoints(SEGS);
+    curvePts.push(pts);
+    for (let sIdx = 0; sIdx < SEGS; sIdx++) {
+      ep.set([pts[sIdx].x, pts[sIdx].y, pts[sIdx].z, pts[sIdx + 1].x, pts[sIdx + 1].y, pts[sIdx + 1].z], (i * SEGS + sIdx) * 6);
+    }
+  });
+  // depth-graded dendrites: bright near the core, fading at the rim —
+  // the web reads as a volume instead of a flat hairball
+  const ec = new Float32Array(edges.length * SEGS * 6);
+  const cEdge2 = new THREE.Color(0x6fa4dc);
+  edges.forEach((e, i) => {
+    const vary = .55 + Math.random() * .45;
+    for (let sIdx = 0; sIdx <= SEGS; sIdx++) {
+      if (sIdx === SEGS) break;
+      for (const end of [0, 1]) {
+        const P = curvePts[i][sIdx + end];
+        const k = Math.max(.18, 1 - (P.length() / 19) * .75) * vary;
+        ec.set([cEdge2.r * k, cEdge2.g * k, cEdge2.b * k], (i * SEGS + sIdx) * 6 + end * 3);
+      }
+    }
+  });
+  const eg = new THREE.BufferGeometry();
+  eg.setAttribute('position', new THREE.BufferAttribute(ep, 3));
+  eg.setAttribute('color', new THREE.BufferAttribute(ec, 3));
+  const em = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .42, depthWrite: false, blending: THREE.AdditiveBlending });
+  group.add(new THREE.LineSegments(eg, em));
+
+  const NP = 300, pp2 = new Float32Array(NP * 3), assign = [];
+  for (let i = 0; i < NP; i++) assign.push({ c: (Math.random() * curvePts.length) | 0, ph: Math.random(), sp: .25 + Math.random() * .55, pf: 0 });
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute('position', new THREE.BufferAttribute(pp2, 3));
+  const pulses = makePoints(pg, { size: .72, color: 0xeaf6ff, opacity: .95 });
+  group.add(pulses);
+
+  // synapse flares — when a signal arrives, the receiving neuron fires
+  const flareI = new Float32Array(NN);
+  const fc = new Float32Array(NN * 3);
+  const fg = new THREE.BufferGeometry();
+  fg.setAttribute('position', new THREE.BufferAttribute(np.slice(), 3));
+  fg.setAttribute('color', new THREE.BufferAttribute(fc, 3));
+  const flares = makePoints(fg, { size: 1.5, vertexColors: true, opacity: .95 });
+  group.add(flares);
+
+  registerStage('mind', group, [fadeMat(nPts.material, .95), fadeMat(em, .3), fadeMat(pulses.material, .95), fadeMat(flares.material, .95)], (t) => {
+    group.rotation.y = t * 0.05;
+    const a = pg.attributes.position.array;
+    for (let i = 0; i < NP; i++) {
+      const A = assign[i];
+      const f = ((t * A.sp * 0.1 + A.ph) % 1) * SEGS;
+      if (f < A.pf) flareI[edges[A.c][1]] = 1;   // wrapped → signal arrived
+      A.pf = f;
+      const i0 = Math.min(SEGS - 1, f | 0), fr = f - i0;
+      const P = curvePts[A.c][i0], Q = curvePts[A.c][i0 + 1];
+      a[i * 3] = P.x + (Q.x - P.x) * fr; a[i * 3 + 1] = P.y + (Q.y - P.y) * fr; a[i * 3 + 2] = P.z + (Q.z - P.z) * fr;
+    }
+    pg.attributes.position.needsUpdate = true;
+    // flares decay; node brightness shimmers like distant city blocks
+    const ncA = ng.attributes.color.array;
+    for (let i = 0; i < NN; i++) {
+      flareI[i] *= .92;
+      const fI = flareI[i] < .015 ? 0 : flareI[i];
+      fc.set([fI, fI * .97, fI * .88], i * 3);
+      const sh = .68 + .4 * Math.sin(t * 1.6 + nph[i]);
+      ncA.set([cNode.r * sh, cNode.g * sh, cNode.b * sh], i * 3);
+    }
+    fg.attributes.color.needsUpdate = true;
+    ng.attributes.color.needsUpdate = true;
+  });
+  stages.mind.outStart = 1.8; stages.mind.outEnd = 6;
+  stages.mind.inStart = .015; stages.mind.inEnd = .1;   // spark appears once the dive has centred on the head
+}
+
+/* ============ the atom ============
+   The final beat. Sized so the arrived atom actually frames the
+   screen: nucleus a tight two-tone cluster riding above the contact
+   card, electrons burning around it with comet trails. */
+{
+  const group = new THREE.Group();
+  const NC = 260, cp = new Float32Array(NC * 3), cc = new Float32Array(NC * 3);
+  const warm = new THREE.Color(0xffd9a0), cool = new THREE.Color(0xa8c8ff);
+  for (let i = 0; i < NC; i++) {
+    const v = new THREE.Vector3(gauss(), gauss(), gauss()).normalize().multiplyScalar(Math.pow(Math.random(), .4) * .62);
+    cp.set([v.x, v.y, v.z], i * 3);
+    const c = Math.random() < .5 ? warm : cool;
+    cc.set([c.r, c.g, c.b], i * 3);
+  }
+  const cg = new THREE.BufferGeometry();
+  cg.setAttribute('position', new THREE.BufferAttribute(cp, 3));
+  cg.setAttribute('color', new THREE.BufferAttribute(cc, 3));
+  const nucleus = makePoints(cg, { size: .75, vertexColors: true, opacity: .95 });
+  group.add(nucleus);
+
+  const mats = [fadeMat(nucleus.material, .95)];
+  const orbiters = [], TRAIL = 30;
+  [[3.0, .3, .1], [4.3, 1.2, .9], [5.6, 2.2, 1.9]].forEach(([r, rx, rz], i) => {
+    const curve = new THREE.EllipseCurve(0, 0, r, r * .96);
+    const og = new THREE.BufferGeometry().setFromPoints(curve.getPoints(160).map(p => new THREE.Vector3(p.x, p.y, 0)));
+    const om = new THREE.LineBasicMaterial({ color: 0xa8c8ff, transparent: true, opacity: .6, depthWrite: false, blending: THREE.AdditiveBlending });
+    const line = new THREE.LineLoop(og, om);
+    line.rotation.x = rx; line.rotation.z = rz;
+    group.add(line); mats.push(fadeMat(om, .6));
+    const eG = new THREE.BufferGeometry();
+    eG.setAttribute('position', new THREE.BufferAttribute(new Float32Array(3), 3));
+    const eP = makePoints(eG, { size: 1.25, color: 0xeaf6ff, opacity: 1 });
+    group.add(eP); mats.push(fadeMat(eP.material, 1));
+    // comet trail — a ribbon of history fading behind each electron
+    const tp = new Float32Array(TRAIL * 3), tc = new Float32Array(TRAIL * 3);
+    for (let k = 0; k < TRAIL; k++) {
+      const fade = Math.pow(1 - k / TRAIL, 1.8);
+      tc.set([.92 * fade, .96 * fade, fade], k * 3);
+    }
+    const tg = new THREE.BufferGeometry();
+    tg.setAttribute('position', new THREE.BufferAttribute(tp, 3));
+    tg.setAttribute('color', new THREE.BufferAttribute(tc, 3));
+    const tPts = makePoints(tg, { size: .5, vertexColors: true, opacity: .85 });
+    group.add(tPts); mats.push(fadeMat(tPts.material, .85));
+    orbiters.push({ eG, tg, r, rx, rz, sp: 1.35 - i * .3, ph: i * 2.1 });
+  });
+
+  registerStage('atom', group, mats, (t, s) => {
+    group.rotation.y = t * .04;
+    // as the atom arrives, it rises so the nucleus sits above the card
+    group.position.y = smooth(1.2, 4.8, s) * 12.5;
+    nucleus.rotation.y = t * .32; nucleus.rotation.z = t * .21;
+    orbiters.forEach(o => {
+      const a = t * o.sp + o.ph;
+      const v = new THREE.Vector3(Math.cos(a) * o.r, Math.sin(a) * o.r * .96, 0);
+      v.applyEuler(new THREE.Euler(o.rx, 0, o.rz));
+      o.eG.attributes.position.array.set([v.x, v.y, v.z]);
+      o.eG.attributes.position.needsUpdate = true;
+      const tp = o.tg.attributes.position.array;
+      for (let k = TRAIL - 1; k > 0; k--) tp.set([tp[(k - 1) * 3], tp[(k - 1) * 3 + 1], tp[(k - 1) * 3 + 2]], k * 3);
+      tp.set([v.x, v.y, v.z], 0);
+      o.tg.attributes.position.needsUpdate = true;
+    });
+  });
+  stages.atom.outStart = 1e9; stages.atom.outEnd = 2e9;   // the base — never leaves
+}
+
+/* ============ the mandala — the doorway ============
+   Two rotors turning against each other — the whole wheel drifts
+   one way while the inner 24-petal ring turns the other — around
+   a warm, glowing heart. A living instrument, not a diagram. */
+{
+  const group = new THREE.Group();
+  const inner = new THREE.Group();
+  group.add(inner);
+
+  const mkSegs = () => {
+    const arr = [];
+    return {
+      arr,
+      push: (a, b) => arr.push(a.x, a.y, 0, b.x, b.y, 0),
+    };
+  };
+  const outerS = mkSegs(), innerS = mkSegs();
+  const circle = (S, r, n = 128) => {
+    for (let i = 0; i < n; i++) {
+      const a1 = (i / n) * Math.PI * 2, a2 = ((i + 1) / n) * Math.PI * 2;
+      S.push({ x: Math.cos(a1) * r, y: Math.sin(a1) * r }, { x: Math.cos(a2) * r, y: Math.sin(a2) * r });
+    }
+  };
+  const petals = (S, count, ringR, exR, eyR, segsN, phase = 0) => {
+    for (let p = 0; p < count; p++) {
+      const base = (p / count) * Math.PI * 2 + phase, cxp = Math.cos(base) * ringR, cyp = Math.sin(base) * ringR;
+      for (let i = 0; i < segsN; i++) {
+        const t1 = (i / segsN) * Math.PI * 2, t2 = ((i + 1) / segsN) * Math.PI * 2;
+        const pt = t => {
+          const ex = Math.cos(t) * exR, ey = Math.sin(t) * eyR;
+          return { x: cxp + ex * Math.cos(base) - ey * Math.sin(base), y: cyp + ex * Math.sin(base) + ey * Math.cos(base) };
+        };
+        S.push(pt(t1), pt(t2));
+      }
+    }
+  };
+  [4.5, 10, 15.5, 21, 26].forEach(r => circle(outerS, r));
+  petals(outerS, 12, 13, 8, 3.2, 64);
+  for (let i = 0; i < 48; i++) {
+    const a = (i / 48) * Math.PI * 2, r1 = 24.4, r2 = i % 4 === 0 ? 22.8 : 23.6;
+    outerS.push({ x: Math.cos(a) * r1, y: Math.sin(a) * r1 }, { x: Math.cos(a) * r2, y: Math.sin(a) * r2 });
+  }
+  petals(innerS, 24, 6.6, 3.6, 1.5, 40, Math.PI / 24);
+
+  const mkLines = (S, color, opacity, parent) => {
+    const lg = new THREE.BufferGeometry();
+    lg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(S.arr), 3));
+    const lm = new THREE.LineBasicMaterial({ color, transparent: true, opacity, depthWrite: false, blending: THREE.AdditiveBlending });
+    parent.add(new THREE.LineSegments(lg, lm));
+    return lm;
+  };
+  const lmOut = mkLines(outerS, 0xd4e6ff, .8, group);
+  const lmIn = mkLines(innerS, 0xffe0b0, .85, inner);
+
+  // dust: warm gold at the heart, cooling to ice-blue at the rim
+  const mkDust = (S, N, parent, size = .13) => {
+    const dp = new Float32Array(N * 3), dc = new Float32Array(N * 3);
+    const cWarm = new THREE.Color(0xffd9a0), cCool = new THREE.Color(0x8fc4ff);
+    const segs = S.arr;
+    for (let i = 0; i < N; i++) {
+      const si = ((Math.random() * segs.length / 6) | 0) * 6;
+      const f = Math.random();
+      const x = segs[si] + (segs[si + 3] - segs[si]) * f + gauss() * .14;
+      const y = segs[si + 1] + (segs[si + 4] - segs[si + 1]) * f + gauss() * .14;
+      dp[i * 3] = x; dp[i * 3 + 1] = y; dp[i * 3 + 2] = gauss() * .3;
+      const c = cWarm.clone().lerp(cCool, Math.min(1, Math.sqrt(x * x + y * y) / 21));
+      dc.set([c.r, c.g, c.b], i * 3);
+    }
+    const dg = new THREE.BufferGeometry();
+    dg.setAttribute('position', new THREE.BufferAttribute(dp, 3));
+    dg.setAttribute('color', new THREE.BufferAttribute(dc, 3));
+    const dust = makePoints(dg, { size, vertexColors: true, opacity: .55 });
+    parent.add(dust);
+    return dust;
+  };
+  const dustOut = mkDust(outerS, 27000, group);
+  const dustIn = mkDust(innerS, 8000, inner, .15);
+
+  // the heart — a warm ember at the center of the wheel
+  const heartTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 256;
+    const g2 = c.getContext('2d');
+    const grad = g2.createRadialGradient(128, 128, 6, 128, 128, 128);
+    grad.addColorStop(0, 'rgba(255,224,176,.85)'); grad.addColorStop(.28, 'rgba(255,196,120,.28)');
+    grad.addColorStop(.62, 'rgba(214,150,255,.07)'); grad.addColorStop(1, 'rgba(0,0,0,0)');
+    g2.fillStyle = grad; g2.fillRect(0, 0, 256, 256);
+    return new THREE.CanvasTexture(c);
+  })();
+  const heartM = new THREE.SpriteMaterial({ map: heartTex, transparent: true, opacity: .5, depthWrite: false, blending: THREE.AdditiveBlending });
+  const heart = new THREE.Sprite(heartM);
+  heart.scale.setScalar(9.5);
+  group.add(heart);
+
+  registerStage('mandala', group,
+    [fadeMat(lmOut, .8), fadeMat(lmIn, .85), fadeMat(dustOut.material, .5), fadeMat(dustIn.material, .55), fadeMat(heartM, .5)],
+    (t) => {
+      group.rotation.z = t * .015;
+      inner.rotation.z = -t * .055;
+      heart.scale.setScalar(9.5 + Math.sin(t * .9) * .8);   // the ember breathes
+    });
+  stages.mandala.outStart = 12; stages.mandala.outEnd = 80;
+}
+
+/* ============ imagination — the idea graph ============
+   Obsidian-style: NAMKUZU-DA OS at the center (the system that
+   built this page), 6 category hubs, 38 projects as stars,
+   edges = real structure. Hover a star: connections light up. */
+const CATS = [
+  { name: 'TRADING', hue: 0xe8b45f, hub: [12.5, 3, -2],
+    projects: ['trade-signal-backend','Wingman','Options-Calc','Divergance-Scanner','Scout-Win','trading-prep','buyback-blackout-analyzer','fibonacci-backtester','MrCrabs','TERMINUS','Convergence Engine','Prediction Market Scanner'] },
+  { name: 'RESEARCH', hue: 0x7fd4d0, hub: [7, -9.5, 3],
+    projects: ['twitter-algorithm-analysis','ZOLSEASON','Quantitative Research Lab','Breadth-Exhaustion-Signal','Gann Square of Nine Backtester','Mean Reversion Strategy Lab'] },
+  { name: 'BIGPIC', hue: 0xe88a5f, hub: [-6, 10.5, 2],
+    projects: ['BigPic Solutions','BigPic Capital','BigPic Technology','BigPic CyberCab','Invoicing Platform'] },
+  { name: 'INTERACTIVE', hue: 0x8fe89f, hub: [-13, -4, -3],
+    projects: ['Book','Zen','Ancients','BreakTheCode'] },
+  { name: 'AI & VOICE', hue: 0xe88fbf, hub: [-3.5, -12.5, -1],
+    projects: ['WM-Voice','VideoToText','Swarm-AI'] },
+  { name: 'CYBERSECURITY', hue: 0x8fa8e8, hub: [-13, 4.5, 4],
+    projects: ['Cyber Defense Command Center','Pentester Platform','CyberSec Tools'] },
+];
+// the OS category lives AT the center — its systems orbit the core directly
+const CORE_PROJECTS = ['Agentic Business Orchestration','Living Thesis Pipeline','Published Intelligence','Market Data'];
+const CORE_HUE = 0xa88fe8;
+// cross-links the catalog descriptions actually support
+const CROSS = [
+  ['trading-prep', 'NAMKUZU-DA OS'], ['trade-signal-backend', 'NAMKUZU-DA OS'], ['Prediction Market Scanner', 'NAMKUZU-DA OS'],
+  ['TERMINUS', 'Market Data'], ['Wingman', 'Market Data'], ['Published Intelligence', 'Living Thesis Pipeline'],
+];
+
+const labelLayer = document.getElementById('labels');
+const gNodes = [];            // { name, base(V3), pos(V3), el, hue, isHub, ph }
+const gEdges = [];            // { a, b (node indices) }
+let graphGroup, edgeGeo, hiGeo, nodeGeo, haloSprites;
+{
+  const group = new THREE.Group();
+  graphGroup = group;
+  const mats = [];
+
+  const puffTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 128;
+    const g2 = c.getContext('2d');
+    const grad = g2.createRadialGradient(64, 64, 3, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(255,255,255,.9)'); grad.addColorStop(.35, 'rgba(255,255,255,.25)'); grad.addColorStop(1, 'rgba(255,255,255,0)');
+    g2.fillStyle = grad; g2.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  })();
+
+  const addNode = (name, base, hue, isHub, labelClass) => {
+    const el = document.createElement('span');
+    el.className = labelClass;
+    if (labelClass === 'star-label') {
+      el.innerHTML = `<span class="dotc" style="background:#${new THREE.Color(hue).getHexString()}"></span>${name}`;
+    } else {
+      el.textContent = name;
+      el.style.color = '#' + new THREE.Color(hue).clone().lerp(new THREE.Color(0xffffff), .4).getHexString();
+    }
+    labelLayer.appendChild(el);
+    gNodes.push({ name, base: base.clone(), pos: base.clone(), el, hue, isHub, ph: Math.random() * 10, sx: -1e4, sy: -1e4 });
+    return gNodes.length - 1;
+  };
+  const fib = (i, nTot) => {   // fibonacci sphere direction
+    const golden = Math.PI * (3 - Math.sqrt(5));
+    const y = 1 - (i / Math.max(1, nTot - 1)) * 2;
+    const rad = Math.sqrt(Math.max(0, 1 - y * y)), th = golden * i;
+    return new THREE.Vector3(Math.cos(th) * rad, y, Math.sin(th) * rad);
+  };
+
+  // center
+  const centerIdx = addNode('NAMKUZU-DA OS', new THREE.Vector3(0, 0, 0), 0xffd9a0, true, 'hub-label');
+  CORE_PROJECTS.forEach((p, i) => {
+    const dir = fib(i, CORE_PROJECTS.length).multiplyScalar(5.2);
+    const idx = addNode(p, dir, CORE_HUE, false, 'star-label');
+    gEdges.push({ a: centerIdx, b: idx });
+  });
+  CATS.forEach(cat => {
+    const hubPos = new THREE.Vector3(...cat.hub);
+    const hubIdx = addNode(cat.name, hubPos, cat.hue, true, 'hub-label');
+    gEdges.push({ a: centerIdx, b: hubIdx });
+    const rr = 4.4 + cat.projects.length * .22;
+    cat.projects.forEach((p, i) => {
+      const dir = fib(i, cat.projects.length).multiplyScalar(rr + gauss() * .5);
+      const idx = addNode(p, hubPos.clone().add(dir), cat.hue, false, 'star-label');
+      gEdges.push({ a: hubIdx, b: idx });
+    });
+  });
+  const byName = {};
+  gNodes.forEach((nd, i) => byName[nd.name] = i);
+  CROSS.forEach(([a, b]) => { if (byName[a] != null && byName[b] != null) gEdges.push({ a: byName[a], b: byName[b], cross: true }); });
+
+  // node stars (sharp points, per-node color)
+  nodeGeo = new THREE.BufferGeometry();
+  const npn = new Float32Array(gNodes.length * 3), ncl = new Float32Array(gNodes.length * 3);
+  gNodes.forEach((nd, i) => {
+    npn.set([nd.pos.x, nd.pos.y, nd.pos.z], i * 3);
+    const c = nd.isHub ? new THREE.Color(nd.hue).lerp(new THREE.Color(0xffffff), .5) : new THREE.Color(0xffffff);
+    ncl.set([c.r, c.g, c.b], i * 3);
+  });
+  nodeGeo.setAttribute('position', new THREE.BufferAttribute(npn, 3));
+  nodeGeo.setAttribute('color', new THREE.BufferAttribute(ncl, 3));
+  const stars = makePoints(nodeGeo, { size: .95, vertexColors: true, opacity: .95 });
+  group.add(stars); mats.push(fadeMat(stars.material, .95));
+
+  // colored halos (sprites, one per node)
+  haloSprites = gNodes.map(nd => {
+    const hm = new THREE.SpriteMaterial({ map: puffTex, color: nd.hue, transparent: true, opacity: nd.isHub ? .5 : .3, depthWrite: false, blending: THREE.AdditiveBlending });
+    const sp = new THREE.Sprite(hm);
+    sp.scale.setScalar(nd.isHub ? 3.6 : 2.0);
+    sp.position.copy(nd.pos);
+    group.add(sp); mats.push(fadeMat(hm, hm.opacity));
+    return sp;
+  });
+
+  // edges — base layer (dim) + highlight layer (bright, rebuilt on hover)
+  edgeGeo = new THREE.BufferGeometry();
+  edgeGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(gEdges.length * 6), 3));
+  const edgeMat = new THREE.LineBasicMaterial({ color: 0x91a8cc, transparent: true, opacity: .18, depthWrite: false, blending: THREE.AdditiveBlending });
+  group.add(new THREE.LineSegments(edgeGeo, edgeMat)); mats.push(fadeMat(edgeMat, .18));
+
+  hiGeo = new THREE.BufferGeometry();
+  hiGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(64 * 6), 3));
+  hiGeo.setDrawRange(0, 0);
+  const hiMat = new THREE.LineBasicMaterial({ color: 0xffe9c0, transparent: true, opacity: .9, depthWrite: false, blending: THREE.AdditiveBlending });
+  group.add(new THREE.LineSegments(hiGeo, hiMat)); mats.push(fadeMat(hiMat, .9));
+
+  registerStage('graph', group, mats, () => {});
+  stages.graph.outStart = 6; stages.graph.outEnd = 60;   // passes through, down to the atom
+}
+
+/* ============ chapters / ruler / parallax ============ */
+const chapters = [...document.querySelectorAll('.chapter')].map(el => {
+  const [a, b] = el.dataset.band.split(',').map(Number);
+  return { el, a, b };
+});
+const rulerCursor = document.getElementById('rulerCursor');
+let px = 0, py = 0, tx = 0, ty = 0, mouseX = -1e4, mouseY = -1e4;
+addEventListener('pointermove', e => {
+  tx = (e.clientX / innerWidth - .5) * 2;
+  ty = (e.clientY / innerHeight - .5) * 2;
+  mouseX = e.clientX; mouseY = e.clientY;
+});
+
+/* ============ main loop ============ */
+const lenis = window.Lenis ? new window.Lenis({ duration: 1.4, smoothWheel: true }) : null;
+const clock = new THREE.Clock();
+let loaderDone = false, hovered = -1;
+
+function resize() {
+  renderer.setSize(innerWidth, innerHeight, false);
+  composer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  updatePointScale();
+}
+addEventListener('resize', resize);
+resize();
+
+function frame() {
+  requestAnimationFrame(frame);
+  if (lenis) lenis.raf(performance.now());
+  const t = clock.getElapsedTime();
+  const max = document.documentElement.scrollHeight - innerHeight;
+  const p = Math.min(1, Math.max(0, (window.scrollY || 0) / max));
+  const Z = p * Z_MAX;
+
+  px += (tx - px) * .04; py += (ty - py) * .04;
+  camera.position.x = px * 2.6; camera.position.y = -py * 1.8;
+  camera.lookAt(0, 0, 0);
+
+  for (const [name, st] of Object.entries(stages)) {
+    const { z, k } = ANCHORS[name];
+    let over = (Z - z) * k;
+    if (name === 'atom' && over > 0) over = Math.atan(over / 1.6) * 1.6;   // the base: arrive and stay
+    const s = Math.exp(over);
+    const outEnd = st.outEnd ?? 14;
+    if (s < 0.0015 || s > outEnd * 1.6) { st.group.visible = false; continue; }
+    st.group.visible = true;
+    st.group.scale.setScalar(s);
+    st.group.userData.s = s;
+    const a = smooth(st.inStart ?? 0.004, st.inEnd ?? 0.09, s) * (1 - smooth(st.outStart ?? 2.5, outEnd, s));
+    st.mats.forEach(({ m, base }) => { m.opacity = base * a; });
+    st.update(t, s);
+  }
+
+  chapters.forEach(({ el, a, b }) => {
+    const mid = (a + b) / 2, half = (b - a) / 2;
+    const d = Math.abs(p - mid) / half;
+    const o = Math.max(0, 1 - Math.pow(d, 3));
+    el.style.opacity = o.toFixed(3);
+    el.style.pointerEvents = o > .5 ? 'auto' : 'none';
+  });
+  rulerCursor.style.top = (p * 100).toFixed(2) + '%';
+
+  /* ---- graph life: float, project labels, hover ---- */
+  {
+    const st = stages.graph;
+    const s = st.group.visible ? (st.group.userData.s || 0) : 0;
+    const active = st.group.visible && s > .3 && s < 14;
+    const v = new THREE.Vector3();
+    if (active) {
+      st.group.rotation.z = Math.sin(t * .05) * .1;
+      st.group.rotation.y = Math.sin(t * .04) * .12;
+      // float nodes
+      gNodes.forEach((nd, i) => {
+        nd.pos.set(
+          nd.base.x + Math.sin(t * .5 + nd.ph) * .16,
+          nd.base.y + Math.sin(t * .43 + nd.ph * 2.1) * .16,
+          nd.base.z + Math.sin(t * .38 + nd.ph * 3.3) * .16,
+        );
+        nodeGeo.attributes.position.array.set([nd.pos.x, nd.pos.y, nd.pos.z], i * 3);
+        haloSprites[i].position.copy(nd.pos);
+      });
+      nodeGeo.attributes.position.needsUpdate = true;
+      const ea = edgeGeo.attributes.position.array;
+      gEdges.forEach((e, i) => {
+        const A = gNodes[e.a].pos, B = gNodes[e.b].pos;
+        ea.set([A.x, A.y, A.z, B.x, B.y, B.z], i * 6);
+      });
+      edgeGeo.attributes.position.needsUpdate = true;
+    }
+    // labels: project to screen, then a greedy declutter pass —
+    // hovered wins, then hubs, then the rest; overlapping labels yield
+    let nearest = -1, nearestD = 34 * 34;
+    gNodes.forEach((nd, i) => {
+      nd.want = 0;
+      if (!active) { nd.sx = -1e4; return; }
+      v.copy(nd.pos).applyMatrix4(graphGroup.matrixWorld).project(camera);
+      if (v.z > 1) { nd.sx = -1e4; return; }
+      const sx = (v.x * .5 + .5) * innerWidth, sy = (-v.y * .5 + .5) * innerHeight;
+      nd.sx = sx; nd.sy = sy;
+      if (sx < -80 || sx > innerWidth + 80 || sy < -40 || sy > innerHeight + 40) return;
+      nd.want = nd.isHub ? (s > .5 ? .85 : 0) : Math.min(1, Math.max(0, (s - .55) * 2.4));
+      const dx = sx - mouseX, dy = sy - mouseY, dd = dx * dx + dy * dy;
+      if (!nd.isHub && dd < nearestD) { nearestD = dd; nearest = i; }
+    });
+    {
+      const order = gNodes.map((nd, i) => i).sort((a, b) => {
+        const pa = (a === hovered ? 2 : 0) + (gNodes[a].isHub ? 1 : 0);
+        const pb = (b === hovered ? 2 : 0) + (gNodes[b].isHub ? 1 : 0);
+        return pb - pa;
+      });
+      const placed = [];
+      order.forEach(i => {
+        const nd = gNodes[i];
+        if (nd.want <= 0) { nd.el.style.opacity = 0; return; }
+        const clash = placed.some(q => Math.abs(q.sx - nd.sx) < 95 && Math.abs(q.sy - nd.sy) < 16);
+        if (clash && i !== hovered) { nd.el.style.opacity = 0; return; }
+        placed.push(nd);
+        nd.el.style.transform = `translate(${nd.sx.toFixed(1)}px, ${nd.sy.toFixed(1)}px) translate(-50%, ${nd.isHub ? '-170%' : '-150%'})`;
+        nd.el.style.opacity = nd.want.toFixed(2);
+      });
+    }
+    if (active && s > .55) {
+      if (nearest !== hovered) {
+        if (hovered >= 0) gNodes[hovered].el.classList.remove('hot');
+        hovered = nearest;
+        const ha = hiGeo.attributes.position.array;
+        let hc = 0;
+        if (hovered >= 0) {
+          gNodes[hovered].el.classList.add('hot');
+          gEdges.forEach(e => {
+            if (e.a === hovered || e.b === hovered) {
+              const A = gNodes[e.a].pos, B = gNodes[e.b].pos;
+              if (hc < 64) { ha.set([A.x, A.y, A.z, B.x, B.y, B.z], hc * 6); hc++; }
+            }
+          });
+        }
+        hiGeo.setDrawRange(0, hc * 2);
+        hiGeo.attributes.position.needsUpdate = true;
+        document.body.style.cursor = hovered >= 0 ? 'crosshair' : '';
+      } else if (hovered >= 0) {
+        // keep highlight tracking the floating nodes
+        const ha = hiGeo.attributes.position.array;
+        let hc = 0;
+        gEdges.forEach(e => {
+          if (e.a === hovered || e.b === hovered) {
+            const A = gNodes[e.a].pos, B = gNodes[e.b].pos;
+            if (hc < 64) { ha.set([A.x, A.y, A.z, B.x, B.y, B.z], hc * 6); hc++; }
+          }
+        });
+        hiGeo.attributes.position.needsUpdate = true;
+      }
+    } else if (hovered >= 0) {
+      gNodes[hovered].el.classList.remove('hot');
+      hovered = -1; hiGeo.setDrawRange(0, 0);
+      document.body.style.cursor = '';
+    }
+  }
+
+  gradePass.uniforms.uTime.value = t;
+  const tint = tintAt(p);
+  gradePass.uniforms.uTint.value.set(tint[0], tint[1], tint[2]);
+  composer.render();
+  if (!loaderDone) { loaderDone = true; document.getElementById('loader').classList.add('done'); }
+}
+frame();
+</script>
 </body>
 </html>

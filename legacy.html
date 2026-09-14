@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daryll Gomas — Technology Enthusiast</title>
+  <meta name="description" content="Daryll Gomas — Cybersecurity professional, technology enthusiast, and lifelong learner. Portfolio showcasing skills, achievements, and projects.">
+  <meta name="author" content="Daryll Gomas">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Daryll Gomas — Technology Enthusiast">
+  <meta property="og:description" content="Cybersecurity professional, AI and robotics enthusiast.">
+  <meta property="og:url" content="https://daryllgomas.com">
+  <meta property="og:image" content="https://daryllgomas.com/images/AI_Left.jpg">
+  <meta property="og:site_name" content="Daryll Gomas">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Daryll Gomas — Technology Enthusiast">
+  <meta name="twitter:image" content="https://daryllgomas.com/images/AI_Left.jpg">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/mandala.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="canonical" href="https://daryllgomas.com">
+</head>
+<body>
+
+  <!-- Living Mandala WebGL canvas — inert until js/mandala.js confirms
+       WebGL support, no prefers-reduced-motion, and a desktop viewport.
+       Falls back invisibly to the static SVG mandala otherwise. -->
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <!-- SVG Defs (hidden) — shared gradient for skill rings -->
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <linearGradient id="skillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#00d4ff"/>
+        <stop offset="100%" stop-color="#7b2ff2"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Atmosphere layers -->
+  <div class="ambient-bg" aria-hidden="true"></div>
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- ============================================
+       NAVIGATION
+       ============================================ -->
+  <header class="nav-header" id="nav-header">
+    <nav class="nav-inner">
+      <a href="#hero" class="nav-logo">DG</a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about" data-nav="about">About</a></li>
+        <li><a href="#skills" data-nav="skills">Skills</a></li>
+        <li><a href="#achievements" data-nav="achievements">Achievements</a></li>
+        <li><a href="#projects" data-nav="projects">Projects</a></li>
+        <li><a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">BigPic</a></li>
+        <li><a href="https://www.justsomedude.org/" target="_blank" rel="noopener">Book</a></li>
+        <li><a href="#contact" data-nav="contact">Contact</a></li>
+      </ul>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ============================================
+         HERO
+         ============================================ -->
+    <section class="hero" id="hero">
+
+      <!-- Digital Mandala — layered concentric rings behind hero text -->
+      <div class="mandala" aria-hidden="true">
+        <svg class="mandala-svg" viewBox="0 0 800 800">
+
+          <!-- Layer 1: Outermost ring — slow clockwise -->
+          <g class="mandala-layer mandala-layer-1">
+            <circle cx="400" cy="400" r="380" class="mandala-ring"/>
+            <circle cx="400" cy="400" r="360" class="mandala-ring mandala-ring--dashed"/>
+            <!-- 24 outer dots -->
+            <g class="mandala-dots">
+              <circle cx="400" cy="20" r="2.5"/><circle cx="557" cy="42" r="2"/><circle cx="694" cy="113" r="2.5"/>
+              <circle cx="758" cy="243" r="2"/><circle cx="780" cy="400" r="2.5"/><circle cx="758" cy="557" r="2"/>
+              <circle cx="694" cy="687" r="2.5"/><circle cx="557" cy="758" r="2"/><circle cx="400" cy="780" r="2.5"/>
+              <circle cx="243" cy="758" r="2"/><circle cx="106" cy="687" r="2.5"/><circle cx="42" cy="557" r="2"/>
+              <circle cx="20" cy="400" r="2.5"/><circle cx="42" cy="243" r="2"/><circle cx="106" cy="113" r="2.5"/>
+              <circle cx="243" cy="42" r="2"/>
+            </g>
+          </g>
+
+          <!-- Layer 2: Petal ring — 12 petals, counter-clockwise -->
+          <g class="mandala-layer mandala-layer-2">
+            <circle cx="400" cy="400" r="290" class="mandala-ring"/>
+            <!-- 12 petal arcs (ellipses rotated at 30° intervals) -->
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(30 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(60 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(90 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(120 400 400)"/>
+            <ellipse cx="400" cy="400" rx="180" ry="80" class="mandala-petal" transform="rotate(150 400 400)"/>
+          </g>
+
+          <!-- Layer 3: Inner detailed ring — slow clockwise -->
+          <g class="mandala-layer mandala-layer-3">
+            <circle cx="400" cy="400" r="200" class="mandala-ring mandala-ring--dotted"/>
+            <circle cx="400" cy="400" r="180" class="mandala-ring"/>
+            <!-- 8 inner lotus petals (teardrop shapes via paths) -->
+            <g class="mandala-lotus">
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(45 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(90 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(135 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(180 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(225 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(270 400 400)"/>
+              <path d="M400,220 Q430,300 400,380 Q370,300 400,220Z" class="mandala-petal" transform="rotate(315 400 400)"/>
+            </g>
+            <!-- 16 dots on inner ring -->
+            <g class="mandala-dots">
+              <circle cx="400" cy="200" r="2"/><circle cx="541" cy="259" r="1.5"/>
+              <circle cx="600" cy="400" r="2"/><circle cx="541" cy="541" r="1.5"/>
+              <circle cx="400" cy="600" r="2"/><circle cx="259" cy="541" r="1.5"/>
+              <circle cx="200" cy="400" r="2"/><circle cx="259" cy="259" r="1.5"/>
+              <circle cx="468" cy="213" r="1.5"/><circle cx="587" cy="332" r="1.5"/>
+              <circle cx="587" cy="468" r="1.5"/><circle cx="468" cy="587" r="1.5"/>
+              <circle cx="332" cy="587" r="1.5"/><circle cx="213" cy="468" r="1.5"/>
+              <circle cx="213" cy="332" r="1.5"/><circle cx="332" cy="213" r="1.5"/>
+            </g>
+          </g>
+
+          <!-- Layer 4: Core — small rings + center point, slow pulse -->
+          <g class="mandala-layer mandala-layer-4">
+            <circle cx="400" cy="400" r="100" class="mandala-ring mandala-ring--dashed"/>
+            <circle cx="400" cy="400" r="60" class="mandala-ring"/>
+            <circle cx="400" cy="400" r="30" class="mandala-ring mandala-ring--dotted"/>
+            <!-- 8 core dots -->
+            <circle cx="400" cy="340" r="2" class="mandala-dots"/><circle cx="442" cy="358" r="2" class="mandala-dots"/>
+            <circle cx="460" cy="400" r="2" class="mandala-dots"/><circle cx="442" cy="442" r="2" class="mandala-dots"/>
+            <circle cx="400" cy="460" r="2" class="mandala-dots"/><circle cx="358" cy="442" r="2" class="mandala-dots"/>
+            <circle cx="340" cy="400" r="2" class="mandala-dots"/><circle cx="358" cy="358" r="2" class="mandala-dots"/>
+            <!-- Center glow -->
+            <circle cx="400" cy="400" r="5" class="mandala-center"/>
+          </g>
+
+        </svg>
+      </div>
+
+      <div class="hero-content">
+        <p class="hero-greeting">Hello, I'm</p>
+        <h1 class="hero-name shimmer">Daryll Gomas</h1>
+        <p class="hero-title">Technology Enthusiast</p>
+        <div class="hero-line breathing" aria-hidden="true"></div>
+      </div>
+      <div class="hero-scroll-indicator" aria-hidden="true">
+        <span></span>
+      </div>
+    </section>
+
+    <!-- ============================================
+         ABOUT
+         ============================================ -->
+    <section class="section about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-image reveal">
+            <div class="about-image-frame">
+              <img src="images/about.jpg" alt="Daryll Gomas" loading="lazy">
+              <div class="image-glow" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="about-text reveal">
+            <span class="section-label">About Me</span>
+            <h2 class="section-heading">Who I Am</h2>
+            <p>I created this page to give a more comprehensive display of my skills and what I am learning and doing in the tech industry and in life. If you are here as a result of reading my resume, welcome!</p>
+            <p>I have always existed at the cross section of soul and technology. I have always been passionate about new things and learning. This was a gift that was passed down to me from my father, who worked as a Sr Engineer at IBM since the 70's and is now a reverend. I got to experience the personal computer revolution that Steve Jobs and so many others brought us, first hand because of that. He always brought home the latest cutting-edge technologies before they went to market and I was able to play with them for fun, which gave me a head start into the world of technology, it made me a native before this digital land was even built and I have always existed almost primarily in it. That guidance and experience has provided me with a forward-looking perspective that has enabled me to have a long, rewarding career that I remain passionate about to this day. Even now at the age of 51, I could not be more excited and hopeful about the world to come and I try my best to keep my eyes on it and help bring us all there together, in my own ways. Some call me an optimist, some call me a dreamer, but in the words of John Lennon — "I know I'm not the only one."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         PASSIONS
+         ============================================ -->
+    <section class="section passions">
+      <div class="container">
+        <div class="passions-header reveal">
+          <span class="section-label">What Drives Me</span>
+          <h2 class="section-heading">Important Things</h2>
+        </div>
+        <div class="passions-grid reveal-stagger">
+
+          <article class="passion-card reveal">
+            <div class="passion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M9 21c0 .5.4 1 1 1h4c.6 0 1-.5 1-1v-1H9v1zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/>
+              </svg>
+            </div>
+            <h3>Being Creative</h3>
+            <p>Putting things together, even when it doesn't make sense to or you're told not to do it, can lead to the most rewarding experiences and outcomes.</p>
+          </article>
+
+          <article class="passion-card reveal">
+            <div class="passion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <h3>Life Learning</h3>
+            <p>The goal in life I feel should be to never stop learning and improving. It keeps you sharp and honestly, what's the point if you're not always growing?</p>
+          </article>
+
+          <article class="passion-card reveal">
+            <div class="passion-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                <line x1="9" y1="9" x2="9.01" y2="9"/>
+                <line x1="15" y1="9" x2="15.01" y2="9"/>
+              </svg>
+            </div>
+            <h3>Keeping Balance</h3>
+            <p>As the world speeds up, don't forget to slow down. Taking a walk, hiking a mountain, balancing some rocks or just breathing can make all the difference.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         SKILLS
+         ============================================ -->
+    <section class="section skills" id="skills">
+      <div class="container">
+        <div class="skills-header reveal">
+          <span class="section-label">Career Specialties</span>
+          <h2 class="section-heading">Skills</h2>
+          <p class="skills-intro">We are all works in progress. Right now, these are the areas in which I have experienced the most. Don't have to believe me, take ChatGPT and Claude's word for it.</p>
+        </div>
+        <div class="skills-grid reveal-stagger">
+
+          <div class="skill-item reveal" style="--skill-pct: 85" data-modal="networking">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">85%</span>
+              <span class="skill-name">Networking</span>
+            </div>
+          </div>
+
+          <div class="skill-item reveal" style="--skill-pct: 75" data-modal="cybersecurity">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">75%</span>
+              <span class="skill-name">CyberSecurity</span>
+            </div>
+          </div>
+
+          <div class="skill-item reveal" style="--skill-pct: 80" data-modal="virtualization">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">80%</span>
+              <span class="skill-name">Virtualization</span>
+            </div>
+          </div>
+
+          <div class="skill-item reveal" style="--skill-pct: 70" data-modal="cloud">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">70%</span>
+              <span class="skill-name">Cloud</span>
+            </div>
+          </div>
+
+          <div class="skill-item reveal" style="--skill-pct: 88" data-modal="syseng">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">88%</span>
+              <span class="skill-name">Systems Engineering</span>
+            </div>
+          </div>
+
+          <div class="skill-item reveal" style="--skill-pct: 65" data-modal="blockchain">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">65%</span>
+              <span class="skill-name">Blockchain</span>
+            </div>
+          </div>
+
+          <div class="skill-item reveal" style="--skill-pct: 75" data-modal="ai">
+            <svg class="skill-ring" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="skill-ring-bg" cx="60" cy="60" r="54"/>
+              <circle class="skill-ring-fill" cx="60" cy="60" r="54"/>
+            </svg>
+            <div class="skill-label">
+              <span class="skill-value">75%</span>
+              <span class="skill-name">Artificial Intelligence</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         ACHIEVEMENTS
+         ============================================ -->
+    <section class="section achievements" id="achievements">
+      <div class="container">
+        <div class="certs-header reveal">
+          <span class="section-label">Verified Knowledge</span>
+          <h2 class="section-heading">Achievements</h2>
+        </div>
+        <div class="certs-grid reveal-stagger">
+          <div class="cert-card reveal" data-cert="udemynetplus">
+            <img src="images/udemynetplus.jpg" alt="Network+ Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="soc">
+            <img src="images/SOC_Core_Skills.png" alt="SOC Core Skills" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="addigy">
+            <img src="images/addigy.png" alt="Addigy Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="presec">
+            <img src="images/presec.png" alt="Pre-Security Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="linux">
+            <img src="images/linux.png" alt="Linux Certification" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="pentest">
+            <img src="images/THM-07TDRGKZIH.png" alt="TryHackMe PenTest Certificate" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="cyberdef">
+            <img src="images/cyber_def.png" alt="Cyber Defense Certificate" loading="lazy">
+          </div>
+          <div class="cert-card reveal" data-cert="apple">
+            <img src="images/AppleCert.png" alt="Apple Certified Support Professional" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Certificate Image Modal -->
+    <div class="cert-modal-overlay" id="cert-modal-overlay">
+      <button class="cert-modal-close" aria-label="Close">&times;</button>
+      <img class="cert-modal-img" id="cert-modal-img" src="" alt="">
+    </div>
+
+    <!-- ============================================
+         PROJECTS / LABS
+         ============================================ -->
+    <section class="section projects" id="projects">
+      <div class="container">
+        <div class="projects-header reveal">
+          <span class="section-label">Tinker Town</span>
+          <h2 class="section-heading">Labs, Projects &amp; Resources</h2>
+        </div>
+
+        <!-- ====== GitHub Projects ====== -->
+        <div class="projects-accordion reveal-stagger">
+
+          <details class="project-category reveal" open>
+            <summary><span class="category-marker"></span>Namkuzu-da OS</summary>
+
+            <!-- System Architecture Diagram -->
+            <div class="ecosystem-diagram reveal">
+              <svg viewBox="0 0 800 450" class="ecosystem-svg" role="img" aria-label="Namkuzu-da OS architecture — data flows from voice, market feeds, web content, and cloud storage through the Claude Code brain to published reports, knowledge base, system control, and alerts">
+                <defs>
+                  <linearGradient id="nkd-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#7b2ff2"/>
+                    <stop offset="100%" stop-color="#00d4ff"/>
+                  </linearGradient>
+                  <filter id="nkd-glow">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Connection Lines: Inputs → Brain -->
+                <g class="eco-lines">
+                  <path d="M 160 111 C 215 111, 215 185, 270 185" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 177 C 215 177, 215 200, 270 200" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 243 C 215 243, 215 215, 270 215" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 160 309 C 215 309, 215 230, 270 230" class="eco-line eco-line-in" style="stroke: url(#nkd-grad)"/>
+                </g>
+
+                <!-- Connection Lines: Brain → Outputs -->
+                <g class="eco-lines">
+                  <path d="M 530 185 C 585 185, 585 108, 640 108" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 200 C 585 200, 585 176, 640 176" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 215 C 585 215, 585 244, 640 244" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                  <path d="M 530 230 C 585 230, 585 312, 640 312" class="eco-line eco-line-out" style="stroke: url(#nkd-grad)"/>
+                </g>
+
+                <!-- Input Nodes (Left) -->
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-voice">
+                  <rect x="10" y="89" width="150" height="44" rx="6"/>
+                  <text x="85" y="107" class="eco-label">Voice Input</text>
+                  <text x="85" y="122" class="eco-sub">Whisper STT · Microphone</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-marketdata">
+                  <rect x="10" y="155" width="150" height="44" rx="6"/>
+                  <text x="85" y="173" class="eco-label">Market Data</text>
+                  <text x="85" y="188" class="eco-sub">Schwab · 26 RSS · FRED</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-web">
+                  <rect x="10" y="221" width="150" height="44" rx="6"/>
+                  <text x="85" y="239" class="eco-label">Web &amp; Research</text>
+                  <text x="85" y="254" class="eco-sub">YouTube · Browser · Inbox</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="nkd-gdrive">
+                  <rect x="10" y="287" width="150" height="44" rx="6"/>
+                  <text x="85" y="305" class="eco-label">Cloud &amp; Network</text>
+                  <text x="85" y="320" class="eco-sub">Google Drive · LAN APIs</text>
+                </g>
+
+                <!-- Central Brain Hub -->
+                <g class="eco-node eco-hub eco-clickable" data-eco-modal="nkd-os">
+                  <rect x="270" y="168" width="260" height="80" rx="10" style="stroke: url(#nkd-grad); stroke-width: 2"/>
+                  <text x="400" y="198" class="eco-hub-label">NAMKUZU-DA OS</text>
+                  <text x="400" y="220" class="eco-sub">Claude Code · 20+ Skills · 8 Pipelines · SQLite</text>
+                </g>
+
+                <!-- Infrastructure subtitle -->
+                <text x="400" y="270" class="eco-sub" style="opacity: 0.35">Wezterm · Zellij · RTX 3070 Ti · NAS · Bluetooth · Ubuntu 24.04</text>
+
+                <!-- Output Nodes (Right) -->
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-pipelines">
+                  <rect x="640" y="83" width="150" height="50" rx="6"/>
+                  <text x="715" y="102" class="eco-label">Published Intel</text>
+                  <text x="715" y="117" class="eco-sub">Morning Briefs · Eagle Eye</text>
+                  <text x="715" y="128" class="eco-sub">markets.bigpicsolutions.com</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-knowledge">
+                  <rect x="640" y="151" width="150" height="50" rx="6"/>
+                  <text x="715" y="170" class="eco-label">Knowledge Base</text>
+                  <text x="715" y="185" class="eco-sub">Living Thesis · Synthesis</text>
+                  <text x="715" y="196" class="eco-sub">YouTube → Knowledge</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-control">
+                  <rect x="640" y="219" width="150" height="50" rx="6"/>
+                  <text x="715" y="238" class="eco-label">System Control</text>
+                  <text x="715" y="253" class="eco-sub">Voice TTS · Desktop · Display</text>
+                  <text x="715" y="264" class="eco-sub">4 Monitors · xdotool</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="nkd-alerts">
+                  <rect x="640" y="287" width="150" height="50" rx="6"/>
+                  <text x="715" y="306" class="eco-label">Alerts &amp; Delivery</text>
+                  <text x="715" y="321" class="eco-sub">Email · Google Drive</text>
+                  <text x="715" y="332" class="eco-sub">Automated Notifications</text>
+                </g>
+
+                <!-- Column Labels -->
+                <text x="85" y="74" class="eco-col-label">INPUTS</text>
+                <text x="400" y="155" class="eco-col-label">BRAIN</text>
+                <text x="715" y="68" class="eco-col-label">OUTPUTS</text>
+              </svg>
+            </div>
+
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="nkd-os">
+                <div class="project-card-top">
+                  <h4>namkuzu-da</h4>
+                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">Shell</span>
+                </div>
+                <p>AI-native operating system — Claude Code brain, voice control, 8 automated pipelines, 4-monitor workstation.</p>
+              </div>
+              <div class="project-card" data-eco-modal="nkd-voice">
+                <div class="project-card-top">
+                  <h4>WM-Voice</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Hands-free voice assistant — Whisper STT, Kokoro TTS, Claude Agent SDK. Accessibility-first design.</p>
+              </div>
+              <div class="project-card" data-eco-modal="nkd-orchestration">
+                <div class="project-card-top">
+                  <h4>Agentic Orchestration</h4>
+                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">Architecture</span>
+                </div>
+                <p>Directory-as-agent system — cd into a folder and Claude assumes that division's role. Multi-tier CLAUDE.md hierarchy, skill registries, rule inheritance.</p>
+              </div>
+              <div class="project-card" data-eco-modal="nkd-thesis">
+                <div class="project-card-top">
+                  <h4>Living Thesis Pipeline</h4>
+                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">Shell</span>
+                </div>
+                <p>YouTube transcript → Claude extraction → structured knowledge base. Automated prompt-chaining pipeline for continuous learning.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Trading Ecosystem</summary>
+
+            <!-- Architecture Diagram -->
+            <div class="ecosystem-diagram reveal">
+              <svg viewBox="0 0 800 420" class="ecosystem-svg" role="img" aria-label="Trading ecosystem architecture — data flows from sources through the central Data hub to analysis tools and outputs">
+                <defs>
+                  <linearGradient id="eco-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#7b2ff2"/>
+                    <stop offset="100%" stop-color="#00d4ff"/>
+                  </linearGradient>
+                  <filter id="eco-glow">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Connection Lines -->
+                <g class="eco-lines">
+                  <!-- Sources → Hub -->
+                  <path d="M 160 155 C 215 155, 215 210, 270 210" class="eco-line eco-line-in"/>
+                  <path d="M 160 275 C 215 275, 215 210, 270 210" class="eco-line eco-line-in"/>
+                  <!-- Hub → Tools -->
+                  <path d="M 510 195 C 550 195, 555 50, 590 50" class="eco-line eco-line-out"/>
+                  <path d="M 510 200 C 548 200, 555 115, 590 115" class="eco-line eco-line-out"/>
+                  <path d="M 510 207 C 545 207, 555 180, 590 180" class="eco-line eco-line-out"/>
+                  <path d="M 510 220 C 545 220, 555 245, 590 245" class="eco-line eco-line-out"/>
+                  <path d="M 510 230 C 548 230, 555 310, 590 310" class="eco-line eco-line-out"/>
+                  <path d="M 510 240 C 550 240, 555 375, 590 375" class="eco-line eco-line-out"/>
+                </g>
+
+                <!-- Source Nodes -->
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="schwab">
+                  <rect x="10" y="133" width="150" height="44" rx="6"/>
+                  <text x="85" y="158" class="eco-label">Schwab API</text>
+                </g>
+                <g class="eco-node eco-source eco-clickable" data-eco-modal="scout">
+                  <rect x="10" y="253" width="150" height="44" rx="6"/>
+                  <text x="85" y="271" class="eco-label">Scout-Win</text>
+                  <text x="85" y="289" class="eco-sub">X · YouTube · RSS</text>
+                </g>
+
+                <!-- Central Hub -->
+                <g class="eco-node eco-hub eco-clickable" data-eco-modal="data">
+                  <rect x="270" y="170" width="240" height="80" rx="10"/>
+                  <text x="390" y="203" class="eco-hub-label">DATA</text>
+                  <text x="390" y="228" class="eco-sub">33 symbols · SQLite · REST API</text>
+                </g>
+
+                <!-- Tool Nodes -->
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="signal">
+                  <rect x="590" y="30" width="195" height="40" rx="6"/>
+                  <text x="688" y="46" class="eco-label">Signal Engine</text>
+                  <text x="688" y="62" class="eco-sub">15+ algo strategies</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="wingman">
+                  <rect x="590" y="95" width="195" height="40" rx="6"/>
+                  <text x="688" y="111" class="eco-label">Wingman</text>
+                  <text x="688" y="127" class="eco-sub">Trading workstation</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="options">
+                  <rect x="590" y="160" width="195" height="40" rx="6"/>
+                  <text x="688" y="176" class="eco-label">Options-Calc</text>
+                  <text x="688" y="192" class="eco-sub">GEX analysis</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="divergence">
+                  <rect x="590" y="225" width="195" height="40" rx="6"/>
+                  <text x="688" y="248" class="eco-label">Divergence Scanner</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="fibonacci">
+                  <rect x="590" y="290" width="195" height="40" rx="6"/>
+                  <text x="688" y="313" class="eco-label">Fibonacci Backtester</text>
+                </g>
+                <g class="eco-node eco-tool eco-clickable" data-eco-modal="tradingprep">
+                  <rect x="590" y="355" width="195" height="40" rx="6"/>
+                  <text x="688" y="371" class="eco-label">Trading Prep</text>
+                  <text x="688" y="387" class="eco-sub">Claude Code reports</text>
+                </g>
+
+                <!-- Column Labels -->
+                <text x="85" y="118" class="eco-col-label">SOURCES</text>
+                <text x="390" y="158" class="eco-col-label">HUB</text>
+                <text x="688" y="18" class="eco-col-label">TOOLS</text>
+              </svg>
+            </div>
+
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="signal">
+                <div class="project-card-top">
+                  <h4>trade-signal-backend</h4>
+                  <span class="lang-badge lang-js">JavaScript</span>
+                </div>
+                <p>Algorithmic trading engine — 15+ strategies, Claude AI integration, paper trading &amp; alerts.</p>
+              </div>
+              <div class="project-card" data-eco-modal="wingman">
+                <div class="project-card-top">
+                  <h4>wingman</h4>
+                  <span class="lang-badge lang-js">JavaScript</span>
+                </div>
+                <p>AI-assisted trading workstation — dashboard, VWAP + divergence system, backtesting.</p>
+              </div>
+              <div class="project-card" data-eco-modal="options">
+                <div class="project-card-top">
+                  <h4>Options-Calc</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Gamma exposure (GEX) analysis — dealer positioning, call/put walls, AI trade suggestions.</p>
+              </div>
+              <div class="project-card" data-eco-modal="divergence">
+                <div class="project-card-top">
+                  <h4>Divergance-Scanner</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Inter-market divergence scanner — relative strength, correlation breakdowns, sector rotation.</p>
+              </div>
+              <div class="project-card" data-eco-modal="scout">
+                <div class="project-card-top">
+                  <h4>Scout-Win</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Automated market recon — scrapes X, YouTube, RSS into a structured intelligence dashboard.</p>
+              </div>
+              <div class="project-card" data-eco-modal="tradingprep">
+                <div class="project-card-top">
+                  <h4>trading-prep</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Automated pre-market &amp; EOD research reports powered by Claude Code.</p>
+              </div>
+              <div class="project-card" data-eco-modal="buyback">
+                <div class="project-card-top">
+                  <h4>buyback-blackout-analyzer</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Identifies trading opportunities during corporate buyback blackout periods.</p>
+              </div>
+              <div class="project-card" data-eco-modal="fibonacci">
+                <div class="project-card-top">
+                  <h4>fibonacci-backtester</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>DiNapoli Fibonacci levels backtesting against real market data via Schwab API.</p>
+              </div>
+              <div class="project-card" data-eco-modal="mrcrabs">
+                <div class="project-card-top">
+                  <h4>MrCrabs</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Investment research dashboard — market sentiment, metrics &amp; signals.</p>
+              </div>
+              <div class="project-card" data-eco-modal="terminus">
+                <div class="project-card-top">
+                  <h4>TERMINUS</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Price level confluence engine — fuses 11 data sources (gamma, OI, VWAP, Gann, volume profile) into scored institutional levels.</p>
+              </div>
+              <div class="project-card" data-eco-modal="convergence">
+                <div class="project-card-top">
+                  <h4>Convergence Engine</h4>
+                  <span class="lang-badge" style="background: rgba(0,212,255,0.15); color: #00d4ff">System</span>
+                </div>
+                <p>7-dimension capital deployment scoring — thesis conviction, strategy edge, technical setup, cyclical alignment. Quantitative decision science.</p>
+              </div>
+              <div class="project-card" data-eco-modal="prediction">
+                <div class="project-card-top">
+                  <h4>Prediction Market Scanner</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Polymarket scanner — whale tracking, news sentiment, Claude AI probability estimation, Telegram alerts. Multi-criteria confidence gating.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>BigPic Solutions</summary>
+
+            <!-- Organizational Structure Diagram -->
+            <div class="ecosystem-diagram reveal">
+              <svg viewBox="0 0 800 390" class="ecosystem-svg" role="img" aria-label="BigPic Solutions organizational structure — three divisions: Capital, Technology, and CyberCab">
+                <defs>
+                  <linearGradient id="bp-grad" x1="0" y1="0" x2="800" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#7b2ff2"/>
+                    <stop offset="100%" stop-color="#00d4ff"/>
+                  </linearGradient>
+                  <filter id="bp-glow">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Connection Lines: Parent → Divisions -->
+                <g class="eco-lines">
+                  <path d="M 400 75 C 400 102, 135 102, 135 128" class="bp-line bp-line-t1"/>
+                  <path d="M 400 75 C 400 102, 400 102, 400 128" class="bp-line bp-line-t1"/>
+                  <path d="M 400 75 C 400 102, 665 102, 665 128" class="bp-line bp-line-t1"/>
+                </g>
+
+                <!-- Vertical Brackets: Division → Capability columns -->
+                <line x1="18" y1="240" x2="18" y2="378" class="bp-bracket"/>
+                <line x1="283" y1="240" x2="283" y2="378" class="bp-bracket"/>
+                <line x1="548" y1="240" x2="548" y2="378" class="bp-bracket bp-bracket-dev"/>
+
+                <!-- Parent Hub: BigPic Solutions -->
+                <g class="eco-node eco-hub eco-clickable" data-eco-modal="bp-parent">
+                  <rect x="250" y="15" width="300" height="60" rx="12" style="stroke: url(#bp-grad); stroke-width: 2"/>
+                  <text x="400" y="43" class="eco-hub-label">BIGPIC SOLUTIONS</text>
+                  <text x="400" y="62" class="eco-sub">Agentic R&amp;D · Capital · Technology · CyberCab</text>
+                </g>
+
+                <!-- Division: Capital -->
+                <g class="eco-node bp-div eco-source eco-clickable" data-eco-modal="bp-capital">
+                  <rect x="20" y="128" width="230" height="55" rx="8"/>
+                  <text x="135" y="150" class="eco-label">Capital</text>
+                  <text x="135" y="167" class="eco-sub">Investment Operations</text>
+                </g>
+
+                <!-- Division: Technology -->
+                <g class="eco-node bp-div eco-source eco-clickable" data-eco-modal="bp-technology">
+                  <rect x="285" y="128" width="230" height="55" rx="8"/>
+                  <text x="400" y="150" class="eco-label">Technology</text>
+                  <text x="400" y="167" class="eco-sub">IT Services &amp; Security</text>
+                </g>
+
+                <!-- Division: CyberCab -->
+                <g class="eco-node bp-div eco-source bp-dev eco-clickable" data-eco-modal="bp-cybercab">
+                  <rect x="550" y="128" width="230" height="55" rx="8"/>
+                  <text x="665" y="150" class="eco-label">CyberCab</text>
+                  <text x="665" y="166" class="bp-dev-label" style="font-size: 8px; letter-spacing: 0.1em">AUTONOMOUS FLEET · IN DEV</text>
+                </g>
+
+                <!-- Column Labels -->
+                <text x="135" y="230" class="eco-col-label">INVESTMENT</text>
+                <text x="400" y="230" class="eco-col-label">SERVICES</text>
+                <text x="665" y="230" class="eco-col-label">FLEET</text>
+
+                <!-- Capabilities: Capital -->
+                <g class="eco-node bp-cap eco-tool eco-clickable" data-eco-modal="bp-trading">
+                  <rect x="20" y="240" width="230" height="40" rx="6"/>
+                  <text x="135" y="256" class="eco-label">Trading Systems</text>
+                  <text x="135" y="270" class="eco-sub">HERMES · TERMINUS · Strategies</text>
+                </g>
+                <g class="eco-node bp-cap-2 eco-tool eco-clickable" data-eco-modal="bp-intelligence">
+                  <rect x="20" y="290" width="230" height="40" rx="6"/>
+                  <text x="135" y="306" class="eco-label">Market Intelligence</text>
+                  <text x="135" y="320" class="eco-sub">Wingman · Scanners · APIs</text>
+                </g>
+                <g class="eco-node bp-cap-3 eco-tool eco-clickable" data-eco-modal="bp-research">
+                  <rect x="20" y="340" width="230" height="40" rx="6"/>
+                  <text x="135" y="356" class="eco-label">Research &amp; Publishing</text>
+                  <text x="135" y="370" class="eco-sub">9 Theses · Eagle Eye · Briefs</text>
+                </g>
+
+                <!-- Capabilities: Technology -->
+                <g class="eco-node bp-cap eco-tool eco-clickable" data-eco-modal="bp-pentester">
+                  <rect x="285" y="240" width="230" height="40" rx="6"/>
+                  <text x="400" y="256" class="eco-label">Pentester Platform</text>
+                  <text x="400" y="270" class="eco-sub">Automated Security Assessments</text>
+                </g>
+                <g class="eco-node bp-cap-2 eco-tool eco-clickable" data-eco-modal="bp-consulting">
+                  <rect x="285" y="290" width="230" height="40" rx="6"/>
+                  <text x="400" y="306" class="eco-label">IT Consulting</text>
+                  <text x="400" y="320" class="eco-sub">Remote Infrastructure &amp; Cloud</text>
+                </g>
+                <g class="eco-node bp-cap-3 eco-tool eco-clickable" data-eco-modal="bp-automation">
+                  <rect x="285" y="340" width="230" height="40" rx="6"/>
+                  <text x="400" y="356" class="eco-label">AI Automation</text>
+                  <text x="400" y="370" class="eco-sub">Workflow &amp; Process Automation</text>
+                </g>
+
+                <!-- Capabilities: CyberCab -->
+                <g class="eco-node bp-cap eco-tool bp-dev eco-clickable" data-eco-modal="bp-revenue">
+                  <rect x="550" y="240" width="230" height="40" rx="6"/>
+                  <text x="665" y="256" class="eco-label">Revenue Modeling</text>
+                  <text x="665" y="270" class="eco-sub">Unit Economics · ROI Analysis</text>
+                </g>
+                <g class="eco-node bp-cap-2 eco-tool bp-dev eco-clickable" data-eco-modal="bp-fleet">
+                  <rect x="550" y="290" width="230" height="40" rx="6"/>
+                  <text x="665" y="306" class="eco-label">Fleet Planning</text>
+                  <text x="665" y="320" class="eco-sub">Acquisition · Operations</text>
+                </g>
+                <g class="eco-node bp-cap-3 bp-dev">
+                  <rect x="550" y="340" width="230" height="40" rx="6" style="fill: rgba(255, 193, 7, 0.06)"/>
+                  <text x="665" y="364" class="bp-dev-label" style="font-size: 10px; letter-spacing: 0.2em; opacity: 0.8">LAUNCHING 2026</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="bp-capital">
+                <div class="project-card-top">
+                  <h4>BigPic Capital</h4>
+                </div>
+                <p>AI-native investment OS — trading agents, verified strategies, 9 sector theses, published research at markets.bigpicsolutions.com.</p>
+              </div>
+              <div class="project-card" data-eco-modal="bp-technology">
+                <div class="project-card-top">
+                  <h4>BigPic Technology</h4>
+                </div>
+                <p>IT consulting &amp; security — automated pentesting platform, AI automation, remote infrastructure. 25+ years expertise.</p>
+              </div>
+              <div class="project-card" data-eco-modal="bp-cybercab">
+                <div class="project-card-top">
+                  <h4>BigPic CyberCab</h4>
+                  <span class="lang-badge" style="background: rgba(255,193,7,0.15); color: #ffc107">In Dev</span>
+                </div>
+                <p>Autonomous vehicle fleet — Tesla CyberCab revenue modeling, unit economics &amp; fleet planning.</p>
+              </div>
+              <div class="project-card" data-eco-modal="bp-invoicing">
+                <div class="project-card-top">
+                  <h4>Invoicing Platform</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Flask + Stripe invoicing system — client management, PDF generation, QR payment links, lead pipeline. Production business tool.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Cybersecurity</summary>
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="cyberdefense">
+                <div class="project-card-top">
+                  <h4>Cyber Defense Command Center</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Distributed security platform — Python scanning agents, Node.js REST API, React dashboard. Network discovery, vuln detection, DNS monitoring.</p>
+              </div>
+              <div class="project-card" data-eco-modal="pentester">
+                <div class="project-card-top">
+                  <h4>Pentester Platform</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>4-tool CLI security suite — automated scans, CVSS classification, compliance-mapped reports (PCI DSS, HIPAA). Nmap, Nuclei, Ansible.</p>
+              </div>
+              <div class="project-card" data-eco-modal="cybersectools">
+                <div class="project-card-top">
+                  <h4>CyberSec Tools</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>8 hand-written offensive security tools — port scanner, SSH brute forcer, hash cracker, WiFi cracker, subdomain &amp; directory enumeration.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>AI &amp; Voice Tools</summary>
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="wmvoice">
+                <div class="project-card-top">
+                  <h4>WM-Voice</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Hands-free Linux voice assistant — Claude Agent SDK, Whisper STT, Kokoro TTS.</p>
+              </div>
+              <div class="project-card" data-eco-modal="videototext">
+                <div class="project-card-top">
+                  <h4>VideoToText</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Download and transcribe X/Twitter videos using OpenAI Whisper.</p>
+              </div>
+              <div class="project-card" data-eco-modal="swarmai">
+                <div class="project-card-top">
+                  <h4>Swarm-AI</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Service DAO blueprint for an AI-augmented vibe-coding freelancer collective.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Interactive Experiences</summary>
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="book">
+                <div class="project-card-top">
+                  <h4>Book</h4>
+                  <span class="lang-badge lang-js">JavaScript</span>
+                </div>
+                <p>"Enter Zen From There" — WebGL portal linking three interactive sub-projects.</p>
+              </div>
+              <div class="project-card" data-eco-modal="zen">
+                <div class="project-card-top">
+                  <h4>Zen</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>Interactive Zen meditation — breathing guide, sand garden, ambient sounds, timer.</p>
+              </div>
+              <div class="project-card" data-eco-modal="ancients">
+                <div class="project-card-top">
+                  <h4>Ancients</h4>
+                  <span class="lang-badge lang-js">JavaScript</span>
+                </div>
+                <p>Interactive history timeline — WebGL cosmic portal, alternative civilization theories.</p>
+              </div>
+              <div class="project-card" data-eco-modal="breakthecode">
+                <div class="project-card-top">
+                  <h4>BreakTheCode</h4>
+                  <span class="lang-badge lang-html">HTML</span>
+                </div>
+                <p>"Breaking Your Genetic Code" — immersive digital book on consciousness expansion.</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Research &amp; Analysis</summary>
+            <div class="project-cards">
+              <div class="project-card" data-eco-modal="twitteralgo">
+                <div class="project-card-top">
+                  <h4>twitter-algorithm-analysis</h4>
+                  <span class="lang-badge lang-rust">Rust</span>
+                </div>
+                <p>Decompiled X's "For You" algorithm — actionable posting rules and scoring formulas.</p>
+              </div>
+              <div class="project-card" data-eco-modal="zolseason">
+                <div class="project-card-top">
+                  <h4>ZOLSEASON</h4>
+                </div>
+                <p>Privacy-preserving bridge concept uniting Zcash and Solana.</p>
+              </div>
+              <div class="project-card" data-eco-modal="sandbox">
+                <div class="project-card-top">
+                  <h4>Quantitative Research Lab</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>31K lines — 39-ticker universe, regime detection, signal discovery with Newey-West corrections, bootstrap validation. 5 confirmed signals.</p>
+              </div>
+              <div class="project-card" data-eco-modal="breadth">
+                <div class="project-card-top">
+                  <h4>Breadth-Exhaustion-Signal</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>Market breadth research — 27 years NYSE data, Monte Carlo null hypothesis testing, p&lt;0.05 confirmed. Modular Python architecture.</p>
+              </div>
+              <div class="project-card" data-eco-modal="gann">
+                <div class="project-card-top">
+                  <h4>Gann Square of Nine</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>56KB backtester — 6 Gann techniques vs 33 years SPY data. z=+9.51 (p=0.0000), Monte Carlo validated. Century-old theory, modern rigor.</p>
+              </div>
+              <div class="project-card" data-eco-modal="meanrevert">
+                <div class="project-card-top">
+                  <h4>Mean Reversion Lab</h4>
+                  <span class="lang-badge lang-py">Python</span>
+                </div>
+                <p>PineScript + Python walk-forward — 20,736 parameter sweep, 81.2% WR across 203 trades, out-of-sample validated at 84.3%.</p>
+              </div>
+            </div>
+          </details>
+
+        </div>
+
+        <!-- ====== Labs & Learning Resources ====== -->
+        <div class="projects-divider reveal"></div>
+        <div class="projects-header reveal">
+          <span class="section-label">Skill Building</span>
+          <h3 class="section-subheading">Labs &amp; Learning Resources</h3>
+        </div>
+        <div class="projects-accordion reveal-stagger">
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Fundamentals</summary>
+            <ul class="project-links">
+              <li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnlCJiCrOYuRYb6cne864a7G" target="_blank" rel="noopener">Professor Messer - N10-008 Net+ Training Course</a></li>
+              <li><a href="https://youtube.com/playlist?list=PLG49S3nxzAnkL2ulFS3132mOVKuzzBxA8" target="_blank" rel="noopener">Professor Messer - Sec+ SY0-601 Training Course</a></li>
+              <li>
+                <a href="https://youtube.com/playlist?list=PLlVtbbG169nED0_vMEniWBQjSoxTsBYS3" target="_blank" rel="noopener">AZ-900 | Azure Fundamentals Certification Course</a>
+                <ul><li><a href="https://github.com/DaryllGomas/Documents/blob/main/Cloud/AZ-900_MS-Learn_Notes.pdf" target="_blank" rel="noopener">My Notion Notes (Documentation Practice)</a></li></ul>
+              </li>
+              <li>
+                <a href="https://youtu.be/u4VWQZ8KLmI" target="_blank" rel="noopener">Become an Ethical Hacker for $0 — @thecybermentor</a>
+                <ul><li><a href="https://github.com/DaryllGomas/Documents/blob/main/CyberSecurity/Becoming_a_Ethical_Hacker_for_0.pdf" target="_blank" rel="noopener">My Notion Notes (Documentation Practice)</a></li></ul>
+              </li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>CyberSecurity</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/RoZeVbbZ0o0" target="_blank" rel="noopener">SIEM Tutorial with Live Attacks (Azure Sentinel) — @JoshMadakor</a></li>
+              <li><a href="https://youtu.be/lT6Px9zJM3s" target="_blank" rel="noopener">Vulnerability Management (Nessus) — @JoshMadakor</a></li>
+              <li><a href="https://youtu.be/P85L2vwmBKA" target="_blank" rel="noopener">Build a CyberSecurity Lab — @collinsinfosec</a></li>
+              <li><a href="https://youtube.com/playlist?list=PLDqMNdDvMsRkmtiKcZwbhOz7MeLQE0r3G" target="_blank" rel="noopener">Cybersecurity Detection &amp; Monitoring Lab — @daycyberwox</a></li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Cloud &amp; Virtualization</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/apC1bOLbzbY" target="_blank" rel="noopener">Docker Fundamentals — @adriancantrill</a></li>
+              <li><a href="https://youtu.be/VIMaFk-R9xQ" target="_blank" rel="noopener">Linux Lab in the Azure Cloud — @NetworkChuck</a></li>
+              <li><a href="https://youtu.be/9J_yjmzCavg" target="_blank" rel="noopener">Virtualize Mac OS</a></li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Network &amp; Administration</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/MHsI8hJmggI" target="_blank" rel="noopener">Setup AD and Add Users with PowerShell — @JoshMadakor</a></li>
+              <li><a href="https://youtu.be/r8UOKHCQEW8" target="_blank" rel="noopener">Host a Website on Windows Server 2016/2019</a></li>
+              <li><a href="https://tryhackme.com/room/winadbasics" target="_blank" rel="noopener">TryHackMe — Active Directory Basics</a></li>
+            </ul>
+          </details>
+
+          <details class="project-category reveal">
+            <summary><span class="category-marker"></span>Linux &amp; Coding</summary>
+            <ul class="project-links">
+              <li><a href="https://youtu.be/rZsJieGi8os" target="_blank" rel="noopener">Linux for Ethical Hackers — @thecybermentor</a></li>
+              <li><a href="https://youtu.be/kqtD5dpn9C8" target="_blank" rel="noopener">Python for Beginners — Learn Python in 1 Hour</a></li>
+              <li><a href="https://youtu.be/be4W-pSk8Ac" target="_blank" rel="noopener">Linux Home Lab Server — @christian_tdl</a></li>
+              <li><a href="https://youtube.com/playlist?list=PLw78nfbi6DWjX8ephtrITEqdnWL1wv8qC" target="_blank" rel="noopener">CompTIA Linux+ Breakdowns and Labs — @JBizzle703</a></li>
+            </ul>
+          </details>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER / CONTACT
+         ============================================ -->
+    <footer class="section footer" id="contact">
+      <div class="container">
+        <div class="footer-content reveal">
+          <span class="section-label">Get In Touch</span>
+          <h2 class="section-heading">Let's Connect</h2>
+          <div class="footer-links">
+            <a href="https://twitter.com/DaryllGomas" target="_blank" rel="noopener" aria-label="Twitter">
+              <svg viewBox="0 0 24 24"><path d="M4 4l11.7 16h4.3L8.3 4H4zm2.1 1h1.9l9.9 14h-1.9L6.1 5z"/><line x1="4" y1="20" x2="10" y2="13"/><line x1="20" y1="4" x2="14" y2="11"/></svg>
+              <span>X / Twitter</span>
+            </a>
+            <a href="https://www.linkedin.com/in/daryll-gomas" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://github.com/DaryllGomas" target="_blank" rel="noopener" aria-label="GitHub">
+              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              <span>GitHub</span>
+            </a>
+            <a href="mailto:daryll.gomas@gmail.com" aria-label="Email">
+              <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,7 12,13 2,7"/></svg>
+              <span>Email</span>
+            </a>
+          </div>
+          <div class="footer-external">
+            <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener">BigPic Solutions</a>
+            <span class="footer-divider" aria-hidden="true"></span>
+            <a href="https://www.justsomedude.org/" target="_blank" rel="noopener">justsomedude.org</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 Daryll Gomas</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- ============================================
+         SKILL MODALS
+         ============================================ -->
+    <div class="skill-modal-overlay" id="skill-modal-overlay">
+
+      <div class="skill-modal" id="modal-networking">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Networking</h3>
+        <span class="skill-modal-pct">85% — Architecture Capable</span>
+        <p>Operating comfortably at architecture level. Not just configuring — thinking structurally.</p>
+        <ul>
+          <li>SonicWall firewall configuration and management</li>
+          <li>VLAN design and network segmentation strategy</li>
+          <li>DNS architecture including Synology as backup DNS</li>
+          <li>MSP multi-site network awareness</li>
+          <li>Packet inspection concepts</li>
+          <li>Security-first network design philosophy</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-cybersecurity">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>CyberSecurity</h3>
+        <span class="skill-modal-pct">75% — Strong Defensive Mindset</span>
+        <p>Consistently thinking in terms of attack surface and defense. Strong blue-team architecture brain.</p>
+        <ul>
+          <li>2FA enforcement across M365 and Authenticator</li>
+          <li>Firewall upgrades for security posture improvement</li>
+          <li>Vulnerability scanning VM architecture</li>
+          <li>SIEM implementation and discussion</li>
+          <li>Zero-cloud AI inference for data control</li>
+          <li>Incident response mindset — dealt with real attacks</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-virtualization">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Virtualization</h3>
+        <span class="skill-modal-pct">80% — Infrastructure Fluent</span>
+        <p>Understanding virtualization as infrastructure, not just lab usage.</p>
+        <ul>
+          <li>Hyper-V including performance troubleshooting</li>
+          <li>Linux VM deployment and management</li>
+          <li>Synology VM environments</li>
+          <li>Multi-GPU LLM servers in Docker</li>
+          <li>Cross-platform Mac/Windows virtualization needs</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-cloud">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Cloud</h3>
+        <span class="skill-modal-pct">70% — Hybrid-Heavy Strength</span>
+        <p>Leaning hybrid/on-prem secure architecture more than pure cloud-native SaaS engineering.</p>
+        <ul>
+          <li>Microsoft 365 tenant management</li>
+          <li>Entra integration concepts</li>
+          <li>Multi-tenant management strategy</li>
+          <li>Authentication models and identity sync</li>
+          <li>Hybrid cloud architecture planning</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-syseng">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Systems Engineering</h3>
+        <span class="skill-modal-pct">88% — Core Competency</span>
+        <p>This is not IT support. This is infrastructure systems engineering. 25+ years of cross-platform systems work.</p>
+        <ul>
+          <li>Windows, macOS, and Linux administration</li>
+          <li>DNS and domain consolidation planning</li>
+          <li>Infrastructure modernization strategy</li>
+          <li>RAID decisions and storage architecture</li>
+          <li>Identity architecture and access management</li>
+          <li>Automation mindset across all platforms</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-blockchain">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Blockchain</h3>
+        <span class="skill-modal-pct">65% — Investor + Systems Awareness</span>
+        <p>Understanding the ecosystem at a structural and capital allocation level.</p>
+        <ul>
+          <li>What a blockchain is (distributed ledger, consensus, immutability)</li>
+          <li>Difference between Bitcoin-style monetary chains and smart contract platforms</li>
+          <li>Market cycles and volatility mechanics</li>
+          <li>Token economics at a macro level</li>
+          <li>Layer 1 vs Layer 2 concepts</li>
+          <li>Custody risks (self-custody vs exchange risk)</li>
+          <li>Why decentralization matters (and where it's overstated)</li>
+        </ul>
+      </div>
+
+      <div class="skill-modal" id="modal-ai">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Artificial Intelligence</h3>
+        <span class="skill-modal-pct">75% — Builder + Deployer</span>
+        <p>Not just using AI — deploying it on infrastructure, building with it, and thinking about where it's going.</p>
+        <ul>
+          <li>LLM deployment on local infrastructure</li>
+          <li>Multi-GPU server builds for AI inference</li>
+          <li>AI-assisted automation and workflow design</li>
+          <li>Secure on-prem AI for data sovereignty</li>
+          <li>Strategic understanding of the AI landscape</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- ============================================
+         ECOSYSTEM MODALS
+         ============================================ -->
+    <div class="skill-modal-overlay" id="eco-modal-overlay">
+
+      <div class="skill-modal" id="eco-modal-schwab">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Schwab API</h3>
+        <span class="skill-modal-pct">Data Source</span>
+        <p>The primary external data feed powering the entire trading ecosystem. Provides real-time and historical market data across multiple asset classes.</p>
+        <ul>
+          <li>Real-time price data for stocks, ETFs, and options</li>
+          <li>Historical OHLCV data for backtesting strategies</li>
+          <li>Options chains with Greeks, IV, and open interest</li>
+          <li>Account and position data for portfolio tracking</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds into &rarr; DATA hub, Options-Calc</span>
+        <span class="eco-modal-repo eco-external">External Service</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-scout">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Scout-Win</h3>
+        <span class="skill-modal-pct">Intelligence Gathering</span>
+        <p>Automated market reconnaissance system that scrapes multiple sources and generates a structured intelligence dashboard for daily trading decisions.</p>
+        <ul>
+          <li>Scrapes X/Twitter for market sentiment and breaking news</li>
+          <li>Monitors YouTube for analyst commentary and trade ideas</li>
+          <li>Aggregates RSS feeds from financial news sources</li>
+          <li>Generates a consolidated dashboard (dash.html) for morning prep</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds into &rarr; DATA hub, Trading Prep</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-data">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>DATA</h3>
+        <span class="skill-modal-pct">Central Hub &mdash; The Backbone</span>
+        <p>The shared data backbone that every other tool in the ecosystem queries. Collects, processes, and stores market data from multiple sources, then exposes it via REST API.</p>
+        <ul>
+          <li>Tracks 33 symbols across ETFs and individual stocks</li>
+          <li>Stores price data, IV/HV, VIX, and volume in SQLite</li>
+          <li>Processes RSS feeds and YouTube content metadata</li>
+          <li>REST API (port 3000/3443) for all downstream tools</li>
+          <li>Matrix-style web interface for direct data exploration</li>
+        </ul>
+        <span class="skill-modal-tagline">Every tool in the ecosystem connects here</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-signal">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Signal Engine</h3>
+        <span class="skill-modal-pct">trade-signal-backend &mdash; Algorithmic Core</span>
+        <p>The algorithmic trading engine at the heart of the platform. Runs 15+ strategies with multi-timeframe analysis and Claude AI integration for intelligent trade vetting.</p>
+        <ul>
+          <li>15+ strategies: ORB, Golden Setup, VWAP Reversion, Mean Reversion, and more</li>
+          <li>Multi-timeframe analysis across intraday and swing periods</li>
+          <li>Claude AI integration for trade veto and learning loop</li>
+          <li>Paper trading with realistic slippage modeling</li>
+          <li>Real-time alerts via SSE, Discord, and Telegram</li>
+          <li>SQLite backend with 40+ tables tracking strategy performance</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub &nbsp;|&nbsp; Outputs &rarr; Wingman, Alerts</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-wingman">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Wingman</h3>
+        <span class="skill-modal-pct">AI-Assisted Trading Workstation</span>
+        <p>The comprehensive trading dashboard and daily command center. Combines all strategies, analysis tools, and market data into a single AI-assisted workstation.</p>
+        <ul>
+          <li>Full web dashboard with strategy views and daily workflows</li>
+          <li>VWAP + Divergence integrated trading system</li>
+          <li>Built-in backtesting tools for strategy validation</li>
+          <li>Earnings scanner for upcoming catalysts</li>
+          <li>Daily workflow pages for structured pre-market and EOD routines</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub, Signal Engine</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-options">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Options-Calc</h3>
+        <span class="skill-modal-pct">Gamma Exposure Analysis</span>
+        <p>Schwab Trading Dashboard focused on gamma exposure (GEX) analysis. Shows where market makers are positioned and where price is likely to pin, reverse, or accelerate.</p>
+        <ul>
+          <li>Dealer positioning and gamma exposure visualization</li>
+          <li>Call/put walls and gamma flip level detection</li>
+          <li>0DTE expected move calculations</li>
+          <li>AI-powered (Claude) trade setup suggestions</li>
+          <li>Real-time data streaming from Schwab API + Yahoo</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub, Schwab API</span>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-divergence">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Divergence Scanner</h3>
+        <span class="skill-modal-pct">Inter-Market Analysis</span>
+        <p>Real-time scanner that detects relative strength shifts, correlation breakdowns, and sector rotation signals across markets. Catches moves before they become obvious.</p>
+        <ul>
+          <li>Real-time inter-market divergence detection</li>
+          <li>Relative strength shift identification</li>
+          <li>Correlation breakdown alerts</li>
+          <li>Sector rotation heatmap visualization</li>
+          <li>3-tier alert system with SQLite persistence</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub (Schwab API)</span>
+        <a href="https://github.com/Namkuzu-da-OS/Divergance-Scanner" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-fibonacci">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Fibonacci Backtester</h3>
+        <span class="skill-modal-pct">Strategy Validation</span>
+        <p>Backtesting system for DiNapoli Fibonacci Levels — testing the methodology against real market data to validate entry and exit strategies.</p>
+        <ul>
+          <li>DiNapoli Fibnodes, Confluence, and Agreement analysis</li>
+          <li>Objective profit points based on Fibonacci extensions</li>
+          <li>Historical backtesting against real Schwab API data</li>
+          <li>Performance metrics and win-rate analysis</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub (historical data)</span>
+        <a href="https://github.com/Namkuzu-da-OS/fibonacci-backtester" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-tradingprep">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Trading Prep</h3>
+        <span class="skill-modal-pct">Research Automation</span>
+        <p>Automated pre-market and end-of-day research report generator. Uses Claude Code to synthesize market data, signals, and intelligence into actionable daily briefs.</p>
+        <ul>
+          <li>Automated pre-market morning research reports</li>
+          <li>End-of-day recap and performance analysis</li>
+          <li>Powered by Claude Code with custom prompt templates</li>
+          <li>Shell scripts for scheduled report generation</li>
+        </ul>
+        <span class="skill-modal-tagline">Queries &larr; DATA hub, Scout-Win, Signal Engine</span>
+        <a href="https://github.com/Namkuzu-da-OS/trading-prep" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <!-- Namkuzu-da OS modals -->
+      <div class="skill-modal" id="eco-modal-nkd-os">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Namkuzu-da OS</h3>
+        <span class="skill-modal-pct">AI-Native Operating System</span>
+        <p>A custom AI-powered computing environment built on Ubuntu 24.04 LTS with Claude Code as the orchestration brain. Designed for accessibility (hands-free operation) with voice control, automated pipelines, and agentic AI driving every workflow.</p>
+        <ul>
+          <li>Claude Code as system brain — xdotool, wmctrl, scrot for desktop control</li>
+          <li>8 automated cron pipelines (market analysis, research, backups)</li>
+          <li>RTX 3070 Ti with CUDA for local AI inference</li>
+          <li>4-monitor workstation with night/day display modes</li>
+          <li>Custom systemd services, shell toolbox, and Chrome extensions</li>
+          <li>Synology NAS nightly backups with email alerts</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-voice">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Voice Input</h3>
+        <span class="skill-modal-pct">Speech → Transcription → Claude</span>
+        <p>Hands-free voice input layer. Spoken commands are captured by the microphone, transcribed in real-time using CUDA-accelerated Whisper, and fed directly into Claude Code for processing and action.</p>
+        <ul>
+          <li>WM-Voice — Faster-Whisper (large-v3-turbo) + Silero VAD</li>
+          <li>Whisper Writer — hotkey dictation to any application via Insert key</li>
+          <li>RTX 3070 Ti CUDA acceleration for real-time transcription</li>
+          <li>Accessibility-first — designed for hands-free operation</li>
+          <li>Voice output via Kokoro TTS feeds back through System Control</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-marketdata">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Market Data</h3>
+        <span class="skill-modal-pct">APIs · RSS · Economic Data</span>
+        <p>The raw data pipeline feeding the brain. Market quotes, news feeds, and economic indicators flow in on automated schedules — 26 RSS feeds, Schwab broker API, and FRED economic data.</p>
+        <ul>
+          <li>Schwab API proxy at 192.168.10.60 — real-time quotes &amp; technicals</li>
+          <li>26 RSS feeds — financial news, sector coverage, macro analysis</li>
+          <li>FRED API — economic indicators and macro data</li>
+          <li>33 tracked symbols across sectors</li>
+          <li>Collected automatically by cron at 4:30 AM Mon–Fri</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds Morning Briefs, Eagle Eye &amp; Trading Prep</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-web">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Web &amp; Research</h3>
+        <span class="skill-modal-pct">YouTube · Browser · Inbox</span>
+        <p>Web content and research inputs that feed the knowledge system. YouTube transcripts, browser research, and inbox files are routed through Claude for extraction, analysis, and integration.</p>
+        <ul>
+          <li>Living Thesis Chrome extension — one-click YouTube transcript capture</li>
+          <li>Native messaging bridge from browser → Claude Code</li>
+          <li>Inbox file processing via /inbox skill</li>
+          <li>Web research amplification via /enhance skill</li>
+          <li>Polymarket prediction data via /predict skill</li>
+        </ul>
+        <span class="skill-modal-tagline">Feeds Knowledge Base &amp; Research Pipeline</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-terminal">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Terminal Stack</h3>
+        <span class="skill-modal-pct">GPU-Accelerated Development Environment</span>
+        <p>A modern, GPU-accelerated terminal environment optimized for AI-assisted development. Multiple panes for Claude Code, file management, and shell access.</p>
+        <ul>
+          <li>Wezterm — GPU-accelerated terminal with Tokyo Night theme</li>
+          <li>Zellij — terminal multiplexer with dev.kdl layout</li>
+          <li>Starship — cross-shell prompt with git integration</li>
+          <li>Yazi — terminal file manager with previews</li>
+          <li>Modern CLI: eza, bat, fzf, zoxide, fd, ripgrep</li>
+        </ul>
+        <span class="skill-modal-tagline">Core Development Interface</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-display">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Display System</h3>
+        <span class="skill-modal-pct">4-Monitor Workstation</span>
+        <p>A multi-monitor command center managed via xrandr with automated display modes for extended trading and development sessions.</p>
+        <ul>
+          <li>Primary: 1440p center (DP-0) — main workspace</li>
+          <li>Top: 1440p (HDMI-0) — video and night mode display</li>
+          <li>Sides: dual 1080p portrait (DP-3, DP-5)</li>
+          <li>Night mode: reduced brightness + amber gamma tint</li>
+          <li>Day mode: full brightness + normal gamma</li>
+        </ul>
+        <span class="skill-modal-tagline">Custom xrandr + Gamma Scripts</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-pipelines">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Published Intelligence</h3>
+        <span class="skill-modal-pct">8 Automated Cron Jobs → Live Reports</span>
+        <p>The brain's primary output. Market data flows in, Claude Opus analyzes it, writes institutional-quality reports, and publishes them to the web — all autonomously on schedule, zero human intervention.</p>
+        <ul>
+          <li>4:30 AM — Morning Brief: 26 RSS feeds + Schwab API → Claude analysis → HTML publish</li>
+          <li>4:30 AM — Trading Prep: pre-market structure analysis</li>
+          <li>5:00 AM — Auto-inject into BigPic Capital daily notes</li>
+          <li>4:00 PM Sun — Eagle Eye: weekly macro cycle report</li>
+          <li>5:00 PM Sun — Auto-inject weekly notes</li>
+          <li>Every 15 min — Google Drive sync + GPU health monitoring</li>
+        </ul>
+        <span class="skill-modal-tagline">Zero-Touch Daily Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-knowledge">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Knowledge System</h3>
+        <span class="skill-modal-pct">Living Thesis · Research Synthesis</span>
+        <p>An automated knowledge management pipeline. One-click YouTube transcript extraction flows through Claude-powered analysis into a structured, evolving knowledge base.</p>
+        <ul>
+          <li>Living Thesis Chrome extension — one-click YouTube → knowledge base</li>
+          <li>4-stage pipeline: validate → download → extract → incorporate</li>
+          <li>Native messaging bridge from browser to Claude</li>
+          <li>Topic synthesis and cross-referencing via Claude</li>
+          <li>Zero-prompt automation — fully hands-off after click</li>
+        </ul>
+        <span class="skill-modal-tagline">Browser → Claude → Knowledge Base</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-services">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>System Services</h3>
+        <span class="skill-modal-pct">Backup · Bluetooth · GPU Monitoring</span>
+        <p>Custom systemd services and automation scripts that keep the workstation running reliably. Nightly backups, auto-connecting peripherals, and hardware monitoring.</p>
+        <ul>
+          <li>Nightly rsync backup to Synology NAS with email alerts on failure</li>
+          <li>Bluetooth auto-switch — D-Bus monitoring for A2DP headset connect</li>
+          <li>GPU health monitor — RTX 3070 Ti temp/utilization logged every 15 min</li>
+          <li>Google Drive mount via rclone (full VFS cache, 720h retention)</li>
+          <li>Realtek BT adapter fix — modprobe reload at boot</li>
+        </ul>
+        <span class="skill-modal-tagline">Systemd + Custom Shell Toolbox</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-control">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>System Control</h3>
+        <span class="skill-modal-pct">Voice TTS · Desktop · Display</span>
+        <p>The brain's physical output layer. Claude controls the workstation — speaking responses via Kokoro TTS, manipulating windows and applications, and managing the 4-monitor display environment.</p>
+        <ul>
+          <li>Kokoro TTS — Claude speaks responses aloud via Docker container</li>
+          <li>xdotool + wmctrl — window management and keyboard automation</li>
+          <li>scrot — screenshot capture for visual context</li>
+          <li>4-monitor xrandr control with night/day gamma modes</li>
+          <li>Systemd services: backup, Bluetooth auto-switch, GPU monitoring</li>
+          <li>Synology NAS nightly rsync with email alerts on failure</li>
+        </ul>
+        <span class="skill-modal-tagline">Brain → Physical World</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-gdrive">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Cloud & Network</h3>
+        <span class="skill-modal-pct">Google Drive · LAN APIs · Scanner Infrastructure</span>
+        <p>The distributed data layer. Google Drive mounts via rclone feed all three BigPic divisions into the brain, while local network APIs serve real-time market and scanner data from dedicated machines.</p>
+        <ul>
+          <li>rclone — 2 Google Drive mounts (BigPic Capital &amp; Technology)</li>
+          <li>Options API — GEX analysis, dealer positioning (dedicated LAN server)</li>
+          <li>Intel API — market intelligence aggregation (dedicated LAN server)</li>
+          <li>Scanner API — divergence &amp; momentum scanning (secondary LAN node)</li>
+          <li>Synology NAS — nightly rsync backup with failure alerts</li>
+        </ul>
+        <span class="skill-modal-tagline">Cloud + LAN → Brain</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-alerts">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Alerts & Delivery</h3>
+        <span class="skill-modal-pct">Email · Google Drive · Automated Notifications</span>
+        <p>The outbound delivery system. Automated pipelines push finished intelligence products to email, save reports to Google Drive for team access, and trigger notifications when critical market events fire.</p>
+        <ul>
+          <li>msmtp — sends automated reports to daryll@bigpicsolutions.com</li>
+          <li>Google Drive export — morning briefs, EOD summaries, research saved to shared folders</li>
+          <li>Cron-triggered alerts — pre-market (5:45 AM), EOD (4:15 PM), weekend research</li>
+          <li>Error alerting — NAS backup failures, service health, pipeline errors</li>
+          <li>Webhook integrations — future Slack/Discord delivery planned</li>
+        </ul>
+        <span class="skill-modal-tagline">Brain → World</span>
+      </div>
+
+      <!-- Namkuzu-da OS — additional modals -->
+      <div class="skill-modal" id="eco-modal-nkd-orchestration">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Agentic Business Orchestration</h3>
+        <span class="skill-modal-pct">Directory-as-Agent Architecture</span>
+        <p>A multi-tier system where Google Drive directories become autonomous AI-managed business units. Each directory has a CLAUDE.md that auto-loads context — cd into a folder and Claude assumes that division's role. An orchestrator layer coordinates across divisions with rule inheritance, skill registries, and shared infrastructure.</p>
+        <ul>
+          <li>Multi-tier CLAUDE.md hierarchy — root orchestrator inherits rules to all divisions</li>
+          <li>16 specialized Claude Code skills (/hermes, /pulse, /predict, /kungfu, /analyst, etc.)</li>
+          <li>Google Drive as shared skill library synced via rclone FUSE mounts</li>
+          <li>Automatic role-switching — context changes based on working directory</li>
+          <li>Cross-division coordination — Capital, Technology, CyberCab share infrastructure</li>
+          <li>Experimental agent teams for multi-agent workflows</li>
+        </ul>
+        <span class="skill-modal-tagline">Filesystem as Org Chart</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-nkd-thesis">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Living Thesis Pipeline</h3>
+        <span class="skill-modal-pct">Knowledge Management Automation</span>
+        <p>A two-stage Claude Code pipeline that takes unstructured video content and integrates it into a structured research corpus. Stage 1 downloads YouTube transcripts and extracts key claims. Stage 2 incorporates extracted claims into a topic-organized knowledge base.</p>
+        <ul>
+          <li>YouTube transcript download and validation</li>
+          <li>Claude-powered key claims extraction (Stage 1)</li>
+          <li>Structured knowledge base integration (Stage 2)</li>
+          <li>Topic-organized research corpus with cross-references</li>
+          <li>Error handling, cleanup traps, and logging</li>
+          <li>Feeds the morning brief and research report pipelines</li>
+        </ul>
+        <span class="skill-modal-tagline">Unstructured → Structured Knowledge</span>
+      </div>
+
+      <!-- Trading Ecosystem — additional modals -->
+      <div class="skill-modal" id="eco-modal-buyback">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Buyback Blackout Analyzer</h3>
+        <span class="skill-modal-pct">Quantitative Analysis</span>
+        <p>Identifies trading opportunities during corporate buyback blackout periods — windows when companies halt share repurchases before earnings, creating predictable price patterns.</p>
+        <ul>
+          <li>Analyzes historical price data during blackout windows</li>
+          <li>Detects predictable patterns when large buyback programs pause</li>
+          <li>Quantifies edge from reduced institutional buying pressure</li>
+          <li>Integrated with Schwab API for real-time data</li>
+        </ul>
+        <a href="https://github.com/Namkuzu-da-OS/buyback-blackout-analyzer" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-mrcrabs">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>MrCrabs</h3>
+        <span class="skill-modal-pct">Investment Research Dashboard</span>
+        <p>A single-page investment research dashboard displaying real-time market sentiment, metrics, and research signals. Named with the right energy for the mission.</p>
+        <ul>
+          <li>Market sentiment cards for equities, crypto, liquidity, macro</li>
+          <li>Structured research data and signal tracking</li>
+          <li>YAML-based master plan with real-time market signals</li>
+        </ul>
+        <a href="https://github.com/DaryllGomas/MrCrabs" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-terminus">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>TERMINUS</h3>
+        <span class="skill-modal-pct">Multi-Source Price Level Confluence Engine</span>
+        <p>A Python engine that aggregates 11 independent data sources and produces confluence-scored price levels ranked by institutional significance. Outputs structured JSON for downstream AI agents (HERMES) and markdown for human review.</p>
+        <ul>
+          <li>11 data sources: gamma levels, open interest, VWAP, pivot points, SMA, swing points, gap fills, volume profile, round numbers, Fibonacci, Gann Square of Nine</li>
+          <li>Weighted scoring algorithm — each source contributes independently</li>
+          <li>Gann Square of Nine component validated at z=+9.51 against 33 years of data</li>
+          <li>JSON output feeds HERMES trading execution agent</li>
+          <li>Real-time Schwab API integration for live market data</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">11 Sources → 1 Truth</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-convergence">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Convergence Scoring Engine</h3>
+        <span class="skill-modal-pct">Quantitative Capital Deployment</span>
+        <p>A 7-dimension scoring system that replaces subjective gut-feel with multi-factor scoring for capital deployment decisions. Each dimension draws from independent data sources to avoid double-counting signals.</p>
+        <ul>
+          <li>7 dimensions: thesis conviction, strategy edge, technical setup, cyclical alignment, catalyst proximity, risk/reward, position sizing</li>
+          <li>Source independence enforcement — no signal counted twice</li>
+          <li>Strategy library with verified win rates and sample sizes</li>
+          <li>Portfolio phase management (Hyper-Growth through Income)</li>
+          <li>Deployment rules with numerical thresholds</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">Decision Science, Not Gut Feel</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-prediction">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Prediction Market Scanner</h3>
+        <span class="skill-modal-pct">Polymarket AI Analysis Pipeline</span>
+        <p>An async Python system that scans Polymarket for trading opportunities. Tracks whale wallets, gathers news sentiment, calculates signal confluence, and feeds everything to Claude AI for probability estimation. Only high-confidence alerts reach Telegram.</p>
+        <ul>
+          <li>Polymarket Gamma API integration — real-time prediction market probabilities</li>
+          <li>Whale wallet tracking — large position changes as leading indicators</li>
+          <li>News sentiment aggregation and enrichment</li>
+          <li>Claude AI probability estimation with confidence scoring</li>
+          <li>Multi-criteria filtering: edge &ge; 10%, confluence &ge; 3/5</li>
+          <li>Telegram delivery for high-confidence alerts only</li>
+          <li>SQLite persistence and prompt/response artifact logging</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">Crowd Wisdom → Trading Edge</span>
+      </div>
+
+      <!-- BigPic Solutions — organizational modals -->
+      <div class="skill-modal" id="eco-modal-bp-parent">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Solutions</h3>
+        <span class="skill-modal-pct">Research &amp; Development</span>
+        <p>An AI-native R&amp;D company powered by agentic systems — Claude AI agents, custom skill frameworks, and automated pipelines drive every division. Three operating units span investment operations, IT consulting, and autonomous fleet management.</p>
+        <ul>
+          <li>BigPic Capital — AI-powered investment research &amp; trading</li>
+          <li>BigPic Technology — IT consulting &amp; security services</li>
+          <li>BigPic CyberCab — autonomous vehicle fleet (in development)</li>
+          <li>Agentic AI across all divisions — 20+ custom Claude skills, automated workflows, and AI-driven decision support</li>
+        </ul>
+        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
+        <a href="https://github.com/DaryllGomas/BigPicSolutions" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-capital">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Capital</h3>
+        <span class="skill-modal-pct">Investment Operations</span>
+        <p>An AI-native investment operating system that replicates a full institutional team — research, macro strategy, quant analysis, risk management, and trading execution — with AI agents and automated pipelines.</p>
+        <ul>
+          <li>HERMES trading execution agent with verified strategy library</li>
+          <li>TERMINUS price level engine aggregating 11 data sources</li>
+          <li>Wingman market intelligence with real-time scanner APIs</li>
+          <li>9 completed sector investment theses with interactive reports</li>
+          <li>Published at markets.bigpicsolutions.com</li>
+        </ul>
+        <a href="https://markets.bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">markets.bigpicsolutions.com &rarr;</a>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-technology">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Technology</h3>
+        <span class="skill-modal-pct">IT Services &amp; Security</span>
+        <p>Remote IT consulting and automation services specializing in AI-augmented infrastructure, cloud advisory, and productized security assessments for the SMB market.</p>
+        <ul>
+          <li>BigPic Pentester — automated network security platform</li>
+          <li>Compliance frameworks: PCI DSS, HIPAA, cyber insurance</li>
+          <li>Remote IT consulting and cloud infrastructure</li>
+          <li>AI workflow automation services</li>
+        </ul>
+        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-cybercab">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic CyberCab</h3>
+        <span class="skill-modal-pct">Autonomous Fleet — In Development</span>
+        <p>A venture focused on autonomous vehicle fleet ownership. Building financial models and operational plans for Tesla CyberCab fleet deployment on the autonomous ride-hailing network.</p>
+        <ul>
+          <li>Unit economics modeling across utilization scenarios</li>
+          <li>Revenue projections: $36K–$78K gross per vehicle per year</li>
+          <li>Competitive landscape analysis (Waymo, Tesla, Zoox)</li>
+          <li>Phased deployment: research &rarr; first vehicle &rarr; fleet scaling</li>
+        </ul>
+        <span class="skill-modal-tagline" style="color: #ffc107">Currently in Research &amp; Planning Phase</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-trading">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Trading Systems</h3>
+        <span class="skill-modal-pct">HERMES · TERMINUS · Strategies</span>
+        <p>The execution layer of BigPic Capital. HERMES is the trading agent with a comprehensive methodology, TERMINUS identifies price levels from 11 sources, and the strategy library holds backtested edges.</p>
+        <ul>
+          <li>HERMES — 83K-word trading methodology with execution rules</li>
+          <li>TERMINUS — Python engine: gamma, VWAP, volume profile, Gann, pivots</li>
+          <li>Mean Reversion v4: 81.2% win rate over 203 trades (10yr backtest)</li>
+          <li>Buyback Blackout: 77% win rate, verified across 106 events</li>
+          <li>7-dimension Convergence scoring engine for capital deployment</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-intelligence">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Market Intelligence</h3>
+        <span class="skill-modal-pct">Wingman · Scanners · APIs</span>
+        <p>Real-time market intelligence infrastructure. Wingman provides session-aware market analysis while remote scanner APIs deliver live options flow, gamma data, and sentiment fusion scores.</p>
+        <ul>
+          <li>Wingman — living market regime tracking and trading rules</li>
+          <li>Options API — real-time quotes, gamma, IV, flow analysis</li>
+          <li>Intel API — market outlook, sentiment scores, trade journal</li>
+          <li>15 Claude AI skills for session workflow automation</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-research">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Research &amp; Publishing</h3>
+        <span class="skill-modal-pct">Sector Theses · Reports · Briefs</span>
+        <p>A complete research pipeline producing institutional-quality investment research across 9 high-growth sectors, weekly macro reports, and daily pre-market intelligence briefs.</p>
+        <ul>
+          <li>9 sector theses: AI, Nuclear, Space, Quantum, Robotics, Cyber, Minerals, Defense, Energy</li>
+          <li>Eagle Eye — automated weekly macro cycle reports</li>
+          <li>Morning Briefs — daily pre-market structure analysis</li>
+          <li>Interactive HTML data stories published to BigPic Markets</li>
+        </ul>
+        <a href="https://markets.bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">markets.bigpicsolutions.com &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-pentester">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Pentester Platform</h3>
+        <span class="skill-modal-pct">Automated Security Assessments</span>
+        <p>A productized network security assessment platform targeting the SMB market gap between basic scanning and enterprise pentest firms. Fully automated multi-phase engagements with compliance-mapped reporting.</p>
+        <ul>
+          <li>Service tiers: External ($2.5K), Internal ($5K), Comprehensive ($10K+)</li>
+          <li>Compliance: PCI DSS v4.0, HIPAA Security Rule, Cyber Insurance</li>
+          <li>Tools: Nmap, Nuclei, Lynis, Faraday, Ansible remediation</li>
+          <li>CLI suite: bigpic-scan, bigpic-report, bigpic-engage, bigpic-remediate</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-consulting">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>IT Consulting</h3>
+        <span class="skill-modal-pct">Remote Infrastructure &amp; Cloud</span>
+        <p>Remote IT consulting services providing cloud infrastructure advisory, system administration, and technology strategy for small and medium businesses.</p>
+        <ul>
+          <li>Cloud infrastructure and migration advisory</li>
+          <li>Network architecture and administration</li>
+          <li>MSP partnership and subcontracting</li>
+          <li>25+ years of hands-on technology expertise</li>
+        </ul>
+        <a href="https://bigpicsolutions.com/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">bigpicsolutions.com &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-automation">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>AI Automation</h3>
+        <span class="skill-modal-pct">Workflow &amp; Process Automation</span>
+        <p>AI-augmented workflow automation services that streamline business operations using Claude AI agents, custom skill systems, and automated pipelines.</p>
+        <ul>
+          <li>Custom AI agent development with Claude SDK</li>
+          <li>Skill-based automation (inbox processing, reporting, analysis)</li>
+          <li>Automated document workflows and data pipelines</li>
+          <li>Process optimization through AI-native tooling</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Internal Operations</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-revenue">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Revenue Modeling</h3>
+        <span class="skill-modal-pct">Unit Economics &amp; ROI Analysis</span>
+        <p>Financial modeling for the CyberCab fleet venture. Revenue projections, cost analysis, and ROI scenarios across utilization rates, fare structures, and market conditions.</p>
+        <ul>
+          <li>Vehicle cost under $30K with 75/25 owner/Tesla revenue split</li>
+          <li>Scenarios: urban ($1.50/mi), suburban ($1/mi), high-fare ($2/mi)</li>
+          <li>Payback period: 1–3 years depending on utilization</li>
+          <li>Fleet scaling models: 1, 3, 5, 10 vehicle scenarios</li>
+        </ul>
+        <span class="skill-modal-tagline" style="color: #ffc107">In Development</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-fleet">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Fleet Planning</h3>
+        <span class="skill-modal-pct">Acquisition · Operations · Logistics</span>
+        <p>Operational planning for autonomous vehicle fleet management — vehicle acquisition, home charging infrastructure, maintenance protocols, insurance, and tax optimization.</p>
+        <ul>
+          <li>Phased approach: research &rarr; first vehicle &rarr; fleet scaling</li>
+          <li>Home wireless charging infrastructure planning</li>
+          <li>Insurance and regulatory requirements research</li>
+          <li>Target market and deployment city identification</li>
+        </ul>
+        <span class="skill-modal-tagline" style="color: #ffc107">In Development</span>
+      </div>
+
+      <!-- BigPic Solutions — repo modals -->
+      <div class="skill-modal" id="eco-modal-bigpicmarkets">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Markets</h3>
+        <span class="skill-modal-pct">Investment Research</span>
+        <p>Thematic investment research site covering high-growth sectors with deep-dive analysis, weekly macro reports, and daily pre-market briefs.</p>
+        <ul>
+          <li>Sector coverage: AI, nuclear, space, quantum, robotics, cybersecurity</li>
+          <li>Weekly "Eagle Eye" macro cycle reports</li>
+          <li>Daily pre-market morning briefs</li>
+          <li>Hosted at markets.bigpicsolutions.com</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bigpictech">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Technology</h3>
+        <span class="skill-modal-pct">Technology Services</span>
+        <p>Company website for BigPic Solutions — AI-powered IT support and technology services built on 25+ years of hands-on expertise.</p>
+        <ul>
+          <li>AI-augmented tech support and consulting</li>
+          <li>Client invoicing and reporting portal</li>
+          <li>Neural-network themed design</li>
+          <li>25+ years of technology expertise</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bigpicsolutions">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BigPic Solutions</h3>
+        <span class="skill-modal-pct">Business Website</span>
+        <p>The main BigPic Solutions business website — the public-facing brand for IT consulting and technology services.</p>
+        <ul>
+          <li>Company landing page and service overview</li>
+          <li>Client contact and inquiry forms</li>
+          <li>AI-themed branding and design</li>
+        </ul>
+        <a href="https://github.com/DaryllGomas/BigPicSolutions" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-bp-invoicing">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Invoicing Platform</h3>
+        <span class="skill-modal-pct">Business Operations Tool</span>
+        <p>A production invoicing system built for BigPic Technology's consulting business. Manages clients, generates branded PDF invoices with QR payment links, and tracks the sales pipeline from lead to payment.</p>
+        <ul>
+          <li>Flask backend with SQLite persistence</li>
+          <li>Stripe integration for payment processing</li>
+          <li>ReportLab PDF generation with branded templates</li>
+          <li>QR code payment links on each invoice</li>
+          <li>Client management and job tracking</li>
+          <li>Lead pipeline and CSV export</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">Real Business, Real Tool</span>
+      </div>
+
+      <!-- Cybersecurity modals -->
+      <div class="skill-modal" id="eco-modal-cyberdefense">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Cyber Defense Command Center</h3>
+        <span class="skill-modal-pct">Distributed Security Platform</span>
+        <p>A full-stack cybersecurity monitoring platform with distributed scanning agents, a secure REST API, and a real-time visualization dashboard. Built to continuously monitor network infrastructure and detect vulnerabilities.</p>
+        <ul>
+          <li>Python scanning agents: network scanner, vulnerability scanner, DNS monitor, connection tracker, metrics collector</li>
+          <li>Node.js/Express REST API with versioned endpoints</li>
+          <li>React/Vite dashboard with Recharts visualization</li>
+          <li>SQLite + Sequelize ORM for persistence</li>
+          <li>TLS encryption, 3-tier rate limiting, CORS whitelisting</li>
+          <li>Input validation via Joi schemas, audit logging</li>
+          <li>CIDR network discovery and host enumeration</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">See Everything. Miss Nothing.</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-pentester">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Pentester Platform</h3>
+        <span class="skill-modal-pct">Automated Security Assessment Suite</span>
+        <p>A 4-tool CLI suite that orchestrates multi-phase network security assessments, classifies findings by CVSS/CWE severity, generates compliance-mapped reports, and automates remediation. Built on Kali Linux for professional engagements.</p>
+        <ul>
+          <li>bigpic-engage — client onboarding, scope definition, rules of engagement</li>
+          <li>bigpic-scan — orchestrated scanning via Nmap, Masscan, Nuclei, Nikto</li>
+          <li>bigpic-report — branded PDF/DOCX reports with SVG charts, Jinja2 + WeasyPrint</li>
+          <li>bigpic-remediate — Ansible playbooks for automated fix deployment</li>
+          <li>Compliance mapping: PCI DSS v4.0, HIPAA, Cyber Insurance</li>
+          <li>Legal templates: SOW, Authorization Letter, Data Handling Policy</li>
+          <li>Service tiers from basic scan to full engagement</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">Scan → Classify → Report → Remediate</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-cybersectools">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>CyberSec Tools</h3>
+        <span class="skill-modal-pct">Offensive Security Toolbox</span>
+        <p>A collection of 8 hand-written Python offensive security tools built from scratch. Each tool demonstrates fundamental understanding of networking, cryptography, and system exploitation — the practical skills behind the pentesting platform.</p>
+        <ul>
+          <li>Port Scanner — TCP/UDP port enumeration with service detection</li>
+          <li>Network Scanner — CIDR host discovery and ARP scanning</li>
+          <li>SSH Brute Forcer — dictionary attack with threading</li>
+          <li>Hash Cracker — multi-algorithm hash cracking (MD5, SHA, bcrypt)</li>
+          <li>WiFi Cracker — WPA/WPA2 handshake capture and cracking</li>
+          <li>Subdomain Enumerator — DNS brute-force subdomain discovery</li>
+          <li>Directory Enumerator — web path fuzzing and directory traversal</li>
+          <li>File Downloader — HTTP/FTP file retrieval with progress tracking</li>
+        </ul>
+        <a href="https://github.com/DaryllGomas/Coding" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+        <span class="skill-modal-tagline">Built From Scratch, Not Borrowed</span>
+      </div>
+
+      <!-- AI & Voice Tools modals -->
+      <div class="skill-modal" id="eco-modal-wmvoice">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>WM-Voice</h3>
+        <span class="skill-modal-pct">Hands-Free Voice Assistant</span>
+        <p>A hands-free Linux voice assistant that lets you speak commands and hear Claude's responses. Push-to-talk interface powered by cutting-edge speech AI.</p>
+        <ul>
+          <li>Claude Agent SDK for AI-powered responses</li>
+          <li>Whisper STT for speech-to-text transcription</li>
+          <li>Silero VAD for voice activity detection</li>
+          <li>Kokoro TTS in Docker for natural voice output</li>
+          <li>Push-to-talk interface for clean interactions</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-videototext">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>VideoToText</h3>
+        <span class="skill-modal-pct">Video Transcription Tool</span>
+        <p>Windows GUI and CLI tool that downloads videos from X/Twitter and transcribes them to text using OpenAI Whisper. Built for capturing and processing video content at scale.</p>
+        <ul>
+          <li>Downloads videos directly from X.com (Twitter)</li>
+          <li>OpenAI Whisper for accurate transcription</li>
+          <li>Python GUI for easy operation</li>
+          <li>Batch scripts for installation and GPU support</li>
+          <li>Logging and progress tracking</li>
+        </ul>
+        <a href="https://github.com/DaryllGomas/VideoToText" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-swarmai">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Swarm AI</h3>
+        <span class="skill-modal-pct">Service DAO Blueprint</span>
+        <p>Architectural blueprint for a vibe-coding freelancer collective — a Service DAO that combines human freelancers with autonomous AI agent swarms to deliver software at scale.</p>
+        <ul>
+          <li>Service DAO organizational model (Raid Guild, Vector DAO precedents)</li>
+          <li>Hybrid workforce: human freelancers + AI agent swarms</li>
+          <li>Vibe coding methodology — intent over syntax</li>
+          <li>Agentic frameworks: Autonolas, LangChain integration</li>
+          <li>85% revenue to developers, 50% crypto focus</li>
+        </ul>
+        <a href="https://github.com/Namkuzu-da-OS/Swarm-AI" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <!-- Interactive Experiences modals -->
+      <div class="skill-modal" id="eco-modal-book">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Book</h3>
+        <span class="skill-modal-pct">"Enter Zen From There"</span>
+        <p>A WebGL-powered portal that serves as the hub for three interconnected interactive experiences — Zen, Ancients, and BreakTheCode. Features cosmic backgrounds, 3D sacred geometry, and floating mandalas.</p>
+        <ul>
+          <li>WebGL cosmic background with particle effects</li>
+          <li>3D sacred geometry navigation elements</li>
+          <li>Interactive book as the central portal</li>
+          <li>Links to Zen, Ancients, and BreakTheCode sub-projects</li>
+        </ul>
+        <a href="https://www.justsomedude.org/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
+        <a href="https://github.com/DaryllGomas/Book" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-zen">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Zen</h3>
+        <span class="skill-modal-pct">Interactive Meditation Experience</span>
+        <p>An immersive Zen meditation website presenting the classic story "Enter Zen From There." A full digital meditation space with multiple interactive elements.</p>
+        <ul>
+          <li>Guided breathing exercises with visual feedback</li>
+          <li>Cosmic meditation mode with ambient visuals</li>
+          <li>Interactive zen garden — raking, placing stones, koi fish</li>
+          <li>Meditation timer with ambient sound library</li>
+          <li>Falling leaves, water ripple effects, fireflies</li>
+        </ul>
+        <a href="https://daryllgomas.github.io/Zen/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
+        <a href="https://github.com/DaryllGomas/Zen" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-ancients">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Ancients</h3>
+        <span class="skill-modal-pct">Interactive History Timeline</span>
+        <p>An interactive web-based history timeline spanning prehistoric to modern eras, exploring alternative theories about pre-cataclysm advanced civilizations through an immersive WebGL experience.</p>
+        <ul>
+          <li>WebGL cosmic portal effect built with Three.js</li>
+          <li>Timeline from prehistoric through modern eras</li>
+          <li>Alternative civilization theories and research</li>
+          <li>Search and filtering across historical periods</li>
+          <li>"Did You Know?" facts and deep dives</li>
+        </ul>
+        <a href="https://daryllgomas.github.io/Ancients/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
+        <a href="https://github.com/DaryllGomas/Ancients" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-breakthecode">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>BreakTheCode</h3>
+        <span class="skill-modal-pct">"Breaking Your Genetic Code"</span>
+        <p>An immersive interactive digital book exploring consciousness expansion and personal transformation. Features a cosmic theme with animated visuals across 6 chapters.</p>
+        <ul>
+          <li>Animated DNA helix and starfield backgrounds</li>
+          <li>6 chapters on awakening and breaking unconscious patterns</li>
+          <li>Meditation prompts and contemplative exercises</li>
+          <li>Pure HTML/CSS/JS — no frameworks</li>
+        </ul>
+        <a href="https://daryllgomas.github.io/BreakTheCode/" target="_blank" rel="noopener" class="eco-modal-repo eco-external">Visit Live Site &rarr;</a>
+        <a href="https://github.com/DaryllGomas/BreakTheCode" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <!-- Research & Analysis modals -->
+      <div class="skill-modal" id="eco-modal-twitteralgo">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Twitter Algorithm Analysis</h3>
+        <span class="skill-modal-pct">Platform Intelligence</span>
+        <p>Deep analysis of X's open-sourced "For You" feed algorithm. Decompiled the scoring formula and extracted actionable posting strategies to maximize reach.</p>
+        <ul>
+          <li>Decompiled algorithm source code analysis</li>
+          <li>Scoring formula breakdown and weight mapping</li>
+          <li>Actionable posting rules for optimization</li>
+          <li>Built with Rust for performance</li>
+        </ul>
+        <a href="https://github.com/Namkuzu-da-OS/twitter-algorithm-analysis" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-zolseason">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>ZOLSEASON</h3>
+        <span class="skill-modal-pct">Cross-Chain Research</span>
+        <p>Research and vision documents proposing a privacy-preserving bridge between Zcash and Solana — combining Zcash's privacy technology with Solana's speed and throughput.</p>
+        <ul>
+          <li>Privacy-preserving cross-chain bridge concept</li>
+          <li>Zcash shielded transactions + Solana speed</li>
+          <li>Multi-AI research synthesis (Claude, Grok, Gemini)</li>
+          <li>Conceptual/whitepaper stage</li>
+        </ul>
+        <a href="https://github.com/Namkuzu-da-OS/ZOLSEASON" target="_blank" rel="noopener" class="eco-modal-repo eco-public">View on GitHub &rarr;</a>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-sandbox">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Quantitative Research Lab</h3>
+        <span class="skill-modal-pct">Signal Discovery &amp; Backtesting Engine</span>
+        <p>A 31,000-line Python quantitative research platform covering a 39-ticker universe (SPY/QQQ, 11 sectors, 18 individual stocks, thematic ETFs). Rigorous scientific methodology — hypotheses are tested, failed hypotheses are honestly documented, and only statistically significant signals survive.</p>
+        <ul>
+          <li>39-ticker universe with sector, thematic, and individual coverage</li>
+          <li>Regime detection via sector dispersion analysis</li>
+          <li>Signal discovery with Newey-West correction for autocorrelation</li>
+          <li>Bootstrap statistical validation (p-values, confidence intervals)</li>
+          <li>48-signal cross-sectional sweep — 5 confirmed statistically significant</li>
+          <li>Wave-bucket framework for market cycle classification</li>
+          <li>SQLite historical database with automated data collection</li>
+          <li>Documented disproven hypotheses (intellectual honesty)</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">Every Confirmed Signal Is Contrarian</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-breadth">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Breadth-Exhaustion-Signal</h3>
+        <span class="skill-modal-pct">Market Breadth Research Platform</span>
+        <p>A complete Python research platform testing market breadth exhaustion signals against 27 years of NYSE data. Thesis confirmed with p&lt;0.05 statistical significance using Monte Carlo null hypothesis testing.</p>
+        <ul>
+          <li>Modular architecture: data_loader, signal_detector, backtester, visualizer</li>
+          <li>Schwab API collector for live market data</li>
+          <li>27 years of NYSE Advance-Decline data analysis</li>
+          <li>Monte Carlo null hypothesis testing for signal validation</li>
+          <li>Sensitivity analysis with parameter heatmaps</li>
+          <li>Multiple data input modes: proxy, real ADD, Schwab live, ThinkOrSwim import</li>
+          <li>Equity curve generation and drawdown analysis</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">27 Years of Data, One Signal</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-gann">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Gann Square of Nine Backtester</h3>
+        <span class="skill-modal-pct">Century-Old Theory, Modern Rigor</span>
+        <p>A 56KB Python backtester that formalizes 6 quantifiable W.D. Gann techniques and stress-tests them against 33 years of S&amp;P 500 data with Monte Carlo null hypothesis testing. Found that Square of Nine support/resistance significantly outperforms random and round-number baselines.</p>
+        <ul>
+          <li>6 Gann techniques formalized mathematically and backtested</li>
+          <li>33 years of S&amp;P 500 daily data (1991-2024)</li>
+          <li>Square of Nine S/R: z-score +9.51 (p=0.0000)</li>
+          <li>3+ stacked Gann signals → 34% larger 5-day moves (z=+4.14)</li>
+          <li>Monte Carlo null hypothesis testing against random levels</li>
+          <li>Round-number baseline comparison for additional rigor</li>
+          <li>Feeds TERMINUS confluence engine as one of 11 data sources</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">z = +9.51 · p = 0.0000</span>
+      </div>
+
+      <div class="skill-modal" id="eco-modal-meanrevert">
+        <button class="skill-modal-close" aria-label="Close">&times;</button>
+        <h3>Mean Reversion Strategy Lab</h3>
+        <span class="skill-modal-pct">Full Strategy Development Lifecycle</span>
+        <p>A complete strategy development lab spanning indicator ideation to production deployment. Multiple PineScript versions for TradingView, Python brute-force parameter sweep (20,736 combinations), and event-driven walk-forward backtesting with out-of-sample validation.</p>
+        <ul>
+          <li>PineScript strategies for TradingView (multiple iterations)</li>
+          <li>Python brute-force sweep: 20,736 parameter combinations</li>
+          <li>Walk-forward out-of-sample validation using backtesting.py</li>
+          <li>In-sample: 81.2% WR across 203 trades</li>
+          <li>Out-of-sample: 84.3% WR (no overfitting — improved OOS)</li>
+          <li>BB%B &lt; 0.10 + IBS &lt; 0.25 = confirmed edge</li>
+          <li>Full lifecycle: ideation → sweep → validation → deployment</li>
+        </ul>
+        <span class="eco-modal-repo eco-private">Private Repository</span>
+        <span class="skill-modal-tagline">81.2% In-Sample → 84.3% Out-of-Sample</span>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Living Mandala WebGL hero — loaded before main.js, no-ops safely
+       if WebGL/motion-preference/viewport checks fail. -->
+  <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="js/mandala.js"></script>
+
+  <script src="main.js"></script>
+</body>
+</html>
