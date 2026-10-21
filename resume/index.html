@@ -42,7 +42,30 @@
   .tl dd { color:var(--ink-dim); }
   .tl dd b { color:var(--ink); font-weight:400; }
   @media (max-width:640px) { .grid { grid-template-columns:1fr; } .tl { grid-template-columns:1fr; } .tl dt { padding-top:10px; } }
-  @media print { body { display:none; } }
+  .dl { display:inline-block; margin-top:18px; font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.2em;
+    text-transform:uppercase; color:var(--amber); text-decoration:none; border:1px solid rgba(224,164,92,.5); border-radius:999px; padding:.55rem 1rem; }
+  .dl:hover { background:rgba(224,164,92,.1); }
+  .print-only { display:none; }
+  /* the PDF: light paper, dark ink */
+  @media print {
+    @page { margin:11mm 12mm; }
+    body { background:#fff; color:#111; font-size:9.5pt; line-height:1.45; }
+    h2 { break-after:avoid; } li { margin:2px 0; font-size:9pt; }
+    body::before, .top, .dl { display:none !important; }
+    .print-only { display:block; }
+    .wrap { max-width:none; padding:0; }
+    .k, .role { color:#8a5a1c; }
+    .where, .meta, .tl dt, h2 { color:#555; }
+    .sum, li, .tl dd { color:#222; }
+    .tl dd b { color:#111; }
+    h1 { font-size:26pt; margin-top:4px; }
+    section { margin-top:12px; break-inside:auto; }
+    .sum { margin-top:10px; font-size:9.5pt; } .grid { gap:8px; }
+    h2 { border-color:#ccc; margin-bottom:8px; }
+    .card { background:none; border-color:#ddd; padding:8px 10px; break-inside:avoid; }
+    .job { border-color:#ddd; padding:8px 0; break-inside:avoid; }
+    li::before { background:#8a5a1c; }
+  }
 </style>
 </head>
 <body>
@@ -53,9 +76,11 @@
   <h1>Daryll Gomas</h1>
   <p class="role">AI Solutions · Automation · Infrastructure + AI Integration</p>
   <p class="where">Portland, OR · Remote-first</p>
+  <p class="where print-only">daryll.gomas@gmail.com · daryllgomas.com</p>
   <p class="sum">25+ years in IT infrastructure, now building with AI. Deep infrastructure knowledge (Microsoft 365, networking,
   security, virtualization) combined with hands-on AI development: Python, the Claude API, MCP and local LLMs. I design and run
   multi-agent research systems, automated security scanning and AI-powered data pipelines, mostly by voice.</p>
+  <p><a class="dl" href="Daryll-Gomas-Resume.pdf" download>PDF ↓</a> <a class="dl" href="Daryll-Gomas-Resume.docx" download>Word ↓</a></p>
 
   <section>
     <h2>Core skills</h2>
