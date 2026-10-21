@@ -144,6 +144,10 @@
   .links a { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
     color: var(--ink-dim); text-decoration: none; border-bottom: 1px solid rgba(224,164,92,.4); padding-bottom: .15rem; }
   .links a:hover { color: var(--amber); border-color: var(--amber); }
+  /* the résumé link: a quiet amber pill, so it reads as the one to open */
+  .links a.cv { color: var(--amber); border: 1px solid rgba(224,164,92,.45); border-radius: 999px; padding: .28rem .75rem;
+    margin: -.3rem 0; background: rgba(224,164,92,.07); }
+  .links a.cv:hover { background: rgba(224,164,92,.16); border-color: var(--amber); }
   .sys-card { display: flex; gap: .9rem; align-items: center; padding: .7rem .8rem; border-radius: 12px; text-decoration: none;
     color: var(--ink); border: 1px solid rgba(224,164,92,.55);
     background: linear-gradient(135deg, rgba(224,164,92,.12), rgba(95,212,240,.06));
@@ -320,7 +324,7 @@
       <a href="https://x.com/DaryllGomas" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/DaryllGomas" target="_blank" rel="noopener">GitHub</a>
       <a href="https://bigpicsolutions.com" target="_blank" rel="noopener">BigPic Solutions</a>
-      <a href="resume/" data-study="resume">Résumé</a>
+      <a class="cv" href="resume/" data-study="resume">Résumé</a>
       <button type="button" class="copy-mail" data-mail="daryll.gomas@gmail.com" title="Copy my email address">daryll.gomas@gmail.com</button>
     </div>
     <p class="scroll-cue">Scroll to descend</p>
