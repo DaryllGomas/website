@@ -42,9 +42,10 @@
   .tl dd { color:var(--ink-dim); }
   .tl dd b { color:var(--ink); font-weight:400; }
   @media (max-width:640px) { .grid { grid-template-columns:1fr; } .tl { grid-template-columns:1fr; } .tl dt { padding-top:10px; } }
-  .dl { display:inline-block; margin-top:18px; font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.2em;
-    text-transform:uppercase; color:var(--amber); text-decoration:none; border:1px solid rgba(224,164,92,.5); border-radius:999px; padding:.55rem 1rem; }
-  .dl:hover { background:rgba(224,164,92,.1); }
+  .dl { display:inline-block; margin:18px 8px 0 0; font-family:'IBM Plex Mono',monospace; font-size:.78rem; font-weight:500; letter-spacing:.18em;
+    text-transform:uppercase; color:#1a1206; background:linear-gradient(180deg,#f0bb72,#e0a45c); text-decoration:none;
+    border-radius:999px; padding:.75rem 1.4rem; box-shadow:0 0 0 1px rgba(255,214,150,.4), 0 6px 24px rgba(224,164,92,.35); transition:transform .15s ease, box-shadow .15s ease; }
+  .dl:hover { transform:translateY(-1px); box-shadow:0 0 0 1px rgba(255,214,150,.6), 0 10px 32px rgba(224,164,92,.5); }
   .print-only { display:none; }
   /* the PDF: light paper, dark ink */
   @media print {
