@@ -320,6 +320,7 @@
       <a href="https://x.com/DaryllGomas" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/DaryllGomas" target="_blank" rel="noopener">GitHub</a>
       <a href="https://bigpicsolutions.com" target="_blank" rel="noopener">BigPic Solutions</a>
+      <a href="resume/" data-study="resume">Résumé</a>
       <button type="button" class="copy-mail" data-mail="daryll.gomas@gmail.com" title="Copy my email address">daryll.gomas@gmail.com</button>
     </div>
     <p class="scroll-cue">Scroll to descend</p>
@@ -1756,7 +1757,7 @@ frame();
   var study = document.getElementById('study'), studyFrame = document.getElementById('studyFrame'), studyFrom = null;
   function openStudy(hash) {
     studyFrom = document.activeElement;
-    studyFrame.src = 'systems/?embed=1' + (hash || '');
+    studyFrame.src = /^resume/.test(hash || '') ? 'resume/?embed=1' : 'systems/?embed=1' + (hash || '');
     study.hidden = false; document.documentElement.style.overflow = 'hidden';
     setInert(study, true);
     if (window.lenis && window.lenis.stop) window.lenis.stop();

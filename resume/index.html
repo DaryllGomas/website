@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résumé — Daryll Gomas</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<style>
+  :root { --bg:#04050a; --line:rgba(238,242,248,.12); --ink:#eef2f8; --ink-dim:rgba(238,242,248,.74);
+    --ink-faint:rgba(238,242,248,.6); --amber:#e0a45c; --cyan:#5fd4f0; --violet:#9d84ff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scrollbar-width:thin; scrollbar-color:rgba(224,164,92,.35) transparent; }
+  body { font-family:'IBM Plex Sans',sans-serif; font-weight:300; background:var(--bg); color:var(--ink); line-height:1.6; }
+  body::before { content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:radial-gradient(900px 600px at 80% -10%, rgba(95,212,240,.10), transparent 60%),
+      radial-gradient(800px 600px at -10% 40%, rgba(157,132,255,.09), transparent 60%); }
+  .wrap { max-width:880px; margin:0 auto; padding:0 clamp(16px,4vw,40px) 80px; }
+  .top { padding:22px 0; }
+  .top a { font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; }
+  .top a:hover { color:var(--amber); }
+  .k { font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:var(--amber); }
+  h1 { font-family:'Fraunces',serif; font-weight:400; font-size:clamp(2.4rem,6vw,3.8rem); line-height:1.05; margin:14px 0 6px; }
+  .role { font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.2rem; color:var(--amber); }
+  .where { margin-top:6px; color:var(--ink-faint); font-size:.9rem; }
+  .sum { margin-top:22px; color:var(--ink-dim); font-size:1.05rem; max-width:68ch; }
+  section { margin-top:46px; }
+  h2 { font-family:'IBM Plex Mono',monospace; font-weight:400; font-size:.72rem; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--ink-faint); padding-bottom:10px; border-bottom:1px solid var(--line); margin-bottom:18px; }
+  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  .card { border:1px solid var(--line); border-radius:14px; padding:16px 18px; background:rgba(12,16,28,.6); }
+  .card h3, .job h3 { font-family:'Fraunces',serif; font-weight:400; font-size:1.15rem; }
+  ul { list-style:none; margin-top:8px; }
+  li { position:relative; padding-left:16px; color:var(--ink-dim); font-size:.93rem; margin:4px 0; }
+  li::before { content:""; position:absolute; left:0; top:.68em; width:6px; height:1px; background:var(--amber); }
+  .job { padding:16px 0; border-bottom:1px solid var(--line); }
+  .job:last-child { border-bottom:0; }
+  .meta { font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); margin-top:2px; }
+  .tl { display:grid; grid-template-columns:150px 1fr; gap:6px 18px; font-size:.93rem; }
+  .tl dt { font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.08em; color:var(--ink-faint); padding-top:3px; }
+  .tl dd { color:var(--ink-dim); }
+  .tl dd b { color:var(--ink); font-weight:400; }
+  @media (max-width:640px) { .grid { grid-template-columns:1fr; } .tl { grid-template-columns:1fr; } .tl dt { padding-top:10px; } }
+  @media print { body { display:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top"><a href="../">← Daryll Gomas</a></nav>
+
+  <span class="k">Résumé</span>
+  <h1>Daryll Gomas</h1>
+  <p class="role">AI Solutions · Automation · Infrastructure + AI Integration</p>
+  <p class="where">Portland, OR · Remote-first</p>
+  <p class="sum">25+ years in IT infrastructure, now building with AI. Deep infrastructure knowledge (Microsoft 365, networking,
+  security, virtualization) combined with hands-on AI development: Python, the Claude API, MCP and local LLMs. I design and run
+  multi-agent research systems, automated security scanning and AI-powered data pipelines, mostly by voice.</p>
+
+  <section>
+    <h2>Core skills</h2>
+    <div class="grid">
+      <div class="card"><h3>AI &amp; automation</h3><ul>
+        <li>Claude API, Anthropic SDK, MCP</li><li>Multi-agent design and orchestration</li>
+        <li>Local LLMs on NVIDIA GPUs (Ollama, Docker)</li><li>Python automation and data pipelines</li>
+        <li>Voice-first, hands-free workflows</li></ul></div>
+      <div class="card"><h3>Infrastructure</h3><ul>
+        <li>Microsoft 365 / Entra ID, Conditional Access, MFA</li><li>Networks, firewalls, VLANs, VPN</li>
+        <li>Hyper-V virtualization, Windows Server, AD/DNS/DHCP</li><li>NAS backup and disaster recovery</li>
+        <li>Mac &amp; Windows fleet management</li></ul></div>
+      <div class="card"><h3>Security &amp; compliance</h3><ul>
+        <li>Automated vulnerability scanning with AI summaries</li><li>PCI DSS, HIPAA and cyber-insurance mapping</li>
+        <li>Pen test &amp; cyber defense experience</li><li>HIPAA environments: medical and dental</li></ul></div>
+      <div class="card"><h3>Development</h3><ul>
+        <li>Python, Bash, PowerShell, JavaScript, SQL</li><li>HTML/CSS/JS dashboards and 3D web</li>
+        <li>Docker, Ansible, Git</li><li>Pine Script / ThinkScript indicators</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+    <div class="job"><h3>Principal Consultant · AI Solutions — BigPic Solutions</h3>
+      <p class="meta">May 2025 – present · Portland, OR (remote)</p><ul>
+      <li>Built a multi-agent equity research framework with composite scoring and automated reports</li>
+      <li>Built an AI sentiment pipeline over social and news feeds, using local LLMs on my own GPUs</li>
+      <li>Built an automated security assessment toolchain: scan, report, remediate, with AI executive summaries and compliance mapping</li>
+      <li>Microsoft 365 / Entra hardening, network segmentation and NAS backup for small businesses</li></ul></div>
+    <div class="job"><h3>IT Field Engineer — MacForce (Launch Technologies)</h3>
+      <p class="meta">Feb 2023 – May 2025 · Portland, OR</p><ul>
+      <li>Microsoft 365 and Entra ID administration, Conditional Access, SSO, migrations</li>
+      <li>Hybrid Apple and Windows fleets; on-site assessments, firewalls, VPN and NAS backups</li>
+      <li>Client consulting with documented 30–60% cost reduction through SaaS audits</li></ul></div>
+    <div class="job"><h3>Earlier</h3>
+      <dl class="tl" style="margin-top:10px">
+        <dt>2014 – 2023</dt><dd><b>BigPic Solutions</b>: founded in Buffalo, NY; networks, repair and IT consulting, then Portland</dd>
+        <dt>2018 – 2020</dt><dd><b>DenTech LLC</b>: IT field technician for medical and dental practices (HIPAA)</dd>
+        <dt>2012 – 2013</dt><dd><b>Felines Pride</b>: manager; technology, operations and web</dd>
+        <dt>2011 – 2012</dt><dd><b>TransWorld Network</b>: ISP network operations center technician</dd>
+        <dt>2002 – 2011</dt><dd><b>Knight Enterprises</b>: field services engineer, county lead for network deployments</dd>
+        <dt>2000 – 2002</dt><dd><b>Time Warner Cable</b>: level 3 support and escalation lead</dd>
+      </dl></div>
+  </section>
+
+  <section>
+    <h2>Selected projects</h2>
+    <div class="grid">
+      <div class="card"><h3>Multi-agent research system</h3><ul><li>Seven-dimension composite scoring, agent orchestration, automated reports</li></ul></div>
+      <div class="card"><h3>Security scanning platform</h3><ul><li>Scan, report, remediate; AI summaries; YAML compliance frameworks; Ansible fixes</li></ul></div>
+      <div class="card"><h3>Network &amp; systems build-out</h3><ul><li>Virtualized servers, segmented network, observability, verified backups, run by AI agents</li></ul></div>
+      <div class="card"><h3>Games and public tools</h3><ul><li>Browser games, Town Hall and Swarm AI, built mostly by voice with AI</li></ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Training</h2>
+    <ul>
+      <li>Microsoft 365 / Entra ID administration (hands-on production)</li>
+      <li>Pen test &amp; cyber defense experience</li>
+      <li>AI systems architecture (self-directed: Claude API, MCP, local LLMs, multi-agent design)</li>
+    </ul>
+  </section>
+</div>
+<script>
+// inside the site's pop-up: the back link closes the pop-up instead of navigating
+(function () {
+  if (window.top === window.self) return;
+  var back = document.querySelector('.top a[href="../"]');
+  if (back) { back.textContent = '← Back to the galaxy'; back.addEventListener('click', function (e) { e.preventDefault(); window.parent.postMessage('study:close', location.origin); }); }
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') window.parent.postMessage('study:close', location.origin); });
+})();
+</script>
+</body>
+</html>
