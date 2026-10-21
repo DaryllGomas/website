@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Systems Build-Out — Daryll Gomas</title>
+<meta name="description" content="An anonymized look at the network and systems Daryll Gomas built and runs: virtualization, segmented network, observability, verified backups and AI agents operating it all safely.">
+<meta property="og:title" content="Systems Build-Out — Daryll Gomas">
+<meta property="og:description" content="The network and systems I built and run every day, with AI agents operating them safely. Anonymized.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="canonical" href="https://daryllgomas.com/systems/">
+<link rel="stylesheet" href="../assets/fonts/fonts.css">
+<!--
+  ANONYMIZED ON PURPOSE. Roles only: no hostnames, addresses, internal domains, accounts, ports,
+  vendor firmware or known gaps. Source facts: ~/BigPic/BigPic - Technology/Infrastructure/ and
+  ~/Projects/systems/control-plane/docs (checked 2026-10-13 to 10-20).
+-->
+<style>
+  :root {
+    --bg: #04050a; --panel: rgba(12,16,28,.72); --line: rgba(238,242,248,.12);
+    --ink: #eef2f8; --ink-dim: rgba(238,242,248,.74); --ink-faint: rgba(238,242,248,.6);
+    --amber: #e0a45c; --cyan: #5fd4f0; --violet: #9d84ff; --green: #5fe0a0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: rgba(224,164,92,.35) transparent; }
+  ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(224,164,92,.3); border-radius: 8px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { font-family: 'IBM Plex Sans', sans-serif; font-weight: 300; background: var(--bg); color: var(--ink);
+    line-height: 1.6; overflow-x: hidden; }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background:
+      radial-gradient(900px 600px at 80% -10%, rgba(95,212,240,.10), transparent 60%),
+      radial-gradient(800px 600px at -10% 30%, rgba(157,132,255,.09), transparent 60%),
+      radial-gradient(700px 500px at 60% 110%, rgba(224,164,92,.08), transparent 60%); }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 40px); }
+  .mono { font-family: 'IBM Plex Mono', monospace; }
+  .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: .72rem; letter-spacing: .3em; text-transform: uppercase; color: var(--amber); }
+  h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 400; letter-spacing: -.01em; line-height: 1.08; }
+
+  /* top bar */
+  .top { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; }
+  .top a { font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--ink-dim); text-decoration: none; }
+  .top a:hover { color: var(--amber); }
+
+  /* hero */
+  .hero { padding: 7vh 0 4vh; }
+  .hero h1 { font-size: clamp(2.6rem, 7vw, 5.2rem); margin: 18px 0 18px; }
+  .hero h1 em { font-style: italic; color: var(--amber); }
+  .hero p.lead { font-size: clamp(1.05rem, 2vw, 1.25rem); color: var(--ink-dim); max-width: 62ch; }
+  .note { margin-top: 18px; font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .08em; color: var(--ink-faint); }
+
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 42px 0 10px; }
+  .stat { padding: 20px 20px 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .stat b { display: block; font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.9rem, 4vw, 2.6rem); line-height: 1; }
+  .stat span { display: block; margin-top: 10px; font-size: .84rem; color: var(--ink-dim); }
+  .stat:nth-child(1) b { color: var(--cyan); } .stat:nth-child(2) b { color: var(--violet); }
+  .stat:nth-child(3) b { color: var(--green); } .stat:nth-child(4) b { color: var(--amber); }
+
+  /* topology */
+  .topo { margin: 60px 0 20px; border: 1px solid var(--line); border-radius: 22px; overflow: hidden;
+    background: radial-gradient(120% 90% at 50% 0%, rgba(20,28,52,.85), rgba(6,8,16,.95)); position: relative; }
+  .topo.sentinel-map { margin: 28px 0 0; }
+  .topo-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 22px 26px 0; flex-wrap: wrap; }
+  .topo-head h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; font-family: 'IBM Plex Mono', monospace; font-size: .64rem; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+  .legend i { display: inline-block; width: 18px; height: 2px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+  svg.map { display: block; width: 100%; height: auto; }
+  .flow { stroke-dasharray: 4 10; animation: flow 1.6s linear infinite; }
+  .flow.slow { animation-duration: 3.2s; }
+  @keyframes flow { to { stroke-dashoffset: -28; } }
+  .node rect { transition: filter .3s ease; }
+  .node:hover rect { filter: brightness(1.35); }
+  .pulse { animation: pulse 2.4s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+  @keyframes pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .flow, .pulse { animation: none; } }
+
+  /* sections */
+  section.block { padding: 64px 0 8px; }
+  .block-head { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: start; }
+  .block-head h2 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); }
+  .block-head p { color: var(--ink-dim); max-width: 64ch; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 26px; }
+  .card { padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: var(--panel);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); position: relative; overflow: hidden; }
+  .card::before { content: ""; position: absolute; left: 0; top: 0; right: 0; height: 2px; background: var(--accent, var(--cyan)); opacity: .8; }
+  .card h3 { font-size: 1.22rem; margin-bottom: 8px; }
+  .card p { font-size: .92rem; color: var(--ink-dim); }
+  .card ul { list-style: none; margin-top: 10px; }
+  .card li { font-size: .88rem; color: var(--ink-dim); padding: 6px 0; border-top: 1px solid var(--line); }
+  .card li:first-child { border-top: 0; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .tags span { font-family: 'IBM Plex Mono', monospace; font-size: .62rem; letter-spacing: .06em; padding: 4px 8px;
+    border-radius: 999px; border: 1px solid var(--line); color: var(--ink-faint); }
+
+  .principle { margin: 70px 0 30px; padding: 34px clamp(20px, 4vw, 44px); border-radius: 22px; border: 1px solid rgba(224,164,92,.35);
+    background: linear-gradient(135deg, rgba(224,164,92,.10), rgba(157,132,255,.06)); }
+  .principle blockquote { font-family: 'Fraunces', serif; font-style: italic; font-weight: 300; font-size: clamp(1.3rem, 3vw, 1.9rem); line-height: 1.4; max-width: 46ch; }
+  .principle cite { display: block; margin-top: 14px; font-style: normal; font-family: 'IBM Plex Mono', monospace; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--amber); }
+
+  footer { padding: 50px 0 70px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--line); margin-top: 50px; }
+  footer p { color: var(--ink-faint); font-size: .85rem; max-width: 60ch; }
+  .cta { display: inline-block; padding: 12px 18px; border-radius: 12px; border: 1px solid rgba(224,164,92,.6);
+    color: var(--ink); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; }
+  .cta:hover { background: rgba(224,164,92,.12); }
+
+  .topo-hint { display: none; padding: 0 26px 14px; font-family: 'IBM Plex Mono', monospace; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }
+  @media (max-width: 700px) {
+    .topo-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .topo-scroll svg.map { width: 760px; max-width: none; }
+    .topo-hint { display: block; }
+  }
+  @media (max-width: 860px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+    .block-head { grid-template-columns: 1fr; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="top">
+    <a href="../">← Daryll Gomas</a>
+  </nav>
+
+  <header class="hero">
+    <span class="eyebrow">Case study · Network &amp; systems build-out</span>
+    <h1>The systems I build,<br><em>and run every day.</em></h1>
+    <p class="lead">One person, a small server room, and a fleet of AI agents. A virtualized server, a segmented network,
+      a monitoring appliance, a GPU node for local AI, and nightly backups that are read back and checked, all running a live
+      market-data platform around the clock.</p>
+    <p class="note">Anonymized on purpose: machines are shown by role. No names, addresses or accounts.</p>
+
+    <div class="stats">
+      <div class="stat"><b>400+</b><span>days of continuous uptime on the market-data server</span></div>
+      <div class="stat"><b>24/7</b><span>machines, services and the internet watched around the clock</span></div>
+      <div class="stat"><b>Nightly</b><span>archives read back and hash-checked; restores tested on purpose</span></div>
+      <div class="stat"><b>3,600+</b><span>commits across the platform in ten months, built with AI</span></div>
+    </div>
+  </header>
+
+  <!-- Topology: roles only -->
+  <div class="topo">
+    <div class="topo-head">
+      <h2>How it fits together</h2>
+      <div class="legend">
+        <span><i style="background:var(--cyan)"></i>data</span>
+        <span><i style="background:var(--violet)"></i>telemetry</span>
+        <span><i style="background:var(--green)"></i>backups</span>
+      </div>
+    </div>
+    <div class="topo-scroll"><svg class="map" viewBox="0 0 1100 560" role="img" aria-label="Anonymized network diagram: internet to gateway and segmented switch; virtualization host with four virtual machines; observability appliance; GPU inference node; NAS; workstation and media rooms.">
+      <defs>
+        <linearGradient id="g-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16203a"/><stop offset="1" stop-color="#0b1020"/></linearGradient>
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <radialGradient id="cloud" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#5fd4f0" stop-opacity=".55"/><stop offset="1" stop-color="#5fd4f0" stop-opacity="0"/></radialGradient>
+      </defs>
+
+      <!-- links -->
+      <g fill="none" stroke-width="2">
+        <path d="M550 78 V130" stroke="#5fd4f0" class="flow"/>
+        <path d="M550 186 V232" stroke="#5fd4f0" class="flow"/>
+        <path d="M550 288 C 550 320, 220 320, 220 352" stroke="#5fd4f0" class="flow"/>
+        <path d="M550 288 V352" stroke="#5fd4f0" class="flow"/>
+        <path d="M550 288 C 550 320, 880 320, 880 352" stroke="#5fd4f0" class="flow"/>
+        <path d="M550 288 C 550 300, 1000 300, 1000 470" stroke="#5fd4f0" class="flow slow"/>
+        <path d="M550 288 C 550 300, 100 300, 100 470" stroke="#5fd4f0" class="flow slow"/>
+        <!-- telemetry into the appliance -->
+        <path d="M695 158 C 800 158, 880 250, 880 352" stroke="#9d84ff" class="flow slow" opacity=".9"/>
+        <path d="M350 420 C 470 460, 700 460, 790 422" stroke="#9d84ff" class="flow slow" opacity=".7"/>
+        <!-- backups into the NAS -->
+        <path d="M330 455 C 400 520, 420 515, 430 505" stroke="#5fe0a0" class="flow slow"/>
+        <path d="M800 422 C 760 520, 700 515, 670 505" stroke="#5fe0a0" class="flow slow"/>
+      </g>
+
+      <!-- internet -->
+      <circle cx="550" cy="46" r="52" fill="url(#cloud)" class="pulse"/>
+      <text x="550" y="42" text-anchor="middle" fill="#eef2f8" font-family="Fraunces, serif" font-size="18">Internet</text>
+      <text x="550" y="62" text-anchor="middle" fill="rgba(238,242,248,.5)" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1.5">TLS · SECURE TUNNELS</text>
+
+      <!-- gateway -->
+      <g class="node"><rect x="405" y="130" width="290" height="56" rx="12" fill="url(#g-card)" stroke="rgba(95,212,240,.55)"/>
+        <text x="550" y="154" text-anchor="middle" fill="#eef2f8" font-family="Fraunces, serif" font-size="17">Gateway &amp; firewall</text>
+        <text x="550" y="173" text-anchor="middle" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1">ZONE FIREWALL · IPS · FLOW EXPORT</text></g>
+
+      <!-- switch -->
+      <g class="node"><rect x="370" y="232" width="360" height="56" rx="12" fill="url(#g-card)" stroke="rgba(95,212,240,.45)"/>
+        <text x="550" y="256" text-anchor="middle" fill="#eef2f8" font-family="Fraunces, serif" font-size="17">48-port PoE core switch</text>
+        <text x="550" y="275" text-anchor="middle" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1">SEGMENTED ADDRESS PLAN · ISOLATED VLAN · WI-FI 7</text></g>
+
+      <!-- hypervisor -->
+      <g class="node"><rect x="90" y="352" width="260" height="104" rx="14" fill="url(#g-card)" stroke="rgba(224,164,92,.6)" filter="url(#glow)"/>
+        <text x="110" y="378" fill="#eef2f8" font-family="Fraunces, serif" font-size="17">Virtualization host</text>
+        <text x="110" y="396" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">TOWER SERVER · RAID · 48 GB</text>
+        <g font-family="IBM Plex Mono, monospace" font-size="9.5" fill="#eef2f8">
+          <rect x="110" y="408" width="112" height="18" rx="5" fill="rgba(95,212,240,.16)" stroke="rgba(95,212,240,.4)"/><text x="166" y="421" text-anchor="middle">market data</text>
+          <rect x="226" y="408" width="104" height="18" rx="5" fill="rgba(157,132,255,.16)" stroke="rgba(157,132,255,.4)"/><text x="278" y="421" text-anchor="middle">automation</text>
+          <rect x="110" y="430" width="112" height="18" rx="5" fill="rgba(238,242,248,.06)" stroke="rgba(238,242,248,.2)"/><text x="166" y="443" text-anchor="middle">development</text>
+          <rect x="226" y="430" width="104" height="18" rx="5" fill="rgba(238,242,248,.06)" stroke="rgba(238,242,248,.2)"/><text x="278" y="443" text-anchor="middle">windows</text>
+        </g></g>
+
+      <!-- GPU node -->
+      <g class="node"><rect x="410" y="352" width="280" height="70" rx="14" fill="url(#g-card)" stroke="rgba(157,132,255,.6)"/>
+        <text x="550" y="380" text-anchor="middle" fill="#eef2f8" font-family="Fraunces, serif" font-size="17">GPU inference node</text>
+        <text x="550" y="400" text-anchor="middle" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">3 GPUS · LOCAL LLM · SPEECH · RENDER</text></g>
+
+      <!-- observability -->
+      <g class="node"><rect x="770" y="352" width="230" height="70" rx="14" fill="url(#g-card)" stroke="rgba(157,132,255,.75)" filter="url(#glow)"/>
+        <circle cx="792" cy="376" r="5" fill="#5fe0a0" class="pulse"/>
+        <text x="806" y="381" fill="#eef2f8" font-family="Fraunces, serif" font-size="18">SENTINEL</text>
+        <text x="790" y="402" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">OBSERVABILITY · ~19 CONTAINERS</text></g>
+
+      <!-- NAS -->
+      <g class="node"><rect x="430" y="476" width="240" height="58" rx="14" fill="url(#g-card)" stroke="rgba(95,224,160,.6)"/>
+        <text x="550" y="501" text-anchor="middle" fill="#eef2f8" font-family="Fraunces, serif" font-size="17">Backup NAS</text>
+        <text x="550" y="520" text-anchor="middle" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">RAID1 · RECOVERY SNAPSHOTS</text></g>
+
+      <!-- edges -->
+      <g class="node"><rect x="20" y="470" width="160" height="50" rx="12" fill="url(#g-card)" stroke="rgba(238,242,248,.25)"/>
+        <text x="100" y="492" text-anchor="middle" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Workstation</text>
+        <text x="100" y="509" text-anchor="middle" fill="rgba(238,242,248,.5)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">VOICE-DRIVEN LINUX</text></g>
+      <g class="node"><rect x="920" y="470" width="160" height="50" rx="12" fill="url(#g-card)" stroke="rgba(238,242,248,.25)"/>
+        <text x="1000" y="492" text-anchor="middle" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Media rooms</text>
+        <text x="1000" y="509" text-anchor="middle" fill="rgba(238,242,248,.5)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">VOICE-CONTROLLED</text></g>
+    </svg></div>
+    <p class="topo-hint">Swipe sideways to see the whole map →</p>
+  </div>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="eyebrow">01 · Foundation</span>
+      <div><h2>Network &amp; servers</h2>
+        <p>Built like a small business, not a hobby shelf. One tower server runs four virtual machines, each with a single
+          job. The network is split into planned address bands, with an isolated segment for untrusted devices that passed
+          its own isolation tests.</p></div>
+    </div>
+    <div class="cards">
+      <div class="card" style="--accent:var(--cyan)"><h3>Virtualization</h3>
+        <ul><li>One host, four VMs: market data, automation, development, Windows</li><li>Fixed memory per VM, RAID storage</li><li>VM state, checkpoints and disk sizes read every minute</li></ul></div>
+      <div class="card" style="--accent:var(--cyan)"><h3>Segmented network</h3>
+        <ul><li>Zone-based firewall with intrusion detection</li><li>Planned address bands per role</li><li>Isolated VLAN, verified with 10 isolation checks</li></ul></div>
+      <div class="card" style="--accent:var(--cyan)"><h3>Names &amp; certificates</h3>
+        <ul><li>Internal services on trusted TLS certificates</li><li>Internal services are reachable only from the local network</li><li>Only what must be public goes out, through secure tunnels</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="eyebrow">02 · The platform</span>
+      <div><h2>A live market-data platform</h2>
+        <p>The busiest machine in the room. It serves real-time quotes, options analytics and a research platform to
+          dashboards and AI agents, and it has stayed up for more than a year.</p></div>
+    </div>
+    <div class="cards">
+      <div class="card" style="--accent:var(--amber)"><h3>APIs</h3>
+        <ul><li>Quotes, options chains, volatility and options-flow analytics</li><li>Market regime, research summaries and per-ticker intelligence</li><li>A price-alert registry checked every 15 minutes, pushed to my phone</li></ul></div>
+      <div class="card" style="--accent:var(--amber)"><h3>Always running</h3>
+        <ul><li>Every service supervised; scheduled jobs pinned to New York market time</li><li>A paper-trading bot and a live charting app</li><li>Every database backed up nightly</li></ul></div>
+      <div class="card" style="--accent:var(--violet)"><h3>Automation server</h3>
+        <ul><li>Supervised scanner services with circuit breakers</li><li>Options-flow capture every 15 minutes during market hours</li><li>One notification hub for alerts, email and calendar</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block" id="sentinel">
+    <div class="block-head">
+      <span class="eyebrow">03 · Observability</span>
+      <div><h2>SENTINEL: it explains, then stays quiet</h2>
+        <p>A low-power appliance watches every machine, service and the internet connection. The rule it is built on:
+          success isn't detecting more things. It's noticing the few things a person would want to know, explaining them
+          correctly, and staying silent the rest of the time.</p></div>
+    </div>
+    <div class="topo sentinel-map">
+      <div class="topo-head">
+        <h2>How SENTINEL listens</h2>
+        <div class="legend"><span><i style="background:var(--cyan)"></i>signals</span><span><i style="background:var(--violet)"></i>collected</span><span><i style="background:var(--amber)"></i>decided</span></div>
+      </div>
+      <div class="topo-scroll"><svg class="map" viewBox="0 0 1100 420" role="img" aria-label="SENTINEL: five kinds of signals from machines, network, services, the internet and logs are collected as metrics, flows, probes and logs, turned into one incident with evidence, and sent as one clear alert, a dashboard, or silence. Watchdogs on two other machines watch SENTINEL itself.">
+        <defs>
+          <linearGradient id="s-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16203a"/><stop offset="1" stop-color="#0b1020"/></linearGradient>
+          <filter id="s-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <g font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="2" fill="rgba(238,242,248,.5)">
+          <text x="20" y="48">WHAT IT WATCHES</text><text x="300" y="48">HOW IT LISTENS</text><text x="600" y="48">WHAT IT DECIDES</text><text x="860" y="48">WHAT YOU GET</text>
+        </g>
+        <g fill="none" stroke-width="2"><path d="M240 94 H300" stroke="#5fd4f0" class="flow"/><path d="M240 156 H300" stroke="#5fd4f0" class="flow"/><path d="M240 218 H300" stroke="#5fd4f0" class="flow"/><path d="M240 280 H300" stroke="#5fd4f0" class="flow"/><path d="M240 342 H300" stroke="#5fd4f0" class="flow"/><path d="M510 94 C 560 94, 560 230, 600 230" stroke="#9d84ff" class="flow slow" fill="none"/><path d="M510 156 C 560 156, 560 230, 600 230" stroke="#9d84ff" class="flow slow" fill="none"/><path d="M510 218 C 560 218, 560 230, 600 230" stroke="#9d84ff" class="flow slow" fill="none"/><path d="M510 280 C 560 280, 560 230, 600 230" stroke="#9d84ff" class="flow slow" fill="none"/><path d="M510 342 C 560 342, 560 230, 600 230" stroke="#9d84ff" class="flow slow" fill="none"/>
+          <path d="M800 230 C 830 230, 830 128, 860 128" stroke="#e0a45c" class="flow"/>
+          <path d="M800 230 H860" stroke="#e0a45c" class="flow slow"/>
+          <path d="M800 230 C 830 230, 830 332, 860 332" stroke="#e0a45c" class="flow slow" opacity=".5"/>
+          <path d="M690 392 V300" stroke="#5fe0a0" class="flow slow" stroke-dasharray="2 8"/>
+        </g>
+        <g class="node"><rect x="20" y="70" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="92" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Servers &amp; VMs</text><text x="34" y="109" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">CPU · MEMORY · DISKS</text></g><g class="node"><rect x="20" y="132" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="154" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Network &amp; Wi-Fi</text><text x="34" y="171" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">GATEWAY · SWITCH · APS</text></g><g class="node"><rect x="20" y="194" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="216" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Services</text><text x="34" y="233" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">IS IT UP? IS IT RIGHT?</text></g><g class="node"><rect x="20" y="256" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="278" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">The internet</text><text x="34" y="295" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">IS THE LINK HEALTHY?</text></g><g class="node"><rect x="20" y="318" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="340" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Logs &amp; changes</text><text x="34" y="357" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">LOGINS · ACCOUNTS · FILES</text></g><g class="node"><rect x="300" y="70" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="92" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Metrics</text><text x="314" y="109" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">NUMBERS OVER TIME</text></g><g class="node"><rect x="300" y="132" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="154" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Flows &amp; SNMP</text><text x="314" y="171" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">WHO TALKS TO WHOM</text></g><g class="node"><rect x="300" y="194" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="216" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Health probes</text><text x="314" y="233" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">FROM INSIDE</text></g><g class="node"><rect x="300" y="256" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="278" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Outside probes</text><text x="314" y="295" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">FROM THE INTERNET</text></g><g class="node"><rect x="300" y="318" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="340" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Log collection</text><text x="314" y="357" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">SEARCHABLE HISTORY</text></g>
+        <g class="node"><rect x="600" y="160" width="200" height="140" rx="16" fill="url(#s-card)" stroke="rgba(157,132,255,.85)" filter="url(#s-glow)"/>
+          <circle cx="624" cy="186" r="5" fill="#5fe0a0" class="pulse"/>
+          <text x="638" y="191" fill="#eef2f8" font-family="Fraunces, serif" font-size="21">SENTINEL</text>
+          <text x="620" y="218" fill="rgba(238,242,248,.62)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">ALERTS AROUND THE CLOCK</text>
+          <text x="620" y="238" fill="rgba(238,242,248,.62)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">NOISE → ONE INCIDENT</text>
+          <text x="620" y="258" fill="rgba(238,242,248,.62)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">EVIDENCE ATTACHED</text>
+          <text x="620" y="282" fill="#e0a45c" font-family="Fraunces, serif" font-style="italic" font-size="13">explains, then stays quiet</text></g>
+        <g class="node"><rect x="860" y="104" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(224,164,92,.6)"/><text x="874" y="126" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">One clear alert</text><text x="874" y="143" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">WITH THE EVIDENCE · TO MY PHONE</text></g>
+        <g class="node"><rect x="860" y="206" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(224,164,92,.45)"/><text x="874" y="228" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Dashboards</text><text x="874" y="245" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">EVERYTHING AT A GLANCE</text></g>
+        <g class="node"><rect x="860" y="308" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(224,164,92,.3)"/><text x="874" y="330" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Silence</text><text x="874" y="347" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">WHEN ALL IS WELL</text></g>
+        <g class="node"><rect x="600" y="372" width="200" height="40" rx="10" fill="url(#s-card)" stroke="rgba(95,224,160,.55)"/>
+          <text x="700" y="397" text-anchor="middle" fill="#eef2f8" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">WATCHDOGS ON 2 OTHER MACHINES</text></g>
+      </svg></div>
+      <p class="topo-hint">Swipe sideways to see the whole map →</p>
+    </div>
+    <div class="cards">
+      <div class="card" style="--accent:var(--violet)"><h3>The stack</h3>
+        <ul><li>Metrics, logs, alerts and dashboards in one appliance</li><li>Network flow, SNMP, disk health and service probes</li><li>Alert rules for every machine, service and the internet link</li></ul></div>
+      <div class="card" style="--accent:var(--violet)"><h3>Incidents, not noise</h3>
+        <ul><li>Raw alerts become one incident, with the evidence attached</li><li>A dead-man check on two other machines watches the watcher</li><li>Tested against a 19-scenario failure suite</li></ul></div>
+      <div class="card" style="--accent:var(--violet)"><h3>Security checks</h3>
+        <ul><li>New devices, failed logins and account changes</li><li>File integrity, pending updates, newly opened ports</li><li>Replaced a heavyweight security suite with 7 lean checks</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="eyebrow">04 · Recovery</span>
+      <div><h2>Backups you can actually restore</h2>
+        <p>A backup you haven't restored is a hope, not a backup. The nightly archives are read back and hash-checked,
+          and restores are tested on purpose.</p></div>
+    </div>
+    <div class="cards">
+      <div class="card" style="--accent:var(--green)"><h3>Every night</h3>
+        <ul><li>Per-machine archives and live database copies to the NAS</li><li>Each one read back and hash-verified</li><li>Kept 14 days, 8 weeks and 12 months</li></ul></div>
+      <div class="card" style="--accent:var(--green)"><h3>Versioned &amp; recoverable</h3>
+        <ul><li>30-day recovery snapshots</li><li>Weekly versioned backup of the whole NAS</li><li>Each machine's backup key works only from that machine</li></ul></div>
+      <div class="card" style="--accent:var(--green)"><h3>Proven restores</h3>
+        <ul><li>Business documents backed up about every 10 minutes</li><li>A document test restore came back byte-identical (Oct 2026)</li><li>One-file restore tool and a restore-test script</li></ul></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head">
+      <span class="eyebrow">05 · AI operations</span>
+      <div><h2>AI agents run it, safely</h2>
+        <p>Most of this is operated through AI agents, by voice. That only works with guardrails, so every agent works
+          inside them: look first, change carefully, write it down, and keep a way back.</p></div>
+    </div>
+    <div class="cards">
+      <div class="card" style="--accent:var(--amber)"><h3>Guardrails</h3>
+        <ul><li>Agents inspect machines read-only first</li><li>Every change logged with how to reverse it</li><li>Snapshots and backups before risky work</li></ul></div>
+      <div class="card" style="--accent:var(--amber)"><h3>Least privilege</h3>
+        <ul><li>Read-only keys where reading is enough</li><li>Keys locked to the machine that uses them</li><li>VM control designed as a short allow-list with a human approval step</li></ul></div>
+      <div class="card" style="--accent:var(--amber)"><h3>Local AI</h3>
+        <ul><li>Language models and speech-to-text on my own GPUs</li><li>A job queue that shares the GPUs fairly</li><li>A live view of Claude Code sessions on five machines (built on StrSimon's AgentVille)</li></ul></div>
+    </div>
+  </section>
+
+  <div class="principle">
+    <blockquote>"I know where AI gets IT work right and where it breaks, because I run it on real systems every day."</blockquote>
+    <cite>Daryll Gomas · 25 years in IT</cite>
+  </div>
+
+
+</div>
+<script>
+  // inside the site's pop-up: the back link closes the pop-up instead of navigating
+  (function () {
+    if (window.top === window.self) return;
+    var back = document.querySelector('.top a[href="../"]');
+    if (back) { back.textContent = '← Back to the galaxy'; back.addEventListener('click', function (e) { e.preventDefault(); window.parent.postMessage('study:close', location.origin); }); }
+    addEventListener('keydown', function (e) { if (e.key === 'Escape') window.parent.postMessage('study:close', location.origin); });
+  })();
+  // phones: start the map centred on the switch, not on empty sky
+  [].forEach.call(document.querySelectorAll('.topo-scroll'), function (t) { if (t.scrollWidth > t.clientWidth) t.scrollLeft = (t.scrollWidth - t.clientWidth) / 2; });
+</script>
+</body>
+</html>

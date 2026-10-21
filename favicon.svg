@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="mandalaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00d4ff"/>
+      <stop offset="100%" stop-color="#7b2ff2"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="6" fill="#07070c"/>
+  <circle cx="16" cy="16" r="12.5" fill="none" stroke="#7b2ff2" stroke-width="1.5" opacity="0.55"/>
+  <circle cx="16" cy="16" r="8.5" fill="none" stroke="#00d4ff" stroke-width="1.5" opacity="0.75"/>
+  <circle cx="16" cy="7.5" r="2" fill="#7b2ff2"/>
+  <circle cx="16" cy="24.5" r="2" fill="#7b2ff2"/>
+  <circle cx="7.5" cy="16" r="2" fill="#7b2ff2"/>
+  <circle cx="24.5" cy="16" r="2" fill="#7b2ff2"/>
+  <circle cx="16" cy="16" r="4.5" fill="url(#mandalaGrad)"/>
+</svg>
