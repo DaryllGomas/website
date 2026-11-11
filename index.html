@@ -1727,6 +1727,8 @@ frame();
     .orbit-body { padding: 1.6rem 1.3rem 1.8rem; }
   }
 .duo + .pics{margin-top:10px}
+/* phones: the constellation names are tall enough for a thumb */
+@media (max-width: 640px) { .orbit-index { gap: .5rem .6rem; } .orbit-index a { display: inline-block; padding: .62rem .75rem; border: 1px solid rgba(238,242,248,.16); border-radius: 999px; } }
 @media (max-width: 520px) {
   .orbit-card { overflow-x: hidden; animation-fill-mode: backwards; }   /* no leftover transform, so the close button can stay fixed on screen */
   .orbit-x { position: fixed; top: 4vh; right: 22px; width: 38px; height: 38px; border-radius: 50%; background: rgba(5,7,14,.78); border: 1px solid rgba(238,242,248,.18); }
