@@ -12,6 +12,22 @@ Daryll's choice: no fallback page. If the 3D context drops, the page reloads in 
 - **Drive docs:** `~/BigPic/_Income/Online Presence/README.md` (the plan for all public surfaces) and
   `~/BigPic/_Income/Expert Work/Master Profile.md` (the one source for bios and claims).
 
+## The first screen, v2 (live 2026-11-11)
+Rebuilt with Daryll (mockup: `~/Projects/sites/_mockups/daryllgomas-hero/v1`). A visitor knows who he is at a glance:
+photo and name with "AI systems builder · 25 years in IT", the pitch "Designing and implementing systems that use the
+right tools for the right job", two buttons, then **technical work first** (network build-out, security audit sample),
+then the picture cards (Swarm AI, Town Hall, The Studio, Ancients), "What I do" and links.
+- **"Discuss a project"** reveals `daryll@bigpicsolutions.com` only after a click (assembled in JS; no form, no
+  `mailto:`), so harvesting bots find nothing in the HTML.
+- **`security/`** is a SAMPLE report for a FICTIONAL dental office, built by `~/Projects/tools/security-sweep/report.py`.
+  Never publish a real scan here.
+- **`resume/`** is built by the Résumé project (`~/Projects/business/resume/web/build_web.py`) from its PUBLIC master
+  (no phone number). Don't hand-edit it; rebuild and copy.
+- **One scroll:** when the first panel is taller than the screen, the page's own scroll slides its contents up, then
+  carries on into the descent (no scroll inside a scroll). On phones the journey is shorter (`.track` 800vh).
+- **Tests** (on Atlas, `~/render`): `qa-hero.mjs` (six sizes), `phone-journey.mjs` (touch swipes top to bottom),
+  `phone-taps.mjs` (every main control).
+
 ## The first screen (2026-10-20)
 Everything that matters is on the first screen, in a tall column: photo, name, the bio from X, the tagline
 "Imagine it. Build it. Share it.", the live projects ("Building now"), and links (X, GitHub, BigPic, email). The

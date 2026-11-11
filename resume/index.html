@@ -34,6 +34,7 @@
   ul { list-style:none; margin-top:8px; }
   li { position:relative; padding-left:16px; color:var(--ink-dim); font-size:.93rem; margin:4px 0; }
   li::before { content:""; position:absolute; left:0; top:.68em; width:6px; height:1px; background:var(--amber); }
+  li b { color:var(--ink); font-weight:400; }
   .job { padding:16px 0; border-bottom:1px solid var(--line); }
   .job:last-child { border-bottom:0; }
   .meta { font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); margin-top:2px; }
@@ -58,7 +59,7 @@
     .k, .role { color:#8a5a1c; }
     .where, .meta, .tl dt, h2 { color:#555; }
     .sum, li, .tl dd { color:#222; }
-    .tl dd b { color:#111; }
+    .tl dd b, li b { color:#111; }
     h1 { font-size:26pt; margin-top:4px; }
     section { margin-top:12px; break-inside:auto; }
     .sum { margin-top:10px; font-size:9.5pt; } .grid { gap:8px; }
@@ -75,74 +76,73 @@
 
   <span class="k">Résumé</span>
   <h1>Daryll Gomas</h1>
-  <p class="role">AI Solutions · Automation · Infrastructure + AI Integration</p>
-  <p class="where">Portland, OR · Remote-first</p>
-  <p class="where print-only">daryll.gomas@gmail.com · daryllgomas.com</p>
-  <p class="sum">25+ years in IT infrastructure, now building with AI. Deep infrastructure knowledge (Microsoft 365, networking,
-  security, virtualization) combined with hands-on AI development: Python, the Claude API, MCP and local LLMs. I design and run
-  multi-agent research systems, automated security scanning and AI-powered data pipelines, mostly by voice.</p>
+  <p class="role">IT Systems Engineer · Infrastructure, Identity &amp; Security · AI Agents &amp; Custom Tooling</p>
+  <p class="where">Portland, OR · Remote or hybrid</p>
+  <p class="where print-only">daryll.gomas@gmail.com · linkedin.com/in/daryll-gomas · github.com/DaryllGomas · daryllgomas.com</p>
+  <p class="sum">IT systems engineer with 25+ years across the whole stack: identity and Microsoft 365, Apple and Windows fleets, networks, security and backups. For the last two years I've retooled around AI, working daily in Claude Code and Codex. I bring both sides: I run the systems a business already depends on, and I find where they waste time and money, measure it, and fix it with the right-sized answer, whether that's an existing product, open source, or a custom tool built with AI.</p>
   <p><a class="dl" href="Daryll-Gomas-Resume.pdf" download>PDF ↓</a> <a class="dl" href="Daryll-Gomas-Resume.docx" download>Word ↓</a></p>
 
   <section>
     <h2>Core skills</h2>
     <div class="grid">
-      <div class="card"><h3>AI &amp; automation</h3><ul>
-        <li>Claude API, Anthropic SDK, MCP</li><li>Multi-agent design and orchestration</li>
-        <li>Local LLMs on NVIDIA GPUs (Ollama, Docker)</li><li>Python automation and data pipelines</li>
-        <li>Voice-first, hands-free workflows</li></ul></div>
-      <div class="card"><h3>Infrastructure</h3><ul>
-        <li>Microsoft 365 / Entra ID, Conditional Access, MFA</li><li>Networks, firewalls, VLANs, VPN</li>
-        <li>Hyper-V virtualization, Windows Server, AD/DNS/DHCP</li><li>NAS backup and disaster recovery</li>
-        <li>Mac &amp; Windows fleet management</li></ul></div>
-      <div class="card"><h3>Security &amp; compliance</h3><ul>
-        <li>Automated vulnerability scanning with AI summaries</li><li>PCI DSS, HIPAA and cyber-insurance mapping</li>
-        <li>Pen test &amp; cyber defense experience</li><li>HIPAA environments: medical and dental</li></ul></div>
-      <div class="card"><h3>Development</h3><ul>
-        <li>Python, Bash, PowerShell, JavaScript, SQL</li><li>HTML/CSS/JS dashboards and 3D web</li>
-        <li>Docker, Ansible, Git</li><li>Pine Script / ThinkScript indicators</li></ul></div>
+      <div class="card"><h3>Identity &amp; Microsoft 365</h3><ul>
+        <li>Entra ID (Azure AD), SSO, user lifecycle, tenant setup and migrations</li><li>Email authentication (SPF, DKIM, DMARC)</li><li>Google Workspace</li><li>Active Directory, DNS, DHCP</li></ul></div>
+      <div class="card"><h3>Automation &amp; AI</h3><ul>
+        <li>Claude Code, Codex</li><li>AI-built automation (Bash, Python, PowerShell)</li><li>MCP servers, REST APIs, OAuth</li><li>Cloudflare Workers</li><li>Local LLMs</li></ul></div>
+      <div class="card"><h3>Security</h3><ul>
+        <li>MFA and Conditional Access</li><li>SonicWall and UniFi firewalls, VLAN segmentation</li><li>Endpoint protection (SentinelOne)</li><li>Incident response</li><li>Backups as ransomware defence</li><li>Security assessments</li><li>AI agent security (prompt-injection screening, consent gates, least-privilege tools)</li><li>HIPAA-sensitive environments</li></ul></div>
+      <div class="card"><h3>Endpoints</h3><ul>
+        <li>macOS and Windows fleets</li><li>MDM (Addigy) and RMM (NinjaOne)</li><li>Deployment, configuration and imaging</li><li>iOS and Android</li></ul></div>
+      <div class="card"><h3>Networks &amp; infrastructure</h3><ul>
+        <li>Site-to-site and client VPN, Wi-Fi</li><li>Linux servers, Docker Compose, Windows Server, Hyper-V</li><li>Synology NAS, 3-2-1 backup and recovery</li><li>Prometheus, Grafana, Loki, Alertmanager</li></ul></div>
+      <div class="card"><h3>Process &amp; cost analysis</h3><ul>
+        <li>Workflow and cost reviews, measuring where time and money go, upgrade proposals, right-sizing software (existing product, open source or custom)</li></ul></div>
     </div>
   </section>
 
   <section>
     <h2>Experience</h2>
-    <div class="job"><h3>Principal Consultant · AI Solutions — BigPic Solutions</h3>
-      <p class="meta">May 2025 – present · Portland, OR (remote)</p><ul>
-      <li>Built a multi-agent equity research framework with composite scoring and automated reports</li>
-      <li>Built an AI sentiment pipeline over social and news feeds, using local LLMs on my own GPUs</li>
-      <li>Built an automated security assessment toolchain: scan, report, remediate, with AI executive summaries and compliance mapping</li>
-      <li>Microsoft 365 / Entra hardening, network segmentation and NAS backup for small businesses</li></ul></div>
-    <div class="job"><h3>IT Field Engineer — MacForce (Launch Technologies)</h3>
-      <p class="meta">Feb 2023 – May 2025 · Portland, OR</p><ul>
-      <li>Microsoft 365 and Entra ID administration, Conditional Access, SSO, migrations</li>
-      <li>Hybrid Apple and Windows fleets; on-site assessments, firewalls, VPN and NAS backups</li>
-      <li>Client consulting with documented 30–60% cost reduction through SaaS audits</li></ul></div>
-    <div class="job"><h3>Earlier</h3>
+    <div class="job"><h3>BigPic Solutions · Independent Technology &amp; AI Systems Practice</h3>
+      <p class="meta">Portland, OR · May 2025 – Present</p><ul>
+      <li>Independent practice: IT services for small-business clients (Microsoft 365, networking, backups), plus building and operating AI-assisted systems in a production lab environment. AI tools write the code; I own the requirements, the verification and the operations.</li>
+      <li><b>Monitoring and detection:</b> built and operate a monitoring platform covering 18 hosts and 29 services (Prometheus, Alertmanager, Loki, Grafana). It correlates alerts into evidence-backed incidents and flags new devices, unusual logins, new accounts and newly opened ports.</li>
+      <li><b>AI agent security:</b> inventoried prompt-injection exposure across the AI agents in use, ranked the gaps and designed probe tests for an independent review; took a consent gate for AI tool calls through four security review rounds. Wrote a security runbook for small offices.</li>
+      <li><b>Backup that proves itself:</b> built versioned backup and restore tooling that runs nightly, proves restores every week and stops with an alert on mass deletes; a full restore drill passed.</li>
+      <li><b>Public service:</b> directed the build of Swarm AI (swarm.bigpicsolutions.com), a public service on Cloudflare Workers with OAuth sign-in that routes research tasks to contributors' own AI agents. Releases are gated on automated tests and a security review; incoming tasks are screened for hidden instructions.</li></ul></div>
+    <div class="job"><h3>MacForce (Launch Technologies) · IT Field Engineer</h3>
+      <p class="meta">Portland, OR (hybrid) · Feb 2023 – May 2025</p><ul>
+      <li>Worked alongside the lead engineer on a break-in and ransomware attack at a client's colocation site: helped contain it over a weekend, collected logs for forensics and recovered project data from off-site Synology C2 backups, then hardened the environment (2FA, VPN, SentinelOne, a rebuilt domain controller).</li>
+      <li>Administered Microsoft 365 and Entra ID for managed-service clients: Conditional Access, SSO, MFA, user lifecycle, licensing and tenant migrations.</li>
+      <li>Managed Apple and Windows fleets with Addigy (MDM) and NinjaOne (RMM): endpoint deployment, configuration and imaging at scale.</li>
+      <li>Configured SonicWall and Ubiquiti firewalls, VPN, VLAN segmentation and site-to-site links; ran Synology backup and disaster-recovery operations across client environments.</li>
+      <li>Led client onboarding and migrations, including email domain moves with SPF, DKIM and DMARC; on-site assessments with network diagrams and upgrade proposals.</li></ul></div>
+    <div class="job"><h3>BigPic Solutions · IT Consultant</h3>
+      <p class="meta">Portland, OR · Mar 2020 – Feb 2023</p><ul>
+      <li>Designed and installed wired and wireless networks for business clients; supported Mac, Windows and Linux, including MDM for mixed environments.</li>
+      <li>Set up remote-support infrastructure as clients moved to hybrid and remote work; trained users.</li></ul></div>
+    <div class="job"><h3>DenTech LLC · IT Field Technician (contract)</h3>
+      <p class="meta">Portland, OR · Sep 2018 – Mar 2020</p><ul>
+      <li>Project lead for medical and dental office deployments: site assessments, deployment plans, materials and execution.</li>
+      <li>Deployed and managed Active Directory, DHCP, DNS and Windows Server in compliance-sensitive (HIPAA) offices.</li></ul></div>
+    <div class="job"><h3>BigPic Solutions · IT Consultant (founder)</h3>
+      <p class="meta">Buffalo, NY · Jan 2014 – Sep 2018</p><ul>
+      <li>Founded the practice: network installs, PC, Mac and Linux repair and setup, and technology training for homes and businesses.</li></ul></div>
+    <div class="job"><h3>TransWorld Network (ISP) · Network Operations Center Technician</h3>
+      <p class="meta">Oldsmar, FL · Oct 2011 – Sep 2012</p><ul>
+      <li>Handled multi-state network incidents, with full autonomy on night shifts; administered Hyper-V, Cisco switches and firewalls; took escalations from level 2.</li></ul></div>
+    <div class="job"><h3>Earlier roles</h3>
       <dl class="tl" style="margin-top:10px">
-        <dt>2014 – 2023</dt><dd><b>BigPic Solutions</b>: founded in Buffalo, NY; networks, repair and IT consulting, then Portland</dd>
-        <dt>2018 – 2020</dt><dd><b>DenTech LLC</b>: IT field technician for medical and dental practices (HIPAA)</dd>
-        <dt>2012 – 2013</dt><dd><b>Felines Pride</b>: manager; technology, operations and web</dd>
-        <dt>2011 – 2012</dt><dd><b>TransWorld Network</b>: ISP network operations center technician</dd>
-        <dt>2002 – 2011</dt><dd><b>Knight Enterprises</b>: field services engineer, county lead for network deployments</dd>
-        <dt>2000 – 2002</dt><dd><b>Time Warner Cable</b>: level 3 support and escalation lead</dd>
+        <dt>2012 – 2013</dt><dd><b>Felines Pride</b>: Operations Manager, Buffalo, NY</dd>
+        <dt>2002 – 2011</dt><dd><b>Knight Enterprises</b>: Field Services Engineer and county lead for network installations, Clearwater, FL</dd>
+        <dt>2000 – 2002</dt><dd><b>Time Warner Cable</b>: Level 3 Support Specialist and escalation lead, Clearwater, FL</dd>
       </dl></div>
   </section>
 
   <section>
-    <h2>Selected projects</h2>
-    <div class="grid">
-      <div class="card"><h3>Multi-agent research system</h3><ul><li>Seven-dimension composite scoring, agent orchestration, automated reports</li></ul></div>
-      <div class="card"><h3>Security scanning platform</h3><ul><li>Scan, report, remediate; AI summaries; YAML compliance frameworks; Ansible fixes</li></ul></div>
-      <div class="card"><h3>Network &amp; systems build-out</h3><ul><li>Virtualized servers, segmented network, observability, verified backups, run by AI agents</li></ul></div>
-      <div class="card"><h3>Games and public tools</h3><ul><li>Browser games, Town Hall and Swarm AI, built mostly by voice with AI</li></ul></div>
-    </div>
-  </section>
-
-  <section>
-    <h2>Training</h2>
+    <h2>Certifications &amp; Professional Development</h2>
     <ul>
-      <li>Microsoft 365 / Entra ID administration (hands-on production)</li>
-      <li>Pen test &amp; cyber defense experience</li>
-      <li>AI systems architecture (self-directed: Claude API, MCP, local LLMs, multi-agent design)</li>
+      <li>TryHackMe: Top 3% (2022); Jr Penetration Tester and Blue Team learning paths.</li>
+      <li>Apple Certified Support Professional: earned Nov 2023; expired.</li>
     </ul>
   </section>
 </div>

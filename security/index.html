@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Security Assessment — 2026-11-01</title>
+<style>
+  :root{
+    --deep:#0a0f1a; --night:#121a2e; --twilight:#1a2744; --horizon:#2d4a6f;
+    --dawn:#e8b87d; --sunrise:#f4a261; --coral:#ef8354;
+    --light:#fdf6ec; --mist:#c9d6df; --star:#fff;
+    --ink:#16202f; --ink-soft:#4a5b70; --rule:#e3dbcd; --paper:#fffdf8;
+    --crit:#c0392b; --high:#d2691e; --med:#b8860b; --info:#5b7b9a; --ok:#2f7d5f;
+    --display:'Space Grotesk','Inter','Helvetica Neue','DejaVu Sans',Arial,sans-serif;
+    --body:'Newsreader','Charter','Iowan Old Style',Georgia,'DejaVu Serif',serif;
+    --mono:'JetBrains Mono','DejaVu Sans Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--light);color:var(--ink);font-family:var(--body);font-size:15.5px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  .sheet{max-width:940px;margin:0 auto;background:var(--paper);box-shadow:0 1px 3px rgba(10,15,26,.08),0 12px 40px rgba(10,15,26,.06)}
+  .letterhead{background:linear-gradient(135deg,var(--deep) 0%,var(--night) 45%,var(--twilight) 100%);color:var(--light);padding:2.4rem 3rem 2rem;position:relative;overflow:hidden}
+  .letterhead::after{content:'';position:absolute;right:-90px;top:-90px;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,rgba(244,162,97,.20) 0%,rgba(244,162,97,.06) 45%,transparent 70%)}
+  .lh-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;position:relative;z-index:1}
+  .brand{display:flex;align-items:center;gap:.7rem;font-family:var(--display);font-weight:600;letter-spacing:.14em;font-size:.82rem}
+  .brand svg{width:26px;height:26px;color:var(--sunrise);flex:none}
+  .classif{font-family:var(--mono);font-size:.62rem;letter-spacing:.18em;color:var(--dawn);border:1px solid rgba(232,184,125,.4);padding:.3rem .6rem;border-radius:2px;white-space:nowrap}
+  .lh-title{position:relative;z-index:1;margin:1.8rem 0 0}
+  .lh-title h1{font-family:var(--display);font-weight:300;font-size:2.35rem;line-height:1.1;margin:0;letter-spacing:-.02em}
+  .lh-title h1 strong{font-weight:600;color:var(--dawn)}
+  .lh-sub{font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;color:var(--mist);margin-top:.9rem}
+  .lh-meta{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:0 2.4rem;margin:1.6rem 0 0;padding-top:1.2rem;border-top:1px solid rgba(201,214,223,.18)}
+  .lh-meta div{font-size:.8rem}
+  .lh-meta dt{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:var(--dawn);text-transform:uppercase}
+  .lh-meta dd{margin:.2rem 0 0;font-family:var(--display);font-weight:400;color:var(--star)}
+  .verdict{display:flex;align-items:stretch;border-bottom:1px solid var(--rule)}
+  .verdict-badge{flex:none;width:210px;padding:1.6rem 1.4rem;display:flex;flex-direction:column;justify-content:center;gap:.35rem;color:#fff}
+  .verdict-badge.crit{background:var(--crit)} .verdict-badge.high{background:var(--high)}
+  .verdict-badge.med{background:var(--med)}  .verdict-badge.ok{background:var(--ok)}
+  .verdict-badge .vl{font-family:var(--mono);font-size:.58rem;letter-spacing:.16em;opacity:.85}
+  .verdict-badge .vv{font-family:var(--display);font-weight:600;font-size:1.2rem;line-height:1.15}
+  .verdict-body{padding:1.5rem 1.8rem;font-size:1rem}
+  .verdict-body p{margin:0}
+  .score{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule)}
+  .score>div{padding:1.3rem 1rem;text-align:center;border-right:1px solid var(--rule)}
+  .score>div:last-child{border-right:0}
+  .score .n{font-family:var(--display);font-size:2.3rem;font-weight:600;line-height:1}
+  .score .l{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:var(--ink-soft);margin-top:.45rem;text-transform:uppercase}
+  .score .crit .n{color:var(--crit)} .score .high .n{color:var(--high)}
+  .score .med .n{color:var(--med)}   .score .info .n{color:var(--info)}
+  .score.small{border:1px solid var(--rule);margin:.8rem 0 1rem}
+  .score.small>div{padding:.8rem .6rem}
+  .score.small .n{font-size:1.35rem}
+  .score.small .n .arrow{font-size:.9rem;color:var(--ink-soft);margin:0 .25rem;font-weight:400}
+  main{padding:2.4rem 3rem 3rem;counter-reset:sec}
+  section{margin-bottom:2.6rem}
+  h2{font-family:var(--display);font-weight:500;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--horizon);
+     margin:0 0 1.1rem;padding-bottom:.55rem;border-bottom:2px solid var(--rule);display:flex;align-items:baseline;gap:.7rem}
+  h2::before{content:counter(sec,decimal-leading-zero);counter-increment:sec;font-family:var(--mono);color:var(--sunrise);font-size:.72rem}
+  h3{font-family:var(--display);font-weight:600;font-size:1.02rem;margin:1.9rem 0 .4rem}
+  p{margin:.55rem 0}
+  code{font-family:var(--mono);font-size:.84em;background:#f3ece0;padding:.1em .38em;border-radius:2px;color:var(--twilight)}
+  .muted{color:var(--ink-soft);font-size:.9rem}
+  .good-line{color:var(--ok);font-size:1rem}
+  .sev-h{display:flex;align-items:center;gap:.6rem;font-size:.95rem;letter-spacing:.02em;margin-top:2rem}
+  .sev-dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .sev-h.crit .sev-dot{background:var(--crit)} .sev-h.high .sev-dot{background:var(--high)}
+  .sev-h.med .sev-dot{background:var(--med)}   .sev-h.info .sev-dot{background:var(--info)}
+  .sev-n{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);background:#f3ece0;padding:.12rem .45rem;border-radius:2px}
+  .sev-blurb{font-size:.86rem;color:var(--ink-soft);margin:.15rem 0 .8rem;font-style:italic}
+  table{width:100%;border-collapse:collapse;font-size:.88rem;margin:.6rem 0 1rem}
+  th{font-family:var(--display);font-weight:500;font-size:.62rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);
+     text-align:left;padding:.5rem .7rem;border-bottom:1.5px solid var(--rule)}
+  td{padding:.62rem .7rem;border-bottom:1px solid #efe8db;vertical-align:top}
+  tbody tr:last-child td{border-bottom:0}
+  .findings td:first-child{width:4.5rem}
+  .fixref{font-family:var(--mono);font-size:.72rem;font-weight:500;background:var(--twilight);color:var(--dawn);padding:.16rem .42rem;border-radius:2px}
+  .act{color:var(--ink-soft);font-size:.85rem}
+  .crit-row{background:rgba(192,57,43,.045)} .high-row{background:rgba(210,105,30,.04)}
+  td.chips{display:table-cell}
+  .chips{display:flex;flex-wrap:wrap;gap:.3rem;margin:.5rem 0}
+  .chip{display:inline-block;font-family:var(--mono);font-size:.72rem;padding:.16rem .46rem;margin:0 .3rem .3rem 0;border-radius:2px;background:#eee6d8;color:var(--twilight)}
+  .chip-bad{background:var(--crit);color:#fff;font-weight:500}
+  .chip-gone{background:transparent;border:1px dashed var(--ink-soft);color:var(--ink-soft);text-decoration:line-through}
+  .tag{font-family:var(--mono);font-size:.68rem;padding:.14rem .44rem;border-radius:2px;white-space:nowrap}
+  .tag-ok{background:rgba(47,125,95,.12);color:var(--ok)}
+  .tag-bad{background:rgba(192,57,43,.1);color:var(--crit);font-weight:500}
+  .tag-warn{background:rgba(184,134,11,.12);color:var(--med)}
+  .tag-unk{background:rgba(91,123,154,.14);color:var(--info)}
+  .callout{border-left:3px solid var(--sunrise);background:linear-gradient(90deg,rgba(244,162,97,.07),transparent 75%);padding:1rem 1.2rem;margin:1.2rem 0;font-size:.93rem}
+  .callout strong{font-family:var(--display)}
+  .kv{font-size:.86rem;margin:.35rem 0}
+  .kv b{font-family:var(--display);font-weight:500;color:var(--horizon);font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;display:block}
+  .kv span{font-family:var(--mono);font-size:.78rem;word-break:break-word;color:var(--ink-soft)}
+  footer{background:var(--deep);color:var(--mist);padding:1.6rem 3rem;font-size:.72rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  footer .mono{font-family:var(--mono);font-size:.66rem;letter-spacing:.05em}
+  @media(max-width:720px){
+    .letterhead,main,footer{padding-left:1.3rem;padding-right:1.3rem}
+    .lh-title h1{font-size:1.65rem}
+    .score{grid-template-columns:repeat(2,1fr)}
+    .score>div:nth-child(2){border-right:0}
+    .verdict{flex-direction:column} .verdict-badge{width:100%}
+    table{font-size:.8rem} .findings td:first-child{width:3.4rem}
+  }
+  @media print{
+    @page{size:letter;margin:14mm}
+    body{background:#fff;font-size:10.5pt}
+    .sheet{box-shadow:none;max-width:none}
+    .letterhead,.verdict-badge,.chip-bad,.fixref,footer{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    section{break-inside:avoid} table{break-inside:auto} tr{break-inside:avoid}
+    h2{break-after:avoid}
+  }
+</style>
+<style>.stamp{position:fixed;top:120px;right:-60px;transform:rotate(18deg);border:4px solid #c0392b;color:#c0392b;font:700 22px/1.1 ui-monospace,Menlo,monospace;letter-spacing:.16em;padding:10px 70px;background:rgba(255,248,240,.88);z-index:5;pointer-events:none;text-align:center}@media (max-width:700px){.stamp{top:70px;right:-80px;font-size:14px;padding:6px 60px}}.samplenote{background:#fff4e0;border:1px solid #e0a64a;color:#5a3d0c;padding:10px 14px;border-radius:6px;margin:0 0 12px;font:14px/1.5 system-ui,sans-serif}</style></head>
+<body>
+<div class="stamp">SAMPLE</div>
+<div class="sheet">
+
+  <header class="letterhead">
+    <div class="lh-top">
+      <div class="brand">
+        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="4"/>
+          <line x1="16" y1="4" x2="16" y2="8"/><line x1="16" y1="24" x2="16" y2="28"/>
+          <line x1="4" y1="16" x2="8" y2="16"/><line x1="24" y1="16" x2="28" y2="16"/>
+        </svg>
+        BIG PIC SOLUTIONS
+      </div>
+      <div class="classif">SAMPLE REPORT · FICTIONAL BUSINESS</div>
+    </div>
+    <div class="lh-title">
+      <h1>Security<br><strong>Assessment</strong></h1>
+      <div class="lh-sub">INFRASTRUCTURE · ENDPOINT · PERIMETER · IDENTITY</div>
+    </div>
+    <dl class="lh-meta">
+      <div><dt>Prepared for</dt><dd>Harbor Light Dental (fictional)</dd></div>
+      <div><dt>Assessment date</dt><dd>2026-11-01</dd></div>
+      <div><dt>Findings</dt><dd>13 total</dd></div>
+      <div><dt>Prepared by</dt><dd>BigPic Solutions</dd></div>
+    </dl>
+  </header>
+
+  <div class="verdict">
+    <div class="verdict-badge crit">
+      <span class="vl">OVERALL POSTURE</span>
+      <span class="vv">ACTION REQUIRED</span>
+    </div>
+    <div class="verdict-body"><p>2 critical findings require immediate attention. Until these are closed, the environment has at least one path an external attacker can attempt directly.</p></div>
+  </div>
+
+  <div class="score"><div class='crit'><div class='n'>2</div><div class='l'>Critical</div></div><div class='high'><div class='n'>4</div><div class='l'>High</div></div><div class='med'><div class='n'>6</div><div class='l'>Medium</div></div><div class='info'><div class='n'>1</div><div class='l'>Informational</div></div></div>
+
+  <main>
+<section><h2>Internet-facing exposure</h2><p class='muted'>What a stranger with only the public IP address can reach. This is the surface that requires no foothold, no phishing, and no insider — so it is assessed first.</p><p>The public address <code>203.0.113.24</code> accepted a connection on <strong>2 ports</strong>:</p><p class="chips"><span class='chip chip-bad'>3389 NEW</span><span class='chip chip-bad'>8443 NEW</span></p><p class="muted">Every open port is a service a stranger can reach without any credential. The goal is zero. Confirm findings from an off-network vantage point: probing your own public IP from inside the LAN can hairpin to the router and produce false positives.</p></section>
+<section><h2>Findings &amp; remediation</h2><p class='muted'>Severity is scored against the threat model in the runbook: a motivated individual attacker, not commodity malware. Fix references map to the numbered procedures in <em>Runbook — Security Hardening &amp; Quarterly Audit</em>, each of which carries its own verification step.</p><h3 class='sev-h crit'><span class='sev-dot'></span>Critical <span class='sev-n'>2</span></h3><p class='sev-blurb'>Exploitable now, or exposed to the open internet. Fix today.</p><table class='findings'><thead><tr><th style='width:4.5rem'>Fix</th><th>Finding</th><th style='width:38%'>Recommended action</th></tr></thead><tbody><tr class='crit-row'><td><span class='fixref'>F1</span></td><td>Router admin page is reachable from the internet on 8443 - fix F1</td><td class='act'>Disable remote management on the gateway and remove any 443/8080/8443 port-forward. Manage from the LAN or the vendor cloud portal.</td></tr><tr class='crit-row'><td><span class='fixref'>—</span></td><td>Remote Desktop on FRONTDESK-01 is forwarded to the internet (3389) without a VPN</td><td class='act'>Confirm RDP is intentional; require Network Level Authentication.</td></tr></tbody></table><h3 class='sev-h high'><span class='sev-dot'></span>High <span class='sev-n'>4</span></h3><p class='sev-blurb'>A realistic path to compromise. Fix this week.</p><table class='findings'><thead><tr><th style='width:4.5rem'>Fix</th><th>Finding</th><th style='width:38%'>Recommended action</th></tr></thead><tbody><tr class='high-row'><td><span class='fixref'>F7</span></td><td>Account &#x27;reception&#x27; does not require a password - fix F7</td><td class='act'>Set a real password on the account. Keep Hello/PIN for convenience.</td></tr><tr class='high-row'><td><span class='fixref'>—</span></td><td>SMB1 is enabled on the file server 10.20.0.15</td><td class='act'>Disable SMB1. It is unauthenticated-RCE legacy and has no modern use.</td></tr><tr class='high-row'><td><span class='fixref'>F8</span></td><td>10.20.0.15 (NAS) still accepts password SSH auth - fix F8</td><td class='act'>Disable SSH password authentication (keys only). Verify your key works BEFORE reloading sshd.</td></tr><tr class='high-row'><td><span class='fixref'>—</span></td><td>No active antivirus on FRONTDESK-01</td><td class='act'>No active antivirus. Re-enable or reinstall endpoint protection.</td></tr></tbody></table><h3 class='sev-h med'><span class='sev-dot'></span>Medium <span class='sev-n'>6</span></h3><p class='sev-blurb'>Weakens defence or aids reconnaissance. Fix this month.</p><table class='findings'><thead><tr><th style='width:4.5rem'>Fix</th><th>Finding</th><th style='width:38%'>Recommended action</th></tr></thead><tbody><tr class='med-row'><td><span class='fixref'>F9</span></td><td>Printer admin page 10.20.0.40 responds without authentication</td><td class='act'>Bind the service to localhost or place it behind an authenticating reverse proxy.</td></tr><tr class='med-row'><td><span class='fixref'>F9</span></td><td>Camera recorder 10.20.0.50 responds without authentication</td><td class='act'>Bind the service to localhost or place it behind an authenticating reverse proxy.</td></tr><tr class='med-row'><td><span class='fixref'>F12</span></td><td>212 inbound allow rules apply on Public profile - prune per fix F12</td><td class='act'>Prune inbound allow rules so the Public profile permits almost nothing.</td></tr><tr class='med-row'><td><span class='fixref'>F11</span></td><td>No firewall logging on Private - fix F11</td><td class='act'>Enable dropped-packet logging on all firewall profiles.</td></tr><tr class='med-row'><td><span class='fixref'>F11</span></td><td>No firewall logging on Public - fix F11</td><td class='act'>Enable dropped-packet logging on all firewall profiles.</td></tr><tr class='med-row'><td><span class='fixref'>—</span></td><td>harborlight-dental.example has no registrar transfer lock</td><td class='act'>Re-enable registrar transfer lock. Domain hijacking is identity loss.</td></tr></tbody></table><h3 class='sev-h info'><span class='sev-dot'></span>Informational <span class='sev-n'>1</span></h3><p class='sev-blurb'>Could not be verified, or noted for the record.</p><table class='findings'><thead><tr><th style='width:4.5rem'>Fix</th><th>Finding</th><th style='width:38%'>Recommended action</th></tr></thead><tbody><tr class='info-row'><td><span class='fixref'>F6</span></td><td>BitLocker is off on FRONTDESK-01 - fix F6</td><td class='act'>Verify full-disk encryption; enable if off. Store the recovery key off this machine.</td></tr></tbody></table></section>
+<section><h2>Internal network</h2><p class='muted'>Listening services on internal hosts. Ports marked <span class='chip chip-bad'>NEW</span> were not present at the last baseline and should be explained; struck-through ports <span class='chip chip-gone'>00</span> were in the baseline but no longer answer.</p><table><thead><tr><th style='width:9rem'>Host</th><th>Open TCP ports</th></tr></thead><tbody><tr><td><code>10.20.0.1</code></td><td class='chips'><span class='chip'>53</span><span class='chip'>80</span><span class='chip'>443</span><span class='chip chip-bad'>8443 NEW</span></td></tr><tr><td><code>10.20.0.15</code></td><td class='chips'><span class='chip'>22</span><span class='chip chip-bad'>139 NEW</span><span class='chip'>445</span><span class='chip'>5000</span></td></tr><tr><td><code>10.20.0.21</code></td><td class='chips'><span class='chip'>135</span><span class='chip'>445</span><span class='chip chip-bad'>3389 NEW</span></td></tr><tr><td><code>10.20.0.40</code></td><td class='chips'><span class='chip'>80</span><span class='chip chip-bad'>443 NEW</span><span class='chip'>631</span><span class='chip'>9100</span></td></tr><tr><td><code>10.20.0.50</code></td><td class='chips'><span class='chip chip-bad'>80 NEW</span><span class='chip chip-bad'>554 NEW</span><span class='chip chip-bad'>8000 NEW</span></td></tr></tbody></table><h3>Remote access (SSH)</h3><p class='muted'>Password authentication is brute-forceable from any foothold on the network. Public-key only is the target state.</p><table><thead><tr><th style='width:9rem'>Host</th><th>Advertised methods</th><th style='width:13rem'>Status</th></tr></thead><tbody><tr><td><code>10.20.0.15</code></td><td><code>publickey,password</code></td><td><span class='tag tag-bad'>password auth enabled</span></td></tr></tbody></table><h3>Service authentication</h3><p class='muted'>Internal services reachable without credentials. Each one is free reconnaissance for anything that gets onto the network.</p><table><thead><tr><th>Service</th><th style='width:16rem'>Status</th></tr></thead><tbody><tr><td>Printer 10.20.0.40</td><td><span class='tag tag-bad'>no authentication</span> <span class='muted'>no auth (HTTP 200)</span></td></tr><tr><td>Camera recorder 10.20.0.50</td><td><span class='tag tag-bad'>no authentication</span> <span class='muted'>no auth (HTTP 200)</span></td></tr><tr><td>NAS admin 10.20.0.15</td><td><span class='tag tag-ok'>auth required</span></td></tr></tbody></table></section>
+<section><h2>Endpoint</h2><p class='kv'><b>Operating system</b><span>Microsoft Windows 10 Pro build 19045 (out of support)</span></p><p class='kv'><b>Disk encryption</b><span>OFF (C:)</span></p><p class='kv'><b>Endpoint protection</b><span>Windows Defender (inactive)</span></p><p class='kv'><b>Enabled local accounts</b><span>reception — NO PASSWORD REQUIRED · drharbor</span></p><p class='kv'><b>Administrators</b><span>FRONTDESK-01\Administrator · FRONTDESK-01\reception</span></p><p class='kv'><b>Remote desktop</b><span>ENABLED</span></p><p class='kv'><b>SMB</b><span>SMB1 ENABLED · signing not required</span></p><h3>Host firewall</h3><table><thead><tr><th>Profile</th><th style='width:6rem'>State</th><th style='width:11rem'>Default inbound</th><th style='width:9rem'>Logging</th></tr></thead><tbody><tr><td>Domain</td><td><span class="tag tag-ok">on</span></td><td><code>Block</code></td><td><span class="tag tag-ok">logging</span></td></tr><tr><td>Private</td><td><span class="tag tag-ok">on</span></td><td><code>NotConfigured</code></td><td><span class="tag tag-warn">no logging</span></td></tr><tr><td>Public</td><td><span class="tag tag-ok">on</span></td><td><code>NotConfigured</code></td><td><span class="tag tag-warn">no logging</span></td></tr></tbody></table><p class='muted'>Inbound allow rules applying to the <strong>Public</strong> profile: <strong>212</strong>. The Public profile is what applies on untrusted networks and should permit almost nothing.</p><h3>Services listening on all interfaces</h3><p class='chips'><span class='chip'>:135 svchost</span><span class='chip'>:445 System</span><span class='chip'>:3389 svchost</span><span class='chip'>:5040 svchost</span></p></section>
+<section><h2>Public identity surface</h2><p class='muted'>Domain registration is identity infrastructure. A transfer lock prevents hijacking; WHOIS privacy prevents the registration record from becoming a home address lookup.</p><table><thead><tr><th>Domain</th><th style='width:9rem'>Transfer lock</th><th style='width:9rem'>WHOIS</th></tr></thead><tbody><tr><td><code>harborlight-dental.example</code></td><td><span class="tag tag-bad">unlocked</span></td><td><span class="tag tag-ok">private</span></td></tr></tbody></table></section>
+<section><h2>What this assessment does not cover</h2><div class='callout'><strong>The highest-impact risks are not on this network.</strong> Account takeover, credential reuse, and SIM-swap attacks bypass every control measured above, because they never touch the perimeter. They cannot be tested remotely and must be verified by hand.</div><p>The following require manual confirmation each cycle:</p><table><tbody><tr><td>Breach exposure checked for all primary email addresses</td></tr><tr><td>Password manager audit clear of reused, weak, and compromised entries</td></tr><tr><td>Active sessions and third-party app authorisations reviewed and revoked</td></tr><tr><td>Phishing-resistant 2FA (hardware key or passkey) on all critical accounts — <em>and the backup key tested</em></td></tr><tr><td>Mobile carrier port-out lock in place</td></tr><tr><td>Data-broker listings re-checked — they repopulate</td></tr><tr><td>Backup restored from the offline copy — an untested backup is a hypothesis</td></tr></tbody></table></section>
+<section><h2>Method</h2><p class='muted'>Read-only collection. Windows posture via native management APIs; listening sockets joined to owning processes; TCP connect-scan of internal hosts and the public address; SSH authentication-method enumeration without any login attempt; unauthenticated requests against internal services to test whether credentials are required; RDAP for registrar state; public DNS resolution. Findings are diffed against a stored baseline, so this report shows drift as well as absolute state.</p><p class='muted'>Run elevated. Duration 74s. Collected on <code>FRONTDESK-01</code> at 2026-11-01 10:12:40.</p><p class='muted'><em>Note:</em> the perimeter probe is designed to trip intrusion detection. An alert for an outbound port scan that matches this run is expected. An alert that does <strong>not</strong> match a scheduled run should be investigated.</p></section>
+  </main>
+
+  <footer>
+    <div>
+      <strong style="font-family:var(--display);color:var(--light);letter-spacing:.1em">BIG PIC SOLUTIONS</strong>
+      <div class="mono" style="margin-top:.25rem">Stop overpaying for IT.</div>
+    </div>
+    <div class="mono" style="text-align:right">
+      <div>Generated 2026-11-01 17:22 · Report ID SEC-2026-11-01</div>
+      <div style="margin-top:.25rem">Confidential · &copy; 2026 BigPic Solutions</div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
