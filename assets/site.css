@@ -118,8 +118,12 @@ p { color: var(--ink-dim); }
   .crumb a, .sec .tags a.tag, .sec p a { position: relative; }
   .sec p a { display: inline-block; }
   .sec .tags:has(a.tag) { row-gap: 18px !important; }
-  .crumb a::after, .sec .tags a.tag::after, .sec p a::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 40px; transform: translateY(-50%); }
-  .crumb a::after { height: 44px; }   /* a tap 12 px above or below the text still lands */
+  .sec p a::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 40px; transform: translateY(-50%); }
+  /* Breadcrumb link and skill-tag links: the link's own box is 40 px tall (no pseudo-element, so nothing overflows it);
+     negative block margins give the extra height back so the layout is the same as before. */
+  .crumb a { display: inline-flex; align-items: center; min-height: 40px; margin-block: -11.3px; }
+  .sec .tags a.tag { display: inline-flex; align-items: center; min-height: 40px; margin-block: -7.6px; border-color: transparent; background: none; isolation: isolate; }
+  .sec .tags a.tag::before { content: ""; position: absolute; inset: 6.6px -1px; z-index: -1; border: 1px solid var(--line); border-radius: 6px; background: rgba(255,255,255,.02); }
 }
 
 /* floating shortcuts, bottom right (built by site.js) */
