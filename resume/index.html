@@ -6,153 +6,412 @@
 <title>Résumé — Daryll Gomas</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="canonical" href="https://daryllgomas.com/resume/">
+<meta property="og:url" content="https://daryllgomas.com/resume/">
 <link rel="stylesheet" href="../assets/fonts/fonts.css">
 <style>
-  :root { --bg:#04050a; --line:rgba(238,242,248,.12); --ink:#eef2f8; --ink-dim:rgba(238,242,248,.74);
-    --ink-faint:rgba(238,242,248,.6); --amber:#e0a45c; --cyan:#5fd4f0; --violet:#9d84ff; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  html { scrollbar-width:thin; scrollbar-color:rgba(224,164,92,.35) transparent; }
-  body { font-family:'IBM Plex Sans',sans-serif; font-weight:300; background:var(--bg); color:var(--ink); line-height:1.6; }
-  body::before { content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
-    background:radial-gradient(900px 600px at 80% -10%, rgba(95,212,240,.10), transparent 60%),
-      radial-gradient(800px 600px at -10% 40%, rgba(157,132,255,.09), transparent 60%); }
-  .wrap { max-width:880px; margin:0 auto; padding:0 clamp(16px,4vw,40px) 80px; }
-  .top { padding:22px 0; }
-  .top a { font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-dim); text-decoration:none; }
-  .top a:hover { color:var(--amber); }
-  .k { font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.28em; text-transform:uppercase; color:var(--amber); }
-  h1 { font-family:'Fraunces',serif; font-weight:400; font-size:clamp(2.4rem,6vw,3.8rem); line-height:1.05; margin:14px 0 6px; }
-  .role { font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.2rem; color:var(--amber); text-wrap:balance; }
-  .where { margin-top:6px; color:var(--ink-faint); font-size:.9rem; }
-  .sum { margin-top:22px; color:var(--ink-dim); font-size:1.05rem; max-width:68ch; }
-  section { margin-top:46px; }
-  h2 { font-family:'IBM Plex Mono',monospace; font-weight:400; font-size:.72rem; letter-spacing:.3em; text-transform:uppercase;
-    color:var(--ink-faint); padding-bottom:10px; border-bottom:1px solid var(--line); margin-bottom:18px; }
-  .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
-  .card { border:1px solid var(--line); border-radius:14px; padding:16px 18px; background:rgba(12,16,28,.6); }
-  .card h3, .job h3 { font-family:'Fraunces',serif; font-weight:400; font-size:1.15rem; }
-  ul { list-style:none; margin-top:8px; }
-  li { position:relative; padding-left:16px; color:var(--ink-dim); font-size:.93rem; margin:4px 0; }
-  li::before { content:""; position:absolute; left:0; top:.68em; width:6px; height:1px; background:var(--amber); }
-  li b { color:var(--ink); font-weight:400; }
-  .job { padding:16px 0; border-bottom:1px solid var(--line); }
-  .job:last-child { border-bottom:0; }
-  .meta { font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); margin-top:2px; }
-  .tl { display:grid; grid-template-columns:150px 1fr; gap:6px 18px; font-size:.93rem; }
-  .tl dt { font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.08em; color:var(--ink-faint); padding-top:3px; }
-  .tl dd { color:var(--ink-dim); }
-  .tl dd b { color:var(--ink); font-weight:400; }
-  @media (max-width:640px) { .grid { grid-template-columns:1fr; } .tl { grid-template-columns:1fr; } .tl dt { padding-top:10px; } }
-  .dl { display:inline-block; margin:18px 8px 0 0; font-family:'IBM Plex Mono',monospace; font-size:.78rem; font-weight:500; letter-spacing:.18em;
-    text-transform:uppercase; color:#1a1206; background:linear-gradient(180deg,#f0bb72,#e0a45c); text-decoration:none;
-    border-radius:999px; padding:.75rem 1.4rem; box-shadow:0 0 0 1px rgba(255,214,150,.4), 0 6px 24px rgba(224,164,92,.35); transition:transform .15s ease, box-shadow .15s ease; }
-  .dl:hover { transform:translateY(-1px); box-shadow:0 0 0 1px rgba(255,214,150,.6), 0 10px 32px rgba(224,164,92,.5); }
-  .print-only { display:none; }
-  /* the PDF: light paper, dark ink */
-  @media print {
-    @page { margin:11mm 12mm; }
-    body { background:#fff; color:#111; font-size:9.5pt; line-height:1.45; }
-    h2 { break-after:avoid; } li { margin:2px 0; font-size:9pt; }
-    body::before, .top, .dl { display:none !important; }
-    .print-only { display:block; }
-    .wrap { max-width:none; padding:0; }
-    .k, .role { color:#8a5a1c; }
-    .where, .meta, .tl dt, h2 { color:#555; }
-    .sum, li, .tl dd { color:#222; }
-    .tl dd b, li b { color:#111; }
-    h1 { font-size:26pt; margin-top:4px; }
-    section { margin-top:12px; break-inside:auto; }
-    .sum { margin-top:10px; font-size:9.5pt; } .grid { gap:8px; }
-    h2 { border-color:#ccc; margin-bottom:8px; }
-    .card { background:none; border-color:#ddd; padding:8px 10px; break-inside:avoid; }
-    .job { border-color:#ddd; padding:8px 0; break-inside:avoid; }
-    li::before { background:#8a5a1c; }
-  }
+/* The site's résumé page (look A, "Scan rail", Warm skills). Wording comes from the Resume tab's web build; never edit it here.
+   Tokens copied from assets/site.css. Downloads: in the final site they sit beside this page (Daryll-Gomas-Resume.pdf/.docx). */
+:root {
+  --bg:#06070b; --panel:rgba(255,255,255,.028); --panel-2:rgba(255,255,255,.045);
+  --line:rgba(238,242,248,.08); --line-2:rgba(238,242,248,.15);
+  --ink:#eef2f8; --ink-dim:rgba(238,242,248,.84); --ink-faint:rgba(238,242,248,.68);   /* round 2: lifted from .76 / .54 for readability */
+  --amber:#e0a45c; --amber-hi:#f3c58c;
+  --serif:'Fraunces',Georgia,serif; --sans:'IBM Plex Sans',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --wrap:1180px; --gut:clamp(16px,4vw,40px); --topH:60px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; scrollbar-width:thin; scrollbar-color:rgba(224,164,92,.35) transparent; }
+body { font-family:var(--sans); font-weight:300; font-size:16px; line-height:1.6; color:var(--ink); background:var(--bg);
+  overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+a { color:inherit; text-decoration:none; }
+ul { list-style:none; }
+::selection { background:rgba(224,164,92,.35); color:#fff; }
+:focus-visible { outline:2px solid var(--amber); outline-offset:3px; border-radius:6px; }
+.sep { display:none; }   /* the source's " · " separators stay in the text; layout shows the break instead */
+
+/* sky, as on the home page */
+.sky { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+.sky::before { content:""; position:absolute; inset:-20% -10% auto -10%; height:90vh;
+  background:radial-gradient(42% 60% at 18% 0%, rgba(224,164,92,.11), transparent 70%),
+             radial-gradient(38% 55% at 88% 6%, rgba(143,168,232,.09), transparent 70%); }
+.sky::after { content:""; position:absolute; inset:0;
+  background-image:linear-gradient(rgba(238,242,248,.03) 1px, transparent 1px), linear-gradient(90deg, rgba(238,242,248,.03) 1px, transparent 1px);
+  background-size:56px 56px;
+  -webkit-mask-image:radial-gradient(70% 55% at 50% 0%, #000 0%, transparent 75%); mask-image:radial-gradient(70% 55% at 50% 0%, #000 0%, transparent 75%); }
+
+.wrap { width:100%; max-width:var(--wrap); margin:0 auto; padding:0 var(--gut); }
+
+/* top bar */
+.top { position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(14px); -webkit-backdrop-filter:saturate(140%) blur(14px);
+  background:rgba(6,7,11,.78); border-bottom:1px solid var(--line); }
+.top .wrap { display:flex; align-items:center; justify-content:space-between; height:var(--topH); gap:1rem; }
+.brand { display:flex; align-items:center; gap:.65rem; font-family:var(--serif); font-size:1.12rem; letter-spacing:-.01em; white-space:nowrap; }
+.brand img { width:28px; height:28px; border-radius:50%; box-shadow:0 0 0 1px var(--line-2); }
+.nav { display:flex; align-items:center; gap:.3rem; }
+.nav a { font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-dim); padding:.5rem .7rem; border-radius:8px; transition:color .2s, background .2s; }
+.nav a:hover { color:var(--ink); background:var(--panel-2); }
+.nav a[aria-current] { color:var(--amber); }
+.nav .btn-sm { color:#1a1206; background:var(--amber); font-weight:500; }
+.nav .btn-sm:hover { background:var(--amber-hi); color:#1a1206; }
+@media (max-width:420px) { .nav a { padding:.5rem .5rem; letter-spacing:.08em; } .brand { font-size:1rem; } }
+@media (max-width:760px) { .brand { min-height:40px; min-width:40px; } .nav a { height:40px; display:inline-flex; align-items:center; } }   /* phone tap targets, as on the main pages */
+
+/* ---------- layout: rail + reading column ---------- */
+.page { display:grid; grid-template-columns:minmax(0,384px) minmax(0,1fr); gap:clamp(36px,4.6vw,72px); padding-top:40px; padding-bottom:96px; }
+.rail { position:sticky; top:var(--railTop, calc(var(--topH) + 24px)); align-self:start; padding-bottom:24px; }
+/* a rail taller than the window scrolls with the page, then pins once its last line is in view (top set by the script below) */
+.main { min-width:0; }
+
+/* identity */
+.kick { font-family:var(--mono); font-size:.68rem; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--amber); }
+h1 { font-family:var(--serif); font-weight:400; font-size:clamp(2.6rem,4.4vw,3.4rem); letter-spacing:-.035em; line-height:1; margin:.7rem 0 1rem; }
+.role { display:grid; gap:.35rem; font-size:.95rem; line-height:1.4; color:var(--ink-dim); }
+.role > span { display:block; padding-left:.85rem; border-left:1px solid var(--line-2); }
+.role > .sep { display:none; }
+.role > span:first-child { font-family:var(--serif); font-style:italic; font-size:1.18rem; color:var(--amber-hi); border-left-color:var(--amber); }
+.where { margin-top:1rem; font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); }
+.dls { display:flex; gap:.6rem; margin-top:1.3rem; flex-wrap:wrap; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:.5rem; height:42px; padding:0 1.1rem; border-radius:10px; flex:1 1 0; min-width:120px;
+  font-family:var(--mono); font-size:.74rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; white-space:nowrap; transition:transform .2s, box-shadow .2s, border-color .2s, background .2s; }
+.btn.primary { background:linear-gradient(180deg,var(--amber-hi),var(--amber)); color:#1a1206; box-shadow:0 8px 30px -12px rgba(224,164,92,.7), inset 0 1px 0 rgba(255,255,255,.4); }
+.btn.primary:hover { transform:translateY(-1px); }
+.btn.ghost { border:1px solid var(--line-2); color:var(--ink); background:rgba(255,255,255,.02); }
+.btn.ghost:hover { border-color:rgba(224,164,92,.55); background:rgba(224,164,92,.06); }
+
+/* rail sections */
+.rsec { margin-top:1.6rem; padding-top:1.2rem; border-top:1px solid var(--line); }
+.rsec > h2, .skills > summary h2 { font-family:var(--mono); font-weight:500; font-size:.68rem; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-faint); }
+.skills > summary { list-style:none; display:flex; align-items:center; justify-content:space-between; cursor:default; }
+.skills > summary::-webkit-details-marker { display:none; }
+.skills > summary .chev { display:none; }
+.grp { margin-top:.85rem; }
+.grp h3 { font-family:var(--mono); font-weight:500; font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--amber); margin-bottom:.42rem; }
+.chips { display:flex; flex-wrap:wrap; gap:.3rem; }
+/* chip shape and colour (Warm) */
+.chips li { font-size:.875rem; font-weight:400; line-height:1.3; padding:.22rem .5rem; border:1px solid; border-radius:6px; }
+/* a soft glow of the site's amber, same family as the "I've done" cards */
+.chips li { color:#f6efe6; border-color:rgba(224,164,92,.26);
+  background:linear-gradient(180deg, rgba(224,164,92,.12), rgba(224,164,92,.045)); box-shadow:inset 0 1px 0 rgba(255,214,150,.06); }
+.grp h3 { color:var(--amber-hi); }
+.certs { display:grid; gap:.5rem; margin-top:.8rem; }
+.certs li { font-size:.9rem; line-height:1.5; color:var(--ink-dim); padding:.55rem .8rem; border:1px solid var(--line); border-radius:10px; background:var(--panel); }
+
+/* reading column */
+.lede { max-width:40rem; }
+.lede .first { display:block; font-family:var(--serif); font-weight:300; font-size:clamp(1.55rem,2.4vw,1.95rem); line-height:1.25; letter-spacing:-.015em; color:var(--ink); margin-bottom:1rem; text-wrap:balance; }
+.lede .rest { display:block; font-size:1.08rem; line-height:1.75; color:var(--ink-dim); }
+.msec { margin-top:4rem; }
+.msec > h2 { display:flex; align-items:center; gap:.8rem; font-family:var(--mono); font-weight:500; font-size:.7rem; letter-spacing:.24em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:1.6rem; }
+.msec > h2::before { content:""; width:22px; height:1px; background:var(--amber); }
+.msec > h2::after { content:""; flex:1; height:1px; background:var(--line); }
+
+/* timeline */
+.tline { position:relative; padding-left:30px; display:grid; gap:1.1rem; }
+.tline::before { content:""; position:absolute; left:6px; top:14px; bottom:14px; width:1px;
+  background:linear-gradient(var(--amber) 0, rgba(224,164,92,.35) 18%, var(--line-2) 40%, var(--line) 100%); }
+.job { position:relative; border:1px solid var(--line); border-radius:16px; padding:1.3rem 1.5rem 1.35rem; background:var(--panel); }
+.job::before { content:""; position:absolute; left:-29px; top:1.65rem; width:11px; height:11px; border-radius:50%;
+  background:var(--bg); border:1px solid rgba(238,242,248,.35); }
+.job.now { border-color:rgba(224,164,92,.32); padding:1.6rem 1.7rem 1.65rem;
+  background:radial-gradient(120% 80% at 0% 0%, rgba(224,164,92,.08), transparent 60%), rgba(255,255,255,.035);
+  box-shadow:0 30px 60px -40px rgba(0,0,0,.9); }
+.job.now::before { background:var(--amber); border-color:var(--amber); box-shadow:0 0 0 4px rgba(224,164,92,.15), 0 0 14px rgba(224,164,92,.7); top:1.95rem; }
+.jh { display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:"t d" "l d"; column-gap:1rem; align-items:start; }
+.jh h3 { grid-area:t; font-weight:400; }
+.jh h3 .org { display:block; font-family:var(--serif); font-size:1.3rem; letter-spacing:-.015em; line-height:1.2; color:var(--ink); }
+.jh h3 .ttl { display:block; margin-top:.2rem; font-size:.95rem; font-weight:400; color:var(--amber-hi); line-height:1.4; }
+.job.now .jh h3 .org { font-size:1.55rem; }
+.job.now .jh h3 .ttl { font-size:1.02rem; }
+.jh .meta { display:contents; }
+.jh .loc { grid-area:l; margin-top:.3rem; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); }
+.jh .date { grid-area:d; font-family:var(--mono); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-dim); white-space:nowrap;
+  padding:.3rem .6rem; border:1px solid var(--line-2); border-radius:999px; margin-top:.15rem; }
+.job.now .jh .date { color:#1a1206; background:var(--amber); border-color:var(--amber); font-weight:500; }
+.bul { margin-top:1.1rem; display:grid; gap:.75rem; max-width:65ch; }
+.bul li { position:relative; padding-left:1.25rem; font-size:.98rem; line-height:1.7; color:var(--ink-dim); }
+.bul li::before { content:""; position:absolute; left:0; top:.85em; width:8px; height:1px; background:var(--amber); }
+.bul li b { display:block; font-weight:500; color:var(--ink); }
+.job.now .bul li:first-child { font-size:1.04rem; color:var(--ink); padding-bottom:.9rem; border-bottom:1px solid var(--line); }
+.job.now .bul li:first-child::before { display:none; }
+.job.now .bul li:first-child { padding-left:0; }
+.job.past .jh h3 .org { font-size:1.2rem; }
+.tl { display:grid; grid-template-columns:110px minmax(0,1fr); gap:.7rem 1rem; margin-top:1rem; font-size:.95rem; line-height:1.55; }
+.tl dt { font-family:var(--mono); font-size:.7rem; letter-spacing:.08em; color:var(--ink-faint); padding-top:.2rem; }
+.tl dd { color:var(--ink-dim); }
+.tl dd b { color:var(--ink); font-weight:400; }
+
+/* ---------- tablet / phone: the rail folds to the top ---------- */
+@media (max-width:880px) {
+  .page { grid-template-columns:minmax(0,1fr); gap:0; padding-top:32px; }
+  .rail { display:contents; }
+  .id { order:1; }
+  .skills { order:2; }
+  .main { order:3; margin-top:2.4rem; }
+  .certsec { order:4; margin-top:3rem; }
+  .skills { margin-top:1.6rem; padding:0; border:1px solid var(--line-2); border-radius:12px; background:var(--panel); }
+  .skills > summary { cursor:pointer; padding:.85rem 1rem; }
+  .skills > summary h2 { color:var(--ink); }
+  .skills > summary .chev { display:block; width:9px; height:9px; border-right:1.5px solid var(--amber); border-bottom:1.5px solid var(--amber); transform:rotate(45deg) translateY(-3px); transition:transform .2s; }
+  .skills[open] > summary .chev { transform:rotate(225deg) translateY(-1px); }
+  .skills .body { padding:0 1rem 1.1rem; }
+  .grp:first-child { margin-top:.2rem; }
+  .chips li { font-size:.95rem; }
+  .grp h3 { font-size:.7rem; }
+  .certs li { font-size:.95rem; }
+}
+@media (max-width:560px) {
+  h1 { font-size:2.6rem; }
+  .role { font-size:1rem; }
+  .lede .first { font-size:1.45rem; }
+  .lede .rest { font-size:1.02rem; }
+  .msec { margin-top:3rem; }
+  .tline { padding-left:20px; }
+  .tline::before { left:3px; }
+  .job { padding:1.1rem 1.05rem 1.15rem; }
+  .job.now { padding:1.2rem 1.1rem 1.25rem; }
+  .job::before { left:-21px; width:9px; height:9px; }
+  .jh { grid-template-columns:minmax(0,1fr); grid-template-areas:"d" "t" "l"; }
+  .jh .date { justify-self:start; margin:0 0 .65rem; }
+  .job.now .jh h3 .org { font-size:1.4rem; }
+  .bul li { font-size:.97rem; }
+  .job.now .bul li:first-child { font-size:1rem; }
+  .tl { grid-template-columns:minmax(0,1fr); gap:.15rem; }
+  .tl dd { margin-bottom:.6rem; }
+}
+@media (prefers-reduced-motion:reduce) { * { transition:none !important; } }
+
+/* Home: the same outlined pill as on the other inner pages */
+.nav .nav-home { display:inline-flex; align-items:center; gap:.45rem; height:34px; padding:0 .75rem; color:var(--ink); border:1px solid var(--line-2); background:rgba(255,255,255,.035); }
+.nav .nav-home svg { width:14px; height:14px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none; }
+.nav .nav-home:hover { color:var(--amber-hi); border-color:rgba(224,164,92,.55); background:rgba(224,164,92,.07); }
+@media (max-width:640px) { .nav .hide-s { display:none; } }
+@media (max-width:560px) { .nav .nav-home { width:40px; height:40px; padding:0; justify-content:center; } .nav .nav-home span { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; } }
+/* footer, as on the other pages */
+.foot { border-top:1px solid var(--line); padding:2.2rem 0 3rem; }
+.foot .wrap { display:flex; flex-wrap:wrap; justify-content:space-between; gap:1rem; align-items:center; }
+.foot p, .foot a { font-family:var(--mono); font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); }
+.foot a:hover { color:var(--amber); }
+.foot nav { display:flex; gap:1.2rem; flex-wrap:wrap; }
+@media (max-width:760px) { .foot nav a { display:inline-flex; align-items:center; justify-content:center; min-height:40px; min-width:40px; } }
+/* inside the galaxy's pop-up: no site bar, a back link that closes the pop-up instead */
+.embed-back { display:none; }
+html.embed .top, html.embed .foot { display:none; }
+html.embed .embed-back { display:inline-flex; align-items:center; min-height:40px; margin-top:16px; font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--amber); }
+html.embed .page { padding-top:16px; }
+.print-only { display:none; }
+/* the PDF: light paper, dark ink, one column */
+@media print {
+  @page { margin:11mm 12mm; }
+  html, body { background:#fff !important; color:#111; }
+  body { font-size:9.5pt; line-height:1.45; }
+  .sky, .top, .foot, .dls, .embed-back, .skills > summary .chev { display:none !important; }
+  .print-only { display:block; }
+  .wrap { max-width:none; padding:0; }
+  .page { display:block; padding:0; }
+  .rail { position:static; padding:0; }
+  .kick, .role > span:first-child, .grp h3, .jh h3 .ttl { color:#8a5a1c !important; }
+  h1 { font-size:26pt; margin:4px 0 6px; color:#111; }
+  .role { display:block; font-size:9.5pt; color:#222; }
+  .role > span { display:inline; padding:0; border:0; } .role > .sep { display:inline; }
+  .role > span:first-child { font-size:10.5pt; }
+  .where { color:#555; margin-top:4px; font-size:8pt; }
+  .rsec, .msec { margin-top:12px; padding-top:0; border:0; }
+  .rsec > h2, .skills > summary h2, .msec > h2 { color:#555 !important; break-after:avoid; }
+  .msec > h2 { margin-bottom:6px; } .msec > h2::after { background:#ccc; }
+  .skills { border:0 !important; background:none !important; padding:0 !important; }
+  .skills > summary { padding:0 !important; } .skills .body { padding:0 !important; display:block !important; }
+  .skills::details-content { content-visibility:visible; display:block; }
+  .chips li { color:#222 !important; background:none !important; border-color:#ccc !important; box-shadow:none !important; font-size:8.5pt; padding:1px 5px; }
+  .certs li { color:#222; background:none; border-color:#ddd; padding:3px 6px; font-size:8.5pt; }
+  .lede .first { color:#111; font-size:12pt; } .lede .rest { color:#222; font-size:9.5pt; line-height:1.5; }
+  .tline { padding-left:0; gap:6px; } .tline::before, .job::before { display:none; }
+  .job, .job.now { border:0; border-top:1px solid #ddd; border-radius:0; padding:6px 0; background:none; box-shadow:none; break-inside:avoid; }
+  .jh h3 .org, .job.now .jh h3 .org { color:#111; font-size:11pt; }
+  .jh .loc { color:#555; }
+  .jh .date, .job.now .jh .date { color:#555; background:none; border:0; padding:0; font-weight:400; }
+  .bul { margin-top:4px; gap:2px; max-width:none; }
+  .bul li, .job.now .bul li:first-child { color:#222; font-size:9pt; line-height:1.45; padding-bottom:0; border:0; }
+  .bul li b { color:#111; display:inline; }
+  .bul li::before { background:#8a5a1c; }
+  .tl dt { color:#555; } .tl dd { color:#222; } .tl dd b { color:#111; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <nav class="top"><a href="../">← Daryll Gomas</a></nav>
+<div class="sky" aria-hidden="true"></div>
 
-  <span class="k">Résumé</span>
-  <h1>Daryll Gomas</h1>
-  <p class="role">IT Systems Engineer · 25 years across networks, security and identity · Fluent in AI (Claude&nbsp;Code,&nbsp;Codex)</p>
-  <p class="where">Portland, OR · Remote or hybrid</p>
-  <p class="where print-only">daryll.gomas@gmail.com · linkedin.com/in/daryll-gomas · github.com/DaryllGomas · daryllgomas.com</p>
-  <p class="sum">IT systems engineer with 25+ years across the whole stack: identity and Microsoft 365, Apple and Windows fleets, networks, security and backups. For the last two years I've retooled around AI, working daily in Claude Code and Codex. I bring both sides: I run the systems a business already depends on, and I find where they waste time and money, measure it, and fix it with the right-sized answer, whether that's an existing product, open source, or a custom tool built with AI.</p>
-  <p><a class="dl" href="Daryll-Gomas-Resume.pdf" download>PDF ↓</a> <a class="dl" href="Daryll-Gomas-Resume.docx" download>Word ↓</a></p>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../"><img src="../assets/img/daryll.jpg" alt="" width="28" height="28">Daryll Gomas</a>
+    <nav class="nav" aria-label="Main">
+      <a class="nav-home" href="../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.5 9.5V19.5h4v-5h3v5h4V9.5"/></svg><span>Home</span></a>
+      <a class="hide-s" href="../#work">Work</a>
+      <a href="./" aria-current="page">Résumé</a>
+      <a class="btn-sm" href="../#contact">Contact</a>
+    </nav>
+  </div>
+</header>
 
-  <section>
-    <h2>Core skills</h2>
-    <div class="grid">
-      <div class="card"><h3>Identity &amp; Microsoft 365</h3><ul>
-        <li>Entra ID (Azure AD), SSO, user lifecycle, tenant setup and migrations</li><li>Email authentication (SPF, DKIM, DMARC)</li><li>Google Workspace</li><li>Active Directory, DNS, DHCP</li></ul></div>
-      <div class="card"><h3>Automation &amp; AI</h3><ul>
-        <li>Claude Code, Codex</li><li>AI-built automation (Bash, Python, PowerShell)</li><li>MCP servers, REST APIs, OAuth</li><li>Cloudflare Workers</li><li>Local LLMs</li></ul></div>
-      <div class="card"><h3>Security</h3><ul>
-        <li>MFA and Conditional Access</li><li>SonicWall and UniFi firewalls, VLAN segmentation</li><li>Endpoint protection (SentinelOne)</li><li>Incident response</li><li>Backups as ransomware defence</li><li>Security assessments</li><li>AI agent security (prompt-injection screening, consent gates, least-privilege tools)</li><li>HIPAA-sensitive environments</li></ul></div>
-      <div class="card"><h3>Endpoints</h3><ul>
-        <li>macOS and Windows fleets</li><li>MDM (Addigy) and RMM (NinjaOne)</li><li>Deployment, configuration and imaging</li><li>iOS and Android</li></ul></div>
-      <div class="card"><h3>Networks &amp; infrastructure</h3><ul>
-        <li>Site-to-site and client VPN, Wi-Fi</li><li>Linux servers, Docker Compose, Windows Server, Hyper-V</li><li>Synology NAS, 3-2-1 backup and recovery</li><li>Prometheus, Grafana, Loki, Alertmanager</li></ul></div>
-      <div class="card"><h3>Process &amp; cost analysis</h3><ul>
-        <li>Workflow and cost reviews, measuring where time and money go, upgrade proposals, right-sizing software (existing product, open source or custom)</li></ul></div>
+<div class="wrap"><a class="embed-back" href="../">← Back to the galaxy</a></div>
+
+<div class="wrap page">
+  <aside class="rail" aria-label="At a glance">
+    <div class="id">
+      <span class="kick">Résumé</span>
+      <h1>Daryll Gomas</h1>
+      <p class="role"><span>IT Systems Engineer</span><span class="sep"> · </span><span>25 years across networks, security and identity</span><span class="sep"> · </span><span>Fluent in AI (Claude&nbsp;Code,&nbsp;Codex)</span></p>
+      <p class="where">Portland, OR · Remote or hybrid</p>
+      <p class="where print-only">daryll.gomas<span class="pm"></span> · linkedin.com/in/daryll-gomas · github.com/DaryllGomas · daryllgomas.com</p>
+      <p class="dls"><a class="btn primary" href="Daryll-Gomas-Resume.pdf" download>PDF ↓</a> <a class="btn ghost" href="Daryll-Gomas-Resume.docx" download>Word ↓</a></p>
     </div>
-  </section>
 
-  <section>
-    <h2>Experience</h2>
-    <div class="job"><h3>BigPic Solutions · Independent Technology &amp; AI Systems Practice</h3>
-      <p class="meta">Portland, OR · May 2025 – Present</p><ul>
-      <li>Independent practice: IT services for small-business clients (Microsoft 365, networking, backups), plus building and operating AI-assisted systems in a production lab environment. AI tools write the code; I own the requirements, the verification and the operations.</li>
-      <li><b>Monitoring and detection:</b> built and operate a monitoring platform covering 18 hosts and 29 services (Prometheus, Alertmanager, Loki, Grafana). It correlates alerts into evidence-backed incidents and flags new devices, unusual logins, new accounts and newly opened ports.</li>
-      <li><b>AI agent security:</b> inventoried prompt-injection exposure across the AI agents in use, ranked the gaps and designed probe tests for an independent review; took a consent gate for AI tool calls through four security review rounds. Wrote a security runbook for small offices.</li>
-      <li><b>Backup that proves itself:</b> built versioned backup and restore tooling that runs nightly, proves restores every week and stops with an alert on mass deletes; a full restore drill passed.</li>
-      <li><b>Public service:</b> directed the build of Swarm AI (swarm.bigpicsolutions.com), a public service on Cloudflare Workers with OAuth sign-in that routes research tasks to contributors' own AI agents. Releases are gated on automated tests and a security review; incoming tasks are screened for hidden instructions.</li></ul></div>
-    <div class="job"><h3>MacForce (Launch Technologies) · IT Field Engineer</h3>
-      <p class="meta">Portland, OR (hybrid) · Feb 2023 – May 2025</p><ul>
-      <li>Worked alongside the lead engineer on a break-in and ransomware attack at a client's colocation site: helped contain it over a weekend, collected logs for forensics and recovered project data from off-site Synology C2 backups, then hardened the environment (2FA, VPN, SentinelOne, a rebuilt domain controller).</li>
-      <li>Administered Microsoft 365 and Entra ID for managed-service clients: Conditional Access, SSO, MFA, user lifecycle, licensing and tenant migrations.</li>
-      <li>Managed Apple and Windows fleets with Addigy (MDM) and NinjaOne (RMM): endpoint deployment, configuration and imaging at scale.</li>
-      <li>Configured SonicWall and Ubiquiti firewalls, VPN, VLAN segmentation and site-to-site links; ran Synology backup and disaster-recovery operations across client environments.</li>
-      <li>Led client onboarding and migrations, including email domain moves with SPF, DKIM and DMARC; on-site assessments with network diagrams and upgrade proposals.</li></ul></div>
-    <div class="job"><h3>BigPic Solutions · IT Consultant</h3>
-      <p class="meta">Portland, OR · Mar 2020 – Feb 2023</p><ul>
-      <li>Designed and installed wired and wireless networks for business clients; supported Mac, Windows and Linux, including MDM for mixed environments.</li>
-      <li>Set up remote-support infrastructure as clients moved to hybrid and remote work; trained users.</li></ul></div>
-    <div class="job"><h3>DenTech LLC · IT Field Technician (contract)</h3>
-      <p class="meta">Portland, OR · Sep 2018 – Mar 2020</p><ul>
-      <li>Project lead for medical and dental office deployments: site assessments, deployment plans, materials and execution.</li>
-      <li>Deployed and managed Active Directory, DHCP, DNS and Windows Server in compliance-sensitive (HIPAA) offices.</li></ul></div>
-    <div class="job"><h3>BigPic Solutions · IT Consultant (founder)</h3>
-      <p class="meta">Buffalo, NY · Jan 2014 – Sep 2018</p><ul>
-      <li>Founded the practice: network installs, PC, Mac and Linux repair and setup, and technology training for homes and businesses.</li></ul></div>
-    <div class="job"><h3>TransWorld Network (ISP) · Network Operations Center Technician</h3>
-      <p class="meta">Oldsmar, FL · Oct 2011 – Sep 2012</p><ul>
-      <li>Handled multi-state network incidents, with full autonomy on night shifts; administered Hyper-V, Cisco switches and firewalls; took escalations from level 2.</li></ul></div>
-    <div class="job"><h3>Earlier roles</h3>
-      <dl class="tl" style="margin-top:10px">
-        <dt>2012 – 2013</dt><dd><b>Felines Pride</b>: Operations Manager, Buffalo, NY</dd>
-        <dt>2002 – 2011</dt><dd><b>Knight Enterprises</b>: Field Services Engineer and county lead for network installations, Clearwater, FL</dd>
-        <dt>2000 – 2002</dt><dd><b>Time Warner Cable</b>: Level 3 Support Specialist and escalation lead, Clearwater, FL</dd>
-      </dl></div>
-  </section>
+    <details class="skills rsec" id="skills" open>
+      <summary><h2>Core skills</h2><span class="chev" aria-hidden="true"></span></summary>
+      <div class="body">
+        <div class="grp"><h3>Identity &amp; Microsoft 365</h3><ul class="chips">
+          <li>Entra ID (Azure AD), Active Directory, SSO, user lifecycle, tenant setup and migrations</li><li>Email authentication (SPF, DKIM, DMARC)</li><li>Google Workspace</li><li>DNS, DHCP</li></ul></div>
+        <div class="grp"><h3>Automation &amp; AI</h3><ul class="chips">
+          <li>Claude Code, Codex</li><li>AI-built automation (Bash, Python, PowerShell)</li><li>MCP servers, REST APIs, OAuth</li><li>Cloudflare Workers</li><li>Local LLMs</li></ul></div>
+        <div class="grp"><h3>Security</h3><ul class="chips">
+          <li>MFA and Conditional Access</li><li>SonicWall and UniFi firewalls, VLAN segmentation</li><li>Endpoint protection (SentinelOne)</li><li>Incident response</li><li>Backups as ransomware defense</li><li>Security assessments</li><li>AI agent security (prompt-injection screening, consent gates, least-privilege tools)</li><li>HIPAA-sensitive environments</li></ul></div>
+        <div class="grp"><h3>Endpoints</h3><ul class="chips">
+          <li>macOS and Windows fleets</li><li>MDM (Addigy) and RMM (NinjaOne)</li><li>Deployment, configuration and imaging</li><li>iOS and Android</li></ul></div>
+        <div class="grp"><h3>Networks &amp; infrastructure</h3><ul class="chips">
+          <li>Site-to-site and client VPN, Wi-Fi</li><li>Linux servers, Docker Compose, Windows Server, Hyper-V</li><li>Synology NAS, 3-2-1 backup and recovery</li><li>Prometheus, Grafana, Loki, Alertmanager</li></ul></div>
+        <div class="grp"><h3>Web &amp; design</h3><ul class="chips">
+          <li>Site and interface design</li><li>Front ends built with AI coding agents (HTML, CSS, JavaScript, WebGL/Three.js)</li><li>Static hosting on GitHub Pages and Cloudflare</li></ul></div>
+        <div class="grp"><h3>Process &amp; cost analysis</h3><ul class="chips">
+          <li>Workflow and cost reviews, measuring where time and money go, upgrade proposals, right-sizing software (existing product, open source or custom)</li></ul></div>
+      </div>
+    </details>
 
-  <section>
-    <h2>Certifications &amp; Professional Development</h2>
-    <ul>
-      <li>TryHackMe: Top 3% (2022); Jr Penetration Tester and Blue Team learning paths.</li>
-      <li>Apple Certified Support Professional: earned Nov 2023; expired.</li>
-    </ul>
-  </section>
+    <section class="certsec rsec">
+      <h2>Certifications &amp; Professional Development</h2>
+      <ul class="certs">
+        <li>TryHackMe: Top 3% (2022); Jr Penetration Tester and Blue Team learning paths.</li>
+        <li>Apple Certified Support Professional: earned Nov 2023; expired.</li>
+      </ul>
+    </section>
+  </aside>
+
+  <main class="main">
+    <p class="lede"><span class="first">IT systems engineer with 25+ years across the whole stack: identity and Microsoft 365, Apple and Windows fleets, networks, security and backups.</span> <span class="rest">For the last two years I've retooled around AI, working daily in Claude Code and Codex. I bring both sides: I run the systems a business already depends on, and I find where they waste time and money, measure it, and fix it with the right-sized answer, whether that's an existing product, open source, or a custom tool built with AI.</span></p>
+
+    <section class="msec">
+      <h2>Experience</h2>
+      <div class="tline">
+        <article class="job now">
+          <div class="jh"><h3><span class="org">BigPic Solutions</span><span class="sep"> · </span><span class="ttl">Independent Technology &amp; AI Systems Practice</span></h3>
+            <p class="meta"><span class="loc">Portland, OR</span><span class="sep"> · </span><span class="date">May 2025 – Present</span></p></div>
+          <ul class="bul">
+            <li>Run an independent practice: IT services for small-business clients (Microsoft 365, networking, backups, security), delivered with AI-assisted systems I build and operate in production. AI tools write the code; I own the requirements, the verification and the operations.</li>
+            <li><b>Monitoring and detection:</b> operate a monitoring platform I built (Prometheus, Alertmanager, Loki, Grafana) covering 18 hosts and 29 services. It correlates alerts into evidence-backed incidents and detects new devices, unusual logins, new accounts and newly exposed services across endpoints, servers and the network.</li>
+            <li><b>AI agent security:</b> keep the AI agents I run inside guardrails: track each agent's prompt-injection exposure and rank the open gaps, hold the voice assistant's tool calls behind a consent gate that has been through four security review rounds, and maintain a security runbook for small offices.</li>
+            <li><b>Backup that proves itself:</b> run nightly versioned backups with tooling I built: every archive is read back and hash-checked, a weekly restore proof must pass or the system flags it, a mass delete stops the job with an alert, and test restores have come back byte-identical.</li>
+            <li><b>Public service:</b> run Swarm AI (swarm.bigpicsolutions.com), a public service I directed the build of, on Cloudflare Workers with OAuth sign-in; it routes research tasks to contributors' own AI agents. Every release is gated on automated tests and a security review, and incoming tasks are screened for hidden instructions.</li>
+            <li><b>Web design:</b> design and direct AI-assisted builds of public sites and front ends: daryllgomas.com (a 3D WebGL site), the BigPic Studios site, Swarm AI and Town Hall.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="jh"><h3><span class="org">MacForce (Launch Technologies)</span><span class="sep"> · </span><span class="ttl">IT Field Engineer</span></h3>
+            <p class="meta"><span class="loc">Portland, OR (hybrid)</span><span class="sep"> · </span><span class="date">Feb 2023 – May 2025</span></p></div>
+          <ul class="bul">
+            <li>Worked alongside the lead engineer on a break-in and ransomware attack at a client's colocation site: helped contain it over a weekend, collected logs for forensics and recovered project data from off-site Synology C2 backups, then hardened the environment (2FA, VPN, SentinelOne, a rebuilt domain controller).</li>
+            <li>Administered Microsoft 365 and Entra ID for managed-service clients: Conditional Access, SSO, MFA, user lifecycle, licensing and tenant migrations.</li>
+            <li>Managed Apple and Windows fleets with Addigy (MDM) and NinjaOne (RMM): endpoint deployment, configuration and imaging at scale.</li>
+            <li>Configured SonicWall and Ubiquiti firewalls, VPN, VLAN segmentation and site-to-site links; ran Synology backup and disaster-recovery operations across client environments.</li>
+            <li>Led client onboarding and migrations, including email domain moves with SPF, DKIM and DMARC; on-site assessments with network diagrams and upgrade proposals.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="jh"><h3><span class="org">BigPic Solutions</span><span class="sep"> · </span><span class="ttl">IT Consultant</span></h3>
+            <p class="meta"><span class="loc">Portland, OR</span><span class="sep"> · </span><span class="date">Mar 2020 – Feb 2023</span></p></div>
+          <ul class="bul">
+            <li>Designed and installed wired and wireless networks for business clients; supported Mac, Windows and Linux, including MDM for mixed environments.</li>
+            <li>Set up remote-support infrastructure as clients moved to hybrid and remote work; trained users.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="jh"><h3><span class="org">DenTech LLC</span><span class="sep"> · </span><span class="ttl">IT Field Technician (contract)</span></h3>
+            <p class="meta"><span class="loc">Portland, OR</span><span class="sep"> · </span><span class="date">Sep 2018 – Mar 2020</span></p></div>
+          <ul class="bul">
+            <li>Project lead for medical and dental office deployments: site assessments, deployment plans, materials and execution.</li>
+            <li>Deployed and managed Active Directory, DHCP, DNS and Windows Server in compliance-sensitive (HIPAA) offices.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="jh"><h3><span class="org">BigPic Solutions</span><span class="sep"> · </span><span class="ttl">IT Consultant (founder)</span></h3>
+            <p class="meta"><span class="loc">Buffalo, NY</span><span class="sep"> · </span><span class="date">Jan 2014 – Sep 2018</span></p></div>
+          <ul class="bul">
+            <li>Founded the practice: network installs, PC, Mac and Linux repair and setup, and technology training for homes and businesses.</li>
+          </ul>
+        </article>
+
+        <article class="job">
+          <div class="jh"><h3><span class="org">TransWorld Network (ISP)</span><span class="sep"> · </span><span class="ttl">Network Operations Center Technician</span></h3>
+            <p class="meta"><span class="loc">Oldsmar, FL</span><span class="sep"> · </span><span class="date">Oct 2011 – Sep 2012</span></p></div>
+          <ul class="bul">
+            <li>Handled multi-state network incidents, with full autonomy on night shifts; administered Hyper-V, Cisco switches and firewalls; took escalations from level 2.</li>
+          </ul>
+        </article>
+
+        <article class="job past">
+          <div class="jh"><h3><span class="org">Earlier roles</span></h3></div>
+          <dl class="tl">
+            <dt>2012 – 2013</dt><dd><b>Felines Pride</b>: Operations Manager, Buffalo, NY</dd>
+            <dt>2002 – 2011</dt><dd><b>Knight Enterprises</b>: Field Services Engineer and county lead for network installations, Clearwater, FL</dd>
+            <dt>2000 – 2002</dt><dd><b>Time Warner Cable</b>: Level 3 Support Specialist and escalation lead, Clearwater, FL</dd>
+          </dl>
+        </article>
+      </div>
+    </section>
+  </main>
 </div>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Daryll Gomas · Portland, OR</p>
+    <nav><a href="https://github.com/DaryllGomas">GitHub</a><a href="../">All projects</a></nav>
+  </div>
+</footer>
+
 <script>
-// inside the site's pop-up: the back link closes the pop-up instead of navigating
+// Phone and tablet: skills fold behind a "Core skills" toggle so the experience isn't pushed down. Desktop: always open.
 (function () {
-  if (window.top === window.self) return;
-  var back = document.querySelector('.top a[href="../"]');
-  if (back) { back.textContent = '← Back to the galaxy'; back.addEventListener('click', function (e) { e.preventDefault(); window.parent.postMessage('study:close', location.origin); }); }
-  addEventListener('keydown', function (e) { if (e.key === 'Escape') window.parent.postMessage('study:close', location.origin); });
+  var d = document.getElementById('skills'); if (!d || !window.matchMedia) return;
+  var mq = matchMedia('(max-width: 880px)');
+  function sync() { if (document.documentElement.classList.contains('printing')) return; d.open = !mq.matches; }
+  sync();
+  if (mq.addEventListener) mq.addEventListener('change', sync);
+  d.querySelector('summary').addEventListener('click', function (e) { if (!mq.matches) e.preventDefault(); });
+})();
+(function () {
+  var rail = document.querySelector('.rail'); if (!rail) return;
+  function pin() { var top = Math.min(84, innerHeight - rail.offsetHeight - 24); rail.style.setProperty('--railTop', top + 'px'); }
+  pin(); addEventListener('resize', pin); if (document.fonts) document.fonts.ready.then(pin);
+})();
+// Inside the galaxy's pop-up (or ?embed=1): hide the site bar; the back link and Escape close the pop-up.
+(function () {
+  var framed; try { framed = window.top !== window.self; } catch (e) { framed = true; }
+  if (!framed && !/[?&]embed=1/.test(location.search)) return;
+  document.documentElement.classList.add('embed');
+  function close() { if (window.parent !== window) window.parent.postMessage('study:close', location.origin); }
+  document.querySelector('.embed-back').addEventListener('click', function (e) { if (window.parent !== window) { e.preventDefault(); close(); } });
+  addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  var rail = document.querySelector('.rail'); if (rail) rail.style.setProperty('--railTop', '24px');
+})();
+// Printing: open the skills, and write the contact address into the print-only line (built from character codes at
+// print time, so it is never in the page source; removed again afterwards).
+(function () {
+  var d = document.getElementById('skills'), pm = document.querySelector('.pm'), was;
+  function before() { document.documentElement.classList.add('printing'); was = d && d.open; if (d) d.open = true; if (pm) pm.textContent = String.fromCharCode(64, 103, 109, 97, 105, 108, 46, 99, 111, 109); }
+  function after() { document.documentElement.classList.remove('printing'); if (d) d.open = was; if (pm) pm.textContent = ''; }
+  addEventListener('beforeprint', before); addEventListener('afterprint', after);
 })();
 </script>
 </body>

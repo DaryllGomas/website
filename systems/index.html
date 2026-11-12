@@ -10,11 +10,7 @@
 <link rel="icon" type="image/svg+xml" href="../favicon.svg">
 <link rel="canonical" href="https://daryllgomas.com/systems/">
 <link rel="stylesheet" href="../assets/fonts/fonts.css">
-<!--
-  ANONYMIZED ON PURPOSE. Roles only: no hostnames, addresses, internal domains, accounts, ports,
-  vendor firmware or known gaps. Source facts: ~/BigPic/BigPic - Technology/Infrastructure/ and
-  ~/Projects/systems/control-plane/docs (checked 2026-10-13 to 10-20).
--->
+<!-- Anonymized on purpose: roles only. -->
 <style>
   :root {
     --bg: #04050a; --panel: rgba(12,16,28,.72); --line: rgba(238,242,248,.12);
@@ -136,10 +132,10 @@
     <p class="note">Anonymized on purpose: machines are shown by role. No names, addresses or accounts.</p>
 
     <div class="stats">
-      <div class="stat"><b>400+</b><span>days of continuous uptime on the market-data server</span></div>
+      <div class="stat"><b>~10 min</b><span>between backups of the business documents</span></div>
       <div class="stat"><b>24/7</b><span>machines, services and the internet watched around the clock</span></div>
       <div class="stat"><b>Nightly</b><span>archives read back and hash-checked; restores tested on purpose</span></div>
-      <div class="stat"><b>3,600+</b><span>commits across the platform in ten months, built with AI</span></div>
+      <div class="stat"><b>3,600+</b><span>commits across the platform in ten months (as of Sept 2026)</span></div>
     </div>
   </header>
 
@@ -212,7 +208,7 @@
       <g class="node"><rect x="770" y="352" width="230" height="70" rx="14" fill="url(#g-card)" stroke="rgba(157,132,255,.75)" filter="url(#glow)"/>
         <circle cx="792" cy="376" r="5" fill="#5fe0a0" class="pulse"/>
         <text x="806" y="381" fill="#eef2f8" font-family="Fraunces, serif" font-size="18">SENTINEL</text>
-        <text x="790" y="402" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">OBSERVABILITY · ~19 CONTAINERS</text></g>
+        <text x="790" y="402" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9.5" letter-spacing="1">OBSERVABILITY · ~20 CONTAINERS</text></g>
 
       <!-- NAS -->
       <g class="node"><rect x="430" y="476" width="240" height="58" rx="14" fill="url(#g-card)" stroke="rgba(95,224,160,.6)"/>
@@ -235,14 +231,14 @@
       <span class="eyebrow">01 · Foundation</span>
       <div><h2>Network &amp; servers</h2>
         <p>Built like a small business, not a hobby shelf. One tower server runs four virtual machines, each with a single
-          job. The network is split into planned address bands, with an isolated segment for untrusted devices that passed
-          its own isolation tests.</p></div>
+          job. The network is split into planned address bands, with an isolated segment for untrusted devices checked
+          against a written isolation report.</p></div>
     </div>
     <div class="cards">
       <div class="card" style="--accent:var(--cyan)"><h3>Virtualization</h3>
         <ul><li>One host, four VMs: market data, automation, development, Windows</li><li>Fixed memory per VM, RAID storage</li><li>VM state, checkpoints and disk sizes read every minute</li></ul></div>
       <div class="card" style="--accent:var(--cyan)"><h3>Segmented network</h3>
-        <ul><li>Zone-based firewall with intrusion detection</li><li>Planned address bands per role</li><li>Isolated VLAN, verified with 10 isolation checks</li></ul></div>
+        <ul><li>Zone-based firewall with intrusion detection</li><li>Planned address bands per role</li><li>Isolated VLAN, isolation tested and documented</li></ul></div>
       <div class="card" style="--accent:var(--cyan)"><h3>Names &amp; certificates</h3>
         <ul><li>Internal services on trusted TLS certificates</li><li>Internal services are reachable only from the local network</li><li>Only what must be public goes out, through secure tunnels</li></ul></div>
     </div>
@@ -253,7 +249,7 @@
       <span class="eyebrow">02 · The platform</span>
       <div><h2>A live market-data platform</h2>
         <p>The busiest machine in the room. It serves real-time quotes, options analytics and a research platform to
-          dashboards and AI agents, and it has stayed up for more than a year.</p></div>
+          dashboards and AI agents, around the clock.</p></div>
     </div>
     <div class="cards">
       <div class="card" style="--accent:var(--amber)"><h3>APIs</h3>
@@ -269,7 +265,7 @@
     <div class="block-head">
       <span class="eyebrow">03 · Observability</span>
       <div><h2>SENTINEL: it explains, then stays quiet</h2>
-        <p>A low-power appliance watches every machine, service and the internet connection. The rule it is built on:
+        <p>A low-power appliance watches the machines, services and the internet connection. The rule it is built on:
           success isn't detecting more things. It's noticing the few things a person would want to know, explaining them
           correctly, and staying silent the rest of the time.</p></div>
     </div>
@@ -292,7 +288,7 @@
           <path d="M800 230 C 830 230, 830 332, 860 332" stroke="#e0a45c" class="flow slow" opacity=".5"/>
           <path d="M690 392 V300" stroke="#5fe0a0" class="flow slow" stroke-dasharray="2 8"/>
         </g>
-        <g class="node"><rect x="20" y="70" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="92" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Servers &amp; VMs</text><text x="34" y="109" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">CPU · MEMORY · DISKS</text></g><g class="node"><rect x="20" y="132" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="154" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Network &amp; Wi-Fi</text><text x="34" y="171" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">GATEWAY · SWITCH · APS</text></g><g class="node"><rect x="20" y="194" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="216" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Services</text><text x="34" y="233" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">IS IT UP? IS IT RIGHT?</text></g><g class="node"><rect x="20" y="256" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="278" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">The internet</text><text x="34" y="295" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">IS THE LINK HEALTHY?</text></g><g class="node"><rect x="20" y="318" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="340" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Logs &amp; changes</text><text x="34" y="357" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">LOGINS · ACCOUNTS · FILES</text></g><g class="node"><rect x="300" y="70" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="92" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Metrics</text><text x="314" y="109" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">NUMBERS OVER TIME</text></g><g class="node"><rect x="300" y="132" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="154" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Flows &amp; SNMP</text><text x="314" y="171" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">WHO TALKS TO WHOM</text></g><g class="node"><rect x="300" y="194" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="216" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Health probes</text><text x="314" y="233" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">FROM INSIDE</text></g><g class="node"><rect x="300" y="256" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="278" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Outside probes</text><text x="314" y="295" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">FROM THE INTERNET</text></g><g class="node"><rect x="300" y="318" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="340" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Log collection</text><text x="314" y="357" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">SEARCHABLE HISTORY</text></g>
+        <g class="node"><rect x="20" y="70" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="92" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Servers &amp; VMs</text><text x="34" y="109" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">CPU · MEMORY · DISKS</text></g><g class="node"><rect x="20" y="132" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="154" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Network &amp; Wi-Fi</text><text x="34" y="171" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">GATEWAY · SWITCH · APS</text></g><g class="node"><rect x="20" y="194" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="216" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Services</text><text x="34" y="233" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">IS IT UP? IS IT RIGHT?</text></g><g class="node"><rect x="20" y="256" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="278" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">The internet</text><text x="34" y="295" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">IS THE LINK HEALTHY?</text></g><g class="node"><rect x="20" y="318" width="220" height="48" rx="10" fill="url(#s-card)" stroke="rgba(95,212,240,.45)"/><text x="34" y="340" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Logs &amp; changes</text><text x="34" y="357" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">LOGINS · ACCOUNTS · FILES</text></g><g class="node"><rect x="300" y="70" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="92" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Metrics</text><text x="314" y="109" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">NUMBERS OVER TIME</text></g><g class="node"><rect x="300" y="132" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="154" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Flows &amp; SNMP</text><text x="314" y="171" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">WHO TALKS TO WHOM</text></g><g class="node"><rect x="300" y="194" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="216" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Health probes</text><text x="314" y="233" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">FROM INSIDE</text></g><g class="node"><rect x="300" y="256" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="278" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Public-name probes</text><text x="314" y="295" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">BY PUBLIC ADDRESS</text></g><g class="node"><rect x="300" y="318" width="210" height="48" rx="10" fill="url(#s-card)" stroke="rgba(157,132,255,.5)"/><text x="314" y="340" fill="#eef2f8" font-family="Fraunces, serif" font-size="15">Log collection</text><text x="314" y="357" fill="rgba(238,242,248,.55)" font-family="IBM Plex Mono, monospace" font-size="9" letter-spacing="1">SEARCHABLE HISTORY</text></g>
         <g class="node"><rect x="600" y="160" width="200" height="140" rx="16" fill="url(#s-card)" stroke="rgba(157,132,255,.85)" filter="url(#s-glow)"/>
           <circle cx="624" cy="186" r="5" fill="#5fe0a0" class="pulse"/>
           <text x="638" y="191" fill="#eef2f8" font-family="Fraunces, serif" font-size="21">SENTINEL</text>
@@ -312,9 +308,9 @@
       <div class="card" style="--accent:var(--violet)"><h3>The stack</h3>
         <ul><li>Metrics, logs, alerts and dashboards in one appliance</li><li>Network flow, SNMP, disk health and service probes</li><li>Alert rules for every machine, service and the internet link</li></ul></div>
       <div class="card" style="--accent:var(--violet)"><h3>Incidents, not noise</h3>
-        <ul><li>Raw alerts become one incident, with the evidence attached</li><li>A dead-man check on two other machines watches the watcher</li><li>Tested against a 19-scenario failure suite</li></ul></div>
+        <ul><li>Raw alerts become one incident, with the evidence attached</li><li>A dead-man check on two other machines watches the watcher</li><li>The dead-man alarm passed a 19-case test before it went live</li></ul></div>
       <div class="card" style="--accent:var(--violet)"><h3>Security checks</h3>
-        <ul><li>New devices, failed logins and account changes</li><li>File integrity, pending updates, newly opened ports</li><li>Replaced a heavyweight security suite with 7 lean checks</li></ul></div>
+        <ul><li>New devices, failed logins and account changes</li><li>File integrity, pending updates, newly opened ports</li><li>Replaced a heavyweight security suite with 6 lean checks</li></ul></div>
     </div>
   </section>
 
@@ -331,7 +327,7 @@
       <div class="card" style="--accent:var(--green)"><h3>Versioned &amp; recoverable</h3>
         <ul><li>30-day recovery snapshots</li><li>Weekly versioned backup of the whole NAS</li><li>Each machine's backup key works only from that machine</li></ul></div>
       <div class="card" style="--accent:var(--green)"><h3>Proven restores</h3>
-        <ul><li>Business documents backed up about every 10 minutes</li><li>A document test restore came back byte-identical (Oct 2026)</li><li>One-file restore tool and a restore-test script</li></ul></div>
+        <ul><li>Business documents backed up about every 10 minutes</li><li>A test restore came back byte-identical (Oct 2026)</li><li>One-file restore tool and a restore-test script</li></ul></div>
     </div>
   </section>
 

@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security audit · Daryll Gomas</title>
+<meta name="description" content="A read-only security sweep (Linux or Windows) that ends in a report an owner can read: a verdict, every finding ranked, and a numbered fix for each. Sample report for a fictional dental office.">
+<!-- Project page: same sections as every project page. The sample report and its crops are for a fictional business. -->
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://daryllgomas.com/projects/security-audit/">
+<meta property="og:url" content="https://daryllgomas.com/projects/security-audit/">
+<link rel="stylesheet" href="../../assets/site.css">
+<link rel="stylesheet" href="../../assets/project.css">
+<style>
+  /* page-only styles (shared CSS untouched) */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  .pcard .shotframe .bar3 { align-items: center; }
+  .pcard .shotframe img { height: auto; display: block; }
+  .bar3 .stampchip { margin-left: auto; font-family: var(--mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase;
+    color: #ff9b8f; border: 1px solid rgba(255,120,105,.55); border-radius: 999px; padding: .18rem .55rem; background: rgba(192,57,43,.12); white-space: nowrap; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .kpis b small { font-size: .55em; color: var(--ink-faint); margin: 0 .12em; }
+  .flow .col.sub { font-size: 8.5px; letter-spacing: .16em; fill: rgba(238,242,248,.6); }
+
+  /* honesty callout */
+  .callout { margin: 1.6rem 0 0; max-width: 42rem; border: 1px solid rgba(143,168,232,.28); border-radius: 14px; padding: 1.1rem 1.25rem;
+    background: linear-gradient(180deg, rgba(143,168,232,.07), rgba(143,168,232,.02)); }
+  .callout .k { display: block; margin-bottom: .5rem; color: #b9c8ff; }
+  .callout p { margin: 0 0 .5rem; font-size: .96rem; }
+  .callout p:last-child { margin-bottom: 0; }
+
+  /* coverage matrix: which sweep checks what */
+  .cov-h { margin: 2.2rem 0 .9rem; font-family: var(--mono); font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--amber); }
+  .cov { border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; }
+  .cov-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr) minmax(0, 1fr); border-top: 1px solid var(--line); }
+  .cov-row:first-child { border-top: 0; }
+  .cov-row > div { padding: .85rem 1rem; font-size: .86rem; line-height: 1.45; color: var(--ink-dim); }
+  .cov-row > div + div { border-left: 1px solid var(--line); }
+  .cov-row.head > div { font-family: var(--mono); font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); background: rgba(255,255,255,.025); padding: .65rem 1rem; }
+  .cov-row .stage { font-family: var(--serif); font-size: 1rem; color: var(--ink); }
+  .cov-row .stage em { display: block; font-style: normal; font-family: var(--mono); font-size: .58rem; letter-spacing: .12em; color: var(--ink-faint); margin-top: .25rem; text-transform: uppercase; }
+  .cov .same { color: var(--ink-faint); font-style: italic; }
+  .cov .win { background: rgba(127,212,212,.04); }
+  .cov .lbl { display: none; }
+  .cov-note { margin-top: .7rem; font-family: var(--mono); font-size: .66rem; letter-spacing: .05em; color: var(--ink-faint); }
+
+  /* verdict ladder */
+  .ladder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; margin-top: 1rem; }
+  .ladder div { border-radius: 12px; padding: .8rem .9rem; border: 1px solid; }
+  .ladder b { display: block; font-family: var(--mono); font-weight: 500; font-size: .7rem; letter-spacing: .12em; }
+  .ladder span { display: block; margin-top: .3rem; font-size: .82rem; color: var(--ink-dim); }
+  .ladder .crit { border-color: rgba(231,96,76,.55); background: rgba(192,57,43,.12); } .ladder .crit b { color: #ff9b8f; }
+  .ladder .high { border-color: rgba(230,140,60,.5); background: rgba(210,110,30,.1); } .ladder .high b { color: #f5b073; }
+  .ladder .med  { border-color: rgba(214,180,60,.45); background: rgba(190,150,30,.08); } .ladder .med b { color: #e8cf7a; }
+  .ladder .ok   { border-color: rgba(127,212,154,.4); background: rgba(127,212,154,.06); } .ladder .ok b { color: var(--green); }
+
+  /* proof: real crops of the sample report, full column width so they stay readable */
+  .proof { margin-top: 1.6rem; border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden; background: #fbf6ee; }
+  .proof img { width: 100%; height: auto; display: block; }
+  .proof figcaption { display: flex; flex-wrap: wrap; gap: .4rem .8rem; align-items: baseline; padding: .8rem 1rem; background: #0b0f1c; border-top: 1px solid var(--line);
+    font-size: .88rem; color: var(--ink-dim); }
+  .proof figcaption b { font-weight: 400; color: var(--ink); }
+  .lane { font-family: var(--mono); font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; border-radius: 999px; padding: .2rem .55rem; border: 1px solid var(--line-2); color: var(--ink-faint); white-space: nowrap; }
+  .lane.both { color: #b9c8ff; border-color: rgba(143,168,232,.4); }
+  .lane.win { color: #8fe0dc; border-color: rgba(127,212,212,.45); }
+  .lane.rep { color: var(--amber-hi); border-color: rgba(224,164,92,.45); }
+  .proof-note { margin-top: 1.2rem; font-size: .9rem; color: var(--ink-faint); max-width: 42rem; }
+  .proof-note a, .inline-a { color: var(--amber); }
+
+  .proof .pan { display: block; }
+  .proof .swipe { display: none; }
+  @media (max-width: 700px) {
+    .proof .pan { overflow-x: auto; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; }
+    .proof .pan img { width: 720px; max-width: none; }
+    .proof .swipe { display: inline; font-family: var(--mono); font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); }
+  }
+  @media (max-width: 960px) { .ladder { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) {
+    .cov-row, .cov-row.head { grid-template-columns: 1fr; }
+    .cov-row.head { display: none; }
+    .cov-row > div + div { border-left: 0; border-top: 1px dashed var(--line); }
+    .cov-row > div { padding: .7rem .9rem; }
+    .cov .lbl { display: block; font-family: var(--mono); font-style: normal; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: .25rem; }
+    .cov .stage { background: rgba(255,255,255,.025); }
+  }
+  @media (max-width: 420px) { .ladder { grid-template-columns: 1fr; } .bar3 .stampchip { font-size: .52rem; } }
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="stars"></span></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/img/daryll.jpg" alt="" width="28" height="28">Daryll Gomas</a>
+    <nav class="nav" aria-label="Main">
+      <a class="nav-home" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.5 9.5V19.5h4v-5h3v5h4V9.5"/></svg><span>Home</span></a>
+      <a class="hide-s" href="../../#work">Work</a>
+      <a href="../../resume/">Résumé</a>
+      <button type="button" class="btn-sm" data-talk="talkTop">Contact</button>
+    </nav>
+  </div>
+  <div class="talk-box pop" id="talkTop" hidden>
+    <span class="talk-mail"></span>
+    <button type="button" class="talk-copy">Copy</button>
+    <span class="talk-note">Write me about what you're working on. I read every message.</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../../#work">Projects</a><span class="mid">/</span><span class="mid">Systems &amp; security</span><span>/</span><span style="color:var(--ink-dim)">Security audit</span></nav>
+
+  <!-- HERO CARD -->
+  <article class="pcard rv">
+    <div class="pcard-in">
+      <div>
+        <span class="status amber"><i></i>Working tool · sample is fictional</span>
+        <h1 data-morph="audit-title">Security audit</h1>
+        <p class="tagline">Every finding comes with its fix.</p>
+        <p class="sum">A read-only sweep of a small network, then a report an owner can read: a verdict, every finding ranked by severity, and a numbered fix for each. The next run can be compared with the last.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="../../security/">Read the sample report <span class="arrow">↗</span></a>
+          <a class="btn ghost" href="#how">How it works</a>
+        </div>
+      </div>
+      <div class="shotframe" data-morph="audit-pic"><div class="bar3"><i></i><i></i><i></i><span class="stampchip">Sample · fictional business</span></div><img src="img/sample-cover.jpg" width="1300" height="761" alt="Cover of the sample security assessment for a fictional dental office: verdict ACTION REQUIRED, 2 critical, 4 high, 6 medium, 1 informational"></div>
+    </div>
+    <div class="kpis">
+      <div><b>4</b><span>stages in every sweep</span></div>
+      <div><b>2<small>→</small>1</b><span>sweeps, Linux and Windows, one report format</span></div>
+      <div><b>0</b><span>logins attempted: read-only</span></div>
+      <div><b>4</b><span>severity levels, each with a deadline</span></div>
+      <div><b>13</b><span>findings in the fictional sample</span></div>
+    </div>
+  </article>
+
+  <div class="doc">
+    <nav class="toc" aria-label="On this page">
+      <a href="#problem"><b>01</b>Problem</a>
+      <a href="#built"><b>02</b>What I built</a>
+      <a href="#how"><b>03</b>How it works</a>
+      <a href="#tools"><b>04</b>Tools</a>
+      <a href="#proof"><b>05</b>Proof</a>
+      <a href="#run"><b>06</b>Tested &amp; run</a>
+      <a href="#next"><b>07</b>Next</a>
+      <a href="#skills"><b>08</b>Skills</a>
+    </nav>
+
+    <div>
+      <section class="sec rv" id="problem">
+        <span class="k"><b>01</b>The problem</span>
+        <h2>A scan only helps if the owner can act on it.</h2>
+        <p>A small office needs to know what is on its network and where the worst holes are: open ports, weak sign-ins, services with no password, what the internet can already see.</p>
+        <p>The person who approves the fix is usually not technical. A raw scanner dump doesn't reach them.</p>
+        <p class="quote">"What's on the network, what's here, and what are the worst holes … an executive summary, because you're going to be bringing this to people who are not technical."</p>
+      </section>
+
+      <section class="sec rv" id="built">
+        <span class="k"><b>02</b>What I built</span>
+        <h2>Two read-only sweeps, one report.</h2>
+        <ul class="list">
+          <li><strong>Linux sweep</strong> (Python, standard library only). Checks the perimeter, the machine it runs on, the local network and the public identity. Never logs in, sends no passwords, needs no root, changes nothing.</li>
+          <li><strong>Windows sweep</strong> (the older PowerShell version). The same network checks, plus Windows endpoint checks: firewall profiles, disk encryption, antivirus, accounts, remote desktop, SMB.</li>
+          <li><strong>Report builder</strong> (Python). Reads a run file from either sweep and writes one branded report: verdict, findings by severity, a numbered fix for each, and an optional "since last time" section.</li>
+          <li><strong>A public sample</strong> for a fictional dental office, so the format can be shown without exposing a real network.</li>
+        </ul>
+        <div class="callout">
+          <span class="k">Which tool does what</span>
+          <p>The sample's endpoint findings (SMB1, BitLocker, antivirus, remote desktop, accounts) are <strong>Windows checks</strong>. The Linux sweep does not run them; the Windows sweep does.</p>
+          <p>Both sweeps write the same run-file shape, so one report builder reads either. Porting the Windows endpoint checks to the Linux sweep is not done yet.</p>
+        </div>
+      </section>
+
+      <section class="sec rv" id="how">
+        <span class="k"><b>03</b>How it works</span>
+        <h2>Read-only checks in, numbered fixes out.</h2>
+        <figure class="figure">
+<!-- FLOW:audit -->
+<svg class="flow wide" viewBox="0 0 1000 400" role="img" aria-labelledby="audit-t">
+<title id="audit-t">How the security audit works: a read-only sweep (Linux or Windows) checks the perimeter, the machine it runs on, the local network and the public identity; each finding is scored and saved to one run file; the report builder turns it into a verdict and numbered fixes; after fixing, the next run is compared with the last.</title>
+<text x="10" y="18" class="col">1 · COLLECT, READ-ONLY</text>
+<text x="10" y="34" class="col sub">LINUX OR WINDOWS SWEEP</text>
+<text x="268" y="18" class="col">2 · SCORE</text>
+<text x="432" y="18" class="col">3 · SAVE</text>
+<text x="596" y="18" class="col">4 · REPORT</text>
+<text x="836" y="18" class="col">5 · ACT</text>
+<text x="380" y="392" class="col sub">NEXT RUN · COMPARED WITH THIS ONE</text>
+<g class="edges"><path id="audit-wide-p0" d="M230,75 C249,75 249,180 268,180" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p0"/></animateMotion></circle>
+<path id="audit-wide-p1" d="M230,145 C249,145 249,180 268,180" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p1"/></animateMotion></circle>
+<path id="audit-wide-p2" d="M230,215 C249,215 249,180 268,180" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p2"/></animateMotion></circle>
+<path id="audit-wide-p3" d="M230,285 C249,285 249,180 268,180" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p3"/></animateMotion></circle>
+<path id="audit-wide-p4" d="M398,180 C415,180 415,180 432,180" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p4"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.18s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p4"/></animateMotion></circle>
+<path id="audit-wide-p5" d="M562,180 C579,180 579,180 596,180" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p5"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.55s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p5"/></animateMotion></circle>
+<path id="audit-wide-p6" d="M802,180 C819,180 819,128 836,128" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p6"/></animateMotion></circle>
+<path id="audit-wide-p7" d="M914,160 C914,180 914,180 914,200" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p7"/></animateMotion></circle>
+<path id="audit-wide-p8" d="M914,264 C914,384 120,384 120,314" class="ln loop"/>
+<circle r="2.6" class="pk loop"><animateMotion dur="6s" begin="-2.96s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p8"/></animateMotion></circle>
+<circle r="2.6" class="pk loop"><animateMotion dur="6s" begin="-5.96s" repeatCount="indefinite" rotate="auto"><mpath href="#audit-wide-p8"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="10" y="46" width="220" height="58" rx="10"/>
+<text x="24" y="69.0" class="t">Perimeter</text>
+<text x="24" y="86.0" class="s">PUBLIC ADDRESS · EXPOSURE</text>
+</g>
+<g class="nd  ">
+<rect x="10" y="116" width="220" height="58" rx="10"/>
+<text x="24" y="139.0" class="t">This machine</text>
+<text x="24" y="156.0" class="s">OPEN PORTS · FIREWALL · DISK</text>
+</g>
+<g class="nd  ">
+<rect x="10" y="186" width="220" height="58" rx="10"/>
+<text x="24" y="209.0" class="t">Local network</text>
+<text x="24" y="226.0" class="s">PORTS · SSH · OPEN SERVICES</text>
+</g>
+<g class="nd  ">
+<rect x="10" y="256" width="220" height="58" rx="10"/>
+<text x="24" y="279.0" class="t">Public identity</text>
+<text x="24" y="296.0" class="s">DOMAIN LOCKS · PUBLIC DNS</text>
+</g>
+<g class="nd  ">
+<rect x="268" y="148" width="130" height="64" rx="10"/>
+<text x="282" y="174.0" class="t">Score</text>
+<text x="282" y="191.0" class="s">SEVERITY + ID</text>
+</g>
+<g class="nd  ">
+<rect x="432" y="148" width="130" height="64" rx="10"/>
+<text x="446" y="174.0" class="t">Run file</text>
+<text x="446" y="191.0" class="s">ONE JSON PER RUN</text>
+</g>
+<g class="nd core ">
+<rect x="596" y="85" width="206" height="190" rx="10"/>
+<circle cx="616" cy="114" r="4.5" class="live"/>
+<text x="628" y="119" class="t big">Report</text>
+<text x="616" y="149" class="s">VERDICT FROM WORST FINDING</text>
+<text x="616" y="168" class="s">FINDING → NUMBERED FIX</text>
+<text x="616" y="187" class="s">ONE SELF-CONTAINED FILE</text>
+<text x="616" y="206" class="it">plus: since last time</text>
+</g>
+<g class="nd hot ">
+<rect x="836" y="96" width="156" height="64" rx="10"/>
+<text x="850" y="122.0" class="t">Fix</text>
+<text x="850" y="139.0" class="s">NUMBERED PROCEDURES</text>
+</g>
+<g class="nd calm ">
+<rect x="836" y="200" width="156" height="64" rx="10"/>
+<text x="850" y="226.0" class="t">Re-scan</text>
+<text x="850" y="243.0" class="s">COMPARE WITH LAST RUN</text>
+</g>
+
+</svg>
+<svg class="flow tall" viewBox="0 0 360 890" role="img" aria-labelledby="auditm-t">
+<title id="auditm-t">How the security audit works: a read-only sweep (Linux or Windows) checks the perimeter, the machine it runs on, the local network and the public identity; each finding is scored and saved to one run file; the report builder turns it into a verdict and numbered fixes; after fixing, the next run is compared with the last.</title>
+<text x="40" y="14" class="col">1 · COLLECT, READ-ONLY</text>
+<text x="40" y="27" class="col sub">LINUX OR WINDOWS SWEEP</text>
+<text x="40" y="320" class="col">2 · SCORE</text>
+<text x="40" y="414" class="col">3 · SAVE</text>
+<text x="40" y="508" class="col">4 · REPORT</text>
+<text x="40" y="718" class="col">5 · ACT</text>
+<g class="edges"><path id="auditm-tall-p0" d="M180,88 C180,94 180,94 180,100" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p0"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p0"/></animateMotion></circle>
+<path id="auditm-tall-p1" d="M180,154 C180,160 180,160 180,166" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p1"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.97s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p1"/></animateMotion></circle>
+<path id="auditm-tall-p2" d="M180,220 C180,226 180,226 180,232" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p2"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-2.34s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p2"/></animateMotion></circle>
+<path id="auditm-tall-p3" d="M180,286 C180,308 180,308 180,330" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p3"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-2.71s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p3"/></animateMotion></circle>
+<path id="auditm-tall-p4" d="M180,388 C180,406 180,406 180,424" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p4"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.18s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p4"/></animateMotion></circle>
+<path id="auditm-tall-p5" d="M180,482 C180,500 180,500 180,518" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p5"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.55s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p5"/></animateMotion></circle>
+<path id="auditm-tall-p6" d="M180,688 C180,708 180,708 180,728" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p6"/></animateMotion></circle>
+<path id="auditm-tall-p7" d="M180,788 C180,803 180,803 180,818" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p7"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.29s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p7"/></animateMotion></circle>
+<path id="auditm-tall-p8" d="M60,848 C8,848 8,61 40,61" class="ln loop"/>
+<circle r="2.6" class="pk loop"><animateMotion dur="6s" begin="-2.96s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p8"/></animateMotion></circle>
+<circle r="2.6" class="pk loop"><animateMotion dur="6s" begin="-5.96s" repeatCount="indefinite" rotate="auto"><mpath href="#auditm-tall-p8"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="40" y="34" width="280" height="54" rx="10"/>
+<text x="54" y="55.0" class="t">Perimeter</text>
+<text x="54" y="72.0" class="s">PUBLIC ADDRESS · EXPOSURE</text>
+</g>
+<g class="nd  ">
+<rect x="40" y="100" width="280" height="54" rx="10"/>
+<text x="54" y="121.0" class="t">This machine</text>
+<text x="54" y="138.0" class="s">OPEN PORTS · FIREWALL · DISK</text>
+</g>
+<g class="nd  ">
+<rect x="40" y="166" width="280" height="54" rx="10"/>
+<text x="54" y="187.0" class="t">Local network</text>
+<text x="54" y="204.0" class="s">PORTS · SSH · OPEN SERVICES</text>
+</g>
+<g class="nd  ">
+<rect x="40" y="232" width="280" height="54" rx="10"/>
+<text x="54" y="253.0" class="t">Public identity</text>
+<text x="54" y="270.0" class="s">DOMAIN LOCKS · PUBLIC DNS</text>
+</g>
+<g class="nd  ">
+<rect x="60" y="330" width="240" height="58" rx="10"/>
+<text x="74" y="353.0" class="t">Score</text>
+<text x="74" y="370.0" class="s">SEVERITY + ID</text>
+</g>
+<g class="nd  ">
+<rect x="60" y="424" width="240" height="58" rx="10"/>
+<text x="74" y="447.0" class="t">Run file</text>
+<text x="74" y="464.0" class="s">ONE JSON PER RUN</text>
+</g>
+<g class="nd core ">
+<rect x="40" y="518" width="280" height="170" rx="10"/>
+<circle cx="60" cy="547" r="4.5" class="live"/>
+<text x="72" y="552" class="t big">Report</text>
+<text x="60" y="582" class="s">VERDICT FROM WORST FINDING</text>
+<text x="60" y="601" class="s">FINDING → NUMBERED FIX</text>
+<text x="60" y="620" class="s">ONE SELF-CONTAINED FILE</text>
+<text x="60" y="639" class="it">plus: since last time</text>
+</g>
+<g class="nd hot ">
+<rect x="60" y="728" width="240" height="60" rx="10"/>
+<text x="74" y="752.0" class="t">Fix</text>
+<text x="74" y="769.0" class="s">NUMBERED PROCEDURES</text>
+</g>
+<g class="nd calm ">
+<rect x="60" y="818" width="240" height="60" rx="10"/>
+<text x="74" y="842.0" class="t">Re-scan</text>
+<text x="74" y="859.0" class="s">COMPARE WITH LAST RUN</text>
+</g>
+
+</svg>
+<!-- /FLOW:audit -->
+          <figcaption>Animated diagram. Each box is a step in the code. The sample report is for a fictional business; no real scan is ever published.</figcaption>
+        </figure>
+
+        <h3 class="cov-h">1 · Collect: what each sweep checks</h3>
+        <div class="cov" role="table" aria-label="What the Linux and Windows sweeps check">
+          <div class="cov-row head" role="row"><div role="columnheader">Stage</div><div role="columnheader">Linux sweep</div><div role="columnheader">Windows sweep (older)</div></div>
+          <div class="cov-row" role="row">
+            <div class="stage" role="cell">Perimeter<em>what a stranger sees</em></div>
+            <div role="cell"><span class="lbl">Linux sweep</span>Public address, a public exposure-database lookup, a local probe of open ports (marked indicative, not proof).</div>
+            <div role="cell" class="win"><span class="lbl">Windows sweep</span><span class="same">Same network check.</span></div>
+          </div>
+          <div class="cov-row" role="row">
+            <div class="stage" role="cell">This machine<em>where the sweep runs</em></div>
+            <div role="cell"><span class="lbl">Linux sweep</span>Listening ports, firewall service state, disk encryption. No root, so anything it can't read is marked <em>unverified</em>.</div>
+            <div role="cell" class="win"><span class="lbl">Windows sweep</span>Firewall profiles, BitLocker, antivirus, local accounts and admins, remote desktop, SMB1 and signing, listening ports.</div>
+          </div>
+          <div class="cov-row" role="row">
+            <div class="stage" role="cell">Local network<em>every known host</em></div>
+            <div role="cell"><span class="lbl">Linux sweep</span>Port scan against a stored baseline (new ports flagged NEW). SSH sign-in methods listed without logging in. Services checked for answering without a password (read-only requests).</div>
+            <div role="cell" class="win"><span class="lbl">Windows sweep</span><span class="same">Same network checks.</span></div>
+          </div>
+          <div class="cov-row" role="row">
+            <div class="stage" role="cell">Public identity<em>domains and DNS</em></div>
+            <div role="cell"><span class="lbl">Linux sweep</span>Domain transfer lock and registration privacy. Public DNS checked for internal addresses leaking out.</div>
+            <div role="cell" class="win"><span class="lbl">Windows sweep</span><span class="same">Same check.</span></div>
+          </div>
+        </div>
+        <p class="cov-note">The Linux sweep is a port of the Windows sweep's network checks. The Windows endpoint checks stay in the PowerShell version for now.</p>
+
+        <div class="break">
+          <div><h4>2 · Score</h4><ul><li>Every finding gets a severity and an ID</li><li>Sorted worst first</li><li>Critical: fix today. High: this week. Medium: this month.</li></ul></div>
+          <div><h4>3 · Save</h4><ul><li>One JSON run file: findings, counts, evidence</li><li>Never overwritten: each run keeps its own file</li><li>What couldn't be checked is listed, not hidden</li></ul></div>
+          <div><h4>4 · Report</h4><ul><li>Each finding ID maps to a numbered fix and its action</li><li>One self-contained HTML file: no outside requests</li><li>Refuses to overwrite an earlier report</li></ul></div>
+          <div><h4>5 · Fix &amp; re-scan</h4><ul><li>Fixes follow numbered procedures, each with its own check</li><li>Next run compared with the last: fixed, still open, or can't check</li><li>Plus a then-to-now scoreboard and what's new</li></ul></div>
+        </div>
+
+        <h3 class="cov-h">The verdict is a rule, not a judgment call</h3>
+        <div class="ladder">
+          <div class="crit"><b>ACTION REQUIRED</b><span>any critical finding</span></div>
+          <div class="high"><b>NEEDS WORK</b><span>no critical, any high</span></div>
+          <div class="med"><b>FAIR</b><span>only medium or lower</span></div>
+          <div class="ok"><b>GOOD</b><span>no findings against the baseline</span></div>
+        </div>
+      </section>
+
+      <section class="sec rv" id="tools">
+        <span class="k"><b>04</b>Tools</span>
+        <h2>Small, plain, no installs.</h2>
+        <div class="tools">
+          <div class="tool"><b>Python 3</b><span>standard library only: Linux sweep + report builder</span></div>
+          <div class="tool"><b>PowerShell</b><span>the older Windows sweep</span></div>
+          <div class="tool"><b>Linux built-ins</b><span>ss, lsblk, systemctl: no root needed</span></div>
+          <div class="tool"><b>OpenSSH client</b><span>lists sign-in methods, never logs in</span></div>
+          <div class="tool"><b>Public exposure lookup</b><span>what the internet already sees</span></div>
+          <div class="tool"><b>RDAP + public DNS</b><span>domain locks, privacy, DNS leaks</span></div>
+          <div class="tool"><b>Self-contained HTML</b><span>system fonts, no outside requests, prints cleanly</span></div>
+          <div class="tool"><b>Claude Code, Codex</b><span>AI writes the code; I specify and verify</span></div>
+        </div>
+      </section>
+
+      <section class="sec rv" id="proof">
+        <span class="k"><b>05</b>Proof</span>
+        <h2>Pieces of the sample report.</h2>
+        <p>Straight crops of the public sample. The business, addresses and machine names are made up.</p>
+
+        <figure class="proof">
+          <div class="pan" tabindex="0" role="region" aria-label="Report excerpt, scrolls sideways on small screens"><img src="img/sample-critical.jpg" width="1760" height="540" loading="lazy" alt="Sample report, Critical findings table: F1, router admin page reachable from the internet on 8443, with the action to disable remote management; a remote desktop finding with the action to require Network Level Authentication"></div>
+          <figcaption><span class="swipe">Swipe to read →</span><span class="lane rep">Report builder</span><b>A finding and its fix, side by side.</b> The fix column holds the procedure number; "—" means no numbered procedure yet.</figcaption>
+        </figure>
+
+        <figure class="proof">
+          <div class="pan" tabindex="0" role="region" aria-label="Report excerpt, scrolls sideways on small screens"><img src="img/sample-network.jpg" width="1760" height="1200" loading="lazy" alt="Sample report, Internal network: open ports per host with NEW ports in red, and an SSH table showing a host that still accepts password sign-in"></div>
+          <figcaption><span class="swipe">Swipe to read →</span><span class="lane both">Network checks · both sweeps</span><b>Drift against the baseline.</b> Red ports weren't there last time. SSH shows a host that still accepts passwords.</figcaption>
+        </figure>
+
+        <figure class="proof">
+          <div class="pan" tabindex="0" role="region" aria-label="Report excerpt, scrolls sideways on small screens"><img src="img/sample-endpoint.jpg" width="1760" height="1390" loading="lazy" alt="Sample report, Endpoint: Windows 10 out of support, disk encryption off, antivirus inactive, an account with no password, remote desktop enabled, SMB1 enabled; host firewall profiles with logging off">
+          <img src="img/sample-method.jpg" width="1760" height="290" loading="lazy" alt="Sample report, Method: read-only collection, Windows posture via native management APIs"></div>
+          <figcaption><span class="swipe">Swipe to read →</span><span class="lane win">Windows sweep only</span><b>The endpoint section is Windows data.</b> The sample's own Method line says so: "Windows posture via native management APIs".</figcaption>
+        </figure>
+
+        <figure class="proof">
+          <div class="pan" tabindex="0" role="region" aria-label="Report excerpt, scrolls sideways on small screens"><img src="img/sample-not-covered.jpg" width="1760" height="1010" loading="lazy" alt="Sample report, What this assessment does not cover: account takeover, credential reuse and SIM swap, with seven items to confirm by hand each cycle"></div>
+          <figcaption><span class="swipe">Swipe to read →</span><span class="lane rep">Report builder</span><b>It says what it can't see.</b> Seven checks that need a person, every cycle.</figcaption>
+        </figure>
+
+        <p class="proof-note">The sample is a single run, so it has no "since last time" section; that comparison is built into the report builder (step 5 above). Real reports hold real network details and stay private. <a href="../../security/">Open the full sample ↗</a></p>
+      </section>
+
+      <section class="sec rv" id="run">
+        <span class="k"><b>06</b>How it's tested and run</span>
+        <h2>Safe to run, honest about its limits.</h2>
+        <ol class="steps">
+          <li><div><b>Permission first</b><span>Field work needs written permission from the owner of the network and devices before any scan.</span></div></li>
+          <li><div><b>Read-only by design</b><span>No logins, no passwords sent, no root, nothing changed. SSH is asked which sign-in methods it allows, and that's all.</span></div></li>
+          <li><div><b>Nothing overwritten</b><span>Each run writes its own file, and the report builder refuses to replace an earlier report.</span></div></li>
+          <li><div><b>Unknown is not "fine"</b><span>Checks it couldn't make are listed as unverified. In a comparison, items the new run can't see are marked can't-check, never fixed; a service that stopped answering is flagged to confirm, not counted as secured.</span></div></li>
+          <li><div><b>Expected alarms</b><span>The sweep trips intrusion detection. The report says so: an alert that matches a run is expected; one that doesn't should be investigated.</span></div></li>
+          <li><div><b>Used on my own network first</b><span>The Linux sweep was built to re-run my own audit and compare it with an earlier run. Those reports stay private.</span></div></li>
+        </ol>
+      </section>
+
+      <section class="sec rv" id="next">
+        <span class="k"><b>07</b>What I'd do next</span>
+        <span class="proposed">Proposed · not built</span>
+        <h2>One sweep, a plain-words front page.</h2>
+        <ul class="list">
+          <li>Port the Windows endpoint checks, so one sweep covers both.</li>
+          <li>Add an executive summary page for owners: the verdict, the top risks, what to do first.</li>
+        </ul>
+      </section>
+
+      <section class="sec rv" id="skills">
+        <span class="k"><b>08</b>Skill tags</span>
+        <div class="tags" style="gap:.5rem">
+          <a class="tag" href="../../?skill=Security#work">Security</a>
+          <span class="tag">Security assessments</span><span class="tag">Python</span><span class="tag">PowerShell</span><span class="tag">Linux</span>
+          <span class="tag">Windows</span><span class="tag">DNS</span><span class="tag">Claude Code</span><span class="tag">Codex</span>
+        </div>
+        <div class="pager" style="margin-top:2.4rem">
+          <a href="../monitoring/"><span class="k">← Previous</span><b>SENTINEL: monitoring</b></a>
+          <a href="../../#work"><span class="k">All →</span><b>All projects</b></a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Daryll Gomas · Portland, OR</p>
+    <nav><a href="https://github.com/DaryllGomas">GitHub</a><a href="../../resume/">Résumé</a><a href="../../">All projects</a></nav>
+  </div>
+</footer>
+
+<script src="../../assets/site.js"></script>
+<script src="../../assets/toc.js"></script>
+<script src="../../assets/fx.js"></script>
+</body>
+</html>

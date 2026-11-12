@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SENTINEL: monitoring · Daryll Gomas</title>
+<meta name="description" content="SENTINEL, a low-power monitoring appliance: 18 hosts and 29 services watched, raw alerts turned into one incident with the evidence attached.">
+<!-- PROJECT PAGE TEMPLATE: every project page keeps the same sections: hero card, 01 problem, 02 what I built,
+     03 how it works (diagram + breakdown), 04 tools, 05 proof, 06 how it's tested and run, 07 what I'd do next, 08 skill tags. -->
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://daryllgomas.com/projects/monitoring/">
+<meta property="og:url" content="https://daryllgomas.com/projects/monitoring/">
+<link rel="stylesheet" href="../../assets/site.css">
+<link rel="stylesheet" href="../../assets/project.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="stars"></span></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/img/daryll.jpg" alt="" width="28" height="28">Daryll Gomas</a>
+    <nav class="nav" aria-label="Main">
+      <a class="nav-home" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.5 9.5V19.5h4v-5h3v5h4V9.5"/></svg><span>Home</span></a>
+      <a class="hide-s" href="../../#work">Work</a>
+      <a href="../../resume/">Résumé</a>
+      <button type="button" class="btn-sm" data-talk="talkTop">Contact</button>
+    </nav>
+  </div>
+  <div class="talk-box pop" id="talkTop" hidden>
+    <span class="talk-mail"></span>
+    <button type="button" class="talk-copy">Copy</button>
+    <span class="talk-note">Write me about what you're working on. I read every message.</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../../#work">Projects</a><span class="mid">/</span><span class="mid">Systems &amp; security</span><span>/</span><span style="color:var(--ink-dim)">Monitoring</span></nav>
+
+  <!-- HERO CARD -->
+  <article class="pcard rv">
+    <div class="pcard-in">
+      <div>
+        <span class="status"><i></i>Running · private</span>
+        <h1 data-morph="monitoring-title">SENTINEL</h1>
+        <p class="tagline">Monitoring that explains, then stays quiet.</p>
+        <p class="sum">A low-power appliance that watches the machines and services, and the internet link, in a small server room. It turns raw alerts into one incident with the evidence attached, and tells me only the few things I'd want to know.</p>
+        <div class="tags"><span class="tag">Monitoring</span><span class="tag">Security detection</span><span class="tag">Prometheus</span><span class="tag">Loki</span><span class="tag">Grafana</span><span class="tag">Alertmanager</span></div>
+      </div>
+      <!-- Example incident: same fields and order as SENTINEL's incident card. Machine names are replaced by roles. -->
+      <figure class="inc" data-morph="monitoring-pic" aria-label="Example SENTINEL incident, names replaced by roles">
+        <div class="inc-card">
+          <span class="inc-ex">Example alert</span>
+          <div class="inc-top"><span class="inc-app"><i></i>SENTINEL · incident</span><span class="inc-open">3m open</span></div>
+          <div class="inc-h"><span class="sev crit">Critical</span><span class="conf">Confidence: high</span></div>
+          <h3>Virtualization host is down. 4 machines affected.</h3>
+          <p class="inc-story">Virtualization host stopped answering at 10:14 AM. Market-data VM, Automation VM, Development VM and Windows VM depend on it, so they went down with it. The rest of the network is fine.</p>
+          <div class="inc-aff" aria-label="Affected"><span>Market-data VM</span><span>Automation VM</span><span>Development VM</span><span>Windows VM</span></div>
+          <div class="inc-ev">
+            <b>Evidence</b>
+            <div><span class="src">registry check</span><span>No answer from Virtualization host <em>(address removed)</em>.</span></div>
+            <div><span class="src">alertmanager</span><span>HostDown</span></div>
+          </div>
+          <div class="inc-next"><i>What to do</i>Check that Virtualization host has power and a network cable, and whether it is in the middle of a reboot.</div>
+        </div>
+        <figcaption>Example · names replaced by roles</figcaption>
+      </figure>
+    </div>
+    <div class="kpis">
+      <div><b>18</b><span>hosts watched</span></div>
+      <div><b>29</b><span>services watched</span></div>
+      <div><b>19</b><span>test cases passed by the dead-man alarm</span></div>
+      <div><b>6</b><span>lean security checks replaced a heavy suite</span></div>
+      <div><b>2</b><span>other machines watch the watcher</span></div>
+    </div>
+  </article>
+
+  <div class="doc">
+    <nav class="toc" aria-label="On this page">
+      <a href="#problem"><b>01</b>Problem</a>
+      <a href="#built"><b>02</b>What I built</a>
+      <a href="#how"><b>03</b>How it works</a>
+      <a href="#tools"><b>04</b>Tools</a>
+      <a href="#proof"><b>05</b>Proof</a>
+      <a href="#run"><b>06</b>Tested &amp; run</a>
+      <a href="#next"><b>07</b>Next</a>
+      <a href="#skills"><b>08</b>Skills</a>
+    </nav>
+
+    <div>
+      <section class="sec rv" id="problem">
+        <span class="k"><b>01</b>The problem</span>
+        <h2>More alerts is not more safety.</h2>
+        <p>One person runs a small server room: a virtualization host with four VMs, a segmented network, a GPU node, a backup NAS, and a market-data platform that has to stay up around the clock. All of it needs watching, and so does the internet link.</p>
+        <p>The usual answer is more detection and a heavier security suite. But a monitor that pages you for everything trains you to ignore it.</p>
+        <p class="quote">Success isn't detecting more things. It's noticing the few things a person would want to know, explaining them correctly, and staying silent the rest of the time.</p>
+      </section>
+
+      <section class="sec rv" id="built">
+        <span class="k"><b>02</b>What I built</span>
+        <h2>One quiet appliance that watches everything.</h2>
+        <p>SENTINEL is a low-power observability appliance (about 20 containers on the box, with its control plane, as of Oct 2026) that collects metrics, logs, network flows and health probes from every machine and service, then decides what is worth a person's attention.</p>
+        <ul class="list">
+          <li>Raw alerts are correlated into <strong>one incident with the evidence attached</strong>, sent to my phone.</li>
+          <li>Security checks flag new devices, failed or unusual logins, new accounts, file-integrity changes, pending updates and newly opened ports.</li>
+          <li>Public web addresses are probed by their public names, and the internet link itself is measured.</li>
+          <li>A dead-man check on two other machines watches the watcher, so a silent SENTINEL is never mistaken for a healthy one.</li>
+        </ul>
+      </section>
+
+      <section class="sec rv" id="how">
+        <span class="k"><b>03</b>How it works</span>
+        <h2>Signals in, one clear answer out.</h2>
+        <figure class="figure">
+<!-- FLOW:sentinel -->
+<svg class="flow wide" viewBox="0 0 1000 560" role="img" aria-labelledby="sentinel-t">
+<title id="sentinel-t">How SENTINEL works: machines and services send signals; SENTINEL collects them, turns raw alerts into one incident with evidence, and sends one clear alert, dashboards, or silence.</title>
+<text x="10" y="22" class="col">WHAT IT WATCHES</text>
+<text x="268" y="22" class="col">HOW IT LISTENS</text>
+<text x="520" y="22" class="col">WHAT IT DECIDES</text>
+<text x="812" y="22" class="col">WHAT YOU GET</text>
+<g class="edges"><path id="sentinel-wide-p0" d="M200,74 C234,74 234,100 268,100" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p0"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p0"/></animateMotion></circle>
+<path id="sentinel-wide-p1" d="M200,166 C234,166 234,200 268,200" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p1"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.97s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p1"/></animateMotion></circle>
+<path id="sentinel-wide-p2" d="M200,166 C234,166 234,100 268,100" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p2"/></animateMotion></circle>
+<path id="sentinel-wide-p3" d="M200,258 C234,258 234,300 268,300" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p3"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-2.71s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p3"/></animateMotion></circle>
+<path id="sentinel-wide-p4" d="M200,350 C234,350 234,300 268,300" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p4"/></animateMotion></circle>
+<path id="sentinel-wide-p5" d="M200,442 C234,442 234,400 268,400" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p5"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.25s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p5"/></animateMotion></circle>
+<path id="sentinel-wide-p6" d="M446,100 C483,100 483,250 520,250" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p6"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.92s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p6"/></animateMotion></circle>
+<path id="sentinel-wide-p7" d="M446,200 C483,200 483,250 520,250" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p7"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.29s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p7"/></animateMotion></circle>
+<path id="sentinel-wide-p8" d="M446,300 C483,300 483,250 520,250" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.36s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p8"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.66s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p8"/></animateMotion></circle>
+<path id="sentinel-wide-p9" d="M446,400 C483,400 483,250 520,250" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.73s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p9"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.03s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p9"/></animateMotion></circle>
+<path id="sentinel-wide-p10" d="M742,250 C777,250 777,150 812,150" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-0.70s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p10"/></animateMotion></circle>
+<path id="sentinel-wide-p11" d="M742,250 C777,250 777,250 812,250" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.47s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p11"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.17s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p11"/></animateMotion></circle>
+<path id="sentinel-wide-p12" d="M742,250 C777,250 777,350 812,350" class="ln quiet"/>
+<circle r="2.6" class="pk quiet"><animateMotion dur="7.5s" begin="-4.44s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p12"/></animateMotion></circle>
+<path id="sentinel-wide-p13" d="M631,470 C631,410 631,410 631,350" class="ln dog"/>
+<circle r="2.6" class="pk dog"><animateMotion dur="4s" begin="-0.81s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinel-wide-p13"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="10" y="44" width="190" height="60" rx="10"/>
+<text x="24" y="68.0" class="t">Servers &amp; VMs</text>
+<text x="24" y="85.0" class="s">CPU · MEMORY · DISKS</text>
+</g>
+<g class="nd  ">
+<rect x="10" y="136" width="190" height="60" rx="10"/>
+<text x="24" y="160.0" class="t">Network &amp; Wi-Fi</text>
+<text x="24" y="177.0" class="s">GATEWAY · SWITCH · APS</text>
+</g>
+<g class="nd  ">
+<rect x="10" y="228" width="190" height="60" rx="10"/>
+<text x="24" y="252.0" class="t">Services</text>
+<text x="24" y="269.0" class="s">IS IT UP? IS IT RIGHT?</text>
+</g>
+<g class="nd  ">
+<rect x="10" y="320" width="190" height="60" rx="10"/>
+<text x="24" y="344.0" class="t">The internet</text>
+<text x="24" y="361.0" class="s">IS THE LINK HEALTHY?</text>
+</g>
+<g class="nd  ">
+<rect x="10" y="412" width="190" height="60" rx="10"/>
+<text x="24" y="436.0" class="t">Logs &amp; changes</text>
+<text x="24" y="453.0" class="s">LOGINS · ACCOUNTS · FILES</text>
+</g>
+<g class="nd  ">
+<rect x="268" y="70" width="178" height="60" rx="10"/>
+<text x="282" y="94.0" class="t">Metrics</text>
+<text x="282" y="111.0" class="s">PROMETHEUS</text>
+</g>
+<g class="nd  ">
+<rect x="268" y="170" width="178" height="60" rx="10"/>
+<text x="282" y="194.0" class="t">Flows &amp; SNMP</text>
+<text x="282" y="211.0" class="s">WHO TALKS TO WHOM</text>
+</g>
+<g class="nd  ">
+<rect x="268" y="270" width="178" height="60" rx="10"/>
+<text x="282" y="294.0" class="t">Probes</text>
+<text x="282" y="311.0" class="s">INSIDE + BY PUBLIC NAME</text>
+</g>
+<g class="nd  ">
+<rect x="268" y="370" width="178" height="60" rx="10"/>
+<text x="282" y="394.0" class="t">Log collection</text>
+<text x="282" y="411.0" class="s">LOKI</text>
+</g>
+<g class="nd core ">
+<rect x="520" y="150" width="222" height="200" rx="10"/>
+<circle cx="540" cy="179" r="4.5" class="live"/>
+<text x="552" y="184" class="t big">SENTINEL</text>
+<text x="540" y="214" class="s">ALERT RULES · ALERTMANAGER</text>
+<text x="540" y="233" class="s">NOISE → ONE INCIDENT</text>
+<text x="540" y="252" class="s">EVIDENCE ATTACHED</text>
+<text x="540" y="271" class="it">explains, then stays quiet</text>
+</g>
+<g class="nd hot ">
+<rect x="812" y="120" width="180" height="60" rx="10"/>
+<text x="826" y="144.0" class="t">One clear alert</text>
+<text x="826" y="161.0" class="s">EVIDENCE · TO MY PHONE</text>
+</g>
+<g class="nd  ">
+<rect x="812" y="220" width="180" height="60" rx="10"/>
+<text x="826" y="244.0" class="t">Dashboards</text>
+<text x="826" y="261.0" class="s">GRAFANA</text>
+</g>
+<g class="nd calm ">
+<rect x="812" y="320" width="180" height="60" rx="10"/>
+<text x="826" y="344.0" class="t">Silence</text>
+<text x="826" y="361.0" class="s">WHEN ALL IS WELL</text>
+</g>
+<g class="nd dog ">
+<rect x="506" y="470" width="250" height="60" rx="10"/>
+<text x="520" y="494.0" class="t">Watchdogs on 2 other machines</text>
+<text x="520" y="511.0" class="s">A DEAD-MAN CHECK WATCHES THE WATCHER</text>
+</g>
+</svg>
+<svg class="flow tall" viewBox="0 0 360 1000" role="img" aria-labelledby="sentinelm-t">
+<title id="sentinelm-t">How SENTINEL works: machines and services send signals; SENTINEL collects them, turns raw alerts into one incident with evidence, and sends one clear alert, dashboards, or silence.</title>
+<text x="4" y="16" class="col">WHAT IT WATCHES</text>
+<text x="4" y="312" class="col">HOW IT LISTENS</text>
+<text x="4" y="506" class="col">WHAT IT DECIDES</text>
+<text x="4" y="736" class="col">WHAT YOU GET</text>
+<g class="edges"><path id="sentinelm-tall-p0" d="M89,90 C89,208 89,208 89,326" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p0"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p0"/></animateMotion></circle>
+<path id="sentinelm-tall-p1" d="M271,90 C271,208 271,208 271,326" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p1"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.97s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p1"/></animateMotion></circle>
+<path id="sentinelm-tall-p2" d="M271,90 C271,208 89,208 89,326" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p2"/></animateMotion></circle>
+<path id="sentinelm-tall-p3" d="M89,170 C89,287 89,287 89,404" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p3"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-2.71s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p3"/></animateMotion></circle>
+<path id="sentinelm-tall-p4" d="M271,170 C271,287 89,287 89,404" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p4"/></animateMotion></circle>
+<path id="sentinelm-tall-p5" d="M180,250 C180,327 271,327 271,404" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p5"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.25s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p5"/></animateMotion></circle>
+<path id="sentinelm-tall-p6" d="M89,386 C89,454 180,454 180,522" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p6"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.92s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p6"/></animateMotion></circle>
+<path id="sentinelm-tall-p7" d="M271,386 C271,454 180,454 180,522" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p7"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.29s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p7"/></animateMotion></circle>
+<path id="sentinelm-tall-p8" d="M89,464 C89,493 180,493 180,522" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.36s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p8"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.66s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p8"/></animateMotion></circle>
+<path id="sentinelm-tall-p9" d="M271,464 C271,493 180,493 180,522" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.73s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p9"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.03s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p9"/></animateMotion></circle>
+<path id="sentinelm-tall-p10" d="M180,694 C180,722 89,722 89,750" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-0.70s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p10"/></animateMotion></circle>
+<path id="sentinelm-tall-p11" d="M180,694 C180,722 271,722 271,750" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.47s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p11"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.17s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p11"/></animateMotion></circle>
+<path id="sentinelm-tall-p12" d="M180,694 C180,761 271,761 271,828" class="ln quiet"/>
+<circle r="2.6" class="pk quiet"><animateMotion dur="7.5s" begin="-4.44s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p12"/></animateMotion></circle>
+<path id="sentinelm-tall-p13" d="M180,930 C180,812 180,812 180,694" class="ln dog"/>
+<circle r="2.6" class="pk dog"><animateMotion dur="4s" begin="-0.81s" repeatCount="indefinite" rotate="auto"><mpath href="#sentinelm-tall-p13"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="4" y="30" width="170" height="60" rx="10"/>
+<text x="18" y="54.0" class="t">Servers &amp; VMs</text>
+<text x="18" y="71.0" class="s">CPU · MEMORY · DISKS</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="30" width="170" height="60" rx="10"/>
+<text x="200" y="54.0" class="t">Network &amp; Wi-Fi</text>
+<text x="200" y="71.0" class="s">GATEWAY · SWITCH · APS</text>
+</g>
+<g class="nd  ">
+<rect x="4" y="110" width="170" height="60" rx="10"/>
+<text x="18" y="134.0" class="t">Services</text>
+<text x="18" y="151.0" class="s">IS IT UP? IS IT RIGHT?</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="110" width="170" height="60" rx="10"/>
+<text x="200" y="134.0" class="t">The internet</text>
+<text x="200" y="151.0" class="s">IS THE LINK HEALTHY?</text>
+</g>
+<g class="nd  ">
+<rect x="95" y="190" width="170" height="60" rx="10"/>
+<text x="109" y="214.0" class="t">Logs &amp; changes</text>
+<text x="109" y="231.0" class="s">LOGINS · ACCOUNTS · FILES</text>
+</g>
+<g class="nd  ">
+<rect x="4" y="326" width="170" height="60" rx="10"/>
+<text x="18" y="350.0" class="t">Metrics</text>
+<text x="18" y="367.0" class="s">PROMETHEUS</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="326" width="170" height="60" rx="10"/>
+<text x="200" y="350.0" class="t">Flows &amp; SNMP</text>
+<text x="200" y="367.0" class="s">WHO TALKS TO WHOM</text>
+</g>
+<g class="nd  ">
+<rect x="4" y="404" width="170" height="60" rx="10"/>
+<text x="18" y="428.0" class="t">Probes</text>
+<text x="18" y="445.0" class="s">INSIDE + BY PUBLIC NAME</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="404" width="170" height="60" rx="10"/>
+<text x="200" y="428.0" class="t">Log collection</text>
+<text x="200" y="445.0" class="s">LOKI</text>
+</g>
+<g class="nd core ">
+<rect x="49" y="522" width="262" height="172" rx="10"/>
+<circle cx="69" cy="551" r="4.5" class="live"/>
+<text x="81" y="556" class="t big">SENTINEL</text>
+<text x="69" y="586" class="s">ALERT RULES · ALERTMANAGER</text>
+<text x="69" y="605" class="s">NOISE → ONE INCIDENT</text>
+<text x="69" y="624" class="s">EVIDENCE ATTACHED</text>
+<text x="69" y="643" class="it">explains, then stays quiet</text>
+</g>
+<g class="nd hot ">
+<rect x="4" y="750" width="170" height="138" rx="10"/>
+<text x="18" y="813.0" class="t">One clear alert</text>
+<text x="18" y="830.0" class="s">EVIDENCE · TO MY PHONE</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="750" width="170" height="60" rx="10"/>
+<text x="200" y="774.0" class="t">Dashboards</text>
+<text x="200" y="791.0" class="s">GRAFANA</text>
+</g>
+<g class="nd calm ">
+<rect x="186" y="828" width="170" height="60" rx="10"/>
+<text x="200" y="852.0" class="t">Silence</text>
+<text x="200" y="869.0" class="s">WHEN ALL IS WELL</text>
+</g>
+<g class="nd dog ">
+<rect x="40" y="930" width="280" height="60" rx="10"/>
+<text x="54" y="954.0" class="t">Watchdogs on 2 other machines</text>
+<text x="54" y="971.0" class="s">A DEAD-MAN CHECK WATCHES THE WATCHER</text>
+</g>
+</svg>
+<!-- /FLOW:sentinel -->
+          <figcaption>Animated diagram. Machines are shown by role: no names, addresses or accounts.</figcaption>
+        </figure>
+        <div class="break">
+          <div><h4>Watches</h4><ul><li>Servers and VMs: CPU, memory, disks</li><li>Gateway, switch and Wi-Fi access points</li><li>Every service: is it up, and is it right?</li><li>The internet link</li><li>Logins, accounts and file changes</li></ul></div>
+          <div><h4>Listens</h4><ul><li>Metrics over time (Prometheus)</li><li>Network flow and SNMP: who talks to whom</li><li>Disk health and service probes, inside and by public name</li><li>Searchable log history (Loki)</li></ul></div>
+          <div><h4>Decides</h4><ul><li>Alert rules for every machine, service and the internet link</li><li>Raw alerts become one incident</li><li>The evidence is attached to it</li></ul></div>
+          <div><h4>Delivers</h4><ul><li>One clear alert, with evidence, to my phone</li><li>Dashboards: everything at a glance (Grafana)</li><li>Silence, when all is well</li></ul></div>
+        </div>
+      </section>
+
+      <section class="sec rv" id="tools">
+        <span class="k"><b>04</b>Tools</span>
+        <h2>Standard parts, used plainly.</h2>
+        <div class="tools">
+          <div class="tool"><b>Prometheus</b><span>metrics over time</span></div>
+          <div class="tool"><b>Alertmanager</b><span>alert routing and grouping</span></div>
+          <div class="tool"><b>Loki</b><span>log collection and search</span></div>
+          <div class="tool"><b>Grafana</b><span>dashboards</span></div>
+          <div class="tool"><b>Flow export + SNMP</b><span>network traffic and devices</span></div>
+          <div class="tool"><b>Health probes</b><span>inside and by public name</span></div>
+          <div class="tool"><b>Linux + containers</b><span>about 20 on the box, with the control plane</span></div>
+          <div class="tool"><b>Claude Code, Codex</b><span>AI writes the code; I specify and verify</span></div>
+        </div>
+      </section>
+
+      <section class="sec rv" id="proof">
+        <span class="k"><b>05</b>Proof</span>
+        <h2>What it covers today.</h2>
+        <div class="nums">
+          <div><b>18 · 29</b><span>hosts and services watched around the clock</span></div>
+          <div><b>2</b><span>other machines run the dead-man check that watches SENTINEL</span></div>
+          <div><b>6</b><span>lean security checks in place of a heavyweight security suite</span></div>
+        </div>
+        <figure class="netmap" id="netmap">
+          <div class="netmap-h"><span class="k">Where it sits in the build-out</span><button type="button" class="zoom" data-lightbox="netmap-svg" aria-label="Enlarge the network diagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Enlarge</button></div>
+          <div class="netmap-scroll" id="netmap-svg">
+<svg class="map" viewBox="0 0 1100 560" role="img" aria-label="Anonymized network diagram: internet to gateway and segmented switch; virtualization host with four virtual machines; SENTINEL; GPU inference node; backup NAS; workstation and media rooms.">
+  <defs>
+    <linearGradient id="nm-card" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16203a"/><stop offset="1" stop-color="#0b1020"/></linearGradient>
+    <filter id="nm-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="nm-cloud" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#5fd4f0" stop-opacity=".55"/><stop offset="1" stop-color="#5fd4f0" stop-opacity="0"/></radialGradient>
+  </defs>
+  <g fill="none" stroke-width="2">
+    <path d="M550 78 V130" stroke="#5fd4f0" class="lk"/>
+    <path d="M550 186 V232" stroke="#5fd4f0" class="lk"/>
+    <path d="M550 288 C 550 320, 220 320, 220 352" stroke="#5fd4f0" class="lk"/>
+    <path d="M550 288 V352" stroke="#5fd4f0" class="lk"/>
+    <path d="M550 288 C 550 320, 880 320, 880 352" stroke="#5fd4f0" class="lk"/>
+    <path d="M550 288 C 550 300, 1000 300, 1000 470" stroke="#5fd4f0" class="lk slow"/>
+    <path d="M550 288 C 550 300, 100 300, 100 470" stroke="#5fd4f0" class="lk slow"/>
+    <path d="M695 158 C 800 158, 880 250, 880 352" stroke="#9d84ff" class="lk tel" opacity=".9"/>
+    <path d="M350 420 C 470 460, 700 460, 790 422" stroke="#9d84ff" class="lk tel" opacity=".8"/>
+    <path d="M330 455 C 400 520, 420 515, 430 505" stroke="#5fe0a0" class="lk slow"/>
+    <path d="M800 422 C 760 520, 700 515, 670 505" stroke="#5fe0a0" class="lk slow"/>
+  </g>
+  <circle cx="550" cy="46" r="52" fill="url(#nm-cloud)" class="nm-pulse"/>
+  <text x="550" y="42" text-anchor="middle" class="nt">Internet</text>
+  <text x="550" y="62" text-anchor="middle" class="ns">TLS · SECURE TUNNELS</text>
+  <g><rect x="405" y="130" width="290" height="56" rx="12" fill="url(#nm-card)" stroke="rgba(95,212,240,.55)"/>
+    <text x="550" y="154" text-anchor="middle" class="nt">Gateway &amp; firewall</text>
+    <text x="550" y="173" text-anchor="middle" class="ns">ZONE FIREWALL · IPS · FLOW EXPORT</text></g>
+  <g><rect x="370" y="232" width="360" height="56" rx="12" fill="url(#nm-card)" stroke="rgba(95,212,240,.45)"/>
+    <text x="550" y="256" text-anchor="middle" class="nt">48-port PoE core switch</text>
+    <text x="550" y="275" text-anchor="middle" class="ns">SEGMENTED ADDRESS PLAN · ISOLATED VLAN · WI-FI 7</text></g>
+  <g><rect x="90" y="352" width="260" height="104" rx="14" fill="url(#nm-card)" stroke="rgba(238,242,248,.3)"/>
+    <text x="110" y="378" class="nt">Virtualization host</text>
+    <text x="110" y="396" class="ns">TOWER SERVER · RAID · 4 VMS</text>
+    <g class="vm">
+      <rect x="110" y="408" width="112" height="18" rx="5" fill="rgba(95,212,240,.16)" stroke="rgba(95,212,240,.4)"/><text x="166" y="421" text-anchor="middle">market data</text>
+      <rect x="226" y="408" width="104" height="18" rx="5" fill="rgba(157,132,255,.16)" stroke="rgba(157,132,255,.4)"/><text x="278" y="421" text-anchor="middle">automation</text>
+      <rect x="110" y="430" width="112" height="18" rx="5" fill="rgba(238,242,248,.06)" stroke="rgba(238,242,248,.2)"/><text x="166" y="443" text-anchor="middle">development</text>
+      <rect x="226" y="430" width="104" height="18" rx="5" fill="rgba(238,242,248,.06)" stroke="rgba(238,242,248,.2)"/><text x="278" y="443" text-anchor="middle">windows</text>
+    </g></g>
+  <g><rect x="410" y="352" width="280" height="70" rx="14" fill="url(#nm-card)" stroke="rgba(157,132,255,.45)"/>
+    <text x="550" y="380" text-anchor="middle" class="nt">GPU inference node</text>
+    <text x="550" y="400" text-anchor="middle" class="ns">3 GPUS · LOCAL LLM · SPEECH · RENDER</text></g>
+  <g><rect x="770" y="352" width="230" height="70" rx="14" fill="url(#nm-card)" stroke="rgba(224,164,92,.85)" stroke-width="1.6" filter="url(#nm-glow)"/>
+    <circle cx="792" cy="376" r="5" fill="#5fe0a0" class="nm-pulse"/>
+    <text x="806" y="381" class="nt" font-size="19">SENTINEL</text>
+    <text x="790" y="402" class="ns">THIS PROJECT · ~20 CONTAINERS</text></g>
+  <g><rect x="430" y="476" width="240" height="58" rx="14" fill="url(#nm-card)" stroke="rgba(95,224,160,.6)"/>
+    <text x="550" y="501" text-anchor="middle" class="nt">Backup NAS</text>
+    <text x="550" y="520" text-anchor="middle" class="ns">RAID1 · RECOVERY SNAPSHOTS</text></g>
+  <g><rect x="20" y="470" width="160" height="50" rx="12" fill="url(#nm-card)" stroke="rgba(238,242,248,.25)"/>
+    <text x="100" y="492" text-anchor="middle" class="nt" font-size="15">Workstation</text>
+    <text x="100" y="509" text-anchor="middle" class="ns">VOICE-DRIVEN LINUX</text></g>
+  <g><rect x="920" y="470" width="160" height="50" rx="12" fill="url(#nm-card)" stroke="rgba(238,242,248,.25)"/>
+    <text x="1000" y="492" text-anchor="middle" class="nt" font-size="15">Media rooms</text>
+    <text x="1000" y="509" text-anchor="middle" class="ns">VOICE-CONTROLLED</text></g>
+</svg>
+          </div>
+          <figcaption><span class="lg"><i style="background:#5fd4f0"></i>data</span><span class="lg"><i style="background:#9d84ff"></i>telemetry into SENTINEL</span><span class="lg"><i style="background:#5fe0a0"></i>backups</span><span class="hint">Swipe sideways, or tap Enlarge</span></figcaption>
+        </figure>
+        <p style="margin-top:1.2rem;font-size:.9rem;color:var(--ink-faint)">The live dashboards stay private: they show machine names and addresses. This diagram is from the anonymized <a href="../../systems/" style="color:var(--amber)">network case study</a>, shown by role.</p>
+      </section>
+
+      <section class="sec rv" id="run">
+        <span class="k"><b>06</b>How it's tested and run</span>
+        <h2>Tested, not trusted.</h2>
+        <ol class="steps">
+          <li><div><b>The alarm was tested before it shipped</b><span>A 19-case scenario test of the dead-man alarm passed before deploy, then an independent AI reviewer checked it twice.</span></div></li>
+          <li><div><b>The watcher is watched</b><span>A dead-man check on two other machines alerts if SENTINEL itself goes quiet.</span></div></li>
+          <li><div><b>Probes by public name</b><span>Public web addresses are also checked by their public names, not only by their inside addresses.</span></div></li>
+          <li><div><b>Built with AI, operated with guardrails</b><span>AI tools write the code; I own the requirements, the verification and the operations. Agents inspect read-only first, and every change is logged with how to reverse it.</span></div></li>
+        </ol>
+      </section>
+
+      <section class="sec rv" id="next">
+        <span class="k"><b>07</b>What I'd do next</span>
+        <span class="proposed">Proposed · not built</span>
+        <h2>Make the config code, then share it.</h2>
+        <ul class="list">
+          <li>Keep the alert rules, dashboards and host setup in version-controlled configuration, deployed with Ansible: the same 18 hosts, no drift.</li>
+          <li>Publish a cleaned-up copy of the rule set, so others can run the same quiet setup.</li>
+        </ul>
+      </section>
+
+      <section class="sec rv" id="skills">
+        <span class="k"><b>08</b>Skill tags</span>
+        <div class="tags" style="gap:.5rem">
+          <a class="tag" href="../../?skill=Monitoring#work">Monitoring</a><a class="tag" href="../../?skill=Security#work">Security</a>
+          <span class="tag">Prometheus</span><span class="tag">Alertmanager</span><span class="tag">Loki</span><span class="tag">Grafana</span>
+          <span class="tag">SNMP</span><span class="tag">Linux</span><span class="tag">Containers</span><span class="tag">Incident response</span><span class="tag">AI-assisted build</span>
+        </div>
+        <div class="pager" style="margin-top:2.4rem">
+          <a href="../../#work"><span class="k">← Back</span><b>All projects</b></a>
+          <a href="../security-audit/"><span class="k">Next →</span><b>Security audit</b></a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Daryll Gomas · Portland, OR</p>
+    <nav><a href="https://github.com/DaryllGomas">GitHub</a><a href="../../resume/">Résumé</a><a href="../../">All projects</a></nav>
+  </div>
+</footer>
+
+<script src="../../assets/site.js"></script>
+<script src="../../assets/toc.js"></script>
+<script src="../../assets/lightbox.js"></script>
+<script src="../../assets/fx.js"></script>
+</body>
+</html>

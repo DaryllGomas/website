@@ -1,0 +1,105 @@
+/* portfolio-v1 — styles for the five quiet effects (behaviour in assets/fx.js). Each effect styles only what its
+   html class or its own elements switch on, so an effect that is off leaves the page exactly as it was.
+   Nothing here moves under prefers-reduced-motion. */
+
+/* ---------- 1. Morph: a project card glides into the project page's hero, and back ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  [data-morph="monitoring-pic"] { view-transition-name: monitoring-pic; }
+  [data-morph="monitoring-title"] { view-transition-name: monitoring-title; }
+  [data-morph="audit-pic"] { view-transition-name: audit-pic; }
+  [data-morph="audit-title"] { view-transition-name: audit-title; }
+  ::view-transition-group(*) { animation-duration: .52s; animation-timing-function: cubic-bezier(.2,.75,.15,1); }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .32s; }
+  ::view-transition-old(monitoring-title), ::view-transition-new(monitoring-title),
+  ::view-transition-old(audit-title), ::view-transition-new(audit-title) { height: 100%; width: auto; object-fit: none; object-position: left center; }
+}
+/* arriving by a morph: show the hero at once (its usual fade-in would fight the glide) */
+html.vt-in .rv { transition: none !important; }
+html.vt-in .pcard.rv, html.vt-in .card.rv { opacity: 1; transform: none; animation: none !important; }
+html.vt-in .pcard .inc-card, html.vt-in .pcard .inc-card > * { animation: none !important; }
+
+/* ---------- 2. Living diagram: the flow lights up step by step ---------- */
+.flow .nd, .flow .ln, .flow .pk { transition: opacity .45s ease; }
+.flow .nd rect, .flow .ln { transition: stroke .45s ease, opacity .45s ease, filter .45s ease; }
+.flow.fx-dim .nd:not(.fx-lit) { opacity: .4; }
+.flow.fx-dim .ln:not(.fx-lit) { opacity: .3; }
+.flow.fx-dim .pk:not(.fx-lit) { opacity: .25; }
+.flow .nd.fx-lit rect { stroke: rgba(243,197,140,.95); stroke-width: 1.6; filter: drop-shadow(0 0 14px rgba(224,164,92,.32)); }
+.flow .ln.fx-lit { stroke: rgba(243,197,140,.8); }
+.fx-step { transition: border-color .35s, background .35s, box-shadow .35s, transform .25s cubic-bezier(.2,.7,.2,1); }
+.fx-step.fx-lit { border-color: rgba(224,164,92,.55) !important; background: rgba(224,164,92,.055) !important; box-shadow: 0 0 0 1px rgba(224,164,92,.12), 0 18px 40px -26px rgba(224,164,92,.55); }
+.break > div.fx-lit h4 { color: var(--amber-hi); }
+@media (prefers-reduced-motion: reduce) { .flow .nd, .flow .ln, .flow .pk, .flow .nd rect, .fx-step { transition: none; } }
+
+/* ---------- 3. Jump menu (Ctrl+K / ⌘K, or the Jump button) ---------- */
+.nav .nav-jump { display: inline-flex; align-items: center; gap: .45rem; }
+.nav .nav-jump svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; flex: none; }
+.nav .nav-jump kbd { font: 500 .6rem var(--mono); letter-spacing: .04em; color: var(--ink-faint); border: 1px solid var(--line-2); border-radius: 5px; padding: .05rem .32rem; text-transform: none; }
+@media (max-width: 900px) { .nav .nav-jump kbd { display: none; } }
+@media (max-width: 560px) {
+  .nav .nav-jump { width: 40px; height: 40px; padding: 0; justify-content: center; }
+  .nav .nav-jump svg { width: 17px; height: 17px; }
+  .nav .nav-jump span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+html.fx-lock { overflow: hidden; }
+.jm { position: fixed; inset: 0; z-index: 200; display: flex; justify-content: center; align-items: flex-start; padding: 16vh 16px 16px;
+  background: rgba(4,5,9,.62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.jm[hidden] { display: none; }
+.jm-in { width: min(560px, 100%); max-height: min(70vh, 560px); display: flex; flex-direction: column; border-radius: 16px; overflow: hidden;
+  border: 1px solid var(--line-2); background: linear-gradient(180deg, rgba(20,22,32,.97), rgba(10,12,18,.98));
+  box-shadow: 0 40px 100px -30px #000, 0 0 0 1px rgba(224,164,92,.06), inset 0 1px 0 rgba(255,255,255,.06); }
+.jm.open .jm-in { animation: jm-in .18s cubic-bezier(.2,.8,.2,1); }
+.jm.open { animation: jm-fade .18s ease; }
+@keyframes jm-in { from { opacity: 0; transform: translateY(-6px) scale(.985); } }
+@keyframes jm-fade { from { opacity: 0; } }
+.jm-h { display: flex; align-items: center; gap: .65rem; padding: 0 .9rem 0 1rem; border-bottom: 1px solid var(--line); }
+.jm-h svg { width: 16px; height: 16px; fill: none; stroke: var(--ink-faint); stroke-width: 2; stroke-linecap: round; flex: none; }
+.jm-q { flex: 1; min-width: 0; height: 54px; border: 0; outline: 0; background: none; color: var(--ink); font: 400 1rem var(--sans); }
+.jm-q::placeholder { color: var(--ink-faint); }
+.jm-q:focus-visible { outline: none; }
+.jm-h:focus-within { box-shadow: inset 0 -1px 0 rgba(224,164,92,.45); }
+.jm-q::-webkit-search-cancel-button { display: none; }
+.jm-x { flex: none; height: 26px; padding: 0 .5rem; border-radius: 6px; border: 1px solid var(--line-2); font: 500 .6rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); }
+.jm-x:hover { color: var(--ink); border-color: rgba(224,164,92,.5); }
+.jm-list { list-style: none; overflow-y: auto; overscroll-behavior: contain; padding: .4rem; scrollbar-width: thin; }
+.jm-g { padding: .7rem .7rem .3rem; font: 500 .58rem var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-faint); }
+.jm-i { display: flex; align-items: center; gap: .75rem; min-height: 44px; padding: .5rem .7rem; border-radius: 10px; color: var(--ink-dim); cursor: pointer; }
+.jm-i .ic { width: 26px; height: 26px; flex: none; display: grid; place-items: center; border-radius: 7px; border: 1px solid var(--line); background: rgba(255,255,255,.025); }
+.jm-i .ic svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.jm-i b { flex: 1; min-width: 0; font-weight: 400; font-size: .95rem; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.jm-i small { flex: none; font: 400 .6rem var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-faint); white-space: nowrap; }
+.jm-i[aria-selected="true"] { background: rgba(224,164,92,.1); box-shadow: inset 0 0 0 1px rgba(224,164,92,.28); }
+.jm-i[aria-selected="true"] .ic { color: var(--amber-hi); border-color: rgba(224,164,92,.45); }
+.jm-none { padding: 1.4rem 1rem; text-align: center; font-size: .9rem; color: var(--ink-faint); }
+.jm-f { display: flex; gap: 1.1rem; padding: .6rem 1rem; border-top: 1px solid var(--line); font: 400 .6rem var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); }
+.jm-f kbd { font: inherit; color: var(--ink-dim); border: 1px solid var(--line-2); border-radius: 4px; padding: 0 .3rem; margin-right: .3rem; }
+@media (max-width: 560px) { .jm-x { height: 40px; padding: 0 .8rem; } .jm { padding-top: 9vh; } .jm-f { display: none; } .jm-i small { display: none; } }
+@media (prefers-reduced-motion: reduce) { .jm.open, .jm.open .jm-in { animation: none; } }
+
+/* ---------- 4. Drifting sky: the star field drifts very slowly; a rare shooting star ---------- */
+html.fx-sky .stars { animation: fx-drift 210s ease-in-out infinite alternate; transition: translate 1.8s cubic-bezier(.2,.7,.2,1); }
+.fx-stars2 { position: absolute; top: 0; left: 0; width: 1px; height: 1px; border-radius: 50%; background: transparent;
+  animation: fx-drift2 300s ease-in-out infinite alternate; transition: translate 1.8s cubic-bezier(.2,.7,.2,1);
+  box-shadow:
+    8vw 19vh rgba(255,255,255,.18), 29vw 6vh rgba(200,215,255,.2), 42vw 26vh rgba(255,255,255,.14), 57vw 15vh rgba(255,255,255,.2),
+    68vw 34vh rgba(200,215,255,.14), 79vw 5vh rgba(255,255,255,.18), 94vw 33vh rgba(255,255,255,.14), 15vw 52vh rgba(255,255,255,.1),
+    39vw 59vh rgba(200,215,255,.1), 66vw 55vh rgba(255,255,255,.1), 85vw 64vh rgba(255,255,255,.09), 49vw 82vh rgba(255,255,255,.08); }
+@keyframes fx-drift { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-26px, 14px, 0); } }
+@keyframes fx-drift2 { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-12px, 7px, 0); } }
+.fx-shoot { position: absolute; width: 120px; height: 1px; border-radius: 1px; pointer-events: none; transform-origin: 100% 50%;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(220,230,255,.75) 85%, #fff);
+  filter: drop-shadow(0 0 3px rgba(200,215,255,.8)); opacity: 0; animation: fx-shoot 1.25s cubic-bezier(.3,.1,.4,1) forwards; }
+@keyframes fx-shoot {
+  0% { opacity: 0; transform: rotate(var(--a)) translateX(0) scaleX(.3); }
+  15% { opacity: .9; }
+  100% { opacity: 0; transform: rotate(var(--a)) translateX(var(--d)) scaleX(1); }
+}
+@media (prefers-reduced-motion: reduce) { html.fx-sky .stars, .fx-stars2 { animation: none; } .fx-shoot { display: none; } }
+
+/* ---------- 5. Galaxy card: the galaxy sways slowly in its own plane ---------- */
+/* soft edges, so the turning picture never shows a hard corner */
+html.fx-galaxy .card.concept .shot img {
+  -webkit-mask-image: radial-gradient(50% 50% at 50% 50%, #000 80%, transparent 100%);
+          mask-image: radial-gradient(50% 50% at 50% 50%, #000 80%, transparent 100%);
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%; }

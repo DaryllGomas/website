@@ -1,9 +1,21 @@
 # daryllgomas.com
 
-Daryll's personal site: "The Big Picture", one continuous scroll from the galaxy down to the atom (WebGL only, by
-Daryll's choice: no fallback page. If the 3D context drops, the page reloads in place and the galaxy restarts).
+Daryll's personal site. Since 2026-11-12 it is a project-first portfolio:
 
-- **Runs on:** GitHub Pages from `github.com/DaryllGomas/website` (`CNAME` = daryllgomas.com). Pushing `main` deploys.
+| Address | What |
+|---|---|
+| `/` (`index.html`) | Plain home: who he is, then projects on two shelves with filters and search |
+| `/projects/<slug>/` | One page per project from one template (problem, what I built, diagram, tools, proof, tested, next). So far: `monitoring`, `security-audit` |
+| `/galaxy/` | "The Big Picture", the earlier site, kept as a design concept: one scroll from the galaxy to the atom (WebGL only; no fallback page) |
+| `/resume/` | Résumé page (look "Scan rail"); PDF and Word beside it come from the Résumé project's PUBLIC master |
+| `/systems/`, `/security/` | Network case study and the SAMPLE security report (fictional business); also opened as pop-ups from the galaxy |
+
+Shared files for the new pages: `assets/site.css`, `site.js`, `project.css`, `toc.js`, `lightbox.js`, `fx.js`, `fx.css`,
+`assets/img/`. The mockup, the fact checks behind every number (`notes/claims-check.md`, `notes/final-audit.md`) and the
+handoff live in `~/Projects/sites/_mockups/portfolio-v1/`. **Every number on a public page must trace to a file or a
+measurement.** The galaxy sections below describe `/galaxy/`.
+
+- **Runs on:** GitHub Pages from `github.com/DaryllGomas/website` (`CNAME` = daryllgomas.com). Pushing `master` deploys.
   Push only on Daryll's say-so.
 - **Preview locally:** `python3 -m http.server 8811 --bind 127.0.0.1`, then open http://127.0.0.1:8811/
 - **The page:** everything lives in `index.html` (styles, markup and the scene script) plus `systems/` (the case study,
@@ -17,7 +29,7 @@ Rebuilt with Daryll (mockup: `~/Projects/sites/_mockups/daryllgomas-hero/v1`). A
 photo and name with "AI systems builder · 25 years in IT", the pitch "Designing and implementing systems that use the
 right tools for the right job", two buttons, then **technical work first** (network build-out, security audit sample),
 then the picture cards (Swarm AI, Town Hall, The Studio, Ancients), "What I do" and links.
-- **"Discuss a project"** reveals `daryll@bigpicsolutions.com` only after a click (assembled in JS; no form, no
+- **"Discuss a project"** reveals his personal Gmail (his choice, 2026-10-29 and 11-12) only after a click (assembled in JS; no form, no
   `mailto:`), so harvesting bots find nothing in the HTML.
 - **`security/`** is a SAMPLE report for a FICTIONAL dental office, built by `~/Projects/tools/security-sweep/report.py`.
   Never publish a real scan here.
