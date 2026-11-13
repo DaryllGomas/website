@@ -197,7 +197,7 @@
         { g: 'Systems & security', t: 'Network & systems build-out', k: 'Case study', ic: 'doc', href: ROOT + 'systems/', w: 'network vlan firewall virtualization server room' },
         { g: 'Systems & security', t: 'Security audit', k: 'Project', ic: 'dot', href: ROOT + 'projects/security-audit/', w: 'security assessment sweep report findings' },
         { g: 'Systems & security', t: 'Backup that proves itself', k: 'Case study', ic: 'doc', href: ROOT + 'systems/', w: 'backup restore hash nightly' },
-        { g: 'Systems & security', t: 'Life OS · Life Control', k: 'On the home page', ic: 'dot', href: ROOT + '?q=life%20os#work', w: 'life os tasks board voice' },
+        { g: 'Systems & security', t: 'Life OS · Life Control', k: 'Project', ic: 'dot', href: ROOT + 'projects/life-os/', w: 'life os tasks board evidence hermes agents walled boards' },
         { g: 'Design & products', t: 'Swarm AI', k: 'Live site', ic: 'out', href: 'https://swarm.bigpicsolutions.com', w: 'swarm agents mcp' },
         { g: 'Design & products', t: 'Town Hall', k: 'Live site', ic: 'out', href: 'https://townhall.bigpicsolutions.com', w: 'town hall civic' },
         { g: 'Design & products', t: 'The Studio', k: 'Live site', ic: 'out', href: 'https://studio.bigpicsolutions.com', w: 'studio games path junction arcade' },

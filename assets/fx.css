@@ -9,10 +9,13 @@
   [data-morph="monitoring-title"] { view-transition-name: monitoring-title; }
   [data-morph="audit-pic"] { view-transition-name: audit-pic; }
   [data-morph="audit-title"] { view-transition-name: audit-title; }
+  [data-morph="lifeos-pic"] { view-transition-name: lifeos-pic; }
+  [data-morph="lifeos-title"] { view-transition-name: lifeos-title; }
   ::view-transition-group(*) { animation-duration: .52s; animation-timing-function: cubic-bezier(.2,.75,.15,1); }
   ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .32s; }
   ::view-transition-old(monitoring-title), ::view-transition-new(monitoring-title),
-  ::view-transition-old(audit-title), ::view-transition-new(audit-title) { height: 100%; width: auto; object-fit: none; object-position: left center; }
+  ::view-transition-old(audit-title), ::view-transition-new(audit-title),
+  ::view-transition-old(lifeos-title), ::view-transition-new(lifeos-title) { height: 100%; width: auto; object-fit: none; object-position: left center; }
 }
 /* arriving by a morph: show the hero at once (its usual fade-in would fight the glide) */
 html.vt-in .rv { transition: none !important; }
