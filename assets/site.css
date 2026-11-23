@@ -115,10 +115,10 @@ p { color: var(--ink-dim); }
   .foot nav { row-gap: 0; column-gap: 1.2rem; }
   .foot nav a { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; min-width: 40px; }
   footer.foot { padding-bottom: 6.5rem; }   /* clear of the fixed bottom controls */
-  .crumb a, .sec .tags a.tag, .sec p a { position: relative; }
-  .sec p a { display: inline-block; }
+  .crumb a, .sec .tags a.tag, .sec p a, .sec .list li a { position: relative; }
+  .sec p a, .sec .list li a { display: inline-block; }
   .sec .tags:has(a.tag) { row-gap: 18px !important; }
-  .sec p a::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 40px; transform: translateY(-50%); }
+  .sec p a::after, .sec .list li a::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 40px; transform: translateY(-50%); }
   /* Breadcrumb link and skill-tag links: the link's own box is 40 px tall (no pseudo-element, so nothing overflows it);
      negative block margins give the extra height back so the layout is the same as before. */
   .crumb a { display: inline-flex; align-items: center; min-height: 40px; margin-block: -11.3px; }
@@ -184,16 +184,18 @@ a:hover .arrow, button:hover .arrow { transform: translateX(3px); }
 .foot a:hover { color: var(--amber); }
 .foot nav { display: flex; gap: 1.2rem; flex-wrap: wrap; }
 
-/* ---------- flow diagrams (a wide and a tall layout of the same diagram) ---------- */
+/* ---------- flow diagrams (a wide and a tall layout of the same diagram) ----------
+   Every wide layout is drawn on a 940-unit canvas and every tall one on 360, so diagram text is the same size on every page. */
 .flow { width: 100%; height: auto; display: block; overflow: visible; }
 .flow.tall { display: none; max-width: 420px; margin: 0 auto; }
 @media (max-width: 700px) { .flow.wide { display: none; } .flow.tall { display: block; } }
-.flow .col { font-family: var(--mono); font-size: 10px; letter-spacing: .18em; fill: var(--ink-faint); }
+.flow .col { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; fill: var(--ink-faint); }
+.flow .col.sub { font-size: 9.5px; letter-spacing: .16em; fill: rgba(238,242,248,.6); }
 .flow .nd rect { fill: #0c111d; stroke: rgba(143,168,232,.32); stroke-width: 1; }
-.flow .nd .t { font-family: var(--serif); font-size: 15px; fill: var(--ink); }
+.flow .nd .t { font-family: var(--serif); font-size: 16px; fill: var(--ink); }
 .flow .nd .t.big { font-size: 22px; letter-spacing: -.01em; }
-.flow .nd .s { font-family: var(--mono); font-size: 8.6px; letter-spacing: .12em; fill: rgba(238,242,248,.68); }
-.flow .nd .it { font-family: var(--serif); font-style: italic; font-size: 13.5px; fill: var(--amber-hi); }
+.flow .nd .s { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; fill: rgba(238,242,248,.76); }
+.flow .nd .it { font-family: var(--serif); font-style: italic; font-size: 14px; fill: var(--amber-hi); }
 .flow .nd.core rect { fill: #121424; stroke: rgba(170,150,255,.6); stroke-width: 1.4; filter: drop-shadow(0 0 18px rgba(150,130,255,.25)); }
 .flow .nd.hot rect { stroke: rgba(224,164,92,.75); fill: #1a140c; }
 .flow .nd.calm rect { stroke: rgba(127,212,154,.45); }

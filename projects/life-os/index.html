@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Life OS · Daryll Gomas</title>
+<title>Life OS: Life Control · Daryll Gomas</title>
 <link rel="canonical" href="https://daryllgomas.com/projects/life-os/">
 <meta property="og:url" content="https://daryllgomas.com/projects/life-os/">
 <meta name="description" content="Life OS: one control plane for life and business, with six separate boards, narrow doors for AI agents, and a database that refuses to mark a task done without evidence.">
@@ -313,87 +313,89 @@
         <span class="k"><b>03</b>How it works</span>
         <h2>The life of a task: asked, worked, closed with evidence, kept.</h2>
         <figure class="figure">
+          <div class="fig-h"><span class="k">The life of a task</span><button type="button" class="zoom" data-lightbox="flow-main" aria-label="Enlarge the diagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Enlarge</button></div>
+          <div class="fig-zoom" id="flow-main" data-lightbox="flow-main">
 <!-- FLOW:lifeos -->
-<svg class="flow wide" viewBox="0 0 1000 384" role="img" aria-labelledby="lifeos-t">
+<svg class="flow wide" viewBox="0 0 940 384" role="img" aria-labelledby="lifeos-t">
 <title id="lifeos-t">The life of a task in Life OS: it is asked for by me, an AI session, the Hermes agent or the household bot; it comes in through a narrow door (the CLI names its board and needs a next action and a done-when; the Hermes tools target the Life board); Life OS holds it on its board and records normal actions as events; it closes only with evidence, or goes on hold with a reason; and it is kept: the CLI and the task bridge have no delete command. Reopening clears the evidence and sends it back to work.</title>
-<text x="10" y="18" class="col">1 · ASK</text>
-<text x="215" y="18" class="col">2 · DOORS</text>
-<text x="415" y="18" class="col">3 · WORK</text>
-<text x="635" y="18" class="col">4 · CLOSE</text>
-<text x="830" y="18" class="col">5 · KEEP</text>
-<text x="420" y="376" class="col sub">REOPEN · CLEARS THE EVIDENCE</text>
-<g class="edges"><path id="lifeos-wide-p0" d="M185,75 C200,75 200,177 215,177" class="ln in"/>
+<text x="8" y="18" class="col">1 · ASK</text>
+<text x="196" y="18" class="col">2 · DOORS</text>
+<text x="388" y="18" class="col">3 · WORK</text>
+<text x="594" y="18" class="col">4 · CLOSE</text>
+<text x="762" y="18" class="col">5 · KEEP</text>
+<text x="400" y="376" class="col sub">REOPEN · CLEARS THE EVIDENCE</text>
+<g class="edges"><path id="lifeos-wide-p0" d="M174,75 C185,75 185,177 196,177" class="ln in"/>
 <circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p0"/></animateMotion></circle>
-<path id="lifeos-wide-p1" d="M185,143 C200,143 200,177 215,177" class="ln in"/>
+<path id="lifeos-wide-p1" d="M174,143 C185,143 185,177 196,177" class="ln in"/>
 <circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p1"/></animateMotion></circle>
-<path id="lifeos-wide-p2" d="M185,211 C200,211 200,177 215,177" class="ln in"/>
+<path id="lifeos-wide-p2" d="M174,211 C185,211 185,177 196,177" class="ln in"/>
 <circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p2"/></animateMotion></circle>
-<path id="lifeos-wide-p3" d="M185,279 C200,279 200,177 215,177" class="ln in"/>
+<path id="lifeos-wide-p3" d="M174,279 C185,279 185,177 196,177" class="ln in"/>
 <circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p3"/></animateMotion></circle>
-<path id="lifeos-wide-p4" d="M385,177 C400,177 400,177 415,177" class="ln core"/>
+<path id="lifeos-wide-p4" d="M366,177 C377,177 377,177 388,177" class="ln core"/>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p4"/></animateMotion></circle>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.18s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p4"/></animateMotion></circle>
-<path id="lifeos-wide-p5" d="M605,177 C620,177 620,140 635,140" class="ln out"/>
+<path id="lifeos-wide-p5" d="M572,177 C583,177 583,140 594,140" class="ln out"/>
 <circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p5"/></animateMotion></circle>
-<path id="lifeos-wide-p6" d="M605,177 C620,177 620,226 635,226" class="ln quiet"/>
+<path id="lifeos-wide-p6" d="M572,177 C583,177 583,226 594,226" class="ln quiet"/>
 <circle r="2.6" class="pk quiet"><animateMotion dur="7.5s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p6"/></animateMotion></circle>
-<path id="lifeos-wide-p7" d="M800,140 C815,140 815,140 830,140" class="ln core"/>
+<path id="lifeos-wide-p7" d="M740,140 C751,140 751,140 762,140" class="ln core"/>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p7"/></animateMotion></circle>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.29s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p7"/></animateMotion></circle>
-<path id="lifeos-wide-p8" d="M912,170 C912,342 510,342 510,272" class="ln loop"/>
+<path id="lifeos-wide-p8" d="M847,170 C847,342 480,342 480,272" class="ln loop"/>
 <circle r="2.6" class="pk loop"><animateMotion dur="5s" begin="-2.96s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeos-wide-p8"/></animateMotion></circle></g>
 <g class="nd  ">
-<rect x="10" y="46" width="175" height="58" rx="10"/>
-<text x="24" y="69.0" class="t">Me, on the page</text>
-<text x="24" y="86.0" class="s">QUICK ADD</text>
+<rect x="8" y="46" width="166" height="58" rx="10"/>
+<text x="22" y="69.0" class="t">Me, on the page</text>
+<text x="22" y="86.0" class="s">QUICK ADD</text>
 </g>
 <g class="nd  ">
-<rect x="10" y="114" width="175" height="58" rx="10"/>
-<text x="24" y="137.0" class="t">An AI session</text>
-<text x="24" y="154.0" class="s">CLAUDE CODE · CODEX</text>
+<rect x="8" y="114" width="166" height="58" rx="10"/>
+<text x="22" y="137.0" class="t">An AI session</text>
+<text x="22" y="154.0" class="s">CLAUDE CODE · CODEX</text>
 </g>
 <g class="nd  ">
-<rect x="10" y="182" width="175" height="58" rx="10"/>
-<text x="24" y="205.0" class="t">Hermes Agent</text>
-<text x="24" y="222.0" class="s">8 NARROW TOOLS</text>
+<rect x="8" y="182" width="166" height="58" rx="10"/>
+<text x="22" y="205.0" class="t">Hermes Agent</text>
+<text x="22" y="222.0" class="s">8 NARROW TOOLS</text>
 </g>
 <g class="nd  ">
-<rect x="10" y="250" width="175" height="58" rx="10"/>
-<text x="24" y="273.0" class="t">Household bot</text>
-<text x="24" y="290.0" class="s">HOUSEHOLD ROUTES ONLY</text>
+<rect x="8" y="250" width="166" height="58" rx="10"/>
+<text x="22" y="273.0" class="t">Household bot</text>
+<text x="22" y="290.0" class="s">HOUSEHOLD ROUTES ONLY</text>
 </g>
 <g class="nd  ">
-<rect x="215" y="102" width="170" height="150" rx="10"/>
-<circle cx="235" cy="131" r="4.5" class="live"/>
-<text x="247" y="136" class="t big">Doors</text>
-<text x="235" y="166" class="s">CLI · 8-TOOL BRIDGE</text>
-<text x="235" y="185" class="s">NO SQL · NO SHELL</text>
-<text x="235" y="204" class="s">CLI: NEXT + DONE-WHEN</text>
-<text x="235" y="223" class="it">wrong board refused</text>
+<rect x="196" y="102" width="170" height="150" rx="10"/>
+<circle cx="216" cy="131" r="4.5" class="live"/>
+<text x="228" y="136" class="t big">Doors</text>
+<text x="216" y="166" class="s">CLI · 8-TOOL BRIDGE</text>
+<text x="216" y="185" class="s">NO SQL · NO SHELL</text>
+<text x="216" y="204" class="s">CLI: NEXT + DONE-WHEN</text>
+<text x="216" y="223" class="it">wrong board refused</text>
 </g>
 <g class="nd core ">
-<rect x="415" y="82" width="190" height="190" rx="10"/>
-<circle cx="435" cy="111" r="4.5" class="live"/>
-<text x="447" y="116" class="t big">Life OS</text>
-<text x="435" y="146" class="s">FASTAPI + SQLITE</text>
-<text x="435" y="165" class="s">ONE BOARD AT A TIME</text>
-<text x="435" y="184" class="s">NOW · SENDS · DECISIONS</text>
-<text x="435" y="203" class="it">actions kept as events</text>
+<rect x="388" y="82" width="184" height="190" rx="10"/>
+<circle cx="408" cy="111" r="4.5" class="live"/>
+<text x="420" y="116" class="t big">Life OS</text>
+<text x="408" y="146" class="s">FASTAPI + SQLITE</text>
+<text x="408" y="165" class="s">ONE BOARD AT A TIME</text>
+<text x="408" y="184" class="s">NOW · SENDS · DECISIONS</text>
+<text x="408" y="203" class="it">actions kept as events</text>
 </g>
 <g class="nd hot ">
-<rect x="635" y="110" width="165" height="60" rx="10"/>
-<text x="649" y="134.0" class="t">Done</text>
-<text x="649" y="151.0" class="s">ONLY WITH EVIDENCE</text>
+<rect x="594" y="110" width="146" height="60" rx="10"/>
+<text x="608" y="134.0" class="t">Done</text>
+<text x="608" y="151.0" class="s">ONLY WITH EVIDENCE</text>
 </g>
 <g class="nd  ">
-<rect x="635" y="196" width="165" height="60" rx="10"/>
-<text x="649" y="220.0" class="t">On hold</text>
-<text x="649" y="237.0" class="s">NEEDS A REASON</text>
+<rect x="594" y="196" width="146" height="60" rx="10"/>
+<text x="608" y="220.0" class="t">On hold</text>
+<text x="608" y="237.0" class="s">NEEDS A REASON</text>
 </g>
 <g class="nd calm ">
-<rect x="830" y="110" width="165" height="60" rx="10"/>
-<text x="844" y="134.0" class="t">Kept</text>
-<text x="844" y="151.0" class="s">NO DELETE IN CLI/BRIDGE</text>
+<rect x="762" y="110" width="170" height="60" rx="10"/>
+<text x="776" y="134.0" class="t">Kept</text>
+<text x="776" y="151.0" class="s">NO DELETE IN CLI/BRIDGE</text>
 </g>
 </svg>
 <svg class="flow tall" viewBox="0 0 360 900" role="img" aria-labelledby="lifeosm-t">
@@ -415,11 +417,11 @@
 <path id="lifeosm-tall-p4" d="M180,462 C180,483 180,483 180,504" class="ln core"/>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeosm-tall-p4"/></animateMotion></circle>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.18s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeosm-tall-p4"/></animateMotion></circle>
-<path id="lifeosm-tall-p5" d="M180,672 C180,692 108,692 108,712" class="ln out"/>
+<path id="lifeosm-tall-p5" d="M180,672 C180,692 107,692 107,712" class="ln out"/>
 <circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeosm-tall-p5"/></animateMotion></circle>
 <path id="lifeosm-tall-p6" d="M180,672 C180,692 252,692 252,712" class="ln quiet"/>
 <circle r="2.6" class="pk quiet"><animateMotion dur="7.5s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeosm-tall-p6"/></animateMotion></circle>
-<path id="lifeosm-tall-p7" d="M108,776 C108,797 180,797 180,818" class="ln core"/>
+<path id="lifeosm-tall-p7" d="M107,776 C107,797 180,797 180,818" class="ln core"/>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeosm-tall-p7"/></animateMotion></circle>
 <circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.29s" repeatCount="indefinite" rotate="auto"><mpath href="#lifeosm-tall-p7"/></animateMotion></circle>
 <path id="lifeosm-tall-p8" d="M60,848 C8,848 8,588 60,588" class="ln loop"/>
@@ -463,9 +465,9 @@
 <text x="80" y="625" class="it">actions kept as events</text>
 </g>
 <g class="nd hot ">
-<rect x="40" y="712" width="136" height="64" rx="10"/>
-<text x="54" y="738.0" class="t">Done</text>
-<text x="54" y="755.0" class="s">ONLY WITH EVIDENCE</text>
+<rect x="36" y="712" width="142" height="64" rx="10"/>
+<text x="50" y="738.0" class="t">Done</text>
+<text x="50" y="755.0" class="s">ONLY WITH EVIDENCE</text>
 </g>
 <g class="nd  ">
 <rect x="184" y="712" width="136" height="64" rx="10"/>
@@ -479,6 +481,7 @@
 </g>
 </svg>
 <!-- /FLOW:lifeos -->
+          </div>
           <figcaption>Animated diagram. Each box is a step in the code. No real tasks are shown anywhere on this page.</figcaption>
         </figure>
 
@@ -589,7 +592,7 @@
         </div>
         <div class="pager" style="margin-top:2.4rem">
           <a href="../security-audit/"><span class="k">← Previous</span><b>Security audit</b></a>
-          <a href="../../#work"><span class="k">All →</span><b>All projects</b></a>
+          <a href="../heimdall/"><span class="k">Next →</span><b>Heimdall</b></a>
         </div>
       </section>
     </div>
@@ -605,6 +608,7 @@
 
 <script src="../../assets/site.js"></script>
 <script src="../../assets/toc.js"></script>
+<script src="../../assets/lightbox.js"></script>
 <script src="../../assets/fx.js"></script>
 </body>
 </html>

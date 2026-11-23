@@ -12,9 +12,10 @@
     b.addEventListener('click', function () {
       var src = document.getElementById(b.getAttribute('data-lightbox')); if (!src) return;
       last = b; inner.innerHTML = ''; inner.appendChild(src.cloneNode(true)).removeAttribute('id');
+      [].forEach.call(inner.querySelectorAll('.fx-dim, .fx-lit'), function (el) { el.classList.remove('fx-dim', 'fx-lit'); });   // a copy of a flow diagram shows whole, not mid-highlight
       lb.hidden = false; document.documentElement.classList.add('lb-lock');
       requestAnimationFrame(function () { lb.classList.add('on'); x.focus(); });
-      var sc = inner.firstChild; if (sc.scrollWidth > sc.clientWidth) sc.scrollLeft = (sc.scrollWidth - sc.clientWidth) * 0.62;
+      var sc = inner.firstChild; if (sc.scrollWidth > sc.clientWidth) sc.scrollLeft = sc.querySelector('svg.flow') ? 0 : (sc.scrollWidth - sc.clientWidth) * 0.62;   // flow diagrams read left to right: start at the left
     });
   });
   x.addEventListener('click', close);

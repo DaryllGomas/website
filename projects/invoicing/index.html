@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invoicing &amp; CRM · Daryll Gomas</title>
+<meta name="description" content="Invoicing &amp; CRM: the app behind a one-person IT business, run with an AI session that drafts, checks and files each invoice while a person approves what goes out.">
+<!-- Project page: same sections as every project page. Every screen on this page is an invented example. -->
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://daryllgomas.com/projects/invoicing/">
+<meta property="og:url" content="https://daryllgomas.com/projects/invoicing/">
+<link rel="stylesheet" href="../../assets/site.css">
+<link rel="stylesheet" href="../../assets/project.css">
+<style>
+  /* page-only styles (shared CSS untouched) */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  /* ---------- hero: the wrap-up, as a terminal (invented example) ---------- */
+  .tw-body { padding: .9rem 1rem 1rem; font: 400 .78rem/1.65 var(--mono); color: var(--ink-dim); }
+  .tw-body p { margin: 0; }
+  .tw-body .me { color: var(--ink); }
+  .tw-body .me b { color: var(--amber); font-weight: 500; }
+  .tw-body .ai b { color: #b9c8ff; font-weight: 500; }
+  .tw-body ul { list-style: none; margin: .35rem 0 .45rem; padding: 0; display: grid; gap: .12rem; }
+  .tw-body li { display: flex; gap: .5rem; }
+  .tw-body li i { font-style: normal; color: #9fe3b4; flex: none; }
+  .tw-body li em { font-style: normal; color: var(--ink-faint); }
+  .tw-body .gap { height: .55rem; }
+  .tw-draft { margin-top: .55rem; display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; border-top: 1px dashed var(--line-2); padding-top: .6rem; }
+  .tw-draft small { font: 400 .6rem var(--mono); color: var(--ink-faint); letter-spacing: .06em; }
+  .js .pcard.in .tw-body li { animation: twli .4s cubic-bezier(.2,.7,.2,1) backwards; }
+  .js .pcard.in .tw-body li:nth-child(1) { animation-delay: .7s; } .js .pcard.in .tw-body li:nth-child(2) { animation-delay: .85s; }
+  .js .pcard.in .tw-body li:nth-child(3) { animation-delay: 1s; } .js .pcard.in .tw-body li:nth-child(4) { animation-delay: 1.15s; }
+  .js .pcard.in .tw-body li:nth-child(5) { animation-delay: 1.3s; }
+  .js .pcard.in .tw-draft { animation: twli .5s cubic-bezier(.2,.7,.2,1) 1.5s backwards; }
+  @keyframes twli { from { opacity: 0; transform: translateX(-6px); } }
+
+  /* ---------- 03: an invoice's life ---------- */
+  .states { margin-top: 1rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+  .states .to { color: var(--ink-faint); font-family: var(--mono); font-size: .8rem; }
+
+  @media (max-width: 560px) { .tw-body { font-size: .72rem; } }
+  @media (prefers-reduced-motion: reduce) { .js .pcard.in .tw-body li, .js .pcard.in .tw-draft { animation: none; } }
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="stars"></span></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/img/daryll.jpg" alt="" width="28" height="28">Daryll Gomas</a>
+    <nav class="nav" aria-label="Main">
+      <a class="nav-home" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.5 9.5V19.5h4v-5h3v5h4V9.5"/></svg><span>Home</span></a>
+      <a class="hide-s" href="../../#work">Work</a>
+      <a href="../../resume/">Résumé</a>
+      <button type="button" class="btn-sm" data-talk="talkTop">Contact</button>
+    </nav>
+  </div>
+  <div class="talk-box pop" id="talkTop" hidden>
+    <span class="talk-mail"></span>
+    <button type="button" class="talk-copy">Copy</button>
+    <span class="talk-note">Write me about what you're working on. I read every message.</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../../#work">Projects</a><span class="mid">/</span><span class="mid">Systems &amp; security</span><span>/</span><span style="color:var(--ink-dim)">Invoicing</span></nav>
+
+  <!-- HERO CARD -->
+  <article class="pcard rv">
+    <div class="pcard-in">
+      <div>
+        <span class="status"><i></i>Running · my business</span>
+        <h1 data-morph="invoicing-title">Invoicing &amp; CRM</h1>
+        <p class="tagline">Paperwork by AI, approved by hand.</p>
+        <p class="sum">The app that runs my IT business: clients, jobs, invoices, payments and the money ledger. After a visit I say "wrap it up", and an AI session writes the notes, creates and checks the invoice, files it and drafts the email.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#how">How it works <span class="arrow">↓</span></a>
+          <a class="btn ghost" href="#guards">The guardrails</a>
+        </div>
+      </div>
+      <!-- Drawn terminal: the same steps as a real wrap-up; the client, hours and invoice number are invented. -->
+      <figure class="demo" data-morph="invoicing-pic" aria-label="Example wrap-up in the terminal: the AI creates, checks, files and drafts the invoice, then leaves it in Gmail drafts">
+        <div class="demo-win">
+          <div class="demo-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="app">Claude Code</span><span class="ex-chip">Example · invented client</span></div>
+          <div class="tw-body">
+            <p class="me"><b>me ›</b> Looks good. Wrap it up, put the email in drafts and I'll preview it.</p>
+            <div class="gap"></div>
+            <p class="ai"><b>claude ›</b> On it:</p>
+            <ul>
+              <li><i>✓</i><span>Invoice created: 2 h × $140 = $280 <em>· read back, status fixed</em></span></li>
+              <li><i>✓</i><span>PDF made, opened and checked <em>· totals, payment link</em></span></li>
+              <li><i>✓</i><span>Filed in the client's folder <em>· checksums match</em></span></li>
+              <li><i>✓</i><span>Email drafted, PDF attached <em>· not sent</em></span></li>
+              <li><i>✓</i><span>Changelog written <em>· with undo steps</em></span></li>
+            </ul>
+            <p class="ai"><b>claude ›</b> It's in your drafts. Send it when you're happy.</p>
+            <div class="tw-draft"><span class="pill me">Gmail draft · waiting for me</span><small>INV-0042 · Example Co.pdf</small></div>
+          </div>
+        </div>
+        <figcaption>Example · invented client and invoice</figcaption>
+      </figure>
+    </div>
+    <div class="kpis">
+      <div><b>1:45</b><span>min, "wrap it up" to drafted, filed, logged</span></div>
+      <div><b>5</b><span>wrap-up steps the AI does and checks</span></div>
+      <div><b>1</b><span>step that stays mine: pressing Send</span></div>
+      <div><b>7</b><span>gates each change to the app passes</span></div>
+      <div><b>65</b><span>commits, Feb to Nov 2026</span></div>
+    </div>
+  </article>
+
+  <div class="doc">
+    <nav class="toc" aria-label="On this page">
+      <a href="#problem"><b>01</b>Problem</a>
+      <a href="#built"><b>02</b>What I built</a>
+      <a href="#how"><b>03</b>How it works</a>
+      <a href="#tools"><b>04</b>Tools</a>
+      <a href="#proof"><b>05</b>Proof</a>
+      <a href="#run"><b>06</b>Tested &amp; run</a>
+      <a href="#next"><b>07</b>Next</a>
+      <a href="#skills"><b>08</b>Skills</a>
+    </nav>
+
+    <div>
+      <section class="sec rv" id="problem">
+        <span class="k"><b>01</b>The problem</span>
+        <h2>The work ends. The paperwork doesn't.</h2>
+        <p>After every client visit there are notes to write, an invoice to make, a PDF to file, an email to send and, later, a payment to record. Commercial PSA suites (the ticketing-and-billing tools IT firms run on) handle this for bigger shops. At a previous IT job I helped evaluate one, set up parts of it and used it every day.</p>
+        <p>A one-person business needs the same records, kept just as carefully, without that overhead. And the paperwork shouldn't eat the time that should go to the next client.</p>
+        <p class="quote">"I'm taking notes in the terminal … and at the end I just wrap it up."</p>
+      </section>
+
+      <section class="sec rv" id="built">
+        <span class="k"><b>02</b>What I built</span>
+        <h2>My own office system, run with an AI.</h2>
+        <ul class="list">
+          <li><strong>Clients.</strong> Rates, contact details and status from prospect to active, with a next follow-up, an activity log and a "due today" list.</li>
+          <li><strong>Jobs and invoices.</strong> Hours × rate, calculated by the server. PDF invoices with a card-payment link and QR code.</li>
+          <li><strong>Money.</strong> An income ledger with one row per payment. Checks and part payments are recorded against the invoice; card payments through Stripe are built to record themselves.</li>
+          <li><strong>Operations.</strong> A lead pipeline, a business scorecard and CSV export.</li>
+          <li><strong>Client PCs.</strong> A Devices tab for each client, wired to <a href="../heimdall/">Heimdall</a> for Add a PC and Connect.</li>
+          <li><strong>An AI operator.</strong> A Claude Code session runs the visit paperwork through the app's own API.</li>
+        </ul>
+        <p class="sec-note">Python and Flask, one SQLite file, PDFs drawn with ReportLab. It runs on my own server on my private network and is backed up every night.</p>
+      </section>
+
+      <section class="sec rv" id="how">
+        <span class="k"><b>03</b>How it works</span>
+        <h2>From the visit to the money.</h2>
+        <figure class="figure">
+          <div class="fig-h"><span class="k">From visit to invoice</span><button type="button" class="zoom" data-lightbox="flow-main" aria-label="Enlarge the diagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Enlarge</button></div>
+          <div class="fig-zoom" id="flow-main" data-lightbox="flow-main">
+<!-- FLOW:invoicing -->
+<svg class="flow wide" viewBox="0 0 940 330" role="img" aria-labelledby="invoicing-t">
+<title id="invoicing-t">How a client visit becomes a paid invoice: I prep, do the work and talk it through, and approve the notes and email text. Claude Code then writes the session notes, creates the invoice in the app, files the checked PDF in the client folder and drafts the email. I send it. The client pays by card or check and the app records it once.</title>
+<text x="8" y="18" class="col">1 · ME</text>
+<text x="245" y="18" class="col">2 · THE AI</text>
+<text x="518" y="18" class="col">3 · WHAT IT MAKES</text>
+<text x="756" y="18" class="col">4 · SEND + GET PAID</text>
+<g class="edges"><path id="invoicing-wide-p0" d="M188,90 C216,90 216,180 245,180" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p0"/></animateMotion></circle>
+<path id="invoicing-wide-p1" d="M188,180 C216,180 216,180 245,180" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p1"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.97s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p1"/></animateMotion></circle>
+<path id="invoicing-wide-p2" d="M188,270 C216,270 216,180 245,180" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p2"/></animateMotion></circle>
+<path id="invoicing-wide-p3" d="M461,180 C490,180 490,90 518,90" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p3"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.41s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p3"/></animateMotion></circle>
+<path id="invoicing-wide-p4" d="M461,180 C490,180 490,180 518,180" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p4"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.18s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p4"/></animateMotion></circle>
+<path id="invoicing-wide-p5" d="M461,180 C490,180 490,270 518,270" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p5"/></animateMotion></circle>
+<path id="invoicing-wide-p6" d="M698,270 C727,270 727,270 756,270" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p6"/></animateMotion></circle>
+<path id="invoicing-wide-p7" d="M844,240 C844,200 844,200 844,160" class="ln dog"/>
+<circle r="2.6" class="pk dog"><animateMotion dur="4s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicing-wide-p7"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="8" y="60" width="180" height="60" rx="10"/>
+<text x="22" y="84.0" class="t">Prep</text>
+<text x="22" y="101.0" class="s">THE NIGHT BEFORE</text>
+</g>
+<g class="nd  ">
+<rect x="8" y="150" width="180" height="60" rx="10"/>
+<text x="22" y="174.0" class="t">The visit</text>
+<text x="22" y="191.0" class="s">I WORK + TALK</text>
+</g>
+<g class="nd hot ">
+<rect x="8" y="240" width="180" height="60" rx="10"/>
+<text x="22" y="264.0" class="t">I approve</text>
+<text x="22" y="281.0" class="s">NOTES + EMAIL TEXT</text>
+</g>
+<g class="nd core ">
+<rect x="245" y="85" width="216" height="190" rx="10"/>
+<circle cx="265" cy="114" r="4.5" class="live"/>
+<text x="277" y="119" class="t big">Claude Code</text>
+<text x="265" y="149" class="s">MY SIGNED-IN BROWSER</text>
+<text x="265" y="168" class="s">THE APP&#x27;S OWN API</text>
+<text x="265" y="187" class="s">EACH STEP READ BACK</text>
+<text x="265" y="206" class="it">logged, with undo steps</text>
+</g>
+<g class="nd  ">
+<rect x="518" y="60" width="180" height="60" rx="10"/>
+<text x="532" y="84.0" class="t">Invoicing app</text>
+<text x="532" y="101.0" class="s">INVOICE + PDF</text>
+</g>
+<g class="nd  ">
+<rect x="518" y="150" width="180" height="60" rx="10"/>
+<text x="532" y="174.0" class="t">Client folder</text>
+<text x="532" y="191.0" class="s">NOTES + PDF FILED</text>
+</g>
+<g class="nd  ">
+<rect x="518" y="240" width="180" height="60" rx="10"/>
+<text x="532" y="264.0" class="t">Gmail draft</text>
+<text x="532" y="281.0" class="s">NOT SENT</text>
+</g>
+<g class="nd hot ">
+<rect x="756" y="240" width="176" height="60" rx="10"/>
+<text x="770" y="264.0" class="t">I send it</text>
+<text x="770" y="281.0" class="s">ONE CLICK</text>
+</g>
+<g class="nd calm ">
+<rect x="756" y="100" width="176" height="60" rx="10"/>
+<text x="770" y="124.0" class="t">Paid</text>
+<text x="770" y="141.0" class="s">COUNTED ONCE</text>
+</g>
+</svg>
+<svg class="flow tall" viewBox="0 0 360 876" role="img" aria-labelledby="invoicingm-t">
+<title id="invoicingm-t">How a client visit becomes a paid invoice: I prep, do the work and talk it through, and approve the notes and email text. Claude Code then writes the session notes, creates the invoice in the app, files the checked PDF in the client folder and drafts the email. I send it. The client pays by card or check and the app records it once.</title>
+<text x="4" y="16" class="col">1 · ME</text>
+<text x="4" y="206" class="col">2 · THE AI</text>
+<text x="4" y="406" class="col">3 · WHAT IT MAKES</text>
+<text x="4" y="662" class="col">4 · SEND + GET PAID</text>
+<g class="edges"><path id="invoicingm-tall-p0" d="M89,90 C89,155 180,155 180,220" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p0"/></animateMotion></circle>
+<path id="invoicingm-tall-p1" d="M271,90 C271,155 180,155 180,220" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p1"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.97s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p1"/></animateMotion></circle>
+<path id="invoicingm-tall-p2" d="M180,170 C180,195 180,195 180,220" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p2"/></animateMotion></circle>
+<path id="invoicingm-tall-p3" d="M180,390 C180,428 89,428 89,466" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p3"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.41s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p3"/></animateMotion></circle>
+<path id="invoicingm-tall-p4" d="M180,390 C180,428 271,428 271,466" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p4"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.18s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p4"/></animateMotion></circle>
+<path id="invoicingm-tall-p5" d="M180,390 C180,473 180,473 180,556" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p5"/></animateMotion></circle>
+<path id="invoicingm-tall-p6" d="M180,616 C180,646 180,646 180,676" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p6"/></animateMotion></circle>
+<path id="invoicingm-tall-p7" d="M180,736 C180,761 180,761 180,786" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.59s" repeatCount="indefinite" rotate="auto"><mpath href="#invoicingm-tall-p7"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="4" y="30" width="170" height="60" rx="10"/>
+<text x="18" y="54.0" class="t">Prep</text>
+<text x="18" y="71.0" class="s">THE NIGHT BEFORE</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="30" width="170" height="60" rx="10"/>
+<text x="200" y="54.0" class="t">The visit</text>
+<text x="200" y="71.0" class="s">I WORK + TALK</text>
+</g>
+<g class="nd hot ">
+<rect x="95" y="110" width="170" height="60" rx="10"/>
+<text x="109" y="134.0" class="t">I approve</text>
+<text x="109" y="151.0" class="s">NOTES + EMAIL TEXT</text>
+</g>
+<g class="nd core ">
+<rect x="50" y="220" width="260" height="170" rx="10"/>
+<circle cx="70" cy="249" r="4.5" class="live"/>
+<text x="82" y="254" class="t big">Claude Code</text>
+<text x="70" y="284" class="s">MY SIGNED-IN BROWSER</text>
+<text x="70" y="303" class="s">THE APP&#x27;S OWN API</text>
+<text x="70" y="322" class="s">EACH STEP READ BACK</text>
+<text x="70" y="341" class="it">logged, with undo steps</text>
+</g>
+<g class="nd  ">
+<rect x="4" y="466" width="170" height="60" rx="10"/>
+<text x="18" y="490.0" class="t">Invoicing app</text>
+<text x="18" y="507.0" class="s">INVOICE + PDF</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="466" width="170" height="60" rx="10"/>
+<text x="200" y="490.0" class="t">Client folder</text>
+<text x="200" y="507.0" class="s">NOTES + PDF FILED</text>
+</g>
+<g class="nd  ">
+<rect x="95" y="556" width="170" height="60" rx="10"/>
+<text x="109" y="580.0" class="t">Gmail draft</text>
+<text x="109" y="597.0" class="s">NOT SENT</text>
+</g>
+<g class="nd hot ">
+<rect x="95" y="676" width="170" height="60" rx="10"/>
+<text x="109" y="700.0" class="t">I send it</text>
+<text x="109" y="717.0" class="s">ONE CLICK</text>
+</g>
+<g class="nd calm ">
+<rect x="95" y="786" width="170" height="60" rx="10"/>
+<text x="109" y="810.0" class="t">Paid</text>
+<text x="109" y="827.0" class="s">COUNTED ONCE</text>
+</g>
+</svg>
+<!-- /FLOW:invoicing -->
+          </div>
+          <figcaption>Animated diagram. The AI works through my signed-in browser and the app's own API. Nothing goes to a client until I send it.</figcaption>
+        </figure>
+
+        <div class="break">
+          <div><h4>1 · Me</h4><ul><li>Prep the night before</li><li>Do the work and talk it through</li><li>Approve the notes and the email text</li></ul></div>
+          <div><h4>2 · The AI</h4><ul><li>A Claude Code session in my terminal</li><li>My signed-in browser and the app's own API</li><li>Every step read back, then logged with undo steps</li></ul></div>
+          <div><h4>3 · What it makes</h4><ul><li>The invoice and its PDF, in the app</li><li>Notes and PDF filed in the client's folder</li><li>An email draft in Gmail, not sent</li></ul></div>
+          <div><h4>4 · Send + get paid</h4><ul><li>I preview it and press Send</li><li>Marked sent only after I say it's gone</li><li>Card or check: the payment is counted once</li></ul></div>
+        </div>
+
+        <h3 class="sub-h" id="guards">The guardrails</h3>
+        <div class="rules">
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></span><span class="lab">Routine</span><h4>The same front door</h4><p>For invoices and payments the AI uses the app's own API from my signed-in browser, so every rule the app applies to me applies to it.</p></div>
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span class="lab">Routine</span><h4>Nothing reaches a client unchecked</h4><p>I approve the notes and the email text first. The email lands in my drafts, and I send it myself.</p></div>
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="lab">App rule</span><h4>Sent means locked</h4><p>A sent or paid invoice can't be edited or deleted. Taking one back needs an explicit unlock, and every change of state is written to an audit trail.</p></div>
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4v6h6"/><path d="M5 15a8 8 0 1 0 2-8.5L4 10"/></svg></span><span class="lab">Routine + app rule</span><h4>Logged, with undo steps</h4><p>Each wrap-up is logged with the exact steps to reverse it. A mistaken payment is voided with a reason, never deleted.</p></div>
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.1-2 2.5-2s2.5.7 2.5 2-1.2 1.8-2.5 2.2-2.5.9-2.5 2.3 1.1 2 2.5 2 2.5-.6 2.5-2"/></svg></span><span class="lab">App rule</span><h4>Money counted once</h4><p>Card payment notices are accepted only with Stripe's signature, and a repeated notice can't record the same payment twice.</p></div>
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2"/></svg></span><span class="lab">App rule</span><h4>One owner, one network</h4><p>One owner login, with wrong guesses limited. Changes are only accepted from the app's own pages. The app isn't on the public internet, and it's backed up nightly.</p></div>
+        </div>
+        <p class="sec-note">"App rule" means the app enforces it for anyone, AI or me. "Routine" means it is how every wrap-up is run.</p>
+
+        <h3 class="sub-h">An invoice's life</h3>
+        <div class="states" aria-label="Invoice states: draft, then sent and paid, which are locked">
+          <span class="pill">Draft · editable</span><span class="to" aria-hidden="true">→</span>
+          <span class="pill ok">Sent · locked</span><span class="to" aria-hidden="true">→</span>
+          <span class="pill ok">Paid · locked</span>
+        </div>
+        <p class="sec-note">Going back to draft needs a deliberate unlock, and the step is recorded.</p>
+      </section>
+
+      <section class="sec rv" id="tools">
+        <span class="k"><b>04</b>Tools</span>
+        <h2>Plain parts, wired together.</h2>
+        <div class="tools">
+          <div class="tool"><b>Python + Flask</b><span>the app and its API</span></div>
+          <div class="tool"><b>SQLite</b><span>one file: clients, jobs, money</span></div>
+          <div class="tool"><b>ReportLab</b><span>the PDF invoices</span></div>
+          <div class="tool"><b>Stripe</b><span>card payments, signed notices</span></div>
+          <div class="tool"><b>systemd</b><span>runs as a service, restarts itself</span></div>
+          <div class="tool"><b>Claude in Chrome</b><span>the AI works in my signed-in browser</span></div>
+          <div class="tool"><b>Gmail + Google Drive</b><span>email drafts, client folders</span></div>
+          <div class="tool"><b>Heimdall</b><span>the Devices tab: Add a PC, Connect</span></div>
+          <div class="tool"><b>Python unittest</b><span>each fix: a failing test first</span></div>
+          <div class="tool"><b>Claude Code, Codex</b><span>AI writes the code; I specify and verify</span></div>
+        </div>
+      </section>
+
+      <section class="sec rv" id="proof">
+        <span class="k"><b>05</b>Proof</span>
+        <h2>One real visit, measured.</h2>
+        <p>A client visit in November 2026, run from my laptop's terminal. The client and the work stay private; the steps and the timing are real.</p>
+        <div class="nums">
+          <div><b>1:45</b><span>from "wrap it up" to the invoice drafted, filed and logged (min:sec)</span></div>
+          <div><b>5</b><span>steps done and checked: invoice, PDF, filing, email draft, changelog</span></div>
+          <div><b>1</b><span>mistake it caught itself: a wrong status, read back and fixed</span></div>
+        </div>
+        <h3 class="sub-h">Who did what</h3>
+        <div class="tbl steps2" role="table" aria-label="Who did what during one client visit: me and the AI">
+          <div class="tbl-row head" role="row"><div role="columnheader">Step</div><div role="columnheader">Me</div><div role="columnheader">Claude Code</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">01</div><div role="cell"><span class="lbl">Me</span><b>"Get me ready for tomorrow"</b>The night before.</div><div role="cell"><span class="lbl">Claude Code</span><b>A prep doc</b>Reads the client's latest email and my calendar, researches the open items, and writes a plan: priorities, what to bring, the order for the time booked.</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">02</div><div role="cell"><span class="lbl">Me</span><b>Do the work, talk it through</b>In plain words, as it happens.</div><div role="cell"><span class="lbl">Claude Code</span><b>Keeps the record</b>Writes the session notes and the decisions as we go, records any payment received, and re-lists what's left whenever I ask.</div></div>
+          <div class="tbl-row key" role="row"><div class="num" role="cell">03</div><div role="cell"><span class="lbl">Me</span><b>"Show me the notes and the email" <span class="pill me">My OK</span></b>I read both and say yes.</div><div role="cell"><span class="lbl">Claude Code</span><b>Drafts, doesn't create</b>The client summary, the invoice lines in plain language, and the email text, all shown before anything is written.</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">04</div><div role="cell"><span class="lbl">Me</span><b>"Wrap it up"</b>One sentence.</div><div role="cell"><span class="lbl">Claude Code</span><b>The paperwork, checked</b><ul><li>Creates the invoice, then reads it back</li><li>Opens the PDF and checks it</li><li>Files it, comparing checksums</li><li>Drafts the email with the PDF</li><li>Logs every change, with how to undo it</li></ul></div></div>
+          <div class="tbl-row key" role="row"><div class="num" role="cell">05</div><div role="cell"><span class="lbl">Me</span><b>Preview, press Send <span class="pill me">My OK</span></b>From my own Gmail.</div><div role="cell"><span class="lbl">Claude Code</span><b>Marks it sent</b>Only after I say it's gone.</div></div>
+        </div>
+        <p class="sec-note">Step 4 is the 1 minute 45 seconds. The invoice first saved with the wrong status; the read-back caught it, and it was fixed before the PDF was made.</p>
+      </section>
+
+      <section class="sec rv" id="run">
+        <span class="k"><b>06</b>How it's tested and run</span>
+        <h2>Seven gates before any change goes live.</h2>
+        <p>The app holds the money, so since October 2026 every change to it goes through the same seven gates.</p>
+        <ol class="steps">
+          <li><div><b>Baseline</b><span>A backup of the live data, plus a snapshot of every read-only screen and report, saved before anything changes.</span></div></li>
+          <li><div><b>A change map I approve</b><span>The exact code before and after, everything it touches, the data it changes counted on a copy, and how to roll it back.</span></div></li>
+          <li><div><b>Red, then green</b><span>Each fix gets a test that must fail on the old code and pass on the new.</span></div></li>
+          <li><div><b>Before and after, compared</b><span>The full suite, then the snapshot rerun on a fresh copy of the live data. Every difference must be one the map predicted.</span></div></li>
+          <li><div><b>An independent review</b><span>Codex checks the whole change against the map: correct, secure, and nothing more than the map says.</span></div></li>
+          <li><div><b>Live check</b><span>A fresh backup, then a click-through of every main screen, and live counts compared with the map. Then I look.</span></div></li>
+          <li><div><b>Record</b><span>A changelog entry, the commits, and rollback steps tested on a copy.</span></div></li>
+        </ol>
+      </section>
+
+      <section class="sec rv" id="next">
+        <span class="k"><b>07</b>What I'd do next</span>
+        <span class="proposed">Proposed · not built</span>
+        <h2>A reusable routine, and narrower doors.</h2>
+        <ul class="list">
+          <li>A reusable visit routine, so any session runs prep, notes and wrap-up the same careful way on any of my machines.</li>
+          <li>A few task-shaped doors for the AI (log a contact, set a follow-up, propose a job), so it never needs the general API.</li>
+        </ul>
+      </section>
+
+      <section class="sec rv" id="skills">
+        <span class="k"><b>08</b>Skill tags</span>
+        <div class="tags" style="gap:.5rem">
+          <a class="tag" href="../../?skill=AI%20agents#work">AI agents</a><a class="tag" href="../../?skill=Automation#work">Automation</a>
+          <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">SQLite</span><span class="tag">Stripe</span>
+          <span class="tag">REST APIs</span><span class="tag">Claude in Chrome</span><span class="tag">Google Workspace</span><span class="tag">Security</span>
+          <span class="tag">Test-first</span><span class="tag">Claude Code</span><span class="tag">Codex</span>
+        </div>
+        <div class="pager" style="margin-top:2.4rem">
+          <a href="../heimdall/"><span class="k">← Previous</span><b>Heimdall</b></a>
+          <a href="../../#work"><span class="k">All →</span><b>All projects</b></a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Daryll Gomas · Portland, OR</p>
+    <nav><a href="https://github.com/DaryllGomas">GitHub</a><a href="../../resume/">Résumé</a><a href="../../">All projects</a></nav>
+  </div>
+</footer>
+
+<script src="../../assets/site.js"></script>
+<script src="../../assets/toc.js"></script>
+<script src="../../assets/lightbox.js"></script>
+<script src="../../assets/fx.js"></script>
+</body>
+</html>

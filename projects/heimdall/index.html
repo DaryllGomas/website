@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heimdall: remote support · Daryll Gomas</title>
+<meta name="description" content="Heimdall: remote support built on open-source RustDesk, then locked down: a hardened server, approval codes, passkey sign-in, no port forwarding and a log of every connection.">
+<!-- Project page: same sections as every project page. The approval card in the hero is an invented example. -->
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://daryllgomas.com/projects/heimdall/">
+<meta property="og:url" content="https://daryllgomas.com/projects/heimdall/">
+<link rel="stylesheet" href="../../assets/site.css">
+<link rel="stylesheet" href="../../assets/project.css">
+<style>
+  /* page-only styles (shared CSS untouched) */
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+  /* ---------- hero: the approval card (invented example) ---------- */
+  .ap-body { padding: .75rem .85rem .9rem; display: grid; gap: .65rem; }
+  .ap-who { display: flex; align-items: center; gap: .75rem; }
+  .ap-who .pc { width: 38px; height: 38px; flex: none; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--line-2); background: #0c111d; }
+  .ap-who .pc svg { width: 20px; height: 20px; fill: none; stroke: var(--ink-dim); stroke-width: 1.6; }
+  .ap-who h3 { font-size: clamp(1.15rem, 1.9vw, 1.35rem); margin: 0; }
+  .ap-who small { display: block; font: 400 .56rem var(--mono); letter-spacing: .06em; color: var(--ink-faint); margin-top: .2rem; text-transform: uppercase; }
+  .ap-who .pill { margin-left: auto; }
+  .ap-lab { font: 500 .58rem var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--amber-hi); margin-bottom: .4rem; }
+  .ap-code { display: flex; gap: .35rem; }
+  .ap-code span { flex: 1 1 0; max-width: 2.4rem; aspect-ratio: 4 / 5; display: grid; place-items: center; border-radius: 7px; border: 1px solid var(--line);
+    background: rgba(255,255,255,.035); font: 500 1.1rem var(--mono); color: var(--ink); }
+  .ap-code span.cur { border-color: rgba(224,164,92,.5); box-shadow: 0 0 14px rgba(224,164,92,.22); }
+  .ap-code span.cur::after { content: ""; width: 2px; height: 1.1em; background: var(--amber); animation: apblink 1.1s steps(1) infinite; }
+  .ap-note { font-size: .8rem; color: var(--ink-dim); line-height: 1.4; margin-top: .45rem; }
+  .ap-act { display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; border-top: 1px dashed var(--line-2); padding-top: .6rem; }
+  .ap-btn { font: 500 .54rem var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: .2rem .5rem; border-radius: 5px; border: 1px solid var(--line-2); color: var(--ink-dim); }
+  .ap-btn.go { color: #1a1206; background: var(--amber-hi); border-color: var(--amber-hi); }
+  .ap-key { margin-left: auto; display: inline-flex; align-items: center; gap: .35rem; font: 400 .6rem var(--mono); letter-spacing: .06em; color: #9fe3b4; }
+  .ap-key svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; }
+  @keyframes apblink { 50% { opacity: 0; } }
+
+  /* ---------- 03: walls inside walls ---------- */
+  .ringwrap { margin-top: 1.4rem; max-width: 46rem; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 1.6rem; align-items: center; }
+  .rings { position: relative; aspect-ratio: 1; max-width: 300px; width: 100%; justify-self: center; }
+  .rings div { position: absolute; border-radius: 50%; display: grid; place-items: start center; padding-top: 6%;
+    font: 500 .56rem var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); text-align: center; }
+  .rings .r1 { inset: 0; border: 1px dashed rgba(143,168,232,.4); }
+  .rings .r2 { inset: 13%; border: 1px solid rgba(143,168,232,.5); background: rgba(143,168,232,.03); }
+  .rings .r3 { inset: 26%; border: 1px solid rgba(224,164,92,.55); background: rgba(224,164,92,.04); }
+  .rings .r4 { inset: 39%; border: 1px solid rgba(127,212,154,.7); background: rgba(127,212,154,.08); place-items: center; padding: 0; color: #9fe3b4; box-shadow: 0 0 26px rgba(127,212,154,.18); }
+
+  @media (max-width: 700px) { .ringwrap { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .ap-act .ap-key { margin-left: 0; flex-basis: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .ap-code span.cur::after { animation: none; } }
+</style>
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="stars"></span></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="../../"><img src="../../assets/img/daryll.jpg" alt="" width="28" height="28">Daryll Gomas</a>
+    <nav class="nav" aria-label="Main">
+      <a class="nav-home" href="../../"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4.5l8 6.7"/><path d="M6.5 9.5V19.5h4v-5h3v5h4V9.5"/></svg><span>Home</span></a>
+      <a class="hide-s" href="../../#work">Work</a>
+      <a href="../../resume/">Résumé</a>
+      <button type="button" class="btn-sm" data-talk="talkTop">Contact</button>
+    </nav>
+  </div>
+  <div class="talk-box pop" id="talkTop" hidden>
+    <span class="talk-mail"></span>
+    <button type="button" class="talk-copy">Copy</button>
+    <span class="talk-note">Write me about what you're working on. I read every message.</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="../../#work">Projects</a><span class="mid">/</span><span class="mid">Systems &amp; security</span><span>/</span><span style="color:var(--ink-dim)">Heimdall</span></nav>
+
+  <!-- HERO CARD -->
+  <article class="pcard rv">
+    <div class="pcard-in">
+      <div>
+        <span class="status"><i></i>Built · tested end to end</span>
+        <h1 data-morph="heimdall-title">Heimdall</h1>
+        <p class="tagline">Open source, hardened and locked down.</p>
+        <p class="sum">Remote support for clients' computers. I took RustDesk, a free open-source remote-desktop tool, hardened its server and wrapped it in my own security: approval codes, passkey sign-in, no port forwarding and a log of every connection.</p>
+        <div class="hero-cta">
+          <a class="btn primary" href="#how">How it works <span class="arrow">↓</span></a>
+          <a class="btn ghost" href="#locks">How it's locked down</a>
+        </div>
+      </div>
+      <!-- Drawn approval card: same steps as the real console; the PC name and code are invented. -->
+      <figure class="demo" data-morph="heimdall-pic" aria-label="Example approval card: a new PC waits until the code from the client's screen is typed in">
+        <div class="demo-win">
+          <div class="demo-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="app">Heimdall console</span><span class="ex-chip">Example · invented PC</span></div>
+          <div class="ap-body">
+            <div class="ap-who">
+              <span class="pc" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></span>
+              <div><h3>Front desk PC</h3><small>Checked in just now · link used once</small></div>
+              <span class="pill me">Waiting</span>
+            </div>
+            <div>
+              <div class="ap-lab">Code from the client's screen</div>
+              <div class="ap-code" aria-hidden="true"><span>4</span><span>8</span><span>1</span><span>0</span><span>6</span><span>2</span><span class="cur"></span></div>
+              <p class="ap-note">The client reads it to me over the phone. Only their browser ever showed it. Five wrong tries lock the link.</p>
+            </div>
+            <div class="ap-act">
+              <span class="ap-btn go">Approve</span><span class="ap-btn">Reject</span>
+              <span class="ap-key"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2"/></svg>Signed in with a passkey</span>
+            </div>
+          </div>
+        </div>
+        <figcaption>Example · invented PC and code</figcaption>
+      </figure>
+    </div>
+    <div class="kpis">
+      <div><b>0</b><span>ports opened on any router</span></div>
+      <div><b>~1,500</b><span>lines of my own code in the server</span></div>
+      <div><b>4</b><span>rounds of independent security review</span></div>
+      <div><b>3</b><span>locks: code, passkey, client's OK</span></div>
+      <div><b>188</b><span>commits in 3 days, 22–24 Oct 2026</span></div>
+    </div>
+  </article>
+
+  <div class="doc">
+    <nav class="toc" aria-label="On this page">
+      <a href="#problem"><b>01</b>Problem</a>
+      <a href="#built"><b>02</b>What I built</a>
+      <a href="#how"><b>03</b>How it works</a>
+      <a href="#tools"><b>04</b>Tools</a>
+      <a href="#proof"><b>05</b>Proof</a>
+      <a href="#run"><b>06</b>Tested &amp; run</a>
+      <a href="#next"><b>07</b>Next</a>
+      <a href="#skills"><b>08</b>Skills</a>
+    </nav>
+
+    <div>
+      <section class="sec rv" id="problem">
+        <span class="k"><b>01</b>The problem</span>
+        <h2>Remote support usually means trusting someone else's master key.</h2>
+        <p>Small clients need help on their own computers. The usual options are per-device fees for a commercial remote-management tool, or a vendor whose one server can command every PC it manages. If that server is breached, every client is exposed.</p>
+        <p>The free open-source route has its own catch: a self-hosted RustDesk server normally needs ports forwarded through the router, any computer can register with it, and the one key that guards connections is handed to every client.</p>
+        <p class="quote">Heimdall, the Norse guardian of the rainbow bridge, opens the bridge only for those allowed.</p>
+      </section>
+
+      <section class="sec rv" id="built">
+        <span class="k"><b>02</b>What I built</span>
+        <h2>A locked-down service around open-source RustDesk.</h2>
+        <ul class="list">
+          <li><strong>A hardened RustDesk server.</strong> I patched the open-source server so devices check in over one encrypted web connection, and only if I approved them.</li>
+          <li><strong>The Heimdall console.</strong> My own service for setup links, approvals, removal, session alerts and a 12-month connection log, behind passkey sign-in.</li>
+          <li><strong>Setup with no scripts.</strong> The client opens a link, installs the official signed RustDesk app and reads me a code. Nothing to type in a terminal.</li>
+          <li><strong>Its own walled-off server.</strong> A small virtual machine on its own network segment, sharing nothing with my own systems.</li>
+          <li><strong>Wired into my invoicing app.</strong> A client's card has <em>Add a PC</em> and <em>Connect</em> buttons.</li>
+        </ul>
+
+        <h3 class="sub-h">The stock open-source server, and mine</h3>
+        <div class="tbl" role="table" aria-label="Stock open-source RustDesk server compared with the hardened Heimdall server">
+          <div class="tbl-row head" role="row"><div role="columnheader">Question</div><div role="columnheader">Stock server</div><div role="columnheader">Hardened server</div></div>
+          <div class="tbl-row" role="row"><div class="stage" role="cell">Who can sign in?</div><div role="cell"><span class="lbl">Stock server</span>Any device can register an ID. The server key is only checked when someone asks to connect, and every client holds that key.</div><div class="good" role="cell"><span class="lbl">Hardened server</span>Only devices I approved, each pinned to its own machine identity and key.</div></div>
+          <div class="tbl-row" role="row"><div class="stage" role="cell">How does it reach the internet?</div><div role="cell"><span class="lbl">Stock server</span>Ports forwarded through the router.</div><div class="good" role="cell"><span class="lbl">Hardened server</span>One outbound, encrypted tunnel. Nothing listens publicly.</div></div>
+          <div class="tbl-row" role="row"><div class="stage" role="cell">Can devices check in over the web?</div><div role="cell"><span class="lbl">Stock server</span>No. WebSocket check-in isn't supported in the free server.</div><div class="good" role="cell"><span class="lbl">Hardened server</span>Yes. That's what lets it run behind a tunnel.</div></div>
+          <div class="tbl-row" role="row"><div class="stage" role="cell">Removing a device</div><div role="cell"><span class="lbl">Stock server</span>No allowlist to remove it from.</div><div class="good" role="cell"><span class="lbl">Hardened server</span>Remove it and its connection closes within seconds.</div></div>
+          <div class="tbl-row" role="row"><div class="stage" role="cell">Strangers who connect</div><div role="cell"><span class="lbl">Stock server</span>Basic timeouts and a registration rate limit.</div><div class="good" role="cell"><span class="lbl">Hardened server</span>Seconds to prove themselves, capped per address and in total.</div></div>
+          <div class="tbl-row" role="row"><div class="stage" role="cell">Connection replies</div><div role="cell"><span class="lbl">Stock server</span>No per-request token.</div><div class="good" role="cell"><span class="lbl">Hardened server</span>Each request carries a one-time token. A reply goes only to whoever asked.</div></div>
+        </div>
+        <p class="sec-note">Built on the open-source project's newest hardened code, not its older release. The RustDesk app on the client's PC is the official, signed app, unchanged.</p>
+      </section>
+
+      <section class="sec rv" id="how">
+        <span class="k"><b>03</b>How it works</span>
+        <h2>One door in. Nothing reaches back.</h2>
+        <figure class="figure">
+          <div class="fig-h"><span class="k">The architecture</span><button type="button" class="zoom" data-lightbox="flow-main" aria-label="Enlarge the diagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Enlarge</button></div>
+          <div class="fig-zoom" id="flow-main" data-lightbox="flow-main">
+<!-- FLOW:heimdall -->
+<svg class="flow wide" viewBox="0 0 940 440" role="img" aria-labelledby="heimdall-t">
+<title id="heimdall-t">How Heimdall works: the client PC runs the official RustDesk app and connects outward only, over an encrypted WebSocket, through one Cloudflare Tunnel, to a walled-off server. There the hardened RustDesk server lets in only approved, pinned PCs, and the Heimdall console handles setup links, approvals and removal. On my side: RustDesk to connect, my invoicing app with Add a PC and Connect, and an alert plus a log entry for every session.</title>
+<text x="8" y="18" class="col">1 · CLIENT PC</text>
+<text x="255" y="18" class="col">2 · ONE DOOR</text>
+<text x="482" y="18" class="col">3 · SERVER</text>
+<text x="756" y="18" class="col">4 · MY SIDE</text>
+<g class="edges"><path id="heimdall-wide-p0" d="M198,122 C226,122 226,152 255,152" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p0"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p0"/></animateMotion></circle>
+<path id="heimdall-wide-p1" d="M198,212 C226,212 226,152 255,152" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p1"/></animateMotion></circle>
+<path id="heimdall-wide-p2" d="M425,152 C454,152 454,152 482,152" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p2"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.04s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p2"/></animateMotion></circle>
+<path id="heimdall-wide-p3" d="M698,152 C727,152 727,152 756,152" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p3"/></animateMotion></circle>
+<path id="heimdall-wide-p4" d="M698,352 C727,352 727,320 756,320" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p4"/></animateMotion></circle>
+<path id="heimdall-wide-p5" d="M698,352 C727,352 727,398 756,398" class="ln quiet"/>
+<circle r="2.6" class="pk quiet"><animateMotion dur="7.5s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p5"/></animateMotion></circle>
+<path id="heimdall-wide-p6" d="M590,322 C590,278 590,278 590,235" class="ln dog"/>
+<circle r="2.6" class="pk dog"><animateMotion dur="4s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdall-wide-p6"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="8" y="92" width="190" height="60" rx="10"/>
+<text x="22" y="116.0" class="t">Client PC</text>
+<text x="22" y="133.0" class="s">OFFICIAL RUSTDESK APP</text>
+</g>
+<g class="nd  ">
+<rect x="8" y="182" width="190" height="60" rx="10"/>
+<text x="22" y="206.0" class="t">Outbound only</text>
+<text x="22" y="223.0" class="s">NO PORTS FORWARDED</text>
+</g>
+<g class="nd  ">
+<rect x="255" y="77" width="170" height="150" rx="10"/>
+<circle cx="275" cy="106" r="4.5" class="live"/>
+<text x="287" y="111" class="t big">One tunnel</text>
+<text x="275" y="141" class="s">CLOUDFLARE TUNNEL</text>
+<text x="275" y="160" class="s">ENCRYPTED WEBSOCKET</text>
+<text x="275" y="179" class="s">A SHORT LIST OF PATHS</text>
+<text x="275" y="198" class="it">all else: not found</text>
+</g>
+<g class="nd core ">
+<rect x="482" y="70" width="216" height="165" rx="10"/>
+<circle cx="502" cy="99" r="4.5" class="live"/>
+<text x="514" y="104" class="t big">Hardened server</text>
+<text x="502" y="134" class="s">APPROVED PCS ONLY</text>
+<text x="502" y="153" class="s">PINNED IDENTITY + KEY</text>
+<text x="502" y="172" class="s">ONE-TIME RELAY TOKENS</text>
+<text x="502" y="191" class="it">strangers capped</text>
+</g>
+<g class="nd  ">
+<rect x="482" y="322" width="216" height="60" rx="10"/>
+<text x="496" y="346.0" class="t">Heimdall console</text>
+<text x="496" y="363.0" class="s">APPROVE · REMOVE</text>
+</g>
+<g class="nd hot ">
+<rect x="756" y="122" width="176" height="60" rx="10"/>
+<text x="770" y="146.0" class="t">Me, connecting</text>
+<text x="770" y="163.0" class="s">RUSTDESK APP</text>
+</g>
+<g class="nd  ">
+<rect x="756" y="290" width="176" height="60" rx="10"/>
+<text x="770" y="314.0" class="t">Invoicing app</text>
+<text x="770" y="331.0" class="s">ADD A PC · CONNECT</text>
+</g>
+<g class="nd calm ">
+<rect x="756" y="368" width="176" height="60" rx="10"/>
+<text x="770" y="392.0" class="t">Alert + log</text>
+<text x="770" y="409.0" class="s">EVERY SESSION</text>
+</g>
+</svg>
+<svg class="flow tall" viewBox="0 0 360 860" role="img" aria-labelledby="heimdallm-t">
+<title id="heimdallm-t">How Heimdall works: the client PC runs the official RustDesk app and connects outward only, over an encrypted WebSocket, through one Cloudflare Tunnel, to a walled-off server. There the hardened RustDesk server lets in only approved, pinned PCs, and the Heimdall console handles setup links, approvals and removal. On my side: RustDesk to connect, my invoicing app with Add a PC and Connect, and an alert plus a log entry for every session.</title>
+<text x="4" y="16" class="col">1 · CLIENT PC</text>
+<text x="4" y="132" class="col">2 · ONE DOOR</text>
+<text x="4" y="340" class="col">3 · SERVER</text>
+<text x="4" y="602" class="col">4 · MY SIDE</text>
+<g class="edges"><path id="heimdallm-tall-p0" d="M89,94 C89,122 180,122 180,150" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.00s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p0"/></animateMotion></circle>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-1.60s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p0"/></animateMotion></circle>
+<path id="heimdallm-tall-p1" d="M271,94 C271,122 180,122 180,150" class="ln in"/>
+<circle r="2.6" class="pk in"><animateMotion dur="3.2s" begin="-0.37s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p1"/></animateMotion></circle>
+<path id="heimdallm-tall-p2" d="M180,315 C180,338 180,338 180,360" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-0.74s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p2"/></animateMotion></circle>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-2.04s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p2"/></animateMotion></circle>
+<path id="heimdallm-tall-p3" d="M180,550 C180,587 89,587 89,624" class="ln out"/>
+<circle r="3.4" class="pk out"><animateMotion dur="3.0s" begin="-1.11s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p3"/></animateMotion></circle>
+<path id="heimdallm-tall-p4" d="M271,688 C271,729 89,729 89,770" class="ln core"/>
+<circle r="2.6" class="pk core"><animateMotion dur="2.6s" begin="-1.48s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p4"/></animateMotion></circle>
+<path id="heimdallm-tall-p5" d="M271,688 C271,729 271,729 271,770" class="ln quiet"/>
+<circle r="2.6" class="pk quiet"><animateMotion dur="7.5s" begin="-1.85s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p5"/></animateMotion></circle>
+<path id="heimdallm-tall-p6" d="M271,624 C271,587 180,587 180,550" class="ln dog"/>
+<circle r="2.6" class="pk dog"><animateMotion dur="4s" begin="-2.22s" repeatCount="indefinite" rotate="auto"><mpath href="#heimdallm-tall-p6"/></animateMotion></circle></g>
+<g class="nd  ">
+<rect x="4" y="30" width="170" height="64" rx="10"/>
+<text x="18" y="56.0" class="t">Client PC</text>
+<text x="18" y="73.0" class="s">OFFICIAL RUSTDESK APP</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="30" width="170" height="64" rx="10"/>
+<text x="200" y="56.0" class="t">Outbound only</text>
+<text x="200" y="73.0" class="s">NO PORTS FORWARDED</text>
+</g>
+<g class="nd  ">
+<rect x="50" y="150" width="260" height="165" rx="10"/>
+<circle cx="70" cy="179" r="4.5" class="live"/>
+<text x="82" y="184" class="t big">One tunnel</text>
+<text x="70" y="214" class="s">CLOUDFLARE TUNNEL</text>
+<text x="70" y="233" class="s">ENCRYPTED WEBSOCKET</text>
+<text x="70" y="252" class="s">A SHORT LIST OF PATHS</text>
+<text x="70" y="271" class="it">all else: not found</text>
+</g>
+<g class="nd core ">
+<rect x="50" y="360" width="260" height="190" rx="10"/>
+<circle cx="70" cy="389" r="4.5" class="live"/>
+<text x="82" y="394" class="t big">Hardened server</text>
+<text x="70" y="424" class="s">APPROVED PCS ONLY</text>
+<text x="70" y="443" class="s">PINNED IDENTITY + KEY</text>
+<text x="70" y="462" class="s">ONE-TIME RELAY TOKENS</text>
+<text x="70" y="481" class="it">strangers capped</text>
+</g>
+<g class="nd  ">
+<rect x="186" y="624" width="170" height="64" rx="10"/>
+<text x="200" y="650.0" class="t">Heimdall console</text>
+<text x="200" y="667.0" class="s">APPROVE · REMOVE</text>
+</g>
+<g class="nd hot ">
+<rect x="4" y="624" width="170" height="64" rx="10"/>
+<text x="18" y="650.0" class="t">Me, connecting</text>
+<text x="18" y="667.0" class="s">RUSTDESK APP</text>
+</g>
+<g class="nd  ">
+<rect x="4" y="770" width="170" height="64" rx="10"/>
+<text x="18" y="796.0" class="t">Invoicing app</text>
+<text x="18" y="813.0" class="s">ADD A PC · CONNECT</text>
+</g>
+<g class="nd calm ">
+<rect x="186" y="770" width="170" height="64" rx="10"/>
+<text x="200" y="796.0" class="t">Alert + log</text>
+<text x="200" y="813.0" class="s">EVERY SESSION</text>
+</g>
+</svg>
+<!-- /FLOW:heimdall -->
+          </div>
+          <figcaption>Animated diagram. The client's PC only ever connects outward. The server sits on its own network segment.</figcaption>
+        </figure>
+
+        <div class="break">
+          <div><h4>1 · Client PC</h4><ul><li>Official, signed RustDesk app</li><li>Connects outward only, over an encrypted WebSocket</li><li>No port forwarding needed on the client's router</li></ul></div>
+          <div><h4>2 · One door</h4><ul><li>A Cloudflare Tunnel, started from inside</li><li>Exposes a short list of paths; everything else is refused</li><li>No ports opened on the home router</li></ul></div>
+          <div><h4>3 · Server</h4><ul><li>Hardened RustDesk server: allowlist, pinning, limits</li><li>Heimdall console: invites, approvals, removal</li><li>Its own firewall blocks everything else, in and out</li></ul></div>
+          <div><h4>4 · My side</h4><ul><li>Console behind a passkey</li><li>Invoicing app: Add a PC, Connect</li><li>An alert on every session request, and a 12-month connection log</li></ul></div>
+        </div>
+
+        <h3 class="sub-h">Adding a PC, step by step</h3>
+        <div class="tbl steps2" role="table" aria-label="How a new PC is added: what the client does and what I do">
+          <div class="tbl-row head" role="row"><div role="columnheader">Step</div><div role="columnheader">The client</div><div role="columnheader">Me</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">01</div><div role="cell"></div><div role="cell"><span class="lbl">Me</span><b>Add a PC</b>From the client's card in my invoicing app. The console opens, waiting for my passkey.</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">02</div><div role="cell"></div><div role="cell"><span class="lbl">Me</span><b>Create a setup link <span class="pill ok">Lock</span></b>One link, one PC. It works once.</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">03</div><div role="cell"><span class="lbl">The client</span><b>Open the link, install <span class="pill ok">Lock</span></b>The official RustDesk app downloads, tied to this one setup link.</div><div role="cell"></div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">04</div><div role="cell"><span class="lbl">The client</span><b>The PC checks in</b>It's held as waiting. It can't be reached yet.</div><div role="cell"></div></div>
+          <div class="tbl-row key" role="row"><div class="num" role="cell">05</div><div role="cell"><span class="lbl">The client</span><b>Read me the code <span class="pill ok">Lock</span></b>A 7-digit code that only their browser shows.</div><div role="cell"><span class="lbl">Me</span><b>Type it, approve <span class="pill ok">Lock</span></b>Five wrong tries lock the link for good.</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">06</div><div role="cell"></div><div role="cell"><span class="lbl">Me</span><b>The PC is pinned <span class="pill ok">Lock</span></b>From then on the server accepts only that PC's own key.</div></div>
+          <div class="tbl-row" role="row"><div class="num" role="cell">07</div><div role="cell"><span class="lbl">The client</span><b>Accept the session</b>Each session needs their click, unless they set up unattended access themselves.</div><div role="cell"><span class="lbl">Me</span><b>Connect</b>One button on the client's card. An alert fires and the connection is logged.</div></div>
+        </div>
+        <p class="sec-note">If anything doesn't match (a second download, a different PC on the same link, too many wrong codes), the link is marked compromised and can only be cancelled.</p>
+
+        <h3 class="sub-h" id="locks">How access is locked down</h3>
+        <div class="rules">
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="lab">Lock 1 · adding a PC</span><h4>A code only the client sees</h4><p>No PC joins until the client reads me the 7-digit code from their own screen. A stranger's machine doesn't get that approval.</p></div>
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8M16 7l2 2"/></svg></span><span class="lab">Lock 2 · the console</span><h4>A passkey, not a password</h4><p>Approving and removing PCs sit behind my passkey. The console has no password to phish, guess or reuse.</p></div>
+          <div class="rule"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8.5 7 10 4-1.5 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/></svg></span><span class="lab">Lock 3 · every session</span><h4>The client says yes</h4><p>Every session needs the client to click Accept on their own screen, unless they chose to set up unattended access with a password. Either way, an alert fires and the connection is logged.</p></div>
+        </div>
+
+        <h3 class="sub-h">Walls inside walls</h3>
+        <div class="ringwrap">
+          <div class="rings" role="img" aria-label="Four nested walls: the internet, the tunnel, the walled-off network segment, and the approved device list">
+            <div class="r1">The internet</div>
+            <div class="r2">One tunnel</div>
+            <div class="r3">Own segment</div>
+            <div class="r4">Approved PCs</div>
+          </div>
+          <ul class="list">
+            <li><strong>A short list of paths through the tunnel.</strong> Everything else gets a "not found". No port forwarding is needed, on my router or a client's.</li>
+            <li><strong>A segment that can't reach home.</strong> My desk can reach the server; the server is blocked from reaching back into my network.</li>
+            <li><strong>Only approved, pinned PCs.</strong> The device list is checked before anything else happens, then again inside the sign-in.</li>
+            <li><strong>Every session announced.</strong> An alert on every session request, and a connection log kept for 12 months.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="sec rv" id="tools">
+        <span class="k"><b>04</b>Tools</span>
+        <h2>Open source, then made mine.</h2>
+        <div class="tools">
+          <div class="tool"><b>RustDesk</b><span>official signed client app, unchanged</span></div>
+          <div class="tool"><b>Rust</b><span>my patch to the open-source server</span></div>
+          <div class="tool"><b>Go</b><span>the Heimdall console and its API</span></div>
+          <div class="tool"><b>Passkeys (WebAuthn)</b><span>console sign-in</span></div>
+          <div class="tool"><b>Cloudflare Tunnel</b><span>the one door, outbound only</span></div>
+          <div class="tool"><b>Ubuntu VM + nftables</b><span>default-deny firewall, its own segment</span></div>
+          <div class="tool"><b>UniFi</b><span>the router wall around the segment</span></div>
+          <div class="tool"><b>Python + Flask</b><span>my invoicing app: Add a PC, Connect</span></div>
+          <div class="tool"><b>Automated tests</b><span>Go, Rust and a real-browser run</span></div>
+          <div class="tool"><b>Claude Code, Codex</b><span>AI writes the code; I specify and verify</span></div>
+        </div>
+      </section>
+
+      <section class="sec rv" id="proof">
+        <span class="k"><b>05</b>Proof</span>
+        <h2>Three days, from the records.</h2>
+        <div class="nums">
+          <div><b>~1,500</b><span>lines of my own code added to the open-source server</span></div>
+          <div><b>4</b><span>review rounds on that patch; the last found nothing new</span></div>
+          <div><b>2</b><span>firewalls around the server: its own and the router's</span></div>
+        </div>
+        <ol class="tl">
+          <li><time datetime="2026-10-22">22 Oct</time><div class="ev"><b>Rules first</b><span>The security and usability rules, then a standalone server and agent built to them, with two reviews.</span></div></li>
+          <li><time datetime="2026-10-22">22 Oct</time><div class="ev"><b>Its own walled-off server</b><span>A small virtual machine on its own network segment. The containment test passed, then passed again with the router's firewall alone.</span></div></li>
+          <li><time datetime="2026-10-22">22 Oct</time><div class="ev"><b>The decision to patch</b><span>The free server can't take check-ins over a WebSocket, so I added a patch for it. The public address stayed switched off until it passed review.</span></div></li>
+          <li class="big"><time datetime="2026-10-23">23 Oct</time><div class="ev"><b>First real connection across the internet</b><span>A real RustDesk client reached a test Windows 11 PC through the tunnel and the hardened server. Review round four found no new issues.</span></div></li>
+          <li><time datetime="2026-10-23">23 Oct</time><div class="ev"><b>Setup with no scripts</b><span>Setup link, install, 7-digit code, approve, connect. This flow went through three review rounds of its own.</span></div></li>
+          <li class="big"><time datetime="2026-10-23">23 Oct</time><div class="ev"><b>Full dress rehearsal passed</b><span>One continuous run as a brand-new client, starting in my invoicing app, with no lab shortcuts.</span></div></li>
+          <li><time datetime="2026-10-23">23 Oct</time><div class="ev"><b>Connection log</b><span>A 12-month log of every connection, and the client's setup page, added and checked.</span></div></li>
+        </ol>
+        <p class="tl-note">Dates and results come from the project's status log, its review files and the git history.</p>
+      </section>
+
+      <section class="sec rv" id="run">
+        <span class="k"><b>06</b>How it's tested and run</span>
+        <h2>Reviewed first, then tested over a real connection.</h2>
+        <ol class="steps">
+          <li><div><b>Rules first</b><span>I wrote the security and usability rules before any code: a separate server, database, login and network path from everything else I run.</span></div></li>
+          <li><div><b>Four rounds of independent review</b><span>Codex, an AI reviewer, went through the server patch four times, and a second AI model red-teamed the plan. Each finding was fixed or written down as a known trade-off. The last round's one condition, a test with a real client, was then met.</span></div></li>
+          <li><div><b>Kept offline until it passed</b><span>The public address stayed switched off until the patched server had passed review.</span></div></li>
+          <li><div><b>A real connection across the internet</b><span>A real RustDesk client reached a test Windows 11 PC through the tunnel and the hardened server, from two different public addresses.</span></div></li>
+          <li><div><b>The firewalls, tested twice</b><span>A containment test checked that the server can't reach my network, first with its own firewall, then with the router's firewall alone. Both had to pass.</span></div></li>
+          <li><div><b>A full dress rehearsal</b><span>One continuous run as a brand-new client: setup link, install, code, approve, connect, then unattended access.</span></div></li>
+          <li><div><b>Automated tests</b><span>Go and Rust test suites, plus a real-browser test that walks the whole invite, download, code and approve flow.</span></div></li>
+        </ol>
+      </section>
+
+      <section class="sec rv" id="next">
+        <span class="k"><b>07</b>What I'd do next</span>
+        <span class="proposed">Proposed · not built</span>
+        <h2>Stronger keys, more platforms.</h2>
+        <ul class="list">
+          <li>Hardware security keys for console sign-in.</li>
+          <li>Mac support.</li>
+        </ul>
+      </section>
+
+      <section class="sec rv" id="skills">
+        <span class="k"><b>08</b>Skill tags</span>
+        <div class="tags" style="gap:.5rem">
+          <a class="tag" href="../../?skill=Security#work">Security</a><a class="tag" href="../../?skill=Networking#work">Networking</a>
+          <span class="tag">RustDesk</span><span class="tag">Rust</span><span class="tag">Go</span><span class="tag">Passkeys</span>
+          <span class="tag">Cloudflare Tunnel</span><span class="tag">nftables</span><span class="tag">UniFi</span><span class="tag">Network segmentation</span>
+          <span class="tag">Threat modeling</span><span class="tag">Claude Code</span><span class="tag">Codex</span>
+        </div>
+        <div class="pager" style="margin-top:2.4rem">
+          <a href="../life-os/"><span class="k">← Previous</span><b>Life OS</b></a>
+          <a href="../invoicing/"><span class="k">Next →</span><b>Invoicing &amp; CRM</b></a>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <p>Daryll Gomas · Portland, OR</p>
+    <nav><a href="https://github.com/DaryllGomas">GitHub</a><a href="../../resume/">Résumé</a><a href="../../">All projects</a></nav>
+  </div>
+</footer>
+
+<script src="../../assets/site.js"></script>
+<script src="../../assets/toc.js"></script>
+<script src="../../assets/lightbox.js"></script>
+<script src="../../assets/fx.js"></script>
+</body>
+</html>
